@@ -1,0 +1,5 @@
+/client/dist/
+/client/src/js/
+/server/server.js
+/webpack.config.js
+/server/boot/authentication.js
