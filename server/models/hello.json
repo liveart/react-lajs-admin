@@ -1,17 +1,14 @@
 {
   "name": "Hello",
   "base": "PersistedModel",
-  "idInjection": true,
+  "idInjection": false,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "name": {
+    "desc": {
       "type": "string",
       "required": true
-    },
-    "desc": {
-      "type": "string"
     }
   },
   "validations": [],

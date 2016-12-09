@@ -33,7 +33,7 @@
     "public": false
   },
   "Hello": {
-    "dataSource": "db",
+    "dataSource": "sqlite3",
     "public": true
   }
 }
