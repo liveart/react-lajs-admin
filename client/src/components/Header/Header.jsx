@@ -5,11 +5,9 @@ import HeaderV from './HeaderV';
 let Header = React.createClass({
   render() {
     return (
-      <div>
         <HeaderV
           name='sample@gmail.com'
         />
-      </div>
     );
   }
 });
