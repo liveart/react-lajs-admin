@@ -1,6 +1,6 @@
 import React from 'react';
 
-let Home = React.createClass({
+let Profile = React.createClass({
   render() {
     return (
       <div>
@@ -10,4 +10,4 @@ let Home = React.createClass({
   }
 });
 
-export default Home;
+export default Profile;

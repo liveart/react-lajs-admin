@@ -1,0 +1,32 @@
+{
+  "name": "Font",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "fontFamily": {
+      "type": "string",
+      "required": true
+    },
+    "vector": {
+      "type": "string",
+      "required": true
+    },
+    "boldAllowed": {
+      "type": "string"
+    },
+    "italicAllowed": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const node_dir = __dirname + '/node_modules';
 
 module.exports = {
@@ -29,5 +30,12 @@ module.exports = {
         loaders: ["babel-loader"]
       }
     ]
-  }
+  },
+
+  plugins: [
+    new webpack.ProvidePlugin({
+      'Promise': 'es6-promise',
+      'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+    })
+  ]
 };

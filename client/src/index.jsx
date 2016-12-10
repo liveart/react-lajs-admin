@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'whatwg-fetch';
 import {Router, Route, IndexRoute, Link, browserHistory} from 'react-router';
 //import {Router, Route, IndexRoute, browserHistory} from 'react-router';
-import LoginForm from './components/LoginForm/LoginForm';
-import Dashboard from './components/Dashboard/Dashboard';
-import Header from './components/Header/Header';
-import NavBar from './components/NavBar/NavBar';
-import Profile from './components/Profile/Profile';
+import LoginForm from './components/LoginForm';
+import Dashboard from './containers/DashboardContainer';
+import Header from './containers/HeaderContainer';
+import NavBar from './containers/NavBarContainer';
+import Profile from './components/Profile';
 import {config} from 'react-loopback';
 config.set('baseUrl', 'http://localhost:3000/api/');
 

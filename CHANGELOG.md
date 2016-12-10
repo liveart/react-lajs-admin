@@ -6,3 +6,5 @@ All notable changes to this project will be documented in this file.
 - SQLite DB as datasource
 - HeaderBar
 - NavBar
+- Fonts API
+- Fonts Widget for the Dashboard

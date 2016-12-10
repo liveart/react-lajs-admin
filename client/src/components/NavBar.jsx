@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 
-let NavBarV = React.createClass({
+let NavBar = React.createClass({
   render: function () {
     return (
       <aside className="main-sidebar">
@@ -49,4 +49,4 @@ let NavBarV = React.createClass({
   }
 });
 
-export default NavBarV;
+export default NavBar;

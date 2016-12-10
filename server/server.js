@@ -18,6 +18,21 @@ app.start = function () {
   });
 };
 
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('DATABASE.db');
+
+db.serialize(function () {
+  db.run("CREATE TABLE IF NOT EXISTS font (" +
+    "id	INTEGER PRIMARY KEY," +
+    "name TEXT NOT NULL, " +
+    "fontFamily TEXT NOT NULL, " +
+    "vector TEXT NOT NULL, " +
+    "boldAllowed TEXT, " +
+    "italicAllowed TEXT);");
+});
+
+db.close();
+
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname, function (err) {

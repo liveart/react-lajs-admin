@@ -32,7 +32,7 @@
     "dataSource": "db",
     "public": false
   },
-  "Hello": {
+  "Font": {
     "dataSource": "sqlite3",
     "public": true
   }
