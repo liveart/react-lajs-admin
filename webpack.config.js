@@ -4,7 +4,7 @@ module.exports = {
   context: __dirname + "/client/src",
 
   entry: {
-    javascript: "./app.js"
+    javascript: "./index.jsx"
   },
 
   output: {
