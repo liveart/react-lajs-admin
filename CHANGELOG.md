@@ -8,3 +8,4 @@ All notable changes to this project will be documented in this file.
 - NavBar
 - Fonts API
 - Fonts Widget for the Dashboard
+- Fonts list component

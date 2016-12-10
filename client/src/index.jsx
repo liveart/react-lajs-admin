@@ -7,6 +7,7 @@ import LoginForm from './components/LoginForm';
 import Dashboard from './containers/DashboardContainer';
 import Header from './containers/HeaderContainer';
 import NavBar from './containers/NavBarContainer';
+import FontsContainer from './containers/FontsContainer';
 import Profile from './components/Profile';
 import {config} from 'react-loopback';
 config.set('baseUrl', 'http://localhost:3000/api/');
@@ -27,6 +28,7 @@ ReactDOM.render((
       <IndexRoute component={Dashboard}/>
       <Route path="/login" component={LoginForm}/>
       <Route path="/profile" component={Profile}/>
+      <Route path="/fonts" component={FontsContainer}/>
     </Route>
   </Router>
 ), document.getElementById('widgets-container'));

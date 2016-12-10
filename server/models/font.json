@@ -1,28 +1,40 @@
 {
   "name": "Font",
   "base": "PersistedModel",
-  "idInjection": true,
-  "options": {
-    "validateUpsert": true
-  },
+  "idInjection": false,
   "properties": {
     "name": {
       "type": "string",
-      "required": true
+      "required": true,
+      "sqlite3": {
+        "columnName": "name"
+      }
     },
     "fontFamily": {
       "type": "string",
-      "required": true
+      "required": true,
+      "sqlite3": {
+        "columnName": "fontFamily"
+      }
     },
     "vector": {
       "type": "string",
-      "required": true
+      "required": true,
+      "sqlite3": {
+        "columnName": "vector"
+      }
     },
     "boldAllowed": {
-      "type": "string"
+      "type": "string",
+      "sqlite3": {
+        "columnName": "boldAllowed"
+      }
     },
     "italicAllowed": {
-      "type": "string"
+      "type": "string",
+      "sqlite3": {
+        "columnName": "italicAllowed"
+      }
     }
   },
   "validations": [],
