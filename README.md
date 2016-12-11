@@ -1,6 +1,8 @@
 # Admin Dashboard
 
 ##### Current version: v0.1.0
+[CHANGELOG](./CHANGELOG.md)
+
 
 ## Getting Started
 
