@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {fetchFonts, fetchFontsSuccess, fetchFontsFailure} from '../actions';
+import {fetchFonts} from '../actions';
 import FontsList from '../components/FontsList';
 
 const mapStateToProps = (state) => {
@@ -11,16 +11,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchFonts: () => {
-      dispatch(fetchFonts()).then((response) => {
-        return response.json();
-
-      }).then(res => {
-        if (res.status !== 200) {
-          dispatch(fetchFontsFailure(res));
-        } else {
-          dispatch(fetchFontsSuccess(res));
-        }
-      });
+      dispatch(fetchFonts());
     }
   };
 };

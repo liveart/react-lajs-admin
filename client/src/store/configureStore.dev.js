@@ -1,15 +1,22 @@
 import {createStore, applyMiddleware, compose} from 'redux';
-import promise from 'redux-promise';
+import createLogger from 'redux-logger';
+import createSagaMiddleware from 'redux-saga';
+import watchFetchFonts from '../sagas';
 import reducer from '../reducers';
 
+export default function configureStore(sagaMiddleware) {
 
-export default function configureStore(initialState) {
+  const middleware = [];
+
+  middleware.push(sagaMiddleware);
+  middleware.push(createLogger()); // only for debug
+
   const finalCreateStore = compose(
-    applyMiddleware(promise),
+    applyMiddleware(...middleware),
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )(createStore);
 
-  const store = finalCreateStore(reducer, initialState);
+  const store = finalCreateStore(reducer);
 
   return store;
 }

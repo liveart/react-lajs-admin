@@ -1,13 +1,10 @@
-export const FETCH_FONTS = 'FETCH_FONTS';
+export const FETCH_FONTS = 'FONTS_FETCH_REQUESTED';
 export const FETCH_FONTS_SUCCESS = 'FETCH_FONTS_SUCCESS';
 export const FETCH_FONTS_FAILURE = 'FETCH_FONTS_FAILURE';
 
 export function fetchFonts() {
-  const request = fetch('/api/fonts');
-  console.log(fetch);
   return {
-    type: FETCH_FONTS,
-    payload: request
+    type: FETCH_FONTS
   };
 }
 
