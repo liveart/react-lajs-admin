@@ -1,6 +1,7 @@
 export const Font = {
   endpoint: 'fonts',
-  fields: [{val: 'id', friendlyName: '#', required: false},
+  header: 'Fonts',
+  fields: [{val: 'id', friendlyName: '#', required: false, isIdentifier: true},
     {val: 'name', friendlyName: 'Name', required: true},
     {val: 'fontFamily', friendlyName: 'Font Family', required: true},
     {val: 'vector', friendlyName: 'Vector', required: true},

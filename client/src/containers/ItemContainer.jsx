@@ -1,11 +1,14 @@
 import React from 'react';
 import {Panel, Table, Alert} from 'react-bootstrap';
-import {createDataLoader} from 'react-loopback';
-import AddFontContainer from './AddFontContainer';
+import AddForm from '../components/AddForm';
 import ErrorAlertContainer from './ErrorAlertContainer';
 import EditFont from '../components/Font/EditFont';
 
-let FontsContainer = React.createClass({
+
+let ItemContainer = React.createClass({
+  propTypes: {
+    items: React.PropTypes.array
+  },
   getInitialState() {
     return {
       alertVisible: false,
@@ -14,8 +17,8 @@ let FontsContainer = React.createClass({
       successMsg: '',
     };
   },
-  propTypes: {
-    fonts: React.PropTypes.array
+  getEndpoint() {
+    return this.props.endpoint;
   },
   hideAlert() {
     this.setState({
@@ -43,7 +46,7 @@ let FontsContainer = React.createClass({
     return (
       <div>
         <section className="content-header">
-          <h1>Fonts</h1>
+          <h1>{this.props.header}</h1>
         </section>
         <section className="content">
           {this.state.alertVisible ?
@@ -64,17 +67,17 @@ let FontsContainer = React.createClass({
             : null}
           <div className="row">
             <div className="col-md-6">
-              <Panel collapsible header="Edit font">
+              <Panel collapsible header="Edit">
                 <EditFont/>
               </Panel>
             </div>
             <div className="col-md-6">
               <Panel collapsible header="Add new">
-                <AddFontContainer showError={this.showAlert} showMsg={this.showSuccessMsg}/>
+                <AddForm showError={this.showAlert} showMsg={this.showSuccessMsg} fields={this.props.fields}/>
               </Panel>
             </div>
           </div>
-          <Panel collapsible defaultExpanded header="Available Fonts">
+          <Panel collapsible defaultExpanded header="Available">
             <Table responsive hover fill>
               <thead>
               <tr>
@@ -87,7 +90,7 @@ let FontsContainer = React.createClass({
               </thead>
               <tbody>
               {
-                this.props.fonts.map((item, i) => {
+                this.props.items.map(item => {
                   const idField = this.props.fields[0];
                   return (
                     <tr key={item[idField.val]}>
@@ -110,10 +113,5 @@ let FontsContainer = React.createClass({
   }
 });
 
-FontsContainer = createDataLoader(FontsContainer, {
-  queries: [{
-    endpoint: 'fonts'
-  }]
-});
 
-export default FontsContainer;
+export default ItemContainer;
