@@ -12,7 +12,7 @@
     "node": true
   },
   "rules": {
-    "indent": ["error", 2],
+    "indent": ["error", 2, {"SwitchCase": 1}],
     "array-bracket-spacing": [2, "never"],
     "block-scoped-var": 2,
     "brace-style": [2, "1tbs"],

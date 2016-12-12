@@ -1,9 +1,8 @@
 import React from 'react';
 import {Panel, Table, Alert} from 'react-bootstrap';
 import AddForm from '../components/AddForm';
+import EditForm from '../components/EditForm';
 import ErrorAlertContainer from './ErrorAlertContainer';
-import EditFont from '../components/Font/EditFont';
-
 
 let ItemContainer = React.createClass({
   propTypes: {
@@ -20,17 +19,28 @@ let ItemContainer = React.createClass({
   getEndpoint() {
     return this.props.endpoint;
   },
-  hideAlert() {
-    this.setState({
-      alertVisible: false,
-      errorMsg: ''
+  handleClick(id, e) {
+    const state = Object.assign({}, this.state);
+    this.props.items.map(item => {
+      const idField = this.props.fields[0];
+      if (item[idField.val] === id) {
+        state.selectedItem = Object.assign({}, item);
+      }
     });
+
+    this.setState(state);
+  },
+  hideAlert() {
+    const state = Object.assign(this.state);
+    state.errorMsg = '';
+    state.alertVisible = false;
+    this.setState(state);
   },
   showAlert(text) {
-    this.setState({
-      alertVisible: true,
-      errorMsg: text
-    });
+    const state = Object.assign(this.state);
+    state.errorMsg = text;
+    state.alertVisible = true;
+    this.setState(state);
   },
   showSuccessMsg(text) {
     const state = Object.assign(this.state);
@@ -68,12 +78,14 @@ let ItemContainer = React.createClass({
           <div className="row">
             <div className="col-md-6">
               <Panel collapsible header="Edit">
-                <EditFont/>
+                <EditForm showError={this.showAlert} showMsg={this.showSuccessMsg} fields={this.props.fields}
+                          endpoint={this.props.fields.endpoint} selectedItem={this.state.selectedItem}/>
               </Panel>
             </div>
             <div className="col-md-6">
               <Panel collapsible header="Add new">
-                <AddForm showError={this.showAlert} showMsg={this.showSuccessMsg} fields={this.props.fields}/>
+                <AddForm showError={this.showAlert} showMsg={this.showSuccessMsg} fields={this.props.fields}
+                         endpoint={this.props.endpoint}/>
               </Panel>
             </div>
           </div>
@@ -93,7 +105,7 @@ let ItemContainer = React.createClass({
                 this.props.items.map(item => {
                   const idField = this.props.fields[0];
                   return (
-                    <tr key={item[idField.val]}>
+                    <tr key={item[idField.val]} onClick={(e) => this.handleClick(item[idField.val], e)}>
                       {
                         this.props.fields.map((field, j) => {
                           return (

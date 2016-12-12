@@ -1,7 +1,7 @@
 import React from 'react';
 import {Form, FormGroup, FormControl, Col, ControlLabel, Button} from 'react-bootstrap';
 
-let AddForm = React.createClass({
+let EditForm = React.createClass({
   propTypes: {
     fields: React.PropTypes.array
   },
@@ -12,7 +12,17 @@ let AddForm = React.createClass({
     };
   },
   componentWillReceiveProps(nextProps) {
-    if (typeof nextProps.fields !== 'undefined') {
+    if (typeof nextProps.selectedItem !== 'undefined') {
+      const state = Object.assign({}, this.state);
+      this.props.fields.forEach(itemObj => {
+        if (!itemObj.isIdentifier) {
+          state.item[itemObj.val] = nextProps.selectedItem[itemObj.val];
+        } else {
+          state.selectedId = nextProps.selectedItem[itemObj.val];
+        }
+      });
+      this.setState(state);
+    } else if (typeof nextProps.fields !== 'undefined') {
       const state = Object.assign({}, this.state);
       nextProps.fields.forEach(itemObj => {
         if (!itemObj.isIdentifier) {
@@ -26,15 +36,15 @@ let AddForm = React.createClass({
     e.preventDefault();
     this.setLoading();
     const that = this;
-    fetch('/api/' + this.props.endpoint, {
-      method: 'POST',
+    fetch('/api/' + this.props.endpoint + this.state.selectedId, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(Object.assign({}, this.state.item))
     }).then(response => {
       if (response.status === 200) {
-        that.props.showMsg('New item was added.');
+        that.props.showMsg('Item was changed.');
       } else {
         that.props.showError(`Status ${response.status}, Message: ${response.statusText}`);
       }
@@ -57,6 +67,8 @@ let AddForm = React.createClass({
     this.setState(currState);
   },
   render() {
+    /*
+    console.log(this.state);
     return (
       <Form horizontal onSubmit={this.handleSubmit}>
 
@@ -65,7 +77,6 @@ let AddForm = React.createClass({
             if (typeof field.isIdentifier !== 'undefined') {
               return null;
             }
-
             return (
               <FormGroup controlId={`i${field.val}`} key={i}>
                 <Col componentClass={ControlLabel} sm={2}>
@@ -92,13 +103,15 @@ let AddForm = React.createClass({
         <FormGroup>
           <Col smOffset={2} sm={10}>
             <Button type="submit" disabled={this.state.isSaving}>
-              Save
+              Edit
             </Button>
           </Col>
         </FormGroup>
       </Form>
     );
+    */
+    return null; // TODO implement through redux
   }
 });
 
-export default AddForm;
+export default EditForm;
