@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {fetchFonts} from '../actions';
+import {fetchFonts} from '../actions/fonts';
 import FontsList from '../components/FontsList';
 
 const mapStateToProps = (state) => {

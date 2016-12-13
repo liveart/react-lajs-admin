@@ -22,25 +22,15 @@ let NavBar = React.createClass({
                 <i className="fa fa-dashboard"/><span>Dashboard</span>
               </Link>
             </li>
-            <li className="treeview">
-              <a href="#">
-                <i className="fa fa-th"/>
-                <span>Components</span>
-                <i className="fa fa-angle-left pull-right"/>
-              </a>
-              <ul className="treeview-menu">
-                <li><Link to="/fonts" activeClassName="active"><i className="fa fa-circle-o"/>Fonts</Link></li>
-              </ul>
-            </li>
+            <li className="header">ENTITIES</li>
             <li>
-              <Link to="/timeline" activeClassName="active">
-                <i className="fa fa-calendar"/> <span>Timeline</span>
-                <small className="label pull-right bg-red">3</small>
+              <Link to="/fonts" activeClassName="active">
+                <i className="fa fa-font"/> <span>Fonts</span>
               </Link>
             </li>
-            <li><a href="#"><i className="fa fa-book"/> <span>Documentation</span></a></li>
             <li className="header">ADDITIONAL</li>
             <li><a href="#"><i className="fa fa-cog"/> <span>Settings</span></a></li>
+            <li><a href="#"><i className="fa fa-book"/> <span>Documentation</span></a></li>
             <li><a href="#"><i className="fa fa-sign-out"/> <span>Log out</span></a></li>
           </ul>
         </section>

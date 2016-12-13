@@ -1,4 +1,4 @@
-import {FETCH_FONTS, FETCH_FONTS_SUCCESS, FETCH_FONTS_FAILURE} from '../actions';
+import {FETCH_FONTS, FETCH_FONTS_SUCCESS, FETCH_FONTS_FAILURE} from '../actions/fonts';
 
 const INITIAL_STATE = {
   fontsList: {fonts: [], error: null, loading: false}

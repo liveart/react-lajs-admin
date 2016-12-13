@@ -1,6 +1,6 @@
-import {put, call} from 'redux-saga/effects';
+import {put} from 'redux-saga/effects';
 import {takeLatest} from 'redux-saga';
-import {FETCH_FONTS, FETCH_FONTS_SUCCESS, FETCH_FONTS_FAILURE} from './actions';
+import {FETCH_FONTS, FETCH_FONTS_SUCCESS, FETCH_FONTS_FAILURE} from './actions/fonts';
 
 function* fetchFonts() {
   try {

@@ -6,19 +6,7 @@ import {Provider} from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import watchFetchFonts from './sagas';
 import configureStore from './store/configureStore.dev';
-import Header from './components/Header';
-import NavBar from './components/NavBar';
-import Main from './containers/Main';
-
-const App = ({children}) => (
-  <div>
-    <Header/>
-    <NavBar/>
-    <main className="content-wrapper">
-      {children}
-    </main>
-  </div>
-);
+import Main from './containers/App';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = configureStore(sagaMiddleware);
