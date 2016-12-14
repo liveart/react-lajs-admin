@@ -10,4 +10,4 @@ All notable changes to this project will be documented in this file.
 - Fonts Widget for the Dashboard
 - Available fonts list
 - Form to add a new font
-- Error and success alerts on operations with DB
+- Loading animation

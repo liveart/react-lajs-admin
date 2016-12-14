@@ -7,7 +7,8 @@ import createSagaMiddleware from 'redux-saga';
 import sagaWatchers from './sagas';
 import configureStore from './store/configureStore.dev';
 import App from './containers/App';
-import Overview from './containers/OverviewContainer';
+import OverviewContainer from './containers/OverviewContainer';
+import FontsListContainer from './containers/FontsListContainer';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = configureStore(sagaMiddleware);
@@ -19,7 +20,8 @@ ReactDOM.render((
   <Provider store={store}>
     <Router history={history}>
       <Route path="/" component={App}>
-        <IndexRoute component={Overview}/>
+        <IndexRoute component={OverviewContainer}/>
+        <Route path="/fonts" component={FontsListContainer}/>
       </Route>
     </Router>
   </Provider>

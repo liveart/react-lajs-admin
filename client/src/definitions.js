@@ -1,3 +1,5 @@
+export const ID_PROP = 'id';
+
 export const Font = {
   endpoint: 'fonts',
   header: 'Fonts',

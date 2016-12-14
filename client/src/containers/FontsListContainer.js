@@ -1,19 +1,20 @@
 import {connect} from 'react-redux';
 import {fetchFonts} from '../actions/fonts';
-import FontsList from '../components/FontsList';
+import EntityExplorer from '../components/EntityExplorer';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
+  const {fonts, error, loading} = state.fonts.fontsList;
   return {
-    fontsList: state.fonts.fontsList
+    entitiesList: {entities: fonts, error, loading}
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    fetchFonts: () => {
+    fetchEntities: () => {
       dispatch(fetchFonts());
     }
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FontsList);
+export default connect(mapStateToProps, mapDispatchToProps)(EntityExplorer);
