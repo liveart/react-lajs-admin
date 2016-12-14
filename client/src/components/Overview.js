@@ -3,7 +3,6 @@ import {Link} from 'react-router';
 import adminLte from 'adminlte-reactjs';
 const InfoTile = adminLte.InfoTile;
 
-
 export default class Overview extends Component {
   componentWillMount() {
     this.props.fetchFontsNumber();
@@ -25,13 +24,7 @@ export default class Overview extends Component {
   }
 
   render() {
-    const {fontsNumber, loading, error} = this.props.fontsList;
-
-    if (loading) {
-      return (<div className="container"><h1>Fonts</h1><h3>Loading...</h3></div>);
-    } else if (error) {
-      return (<div className="alert alert-danger">Error: {error.message}</div>);
-    }
+    const {fontsNumber} = this.props.fontsList;
 
     return (
       <div>

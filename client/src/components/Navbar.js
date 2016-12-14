@@ -19,7 +19,7 @@ let NavBar = React.createClass({
             <li className="header">MAIN NAVIGATION</li>
             <li>
               <Link to="/" activeClassName="active">
-                <i className="fa fa-dashboard"/><span>Dashboard</span>
+                <i className="fa fa-dashboard"/><span>Overview</span>
               </Link>
             </li>
             <li className="header">ENTITIES</li>

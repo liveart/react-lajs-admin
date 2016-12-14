@@ -1,7 +1,8 @@
 # Admin Dashboard
 
-##### Current version: v0.1.0
-[CHANGELOG](./CHANGELOG.md)
+##### v0.1.0 
+
+[Change Log](./CHANGELOG.md)
 
 
 ## Getting Started
@@ -13,7 +14,7 @@ npm install
 ```
 
 ### 2. Starting the server
-##### 1) Run webpack to bundle js files and transpile them with Babel
+##### 1) Run webpack
 ```
 node ./node_modules/webpack/bin/webpack.js
 ```
@@ -24,8 +25,8 @@ or you can install webpack globally so as to use it without referencing this pat
 node .
 ```
 
-## Additional notes
-Don't forget to lint the edited files before pushing:
+## Additional commands
+##### Linting files
 ```
 npm run lint
 ```
