@@ -4,20 +4,22 @@ import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 import {syncHistoryWithStore} from 'react-router-redux';
 import {Provider} from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
-import watchFetchFonts from './sagas';
+import sagaWatchers from './sagas';
 import configureStore from './store/configureStore.dev';
-import Main from './containers/App';
+import App from './containers/App';
+import Overview from './containers/OverviewContainer';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = configureStore(sagaMiddleware);
 const history = syncHistoryWithStore(browserHistory, store);
 
-sagaMiddleware.run(watchFetchFonts);
+sagaMiddleware.run(sagaWatchers);
 
 ReactDOM.render((
   <Provider store={store}>
     <Router history={history}>
-      <Route path="/" component={Main}>
+      <Route path="/" component={App}>
+        <IndexRoute component={Overview}/>
       </Route>
     </Router>
   </Provider>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class FontsList extends Component {
+export default class FontsList extends Component {
   componentWillMount() {
     this.props.fetchFonts();
   }
@@ -34,6 +34,3 @@ class FontsList extends Component {
     );
   }
 }
-
-
-export default FontsList;

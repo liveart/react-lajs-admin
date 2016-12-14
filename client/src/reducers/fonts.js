@@ -1,7 +1,14 @@
-import {FETCH_FONTS, FETCH_FONTS_SUCCESS, FETCH_FONTS_FAILURE} from '../actions/fonts';
+import {
+  FETCH_FONTS,
+  FETCH_FONTS_SUCCESS,
+  FETCH_FONTS_FAILURE,
+  FETCH_FONTS_NUMBER,
+  FETCH_FONTS_NUMBER_FAILURE,
+  FETCH_FONTS_NUMBER_SUCCESS
+} from '../actions/fonts';
 
 const INITIAL_STATE = {
-  fontsList: {fonts: [], error: null, loading: false}
+  fontsList: {fonts: [], fontsNumber: 0, error: null, loading: false}
 };
 
 export default function (state = INITIAL_STATE, action) {
@@ -15,6 +22,13 @@ export default function (state = INITIAL_STATE, action) {
     case FETCH_FONTS_FAILURE:
       error = action.message;
       return {...state, fontsList: {fonts: [], error: error, loading: false}};
+    case FETCH_FONTS_NUMBER:
+      return {...state, fontsList: {...state.fontsList, fontsNumber: 0, error: error, loading: true}};
+    case FETCH_FONTS_NUMBER_SUCCESS:
+      return {...state, fontsList: {...state.fontsList, fontsNumber: action.fontsNumber, error: error, loading: false}};
+    case FETCH_FONTS_NUMBER_FAILURE:
+      error = action.message;
+      return {...state, fontsList: {...state.fontsList, fontsNumber: 0, error: error, loading: false}};
     default:
       return state;
   }

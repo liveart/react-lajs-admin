@@ -1,6 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {InfoTile} from 'react-bootstrap';
 import Header from '../components/Header';
 import NavBar from '../components/Navbar';
 

@@ -1,7 +1,5 @@
 import {createStore, applyMiddleware, compose} from 'redux';
 import createLogger from 'redux-logger';
-import createSagaMiddleware from 'redux-saga';
-import watchFetchFonts from '../sagas';
 import reducer from '../reducers';
 
 export default function configureStore(sagaMiddleware) {
