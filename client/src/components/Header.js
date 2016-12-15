@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Component}  from 'react';
 import {Link} from 'react-router';
 
-let Header = React.createClass({
-  pushMenu: function () {
+export default class Header extends Component {
+  pushMenu() {
     const body = document.body;
     if (body.clientWidth > 768) {
       if (body.className.indexOf('sidebar-collapse') === -1) {
@@ -17,8 +17,9 @@ let Header = React.createClass({
         body.className = body.className.replace(' sidebar-open', '');
       }
     }
-  },
-  render: function () {
+  }
+
+  render() {
     return (
       <header className="main-header">
         <Link to="/" className="logo">
@@ -38,6 +39,4 @@ let Header = React.createClass({
       </header>
     );
   }
-});
-
-export default Header;
+}

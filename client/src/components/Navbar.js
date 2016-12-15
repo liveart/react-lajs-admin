@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Link} from 'react-router';
 
-let NavBar = React.createClass({
-  render: function () {
+export default class NavBar extends Component {
+  render() {
     return (
       <aside className="main-sidebar">
         <section className="sidebar">
@@ -22,7 +22,7 @@ let NavBar = React.createClass({
                 <i className="fa fa-dashboard"/><span>Overview</span>
               </Link>
             </li>
-            <li className="header">ENTITIES</li>
+            <li className="header">EXPLORER</li>
             <li>
               <Link to="/fonts" activeClassName="active">
                 <i className="fa fa-font"/> <span>Fonts</span>
@@ -37,6 +37,4 @@ let NavBar = React.createClass({
       </aside>
     );
   }
-});
-
-export default NavBar;
+}

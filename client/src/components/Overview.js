@@ -24,7 +24,6 @@ export default class Overview extends Component {
   }
 
   render() {
-    const {fontsNumber} = this.props.fontsList;
 
     return (
       <div>
@@ -32,7 +31,7 @@ export default class Overview extends Component {
           <h1>Overview</h1>
         </section>
         <section className="content">
-          {this.renderFontsNumber(fontsNumber)}
+          {this.renderFontsNumber(this.props.fontsNumber)}
         </section>
       </div>
     );

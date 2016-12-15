@@ -21,7 +21,8 @@ export default class EntityExplorer extends Component {
     }
 
     return entities.map(item => (
-        <tr key={item[ID_PROP]}>
+        <tr key={item[ID_PROP]} className={item[ID_PROP] === this.props.selectedRowId ? 'selected' : 'asd'}
+            onClick={() => this.handleRowClick(item[ID_PROP])}>
           {Object.getOwnPropertyNames(entities[0]).map((prop, j) => (<td key={j}>{item[prop]}</td>))}
         </tr>
       )
@@ -43,8 +44,12 @@ export default class EntityExplorer extends Component {
     );
   }
 
+  handleRowClick(id) {
+    this.props.selectRow(id);
+  }
+
   render() {
-    const {entities, loading, error} = this.props.entitiesList;
+    const {entitiesList, loading, error} = this.props;
 
     if (loading) {
       return (
@@ -85,7 +90,7 @@ export default class EntityExplorer extends Component {
               </div>
               <Panel collapsible defaultExpanded style={{'maxHeight': '80vh', 'overflowY': 'scroll'}}
                      header="Available">
-                {this.renderEntitiesTable(entities)}
+                {this.renderEntitiesTable(entitiesList)}
               </Panel>
             </div>
           </div>

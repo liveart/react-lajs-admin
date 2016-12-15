@@ -4,7 +4,7 @@ import Overview from '../components/Overview';
 
 const mapStateToProps = state => {
   return {
-    fontsList: state.fonts.fontsList
+    fontsNumber: state.fonts.fontsNumber
   };
 };
 
