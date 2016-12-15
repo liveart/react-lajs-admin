@@ -1,14 +1,18 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {Link} from 'react-router';
 import adminLte from 'adminlte-reactjs';
 const InfoTile = adminLte.InfoTile;
 
 export default class Overview extends Component {
+  static propTypes = {
+    fontsNumber: PropTypes.number.isRequired
+  };
+
   componentWillMount() {
     this.props.fetchFontsNumber();
   }
 
-  renderFontsNumber(fontsNumber) {
+  renderFontsNumber = fontsNumber => {
     return (
       <Link to="/fonts">
         <InfoTile
@@ -21,10 +25,9 @@ export default class Overview extends Component {
         />
       </Link>
     );
-  }
+  };
 
   render() {
-
     return (
       <div>
         <section className="content-header">
