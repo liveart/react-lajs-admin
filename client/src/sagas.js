@@ -29,18 +29,18 @@ function* fetchFontsNumber() {
   }
 }
 
-function* editFont(newFont) {
+function* editFont(action) {
   try {
     const req = yield fetch('/api/fonts/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: newFont
+      body: action.newFont
     });
     const json = yield req.json();
     if (!(req.status >= 200 && req.status < 300)) {
-      throw new Error(req.statusText);
+      throw new Error(json.error.message);
     }
 
     yield put({type: FONTS_OPERATION_SUCCESS});
@@ -49,9 +49,9 @@ function* editFont(newFont) {
   }
 }
 
-function* deleteFont(id) {
+function* deleteFont(action) {
   try {
-    const req = yield fetch('/api/fonts/' + id, {
+    const req = yield fetch('/api/fonts/' + action.id, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -59,10 +59,11 @@ function* deleteFont(id) {
     });
     const json = yield req.json();
     if (!(req.status >= 200 && req.status < 300)) {
-      throw new Error(req.statusText);
+      throw new Error(json.error.message);
     }
 
     yield put({type: FONTS_OPERATION_SUCCESS});
+    yield put({type: FETCH_FONTS});
   } catch (e) {
     yield put({type: FONTS_OPERATION_FAILURE, message: e.message});
   }
@@ -81,7 +82,7 @@ function* watchEditFont() {
 }
 
 function* watchDeleteFont() {
-  yield takeLatest(EDIT_FONT, deleteFont);
+  yield takeLatest(DELETE_FONT, deleteFont);
 }
 
 export default function* root() {
@@ -89,6 +90,6 @@ export default function* root() {
     fork(watchFetchFonts),
     fork(watchFetchFontsNumber),
     fork(watchEditFont),
-    fork(deleteFont)
+    fork(watchDeleteFont)
   ];
 }
