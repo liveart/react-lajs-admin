@@ -1,4 +1,4 @@
-import {SELECT_ROW, ENABLE_EDITING} from '../actions/table';
+import {SELECT_ROW, ENABLE_EDITING, DISABLE_EDITING} from '../actions/table';
 
 const INITIAL_STATE = {
   selectedRowId: -1,
@@ -11,6 +11,8 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, selectedRowId: action.selectedRowId};
     case ENABLE_EDITING:
       return {...state, editing: true};
+    case DISABLE_EDITING:
+      return {...state, editing: false};
     default:
       return state;
   }

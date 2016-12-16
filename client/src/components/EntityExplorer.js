@@ -58,47 +58,96 @@ export default class EntityExplorer extends Component {
     });
   };
 
-  renderEntitiesTable = entities => {
-    return (
-      <Table responsive hover fill>
-        <thead>
-        <tr>
-          {this.renderEntitiesTableHeading(entities)}
-        </tr>
-        </thead>
-        <tbody>
-        {this.renderEntitiesTableContents(entities)}
-        </tbody>
-      </Table>
-    );
-  };
+  renderEntitiesTable = entities => (
+    <Table responsive hover fill>
+      <thead>
+      <tr>
+        {this.renderEntitiesTableHeading(entities)}
+      </tr>
+      </thead>
+      <tbody>
+      {this.renderEntitiesTableContents(entities)}
+      </tbody>
+    </Table>
+  );
+
+  renderButtons = () => (this.props.editing ? this.renderEditingButtons() : this.renderDefButtons());
+
+  renderDefButtons = () => (
+    <div className="well well-sm">
+      <a className="btn btn-success" href="#" aria-label="Add">
+        <i className="fa fa-plus" aria-hidden="true"/>
+      </a>
+      <div className="pull-right">
+        <a className="btn btn-primary" href="#" aria-label="Edit" onClick={this.handleEditBtnClick}>
+          <i className="fa fa-pencil-square-o" aria-hidden="true"/>
+        </a>
+        <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
+        <a className="btn btn-danger" href="#" aria-label="Delete" onClick={this.handleDeleteBtnClick}>
+          <i className="fa fa-trash-o" aria-hidden="true"/>
+        </a>
+      </div>
+    </div>
+  );
+
+  renderEditingButtons = () => (
+    <div className="well well-sm">
+      <a className="btn btn-success" href="#" aria-label="Save" onClick={this.handleSaveBtnClick}>
+        <i className="fa fa-check" aria-hidden="true"/>
+      </a>
+      <div className="pull-right">
+        <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
+        <a className="btn btn-danger" href="#" aria-label="Cancel" onClick={this.handleCancelBtnClick}>
+          <i className="fa fa-ban" aria-hidden="true"/>
+        </a>
+      </div>
+    </div>
+  );
 
   handleRowClick = id => {
     this.props.selectRow(id);
   };
 
-  handleAddBtnClick = () => {
+  handleEditBtnClick = () => {
     if (this.props.selectedRowId > -1) {
       this.props.enableEditing();
     }
   };
 
+  handleDeleteBtnClick = () => {
+    if (!this.props.editing && this.props.selectedRowId > -1) {
+      this.props.deleteEntity(this.props.selectedRowId);
+    }
+  };
+
+  handleSaveBtnClick = () => {
+    if (this.props.selectedRowId > -1) {
+      //this.props.enableEditing();
+    }
+  };
+
+  handleCancelBtnClick = () => {
+    if (this.props.editing) {
+      this.props.disableEditing();
+    }
+  };
+
   render() {
     const {entitiesList, loading, error} = this.props;
-
     if (loading) {
       return (
         <main>
+          <div className="loader"></div>
           <section className="content-header">
-            <h1>Loading</h1>
+            <h1>Loading...</h1>
           </section>
           <section className="content">
-            <i className="fa fa-spinner fa-spin fa-3x fa-fw"/>
-            <span className="sr-only">Loading...</span>
           </section>
         </main>
       );
-    } else if (error) {
+    }
+
+    if (error) {
       return (<div className="alert alert-danger">Error: {error.message}</div>);
     }
 
@@ -107,23 +156,10 @@ export default class EntityExplorer extends Component {
         <section className="content-header">
           <h1>Navigator</h1>
         </section>
-        <section className="content" style={{'minHeight': '100vh'}}>
+        <section className="content">
           <div className="row">
             <div className="col-md-8 col-md-offset-2">
-              <div className="well well-sm">
-                <a className="btn btn-success" href="#" aria-label="Add">
-                  <i className="fa fa-plus" aria-hidden="true"/>
-                </a>
-                <div className="pull-right">
-                  <a className="btn btn-primary" href="#" aria-label="Edit" onClick={this.handleAddBtnClick}>
-                    <i className="fa fa-pencil-square-o" aria-hidden="true"/>
-                  </a>
-                  <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
-                  <a className="btn btn-danger" href="#" aria-label="Delete">
-                    <i className="fa fa-trash-o" aria-hidden="true"/>
-                  </a>
-                </div>
-              </div>
+              {this.renderButtons()}
               <Panel collapsible defaultExpanded style={{'maxHeight': '80vh', 'overflowY': 'scroll'}}
                      header="Available">
                 {this.renderEntitiesTable(entitiesList)}

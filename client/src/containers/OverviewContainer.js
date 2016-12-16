@@ -3,8 +3,11 @@ import {fetchFontsNumber} from '../actions/fonts';
 import Overview from '../components/Overview';
 
 const mapStateToProps = state => {
+  const {fontsNumber, error, loading} = state.fonts;
   return {
-    fontsNumber: state.fonts.fontsNumber
+    fontsNumber,
+    error,
+    loading
   };
 };
 

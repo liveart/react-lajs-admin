@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
-import {fetchFonts} from '../actions/fonts';
-import {selectRow, enableEditing} from '../actions/table';
+import {fetchFonts, editFont, deleteFont} from '../actions/fonts';
+import {selectRow, enableEditing, disableEditing} from '../actions/table';
 import EntityExplorer from '../components/EntityExplorer';
 
 const mapStateToProps = state => {
@@ -25,6 +25,15 @@ const mapDispatchToProps = dispatch => {
     },
     enableEditing() {
       dispatch(enableEditing());
+    },
+    disableEditing() {
+      dispatch(disableEditing());
+    },
+    editEntity(newFont) {
+      dispatch(editFont(newFont));
+    },
+    deleteEntity(id) {
+      dispatch(deleteFont(id));
     }
   };
 };

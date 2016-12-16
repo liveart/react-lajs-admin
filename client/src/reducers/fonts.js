@@ -1,11 +1,4 @@
-import {
-  FETCH_FONTS,
-  FETCH_FONTS_SUCCESS,
-  FETCH_FONTS_FAILURE,
-  FETCH_FONTS_NUMBER,
-  FETCH_FONTS_NUMBER_FAILURE,
-  FETCH_FONTS_NUMBER_SUCCESS
-} from '../actions/fonts';
+import * as actionType from '../actions/fonts';
 
 const INITIAL_STATE = {
   fontsList: [], fontsNumber: 0, error: null, loading: false
@@ -14,20 +7,25 @@ const INITIAL_STATE = {
 export default function (state = INITIAL_STATE, action) {
   let error;
   switch (action.type) {
-    case FETCH_FONTS:
+    case actionType.FONTS_OPERATION_SUCCESS:
+      return {
+        ...state,
+        fontsList: action.fonts || state.fontsList,
+        fontsNumber: action.fontsNumber || state.fontsNumber,
+        error: null,
+        loading: false
+      };
+    case actionType.FONTS_OPERATION_FAILURE:
+      error = action.message;
+      return {...state, error: error, loading: false};
+    case actionType.FETCH_FONTS:
       return {...state, fontsList: [], error: null, loading: true};
-    case FETCH_FONTS_SUCCESS:
-      return {...state, fontsList: action.fonts, error: null, loading: false};
-    case FETCH_FONTS_FAILURE:
-      error = action.message;
-      return {...state, fontsList: [], error: error, loading: false};
-    case FETCH_FONTS_NUMBER:
+    case actionType.FETCH_FONTS_NUMBER:
       return {...state, fontsNumber: 0, error: error, loading: true};
-    case FETCH_FONTS_NUMBER_SUCCESS:
-      return {...state, fontsNumber: action.fontsNumber, error: error, loading: false};
-    case FETCH_FONTS_NUMBER_FAILURE:
-      error = action.message;
-      return {...state, fontsNumber: 0, error: error, loading: false};
+    case actionType.EDIT_FONT:
+      return {...state, error: null, loading: true};
+    case actionType.DELETE_FONT:
+      return {...state, error: null, loading: true};
     default:
       return state;
   }

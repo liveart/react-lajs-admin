@@ -5,7 +5,9 @@ const InfoTile = adminLte.InfoTile;
 
 export default class Overview extends Component {
   static propTypes = {
-    fontsNumber: PropTypes.number.isRequired
+    fontsNumber: PropTypes.number.isRequired,
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.object
   };
 
   componentWillMount() {
@@ -28,13 +30,27 @@ export default class Overview extends Component {
   };
 
   render() {
+    const {fontsNumber, loading} = this.props;
+    if (loading) {
+      return (
+        <main>
+          <div className="loader"></div>
+          <section className="content-header">
+            <h1>Loading...</h1>
+          </section>
+          <section className="content">
+          </section>
+        </main>
+      );
+    }
+
     return (
       <div>
         <section className="content-header">
           <h1>Overview</h1>
         </section>
         <section className="content">
-          {this.renderFontsNumber(this.props.fontsNumber)}
+          {this.renderFontsNumber(fontsNumber)}
         </section>
       </div>
     );
