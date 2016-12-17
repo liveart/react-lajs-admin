@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
+import InfoWidget from './InfoWidget';
 import {Link} from 'react-router';
-import adminLte from 'adminlte-reactjs';
-const InfoTile = adminLte.InfoTile;
 
 export default class Overview extends Component {
   static propTypes = {
@@ -16,15 +15,8 @@ export default class Overview extends Component {
 
   renderFontsNumber = fontsNumber => {
     return (
-      <Link to="/fonts">
-        <InfoTile
-          width='2'
-          content=''
-          icon='fa-font'
-          stats={fontsNumber}
-          subject='Fonts'
-          theme='bg-aqua'
-        />
+      <Link to='/fonts'>
+        <InfoWidget title='Fonts' number={fontsNumber} iconClass='fa fa-font'/>
       </Link>
     );
   };

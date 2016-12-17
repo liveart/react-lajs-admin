@@ -5,6 +5,9 @@ const boot = require('loopback-boot');
 
 const app = module.exports = loopback();
 
+const helmet = require('helmet');
+app.use(helmet());
+
 app.start = function () {
   // start the web server
   return app.listen(function () {

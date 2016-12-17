@@ -7,24 +7,27 @@
 
 ## Getting Started
 
-### 1. Installing packages
+### Installing packages
 
 ```
 npm install
 ```
 
-### 2. Starting the server
-##### 1) Run webpack
+### Starting the server
+##### For development:
 ```
-node ./node_modules/webpack/bin/webpack.js
-```
-or you can install webpack globally so as to use it without referencing this path.
-
-##### 2) Start the server
-```
-node .
+npm run startDev
 ```
 
+##### For production:
+```
+npm start
+```
+Note that the bundle file dependency has to be changed to _/dist/bundle.js_ when running the version that is in 
+development branch without dev server (which is not recommended).
+
+Any version from master branch will have everything ready and 
+set up for production use.
 ## Additional commands
 ##### Linting files
 ```
