@@ -31,12 +31,12 @@ function* fetchFontsNumber() {
 
 function* editFont(action) {
   try {
-    const req = yield fetch('/api/fonts/', {
-      method: 'POST',
+    const req = yield fetch('/api/fonts/' + action.id, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: action.newFont
+      body: JSON.stringify(action.newFont)
     });
     const json = yield req.json();
     if (!(req.status >= 200 && req.status < 300)) {
@@ -44,6 +44,7 @@ function* editFont(action) {
     }
 
     yield put({type: FONTS_OPERATION_SUCCESS});
+    yield put({type: FETCH_FONTS});
   } catch (e) {
     yield put({type: FONTS_OPERATION_FAILURE, message: e.message});
   }

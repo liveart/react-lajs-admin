@@ -8,6 +8,5 @@ All notable changes to this project will be documented in this file.
 - NavBar
 - Fonts API
 - Fonts Widget for the Dashboard
-- Available fonts list
-- Form to add a new font
+- Explorer for listing, editing and adding entities
 - Loading animation

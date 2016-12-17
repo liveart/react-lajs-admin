@@ -11,9 +11,10 @@ export const fetchFonts = () => {
   };
 };
 
-export const editFont = font => {
+export const editFont = (id, font) => {
   return {
     type: EDIT_FONT,
+    id,
     newFont: font
   };
 };

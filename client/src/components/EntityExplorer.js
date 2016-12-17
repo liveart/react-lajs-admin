@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import {findDOMNode} from 'react-dom';
 import {Panel, Table, FormControl} from 'react-bootstrap';
 import {ID_PROP} from '../definitions';
 
@@ -8,10 +9,16 @@ export default class EntityExplorer extends Component {
     editing: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     entitiesList: PropTypes.array.isRequired,
-    error: PropTypes.object
+    error: PropTypes.string
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {entity: {}};
+  }
+
   componentWillMount() {
+    this.editingEntityInput = {};
     this.props.fetchEntities();
   }
 
@@ -41,7 +48,9 @@ export default class EntityExplorer extends Component {
 
               return (
                 <td key={j}><FormControl type="text"
-                                         defaultValue={typeof item[prop] === 'object' && !item[prop] ? '' : item[prop]}/>
+                                         defaultValue={typeof item[prop] === 'object' && !item[prop] ? '' :
+                                           item[prop]}
+                                         ref={input => this.editingEntityInput[prop] = input}/>
                 </td>
               );
             })}
@@ -61,13 +70,9 @@ export default class EntityExplorer extends Component {
   renderEntitiesTable = entities => (
     <Table responsive hover fill>
       <thead>
-      <tr>
-        {this.renderEntitiesTableHeading(entities)}
-      </tr>
+      <tr>{this.renderEntitiesTableHeading(entities)}</tr>
       </thead>
-      <tbody>
-      {this.renderEntitiesTableContents(entities)}
-      </tbody>
+      <tbody>{this.renderEntitiesTableContents(entities)}</tbody>
     </Table>
   );
 
@@ -92,8 +97,8 @@ export default class EntityExplorer extends Component {
 
   renderEditingButtons = () => (
     <div className="well well-sm">
-      <a className="btn btn-success" href="#" aria-label="Save" onClick={this.handleSaveBtnClick}>
-        <i className="fa fa-check" aria-hidden="true"/>
+      <a className="btn btn-success" href="#" aria-label="Save" onClick={this.handleSaveEditBtnClick}>
+        <i className="fa fa-check" type="submit" aria-hidden="true"/>
       </a>
       <div className="pull-right">
         <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
@@ -105,11 +110,13 @@ export default class EntityExplorer extends Component {
   );
 
   handleRowClick = id => {
-    this.props.selectRow(id);
+    if (this.props.selectedRowId !== id) {
+      this.props.selectRow(id);
+    }
   };
 
   handleEditBtnClick = () => {
-    if (this.props.selectedRowId > -1) {
+    if (!this.props.editing && this.props.selectedRowId > -1) {
       this.props.enableEditing();
     }
   };
@@ -120,9 +127,17 @@ export default class EntityExplorer extends Component {
     }
   };
 
-  handleSaveBtnClick = () => {
-    if (this.props.selectedRowId > -1) {
-      //this.props.enableEditing();
+  handleSaveEditBtnClick = () => {
+    if (this.props.editing && this.props.selectedRowId > -1 && this.props.entitiesList.length) {
+      const properties = Object.getOwnPropertyNames(this.props.entitiesList[0]);
+      const entity = {};
+      properties.forEach(prop => {
+        if (prop !== ID_PROP) {
+          entity[prop] = findDOMNode(this.editingEntityInput[prop]).value || undefined;
+        }
+      });
+      this.props.editEntity(this.props.selectedRowId, entity);
+      this.props.disableEditing();
     }
   };
 
@@ -148,7 +163,7 @@ export default class EntityExplorer extends Component {
     }
 
     if (error) {
-      return (<div className="alert alert-danger">Error: {error.message}</div>);
+      return (<div className="alert alert-danger">Error: {error}</div>);
     }
 
     return (

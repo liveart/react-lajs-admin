@@ -29,8 +29,8 @@ const mapDispatchToProps = dispatch => {
     disableEditing() {
       dispatch(disableEditing());
     },
-    editEntity(newFont) {
-      dispatch(editFont(newFont));
+    editEntity(id, newFont) {
+      dispatch(editFont(id, newFont));
     },
     deleteEntity(id) {
       dispatch(deleteFont(id));
