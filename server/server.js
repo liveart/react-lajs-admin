@@ -25,12 +25,25 @@ const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('DATABASE.db');
 
 db.serialize(function () {
+  db.run("CREATE TABLE IF NOT EXISTS client (" +
+    "id	INTEGER PRIMARY KEY," +
+    "email TEXT NOT NULL," +
+    "password TEXT NOT NULL," +
+    "realm TEXT," +
+    "username TEXT," +
+    "credentials TEXT," +
+    "challenges TEXT," +
+    "emailverified TEXT," +
+    "verificationtoken TEXT," +
+    "status TEXT," +
+    "created TEXT," +
+    "lastupdated TEXT);");
   db.run("CREATE TABLE IF NOT EXISTS font (" +
     "id	INTEGER PRIMARY KEY," +
-    "name TEXT NOT NULL, " +
-    "fontFamily TEXT NOT NULL, " +
-    "vector TEXT NOT NULL, " +
-    "boldAllowed TEXT, " +
+    "name TEXT NOT NULL," +
+    "fontFamily TEXT NOT NULL," +
+    "vector TEXT NOT NULL," +
+    "boldAllowed TEXT," +
     "italicAllowed TEXT);");
 });
 

@@ -17,7 +17,7 @@ export default function (state = INITIAL_STATE, action) {
       };
     case actionType.FONTS_OPERATION_FAILURE:
       error = action.message;
-      return {...state, error: error, loading: false};
+      return {...state, error, loading: false};
     case actionType.FETCH_FONTS:
       return {...state, fontsList: [], error: null, loading: true};
     case actionType.FETCH_FONTS_NUMBER:

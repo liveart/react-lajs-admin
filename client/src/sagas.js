@@ -10,6 +10,11 @@ import {
   FONTS_OPERATION_FAILURE
 } from './actions/fonts';
 
+import {
+  GET_USER_TOKEN,
+  GET_TOKEN_RESULT
+} from './actions/user';
+
 function* fetchFonts() {
   try {
     const req = yield fetch('/api/fonts');
@@ -92,6 +97,26 @@ function* deleteFont(action) {
   }
 }
 
+function* getUserToken(action) {
+  try {
+    const req = yield fetch('/api/clients/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({email: action.email, password: action.password})
+    });
+    const json = yield req.json();
+    if (!(req.status >= 200 && req.status < 300)) {
+      throw new Error(json.error.message);
+    }
+
+    yield put({type: GET_TOKEN_RESULT, token: json.id});
+  } catch (e) {
+    yield put({type: GET_TOKEN_RESULT, message: e.message});
+  }
+}
+
 function* watchFetchFonts() {
   yield takeLatest(FETCH_FONTS, fetchFonts);
 }
@@ -112,12 +137,17 @@ function* watchDeleteFont() {
   yield takeLatest(DELETE_FONT, deleteFont);
 }
 
+function* watchGetUserToken() {
+  yield takeLatest(GET_USER_TOKEN, getUserToken);
+}
+
 export default function* root() {
   yield [
     fork(watchFetchFonts),
     fork(watchFetchFontsNumber),
     fork(watchCreateFont),
     fork(watchEditFont),
-    fork(watchDeleteFont)
+    fork(watchDeleteFont),
+    fork(watchGetUserToken)
   ];
 }

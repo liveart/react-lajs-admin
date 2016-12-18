@@ -8,5 +8,5 @@ All notable changes to this project will be documented in this file.
 - NavBar
 - Fonts API
 - Fonts Widget for the Dashboard
-- Explorer for listing, editing and adding entities
+- Entity Explorer for listing, editing and creating
 - Loading animation

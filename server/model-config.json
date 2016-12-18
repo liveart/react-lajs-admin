@@ -35,5 +35,9 @@
   "Font": {
     "dataSource": "sqlite3",
     "public": true
+  },
+  "Client": {
+    "dataSource": "sqlite3",
+    "public": true
   }
 }

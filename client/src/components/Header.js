@@ -27,7 +27,7 @@ export default class Header extends Component {
           <span className="logo-lg"><b>LiveArt</b>Admin</span>
         </Link>
         <nav className="navbar navbar-static-top" role="navigation">
-          <a href="#" className="sidebar-toggle" data-toggle="offcanvas" role="button" onClick={this.pushMenu}>
+          <a href="#" className="sidebar-toggle" role="button" onClick={this.pushMenu}>
             <span className="sr-only">Toggle navigation</span>
           </a>
           <div className="navbar-custom-menu">
