@@ -1,6 +1,7 @@
 export const SELECT_ROW = 'SELECT_ROW';
 export const ENABLE_EDITING = 'ENABLE_EDITING';
-export const DISABLE_EDITING = 'DISABLE_EDITING';
+export const ENABLE_CREATING = 'ENABLE_CREATING';
+export const ENABLE_DEFAULT_STATUS = 'ENABLE_DEFAULT_STATUS';
 
 export const selectRow = selectedId => {
   return {
@@ -15,8 +16,14 @@ export const enableEditing = () => {
   };
 };
 
-export const disableEditing = () => {
+export const enableCreating = () => {
   return {
-    type: DISABLE_EDITING
+    type: ENABLE_CREATING
+  };
+};
+
+export const enableDefaultStatus = () => {
+  return {
+    type: ENABLE_DEFAULT_STATUS
   };
 };

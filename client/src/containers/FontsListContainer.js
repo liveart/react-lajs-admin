@@ -1,17 +1,17 @@
 import {connect} from 'react-redux';
-import {fetchFonts, editFont, deleteFont} from '../actions/fonts';
-import {selectRow, enableEditing, disableEditing} from '../actions/table';
+import {fetchFonts, createFont, editFont, deleteFont} from '../actions/fonts';
+import {selectRow, enableEditing, enableCreating, enableDefaultStatus} from '../actions/table';
 import EntityExplorer from '../components/EntityExplorer';
 
 const mapStateToProps = state => {
   const {fontsList, error, loading} = state.fonts;
-  const {selectedRowId, editing} = state.table;
+  const {selectedRowId, status} = state.table;
   return {
     entitiesList: fontsList,
     error,
     loading,
     selectedRowId,
-    editing
+    status
   };
 };
 
@@ -26,8 +26,14 @@ const mapDispatchToProps = dispatch => {
     enableEditing() {
       dispatch(enableEditing());
     },
-    disableEditing() {
-      dispatch(disableEditing());
+    enableCreating() {
+      dispatch(enableCreating());
+    },
+    enableDefaultStatus() {
+      dispatch(enableDefaultStatus());
+    },
+    createEntity(font) {
+      dispatch(createFont(font));
     },
     editEntity(id, newFont) {
       dispatch(editFont(id, newFont));

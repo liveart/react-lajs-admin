@@ -2,9 +2,10 @@ import {put, fork} from 'redux-saga/effects';
 import {takeLatest} from 'redux-saga';
 import {
   FETCH_FONTS,
-  DELETE_FONT,
   FETCH_FONTS_NUMBER,
+  CREATE_FONT,
   EDIT_FONT,
+  DELETE_FONT,
   FONTS_OPERATION_SUCCESS,
   FONTS_OPERATION_FAILURE
 } from './actions/fonts';
@@ -26,6 +27,27 @@ function* fetchFontsNumber() {
     yield put({type: FONTS_OPERATION_SUCCESS, fontsNumber: json.count});
   } catch (e) {
     yield put({type: FONTS_OPERATION_FAILURE, message: e.statusText});
+  }
+}
+
+function* createFont(action) {
+  try {
+    const req = yield fetch('/api/fonts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(action.font)
+    });
+    const json = yield req.json();
+    if (!(req.status >= 200 && req.status < 300)) {
+      throw new Error(json.error.message);
+    }
+
+    yield put({type: FONTS_OPERATION_SUCCESS});
+    yield put({type: FETCH_FONTS});
+  } catch (e) {
+    yield put({type: FONTS_OPERATION_FAILURE, message: e.message});
   }
 }
 
@@ -78,6 +100,10 @@ function* watchFetchFontsNumber() {
   yield takeLatest(FETCH_FONTS_NUMBER, fetchFontsNumber);
 }
 
+function* watchCreateFont() {
+  yield takeLatest(CREATE_FONT, createFont);
+}
+
 function* watchEditFont() {
   yield takeLatest(EDIT_FONT, editFont);
 }
@@ -90,6 +116,7 @@ export default function* root() {
   yield [
     fork(watchFetchFonts),
     fork(watchFetchFontsNumber),
+    fork(watchCreateFont),
     fork(watchEditFont),
     fork(watchDeleteFont)
   ];
