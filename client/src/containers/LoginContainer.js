@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getUserToken: (email, password) => {
+    getUserToken(email, password) {
       dispatch(getUserToken(email, password));
     }
   };

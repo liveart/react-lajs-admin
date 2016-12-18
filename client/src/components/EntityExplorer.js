@@ -9,7 +9,15 @@ export default class EntityExplorer extends Component {
     status: PropTypes.string.isRequired,
     loading: PropTypes.bool.isRequired,
     entitiesList: PropTypes.array.isRequired,
-    error: PropTypes.string
+    error: PropTypes.string,
+    fetchEntities: PropTypes.func.isRequired,
+    selectRow: PropTypes.func.isRequired,
+    enableEditing: PropTypes.func.isRequired,
+    enableCreating: PropTypes.func.isRequired,
+    enableDefaultStatus: PropTypes.func.isRequired,
+    createEntity: PropTypes.func.isRequired,
+    editEntity: PropTypes.func.isRequired,
+    deleteEntity: PropTypes.func.isRequired
   };
 
   componentWillMount() {

@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import Header from './Header';
-import NavBar from './Navbar';
+import NavbarContainer from '../containers/NavbarContainer';
 import LoginForm from '../containers/LoginContainer';
 
 export default class App extends Component {
@@ -34,8 +34,8 @@ export default class App extends Component {
     const {children} = this.props;
     return (
       <div>
-        <Header/>
-        <NavBar/>
+        <Header email={this.props.email}/>
+        <NavbarContainer/>
         <main className="content-wrapper">
           {children}
         </main>

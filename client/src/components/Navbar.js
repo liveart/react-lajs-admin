@@ -1,20 +1,15 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {Link} from 'react-router';
 
 export default class NavBar extends Component {
+  static propTypes = {
+    logOut: PropTypes.func.isRequired
+  };
+
   render() {
     return (
       <aside className="main-sidebar">
         <section className="sidebar">
-          <form action="#" method="get" className="sidebar-form">
-            <div className="input-group">
-              <input type="text" name="q" className="form-control" placeholder="Search..."/>
-              <span className="input-group-btn">
-                <button type="submit" name="search" id="search-btn" className="btn btn-flat">
-                <i className="fa fa-search"/></button>
-              </span>
-            </div>
-          </form>
           <ul className="sidebar-menu">
             <li className="header">MAIN NAVIGATION</li>
             <li>
@@ -29,9 +24,8 @@ export default class NavBar extends Component {
               </Link>
             </li>
             <li className="header">ADDITIONAL</li>
-            <li><a href="#"><i className="fa fa-cog"/> <span>Settings</span></a></li>
-            <li><a href="#"><i className="fa fa-book"/> <span>Documentation</span></a></li>
-            <li><a href="#"><i className="fa fa-sign-out"/> <span>Log out</span></a></li>
+            <li><a href="#"><i className="fa fa-cog"/><span>Settings</span></a></li>
+            <li><a href="#" onClick={this.props.logOut}><i className="fa fa-sign-out"/><span>Log out</span></a></li>
           </ul>
         </section>
       </aside>

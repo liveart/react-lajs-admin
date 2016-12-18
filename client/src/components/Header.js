@@ -1,8 +1,12 @@
-import React, {Component}  from 'react';
+import React, {Component, PropTypes}  from 'react';
 import {Link} from 'react-router';
 
 export default class Header extends Component {
-  pushMenu() {
+  static propTypes = {
+    email: PropTypes.string.isRequired
+  };
+
+  pushMenu = () => {
     const body = document.body;
     if (body.clientWidth > 768) {
       if (body.className.indexOf('sidebar-collapse') === -1) {
@@ -17,7 +21,7 @@ export default class Header extends Component {
         body.className = body.className.replace(' sidebar-open', '');
       }
     }
-  }
+  };
 
   render() {
     return (
@@ -32,7 +36,7 @@ export default class Header extends Component {
           </a>
           <div className="navbar-custom-menu">
             <ul className="nav navbar-nav">
-              <li><Link to="/profile">{this.props.name}</Link></li>
+              <li><Link to="/profile">{this.props.email}</Link></li>
             </ul>
           </div>
         </nav>

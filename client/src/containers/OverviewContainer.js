@@ -13,7 +13,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchFontsNumber: () => {
+    fetchFontsNumber() {
       dispatch(fetchFontsNumber());
     }
   };
