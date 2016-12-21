@@ -4,3 +4,4 @@
 /webpack.config.js
 /server/boot/authentication.js
 /client/src/assets/js/
+/__tests__/
