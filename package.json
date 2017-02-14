@@ -9,7 +9,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "bcrypt": "^1.0.1",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
     "es6-promise": "^4.0.5",
