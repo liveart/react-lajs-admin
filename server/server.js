@@ -45,6 +45,16 @@ db.serialize(function () {
     "vector TEXT NOT NULL," +
     "boldAllowed TEXT," +
     "italicAllowed TEXT);");
+  db.run("CREATE TABLE IF NOT EXISTS colorgroup (" +
+    "id	INTEGER PRIMARY KEY," +
+    "name TEXT NOT NULL);");
+
+  db.run("CREATE TABLE IF NOT EXISTS color (" +
+    "id	INTEGER PRIMARY KEY," +
+    "name TEXT NOT NULL," +
+    "colorgroup_name TEXT NOT NULL," +
+    "value TEXT NOT NULL);");
+
 });
 
 db.close();

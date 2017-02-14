@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node ./node_modules/webpack/bin/webpack.js && node ./server/server.js",
-    "startDev": "concurrent --kill-others \"webpack-dev-server --content-base build/\" \"node ./server/server.js\"",
+    "startDev": "concurrently --kill-others \"webpack-dev-server --content-base build/\" \"node ./server/server.js\"",
     "test": "jest"
   },
   "dependencies": {

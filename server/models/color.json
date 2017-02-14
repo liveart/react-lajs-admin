@@ -1,0 +1,32 @@
+{
+  "name": "color",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "sqlite3": {
+        "columnName": "name"
+      }
+    },
+    "colorgroup_name": {
+      "type": "string",
+      "required": true,
+      "sqlite3": {
+        "columnName": "colorgroup_name"
+      }
+    },
+    "value": {
+      "type": "string",
+      "required": true,
+      "sqlite3": {
+        "columnName": "rgb"
+      }
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

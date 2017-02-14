@@ -39,5 +39,13 @@
   "Client": {
     "dataSource": "sqlite3",
     "public": true
+  },
+  "colorgroup": {
+    "dataSource": "sqlite3",
+    "public": true
+  },
+  "color": {
+    "dataSource": "sqlite3",
+    "public": true
   }
 }
