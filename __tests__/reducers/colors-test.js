@@ -1,6 +1,7 @@
 'use strict';
 
-import * as types from '../../client/src/actions/colors';
+import * as actions from '../../client/src/actions/colors';
+import * as actionTypes from '../../client/src/actionTypes/colors';
 import reducer from '../../client/src/reducers/colors';
 
 const INITIAL_STATE = {
@@ -14,45 +15,45 @@ describe('colors reducer', () => {
     ).toEqual(INITIAL_STATE)
   });
 
-  test('should handle ' + types.FETCH_COLORS, () => {
+  test('should handle ' + actionTypes.FETCH_COLORS, () => {
     expect(
       reducer(INITIAL_STATE, {
-        type: types.FETCH_COLORS
+        type: actionTypes.FETCH_COLORS
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle ' + types.FETCH_COLORS_NUMBER, () => {
+  test('should handle ' + actionTypes.FETCH_COLORS_NUMBER, () => {
     expect(
       reducer(INITIAL_STATE, {
-        type: types.FETCH_COLORS_NUMBER
+        type: actionTypes.FETCH_COLORS_NUMBER
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle ' + types.CREATE_COLOR, () => {
+  test('should handle ' + actionTypes.CREATE_COLOR, () => {
     expect(
       reducer(INITIAL_STATE, {
-        type: types.CREATE_COLOR
+        type: actionTypes.CREATE_COLOR
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle ' + types.EDIT_COLOR, () => {
+  test('should handle ' + actionTypes.EDIT_COLOR, () => {
     expect(
       reducer(INITIAL_STATE, {
-        type: types.EDIT_COLOR
+        type: actionTypes.EDIT_COLOR
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle ' + types.DELETE_COLOR, () => {
+  test('should handle ' + actionTypes.DELETE_COLOR, () => {
     expect(
       reducer(INITIAL_STATE, {
-        type: types.DELETE_COLOR
+        type: actionTypes.DELETE_COLOR
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle ' + types.COLOR_OPERATION_SUCCESS, () => {
+  test('should handle ' + actionTypes.COLOR_OPERATION_SUCCESS, () => {
     expect(
       reducer(INITIAL_STATE, {
-        type: types.COLOR_OPERATION_SUCCESS,
+        type: actionTypes.COLOR_OPERATION_SUCCESS,
         colors: [{a: 1, b: 2}],
         colorsNumber: 5,
         error: null,
@@ -66,11 +67,11 @@ describe('colors reducer', () => {
     });
   });
 
-  test('should handle ' + types.COLOR_OPERATION_FAILURE, () => {
+  test('should handle ' + actionTypes.COLOR_OPERATION_FAILURE, () => {
     const error = 'some error';
     expect(
       reducer(INITIAL_STATE, {
-        type: types.COLOR_OPERATION_FAILURE,
+        type: actionTypes.COLOR_OPERATION_FAILURE,
         message: error
       })).toEqual({
       ...INITIAL_STATE, error

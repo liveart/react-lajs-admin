@@ -1,4 +1,4 @@
-import * as actionType from '../actions/colorgroups';
+import * as actionTypes from '../actionTypes/colorgroups';
 
 const INITIAL_STATE = {
   colorgroups: [], colorgroupsNumber: 0, error: null, loading: false
@@ -7,7 +7,7 @@ const INITIAL_STATE = {
 export default function (state = INITIAL_STATE, action) {
   let error;
   switch (action.type) {
-    case actionType.COLORGROUP_OPERATION_SUCCESS:
+    case actionTypes.COLORGROUP_OPERATION_SUCCESS:
       return {
         ...state,
         colorgroups: action.colorgroups || state.colorgroups,
@@ -15,18 +15,18 @@ export default function (state = INITIAL_STATE, action) {
         error: null,
         loading: false
       };
-    case actionType.COLORGROUP_OPERATION_FAILURE:
+    case actionTypes.COLORGROUP_OPERATION_FAILURE:
       error = action.message;
       return {...state, error, loading: false};
-    case actionType.FETCH_COLORGROUPS:
+    case actionTypes.FETCH_COLORGROUPS:
       return {...state, colorgroups: [], error: null, loading: true};
-    case actionType.FETCH_COLORGROUPS_NUMBER:
+    case actionTypes.FETCH_COLORGROUPS_NUMBER:
       return {...state, colorgroupsNumber: 0, error: null, loading: true};
-    case actionType.CREATE_COLORGROUP:
+    case actionTypes.CREATE_COLORGROUP:
       return {...state, error: null, loading: true};
-    case actionType.EDIT_COLORGROUP:
+    case actionTypes.EDIT_COLORGROUP:
       return {...state, error: null, loading: true};
-    case actionType.DELETE_COLORGROUP:
+    case actionTypes.DELETE_COLORGROUP:
       return {...state, error: null, loading: true};
     default:
       return state;

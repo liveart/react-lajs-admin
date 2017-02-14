@@ -1,6 +1,7 @@
 'use strict';
 
-import * as types from '../../client/src/actions/colorgroups';
+import * as actions from '../../client/src/actions/colorgroups';
+import * as actionTypes from '../../client/src/actionTypes/colorgroups';
 import reducer from '../../client/src/reducers/colorgroups';
 
 const INITIAL_STATE = {
@@ -14,45 +15,45 @@ describe('colorgroups reducer', () => {
     ).toEqual(INITIAL_STATE)
   });
 
-  test('should handle ' + types.FETCH_COLORGROUPS, () => {
+  test('should handle ' + actionTypes.FETCH_COLORGROUPS, () => {
     expect(
       reducer(INITIAL_STATE, {
-        type: types.FETCH_COLORGROUPS
+        type: actionTypes.FETCH_COLORGROUPS
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle ' + types.FETCH_COLORGROUPS_NUMBER, () => {
+  test('should handle ' + actionTypes.FETCH_COLORGROUPS_NUMBER, () => {
     expect(
       reducer(INITIAL_STATE, {
-        type: types.FETCH_COLORGROUPS_NUMBER
+        type: actionTypes.FETCH_COLORGROUPS_NUMBER
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle ' + types.CREATE_COLORGROUP, () => {
+  test('should handle ' + actionTypes.CREATE_COLORGROUP, () => {
     expect(
       reducer(INITIAL_STATE, {
-        type: types.CREATE_COLORGROUP
+        type: actionTypes.CREATE_COLORGROUP
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle ' + types.EDIT_COLORGROUP, () => {
+  test('should handle ' + actionTypes.EDIT_COLORGROUP, () => {
     expect(
       reducer(INITIAL_STATE, {
-        type: types.EDIT_COLORGROUP
+        type: actionTypes.EDIT_COLORGROUP
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle ' + types.DELETE_COLORGROUP, () => {
+  test('should handle ' + actionTypes.DELETE_COLORGROUP, () => {
     expect(
       reducer(INITIAL_STATE, {
-        type: types.DELETE_COLORGROUP
+        type: actionTypes.DELETE_COLORGROUP
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle ' + types.COLORGROUP_OPERATION_SUCCESS, () => {
+  test('should handle ' + actionTypes.COLORGROUP_OPERATION_SUCCESS, () => {
     expect(
       reducer(INITIAL_STATE, {
-        type: types.COLORGROUP_OPERATION_SUCCESS,
+        type: actionTypes.COLORGROUP_OPERATION_SUCCESS,
         colorgroups: [{a: 123, b: 456, c: {}}],
         colorgroupsNumber: 3,
         error: null,
@@ -66,11 +67,11 @@ describe('colorgroups reducer', () => {
     });
   });
 
-  test('should handle ' + types.COLORGROUP_OPERATION_FAILURE, () => {
+  test('should handle ' + actionTypes.COLORGROUP_OPERATION_FAILURE, () => {
     const error = 'some error';
     expect(
       reducer(INITIAL_STATE, {
-        type: types.COLORGROUP_OPERATION_FAILURE,
+        type: actionTypes.COLORGROUP_OPERATION_FAILURE,
         message: error
       })).toEqual({
       ...INITIAL_STATE, error

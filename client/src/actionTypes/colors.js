@@ -1,3 +1,7 @@
-/**
- * Created by olehsrh on 2/14/17.
- */
+export const FETCH_COLORS = 'FETCH_COLORS';
+export const FETCH_COLORS_NUMBER = 'FETCH_COLORS_NUMBER';
+export const CREATE_COLOR = 'CREATE_COLOR';
+export const EDIT_COLOR = 'EDIT_COLOR';
+export const DELETE_COLOR = 'DELETE_COLOR';
+export const COLOR_OPERATION_SUCCESS = 'COLOR_OPERATION_SUCCESS';
+export const COLOR_OPERATION_FAILURE = 'COLOR_OPERATION_FAILURE';

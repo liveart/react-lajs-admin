@@ -1,18 +1,19 @@
 'use strict';
 
+import * as actionTypes from '../../client/src/actionTypes/colors';
 import * as C from '../../client/src/actions/colors';
 
 describe('Color Actions', () => {
   test('should create an action to fetch colors', () => {
     const expectedAction = {
-      type: C.FETCH_COLORS
+      type: actionTypes.FETCH_COLORS
     };
     expect(C.fetchColors()).toEqual(expectedAction);
   });
 
   test('should create an action to fetch colors number', () => {
     const expectedAction = {
-      type: C.FETCH_COLORS_NUMBER
+      type: actionTypes.FETCH_COLORS_NUMBER
     };
     expect(C.fetchColorsNumber()).toEqual(expectedAction);
   });
@@ -20,7 +21,7 @@ describe('Color Actions', () => {
   test('should create an action to create a color', () => {
     const color = {name: 'someName', colorgroup_name: 'colorgroup_name', value: 'value'};
     const expectedAction = {
-      type: C.CREATE_COLOR,
+      type: actionTypes.CREATE_COLOR,
       color
     };
     expect(C.createColor(color)).toEqual(expectedAction);
@@ -30,7 +31,7 @@ describe('Color Actions', () => {
     const id = 15;
     const color = {name: 'someName', colorgroup_name: 'colorgroup_name', value: 'value'};
     const expectedAction = {
-      type: C.EDIT_COLOR,
+      type: actionTypes.EDIT_COLOR,
       id,
       newColor: color
     };
@@ -40,7 +41,7 @@ describe('Color Actions', () => {
   test('should create an action to delete a color', () => {
     const id = 15;
     const expectedAction = {
-      type: C.DELETE_COLOR,
+      type: actionTypes.DELETE_COLOR,
       id
     };
     expect(C.deleteColor(id)).toEqual(expectedAction);

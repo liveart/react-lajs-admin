@@ -1,23 +1,23 @@
 import {takeLatest} from 'redux-saga';
-import * as actionTypes from '../../actionTypes/colors';
-import * as colorSagas from '../colors';
+import * as actionTypes from '../../actionTypes/colorgroups';
+import * as colorgroupSagas from '../colorgroups';
 
-function* watchFetchColors() {
-  yield takeLatest(actionTypes.FETCH_COLORS, colorSagas.fetchColors);
+export function* watchFetchColorgroups() {
+  yield takeLatest(actionTypes.FETCH_COLORGROUPS, colorgroupSagas.fetchColorgroups);
 }
 
-function* watchFetchColorsNumber() {
-  yield takeLatest(actionTypes.FETCH_COLORS_NUMBER, colorSagas.fetchColorsNumber);
+export function* watchFetchColorgroupsNumber() {
+  yield takeLatest(actionTypes.FETCH_COLORGROUPS_NUMBER, colorgroupSagas.fetchColorgroupsNumber);
 }
 
-function* watchCreateColor() {
-  yield takeLatest(actionTypes.CREATE_COLOR, colorSagas.createColor);
+export function* watchCreateColorgroup() {
+  yield takeLatest(actionTypes.CREATE_COLORGROUP, colorgroupSagas.createColorgroup);
 }
 
-function* watchEditColor() {
-  yield takeLatest(actionTypes.EDIT_COLOR, colorSagas.editColor);
+export function* watchEditColorgroup() {
+  yield takeLatest(actionTypes.EDIT_COLORGROUP, colorgroupSagas.editColorgroup);
 }
 
-function* watchDeleteColor() {
-  yield takeLatest(actionTypes.DELETE_COLOR, colorSagas.deleteColor);
+export function* watchDeleteColorgroup() {
+  yield takeLatest(actionTypes.DELETE_COLORGROUP, colorgroupSagas.deleteColorgroup);
 }

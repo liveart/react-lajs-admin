@@ -1,4 +1,4 @@
-import * as actionType from '../actions/colors';
+import * as actionTypes from '../actionTypes/colors';
 
 const INITIAL_STATE = {
   colors: [], colorsNumber: 0, error: null, loading: false
@@ -7,7 +7,7 @@ const INITIAL_STATE = {
 export default function (state = INITIAL_STATE, action) {
   let error;
   switch (action.type) {
-    case actionType.COLOR_OPERATION_SUCCESS:
+    case actionTypes.COLOR_OPERATION_SUCCESS:
       return {
         ...state,
         colors: action.colors || state.colors,
@@ -15,18 +15,18 @@ export default function (state = INITIAL_STATE, action) {
         error: null,
         loading: false
       };
-    case actionType.COLOR_OPERATION_FAILURE:
+    case actionTypes.COLOR_OPERATION_FAILURE:
       error = action.message;
       return {...state, error, loading: false};
-    case actionType.FETCH_COLORS:
+    case actionTypes.FETCH_COLORS:
       return {...state, colors: [], error: null, loading: true};
-    case actionType.FETCH_COLORS_NUMBER:
+    case actionTypes.FETCH_COLORS_NUMBER:
       return {...state, colorsNumber: 0, error: null, loading: true};
-    case actionType.CREATE_COLOR:
+    case actionTypes.CREATE_COLOR:
       return {...state, error: null, loading: true};
-    case actionType.EDIT_COLOR:
+    case actionTypes.EDIT_COLOR:
       return {...state, error: null, loading: true};
-    case actionType.DELETE_COLOR:
+    case actionTypes.DELETE_COLOR:
       return {...state, error: null, loading: true};
     default:
       return state;

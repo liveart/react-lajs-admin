@@ -141,6 +141,9 @@ function* watchGetUserToken() {
   yield takeLatest(GET_USER_TOKEN, getUserToken);
 }
 
+import * as colorsWatchers from './sagas/watchers/colors';
+import * as colorgroupsWatchers from './sagas/watchers/colorgroups';
+
 export default function* root() {
   yield [
     fork(watchFetchFonts),
@@ -148,6 +151,16 @@ export default function* root() {
     fork(watchCreateFont),
     fork(watchEditFont),
     fork(watchDeleteFont),
-    fork(watchGetUserToken)
+    fork(watchGetUserToken),
+    fork(colorsWatchers.watchFetchColors),
+    fork(colorsWatchers.watchFetchColorsNumber),
+    fork(colorsWatchers.watchCreateColor),
+    fork(colorsWatchers.watchDeleteColor),
+    fork(colorsWatchers.watchEditColor),
+    fork(colorgroupsWatchers.watchFetchColorgroups),
+    fork(colorgroupsWatchers.watchFetchColorgroupsNumber),
+    fork(colorgroupsWatchers.watchCreateColorgroup),
+    fork(colorgroupsWatchers.watchDeleteColorgroup),
+    fork(colorgroupsWatchers.watchEditColorgroup)
   ];
 }
