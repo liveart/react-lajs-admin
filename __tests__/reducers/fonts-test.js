@@ -14,42 +14,42 @@ describe('fonts reducer', () => {
     ).toEqual(INITIAL_STATE)
   });
 
-  test('should handle FETCH_FONTS', () => {
+  test('should handle ' + types.FETCH_FONTS, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: types.FETCH_FONTS
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle FETCH_FONTS_NUMBER', () => {
+  test('should handle ' + types.FETCH_FONTS_NUMBER, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: types.FETCH_FONTS_NUMBER
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle CREATE_FONT', () => {
+  test('should handle ' + types.CREATE_FONT, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: types.CREATE_FONT
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle EDIT_FONT', () => {
+  test('should handle ' + types.EDIT_FONT, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: types.EDIT_FONT
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle DELETE_FONT', () => {
+  test('should handle ' + types.DELETE_FONT, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: types.DELETE_FONT
       })).toEqual({...INITIAL_STATE, loading: true});
   });
 
-  test('should handle FONTS_OPERATION_SUCCESS', () => {
+  test('should handle ' + types.FONTS_OPERATION_SUCCESS, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: types.FONTS_OPERATION_SUCCESS,
@@ -65,7 +65,7 @@ describe('fonts reducer', () => {
     });
   });
 
-  test('should handle FONTS_OPERATION_FAILURE', () => {
+  test('should handle ' + types.FONTS_OPERATION_FAILURE, () => {
     const error = 'some error';
     expect(
       reducer(INITIAL_STATE, {
@@ -75,5 +75,4 @@ describe('fonts reducer', () => {
       ...INITIAL_STATE, error
     });
   });
-
 });
