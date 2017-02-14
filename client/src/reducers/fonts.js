@@ -1,33 +1,33 @@
 import * as actionType from '../actions/fonts';
 
 const INITIAL_STATE = {
-  fontsList: [], fontsNumber: 0, error: null, loading: false
+  fontsList: [], fontsNumber: 0, fontsError: null, fontsLoading: false
 };
 
 export default function (state = INITIAL_STATE, action) {
-  let error;
+  let fontsError;
   switch (action.type) {
     case actionType.FONTS_OPERATION_SUCCESS:
       return {
         ...state,
         fontsList: action.fonts || state.fontsList,
         fontsNumber: action.fontsNumber || state.fontsNumber,
-        error: null,
-        loading: false
+        fontsError: null,
+        fontsLoading: false
       };
     case actionType.FONTS_OPERATION_FAILURE:
-      error = action.message;
-      return {...state, error, loading: false};
+      fontsError = action.message;
+      return {...state, fontsError, fontsLoading: false};
     case actionType.FETCH_FONTS:
-      return {...state, fontsList: [], error: null, loading: true};
+      return {...state, fontsList: [], fontsError: null, fontsLoading: true};
     case actionType.FETCH_FONTS_NUMBER:
-      return {...state, fontsNumber: 0, error: null, loading: true};
+      return {...state, fontsNumber: 0, fontsError: null, fontsLoading: true};
     case actionType.CREATE_FONT:
-      return {...state, error: null, loading: true};
+      return {...state, fontsError: null, fontsLoading: true};
     case actionType.EDIT_FONT:
-      return {...state, error: null, loading: true};
+      return {...state, fontsError: null, fontsLoading: true};
     case actionType.DELETE_FONT:
-      return {...state, error: null, loading: true};
+      return {...state, fontsError: null, fontsLoading: true};
     default:
       return state;
   }

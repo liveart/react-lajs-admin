@@ -4,7 +4,7 @@ import * as types from '../../client/src/actions/fonts';
 import reducer from '../../client/src/reducers/fonts';
 
 const INITIAL_STATE = {
-  fontsList: [], fontsNumber: 0, error: null, loading: false
+  fontsList: [], fontsNumber: 0, fontsError: null, fontsLoading: false
 };
 
 describe('fonts reducer', () => {
@@ -18,35 +18,35 @@ describe('fonts reducer', () => {
     expect(
       reducer(INITIAL_STATE, {
         type: types.FETCH_FONTS
-      })).toEqual({...INITIAL_STATE, loading: true});
+      })).toEqual({...INITIAL_STATE, fontsLoading: true});
   });
 
   test('should handle ' + types.FETCH_FONTS_NUMBER, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: types.FETCH_FONTS_NUMBER
-      })).toEqual({...INITIAL_STATE, loading: true});
+      })).toEqual({...INITIAL_STATE, fontsLoading: true});
   });
 
   test('should handle ' + types.CREATE_FONT, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: types.CREATE_FONT
-      })).toEqual({...INITIAL_STATE, loading: true});
+      })).toEqual({...INITIAL_STATE, fontsLoading: true});
   });
 
   test('should handle ' + types.EDIT_FONT, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: types.EDIT_FONT
-      })).toEqual({...INITIAL_STATE, loading: true});
+      })).toEqual({...INITIAL_STATE, fontsLoading: true});
   });
 
   test('should handle ' + types.DELETE_FONT, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: types.DELETE_FONT
-      })).toEqual({...INITIAL_STATE, loading: true});
+      })).toEqual({...INITIAL_STATE, fontsLoading: true});
   });
 
   test('should handle ' + types.FONTS_OPERATION_SUCCESS, () => {
@@ -55,24 +55,24 @@ describe('fonts reducer', () => {
         type: types.FONTS_OPERATION_SUCCESS,
         fonts: [{a: 1, b: 2}],
         fontsNumber: 5,
-        error: null,
-        loading: false
+        fontsError: null,
+        fontsLoading: false
       })).toEqual({
       ...INITIAL_STATE, fontsList: [{a: 1, b: 2}],
       fontsNumber: 5,
-      error: null,
-      loading: false
+      fontsError: null,
+      fontsLoading: false
     });
   });
 
   test('should handle ' + types.FONTS_OPERATION_FAILURE, () => {
-    const error = 'some error';
+    const fontsError = 'some error';
     expect(
       reducer(INITIAL_STATE, {
         type: types.FONTS_OPERATION_FAILURE,
-        message: error
+        message: fontsError
       })).toEqual({
-      ...INITIAL_STATE, error
+      ...INITIAL_STATE, fontsError
     });
   });
 });
