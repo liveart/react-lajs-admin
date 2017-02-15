@@ -9,7 +9,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "bcrypt": "^1.0.1",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
     "es6-promise": "^4.0.5",
@@ -17,6 +16,7 @@
     "loopback": "^2.22.0",
     "loopback-boot": "^2.6.5",
     "loopback-component-explorer": "^2.4.0",
+    "loopback-component-storage": "^3.0.1",
     "loopback-connector-sqlite3": "^1.2.0",
     "loopback-datasource-juggler": "^2.39.0",
     "react": "^15.4.1",
