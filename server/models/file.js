@@ -1,15 +1,18 @@
 'use strict';
-var CONTAINERS_URL = '/api/containers/';
+const CONTAINERS_URL = '/api/containers/';
 module.exports = function (File) {
 
   File.upload = function (ctx, options, cb) {
-    if (!options) options = {};
+    if (!options) {
+      options = {};
+    }
+
     ctx.req.params.container = 'server';
     File.app.models.container.upload(ctx.req, ctx.result, options, function (err, fileObj) {
       if (err) {
         cb(err);
       } else {
-        var fileInfo = fileObj.files.file[0];
+        const fileInfo = fileObj.files.file[0];
         File.create({
           name: fileInfo.name,
           type: fileInfo.type,
