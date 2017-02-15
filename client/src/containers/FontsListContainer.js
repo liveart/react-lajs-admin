@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {fetchFonts, createFont, editFont, deleteFont} from '../actions/fonts';
-import {selectRow, enableEditing, enableCreating, enableDefaultStatus} from '../actions/table';
+import {selectRow, enableEditing, enableCreating, enableUploading, enableDefaultStatus} from '../actions/table';
 import EntityExplorer from '../components/EntityExplorer';
 
 const mapStateToProps = state => {

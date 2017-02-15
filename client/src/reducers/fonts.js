@@ -24,6 +24,8 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, fontsNumber: 0, error: null, loading: true};
     case actionType.CREATE_FONT:
       return {...state, error: null, loading: true};
+    case actionType.UPLOAD_FONT:
+      return {...state, error: null, loading: true};
     case actionType.EDIT_FONT:
       return {...state, error: null, loading: true};
     case actionType.DELETE_FONT:

@@ -43,6 +43,25 @@ export function* createFont(action) {
   }
 }
 
+export function* uploadFont(action) {
+  try {
+    const containerName = '/api/containers/woff/upload';
+    const req = yield fetch(containerName, {
+      method: 'POST',
+      body: JSON.stringify(action.fileFont)
+    });
+    const json = yield req.json();
+    if (!(req.status >= 200 && req.status < 300)) {
+      throw new Error(json.error.message);
+    }
+
+    yield put({type: actionTypes.FONTS_OPERATION_SUCCESS});
+    yield put({type: actionTypes.FETCH_FONTS});
+  } catch (e) {
+    yield put({type: actionTypes.FONTS_OPERATION_FAILURE, message: e.message});
+  }
+}
+
 export function* editFont(action) {
   try {
     const req = yield fetch('/api/fonts/' + action.id, {
