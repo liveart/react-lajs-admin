@@ -1,6 +1,6 @@
 'use strict';
 
-import * as types from '../../client/src/actions/table';
+import * as types from '../../client/src/actionTypes/table';
 import reducer from '../../client/src/reducers/table';
 import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../client/src/definitions';
 

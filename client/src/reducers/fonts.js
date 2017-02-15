@@ -1,4 +1,4 @@
-import * as actionType from '../actions/fonts';
+import * as actionType from '../actionTypes/fonts';
 
 const INITIAL_STATE = {
   fontsList: [], fontsNumber: 0, error: null, loading: false
