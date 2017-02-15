@@ -21,7 +21,7 @@
       "type": "string",
       "required": true,
       "sqlite3": {
-        "columnName": "rgb"
+        "columnName": "value"
       }
     }
   },

@@ -1,16 +1,19 @@
 import React, {Component, PropTypes} from 'react';
+import {FormControl} from 'react-bootstrap';
 import {findDOMNode} from 'react-dom';
-import {Table, FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 
-export default class EntityExplorer extends Component {
+export default class Table extends Component {
   static propTypes = {
+    title: PropTypes.string.isRequired,
+    explorerData: PropTypes.arrayOf(PropTypes.any),
+    data: PropTypes.arrayOf(PropTypes.any).isRequired,
+    error: PropTypes.string,
+    loading: PropTypes.bool.isRequired,
+    fetchData: PropTypes.func.isRequired,
+    fetchExplorerData: PropTypes.func.isRequired,
     selectedRowId: PropTypes.number.isRequired,
     status: PropTypes.string.isRequired,
-    loading: PropTypes.bool,
-    entitiesList: PropTypes.array.isRequired,
-    error: PropTypes.string,
-    fetchEntities: PropTypes.func.isRequired,
     selectRow: PropTypes.func.isRequired,
     enableEditing: PropTypes.func.isRequired,
     enableCreating: PropTypes.func.isRequired,
@@ -21,45 +24,48 @@ export default class EntityExplorer extends Component {
   };
 
   componentWillMount() {
+    this.props.fetchExplorerData();
     this.editingEntityInput = {};
     this.newEntityInput = {};
-    this.props.fetchEntities();
+    this.props.fetchData();
   }
 
-  renderEntitiesTableHeading = entities => {
-    if (!entities.length) {
+  renderTableHeadings = data => {
+    if (!data.length) {
       return null;
     }
-    return Object.getOwnPropertyNames(entities[0]).map((prop, i) => (<th key={i}>{prop}</th>));
+    return Object.getOwnPropertyNames(data[0]).map((prop, i) => (<th key={i}>{prop}</th>));
   };
 
-  renderCreatingRow = entities => {
-    if (!entities.length) {
+  renderCreatingRow = data => {
+    if (!data.length) {
       return null;
     }
 
-    return (<tr>{Object.getOwnPropertyNames(entities[0]).map((prop, i) => {
-      if (prop === ID_PROP) {
-        return null;
-      }
+    return (
+      <tr>{Object.getOwnPropertyNames(data[0]).map((prop, i) => {
+        if (prop === ID_PROP) {
+          return null;
+        }
 
-      return (<td key={i}><FormControl type="text" ref={input => this.newEntityInput[prop] = input}/>
-      </td>);
-    })
-    }</tr>);
+        return (<td key={i}><FormControl type="text" ref={input => this.newEntityInput[prop] = input}/>
+        </td>);
+      })
+      }</tr>
+    );
   };
 
-  renderEntitiesTableContents = entities => {
-    if (!entities.length) {
+  renderTableData = data => {
+    if (!data.length) {
       return null;
     }
 
-    return entities.map(item => {
+    return data.map(item => {
       if (this.props.status === STATUS_EDITING && item[ID_PROP] === this.props.selectedRowId) {
         return (
           <tr key={item[ID_PROP]}
               onClick={() => this.handleRowClick(item[ID_PROP])}>
-            {Object.getOwnPropertyNames(entities[0]).map((prop, j) => {
+            {Object.getOwnPropertyNames(data[0]).map((prop, j) => {
               if (prop === ID_PROP) {
                 return (
                   <td key={j}>{item[prop]}</td>
@@ -81,30 +87,50 @@ export default class EntityExplorer extends Component {
       return (
         <tr key={item[ID_PROP]} className={item[ID_PROP] === this.props.selectedRowId ? 'selected' : null}
             onClick={() => this.handleRowClick(item[ID_PROP])}>
-          {Object.getOwnPropertyNames(entities[0]).map((prop, j) => (<td key={j}>{item[prop]}</td>))}
+          {Object.getOwnPropertyNames(data[0]).map((prop, j) => (<td key={j}>{item[prop]}</td>))}
         </tr>
       );
     });
   };
 
-  renderEntitiesTable = entities => (
-    <Table responsive hover fill>
-      <thead>
-      <tr>{this.renderEntitiesTableHeading(entities)}</tr>
-      </thead>
-      <tbody>
-      {this.props.status === STATUS_CREATING ? this.renderCreatingRow(entities) : null}
-      {this.renderEntitiesTableContents(entities)}
-      </tbody>
-    </Table>
+  renderTable = (data, headings) => (
+    <section>
+      <div className='box box-info'>
+        <div className='box-header with-border'>
+          <h3 className='box-title'>Title</h3> //TODO
+          <div className='box-tools pull-right'>
+            <button type='button' className='btn btn-box-tool'/>
+            <button type='button' className='btn btn-box-tool'/>
+          </div>
+        </div>
+        <div className='box-body'>
+          <div className='table-responsive'>
+            <table className='table no-margin'>
+              <thead>
+              <tr>
+                {this.renderTableHeadings(data)}
+              </tr>
+              </thead>
+              <tbody>
+              {this.props.status === STATUS_CREATING ? this.renderCreatingRow(data) : null}
+              {this.renderTableData(data)}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className='box-footer clearfix'>
+          <a>View All</a>
+        </div>
+      </div>
+    </section>
   );
 
   renderButtons = () => (this.props.status === STATUS_EDITING || this.props.status === STATUS_CREATING ?
     this.renderEditingButtons() : this.renderDefButtons());
 
   renderDefButtons = () => (
-    <div className="box-tools">
-      <button className="btn" title="Add" onClick={this.handleCreateBtnClick}><i className="fa fa-plus"/></button>
+    <div className='box-tools'>
+      <button className='btn' title='Add' onClick={this.handleCreateBtnClick}><i className='fa fa-plus'/></button>
       <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
       <button className="btn" title="Edit" onClick={this.handleEditBtnClick}>
         <i className="fa fa-pencil-square-o"/></button>
@@ -115,12 +141,12 @@ export default class EntityExplorer extends Component {
   );
 
   renderEditingButtons = () => (
-    <div className="box-tools">
-      <button className="btn btn-success" title="Save" onClick={this.handleSaveBtnClick}>
-        <i className="fa fa-check"/></button>
+    <div className='box-tools'>
+      <button className='btn btn-success' title='Save' onClick={this.handleSaveBtnClick}>
+        <i className='fa fa-check'/></button>
       <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
-      <button className="btn btn-danger" title="Cancel" onClick={this.handleCancelBtnClick}>
-        <i className="fa fa-ban"/></button>
+      <button className='btn btn-danger' title='Cancel' onClick={this.handleCancelBtnClick}>
+        <i className='fa fa-ban'/></button>
     </div>
   );
 
@@ -149,8 +175,8 @@ export default class EntityExplorer extends Component {
   };
 
   handleSaveBtnClick = () => {
-    if (this.props.status === STATUS_EDITING && this.props.selectedRowId > -1 && this.props.entitiesList.length) {
-      const properties = Object.getOwnPropertyNames(this.props.entitiesList[0]);
+    if (this.props.status === STATUS_EDITING && this.props.selectedRowId > -1 && this.props.data.length) {
+      const properties = Object.getOwnPropertyNames(this.props.data[0]);
       const entity = {};
       properties.forEach(prop => {
         if (prop !== ID_PROP) {
@@ -159,7 +185,7 @@ export default class EntityExplorer extends Component {
       });
       this.props.editEntity(this.props.selectedRowId, entity);
     } else if (this.props.status === STATUS_CREATING) {
-      const properties = Object.getOwnPropertyNames(this.props.entitiesList[0]);
+      const properties = Object.getOwnPropertyNames(this.props.data[0]);
       const entity = {};
       properties.forEach(prop => {
         if (prop !== ID_PROP) {
@@ -178,45 +204,12 @@ export default class EntityExplorer extends Component {
   };
 
   render() {
-    const {entitiesList, loading, error} = this.props;
-    if (loading) {
-      return (
-        <main>
-          <div className="loader"></div>
-          <section className="content-header">
-            <h1>Loading...</h1>
-          </section>
-          <section className="content">
-          </section>
-        </main>
-      );
-    }
-
-    if (error) {
-      return (<div className="alert alert-danger">Error: {error}</div>);
-    }
-
+    const {title, explorerData, headings, data} = this.props;
     return (
-      <main>
-        <section className="content-header">
-          <h1>Navigator</h1>
-        </section>
-        <section className="content">
-          <div className="row">
-            <div className="col-md-8 col-md-offset-2">
-              <div className="box box-default">
-                <div className="box-header with-border">
-                  <h3 className="box-title">Fonts</h3>
-                  {this.renderButtons()}
-                </div>
-                <div className="box-body" style={{'maxHeight': '80vh', 'overflowY': 'scroll'}}>
-                  {this.renderEntitiesTable(entitiesList)}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
+      <section>
+        {this.renderButtons()}
+        {this.renderTable(data, headings)}
+      </section>
     );
   }
 }
