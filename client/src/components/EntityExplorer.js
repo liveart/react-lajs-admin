@@ -14,6 +14,7 @@ export default class EntityExplorer extends Component {
     selectRow: PropTypes.func.isRequired,
     enableEditing: PropTypes.func.isRequired,
     enableCreating: PropTypes.func.isRequired,
+    enableUploading: PropTypes.func.isRequired,
     enableDefaultStatus: PropTypes.func.isRequired,
     createEntity: PropTypes.func.isRequired,
     editEntity: PropTypes.func.isRequired,
@@ -106,6 +107,8 @@ export default class EntityExplorer extends Component {
     <div className="box-tools">
       <button className="btn" title="Add" onClick={this.handleCreateBtnClick}><i className="fa fa-plus"/></button>
       <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
+      <button className="btn" title="AddWOFF" onClick={this.handleFileBtnClick}><i className="fa fa-file"/></button>
+      <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
       <button className="btn" title="Edit" onClick={this.handleEditBtnClick}>
         <i className="fa fa-pencil-square-o"/></button>
       <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
@@ -135,6 +138,7 @@ export default class EntityExplorer extends Component {
       this.props.enableCreating();
     }
   };
+
 
   handleEditBtnClick = () => {
     if (this.props.status === STATUS_DEFAULT && this.props.selectedRowId > -1) {
