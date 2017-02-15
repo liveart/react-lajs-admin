@@ -47,5 +47,13 @@
   "color": {
     "dataSource": "remote-dev-mongo",
     "public": true
+  },
+  "container": {
+    "dataSource": "storage",
+    "public": true
+  },
+  "file": {
+    "dataSource": "storage",
+    "public": true
   }
 }
