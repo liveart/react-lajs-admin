@@ -1,6 +1,6 @@
 'use strict';
 
-import * as types from '../../client/src/actions/fonts';
+import * as types from '../../client/src/actionTypes/fonts';
 import reducer from '../../client/src/reducers/fonts';
 
 const INITIAL_STATE = {
