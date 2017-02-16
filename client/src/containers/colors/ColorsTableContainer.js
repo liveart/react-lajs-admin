@@ -13,7 +13,7 @@ const mapStateToProps = state => {
   const {selectedRowId, status} = state.table;
 
   return {
-    title: 'color',
+    title: 'Colors',
     explorerData: colorgroups,
     data: colors,
     error,

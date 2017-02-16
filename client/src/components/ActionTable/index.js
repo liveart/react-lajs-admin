@@ -94,15 +94,8 @@ export default class Table extends Component {
   };
 
   renderTable = (data, headings) => (
-    <section className='box box-info'>
-      <div className='box-header with-border'>
-        <h3 className='box-title'>Title</h3> //TODO
-        <div className='box-tools pull-right'>
-          <button type='button' className='btn btn-box-tool'/>
-          <button type='button' className='btn btn-box-tool'/>
-        </div>
-      </div>
-      <div className='box-body'>
+    <section className='panel panel-default'>
+      <div>
         <div className='table-responsive'>
           <table className='table no-margin'>
             <thead>
@@ -117,25 +110,22 @@ export default class Table extends Component {
           </table>
         </div>
       </div>
-      <div className='box-footer clearfix'>
-        <a>View All</a>
-      </div>
     </section>
   );
 
-  renderButtons = () => (this.props.status === STATUS_EDITING || this.props.status === STATUS_CREATING ?
-    this.renderEditingButtons() : this.renderDefButtons());
+  renderButtons = () => (
+    this.props.status === STATUS_EDITING || this.props.status === STATUS_CREATING ?
+      this.renderEditingButtons() : this.renderDefButtons()
+  );
 
   renderDefButtons = () => (
+
     <div>
       <a className='btn btn-app' onClick={this.handleCreateBtnClick}><i className='fa fa-plus'/>Add
-        new {' ' + this.props.title}
       </a>
       <a className='btn btn-app' onClick={this.handleEditBtnClick}><i className='fa fa-pencil-square-o'/>Edit
-        {' ' + this.props.title}
       </a>
       <a className='btn btn-app' onClick={this.handleDeleteBtnClick}><i className='fa fa-trash-o'/>Delete
-        {' ' + this.props.title}
       </a>
     </div>
   );
@@ -148,8 +138,13 @@ export default class Table extends Component {
   );
 
   renderExplorer = explorerData => (
-    <div className='list-group'>
-      {this.renderExplorerData(explorerData)}
+    <div className='panel panel-default'>
+      <div className='panel-heading'>
+        <p>Groups</p>
+      </div>
+      <div className='list-group'>
+        {this.renderExplorerData(explorerData)}
+      </div>
     </div>
   );
 
@@ -223,14 +218,14 @@ export default class Table extends Component {
     return (
       <section>
         <div className='row'>
-          <div className='col-lg-2'>
-            {this.renderButtons()}
-          </div>
-          <div className='col-lg-4'>
+          <div className='col-lg-3'>
             {this.renderExplorer(explorerData)}
           </div>
-          <div className='col-lg-6'>
+          <div className='col-lg-7'>
             {this.renderTable(data, headings)}
+          </div>
+          <div className='col-lg-2'>
+            {this.renderButtons()}
           </div>
         </div>
       </section>
