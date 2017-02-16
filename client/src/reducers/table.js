@@ -1,4 +1,4 @@
-import {SELECT_ROW, ENABLE_EDITING, ENABLE_CREATING, ENABLE_UPLOADING, ENABLE_DEFAULT_STATUS} from '../actionTypes/table';
+import {SELECT_ROW, ENABLE_EDITING, ENABLE_CREATING, ENABLE_DEFAULT_STATUS} from '../actionTypes/table';
 import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 
 const INITIAL_STATE = {
@@ -14,8 +14,6 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, status: STATUS_EDITING};
     case ENABLE_CREATING:
       return {...state, status: STATUS_CREATING};
-    case ENABLE_UPLOADING:
-      return {...state, status: ENABLE_UPLOADING};
     case ENABLE_DEFAULT_STATUS:
       return {...state, status: STATUS_DEFAULT};
     default:

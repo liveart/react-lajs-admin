@@ -14,9 +14,9 @@ export default class EntityExplorer extends Component {
     selectRow: PropTypes.func.isRequired,
     enableEditing: PropTypes.func.isRequired,
     enableCreating: PropTypes.func.isRequired,
-    enableUploading: PropTypes.func.isRequired,
     enableDefaultStatus: PropTypes.func.isRequired,
     createEntity: PropTypes.func.isRequired,
+    upload: PropTypes.func.isRequired,
     editEntity: PropTypes.func.isRequired,
     deleteEntity: PropTypes.func.isRequired
   };
@@ -54,7 +54,6 @@ export default class EntityExplorer extends Component {
     if (!entities.length) {
       return null;
     }
-
     return entities.map(item => {
       if (this.props.status === STATUS_EDITING && item[ID_PROP] === this.props.selectedRowId) {
         return (
@@ -100,21 +99,25 @@ export default class EntityExplorer extends Component {
     </Table>
   );
 
+
   renderButtons = () => (this.props.status === STATUS_EDITING || this.props.status === STATUS_CREATING ?
     this.renderEditingButtons() : this.renderDefButtons());
 
   renderDefButtons = () => (
-    <div className="box-tools">
-      <button className="btn" title="Add" onClick={this.handleCreateBtnClick}><i className="fa fa-plus"/></button>
+    <div class="box">
+      <input className="form-inline" type="file" accept=".woff" id="woff"/>
       <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
-      <button className="btn" title="AddWOFF" onClick={this.handleFileBtnClick}><i className="fa fa-file"/></button>
+      <button className="btn" title="AddWOFF" onClick={this.handleFileBtnClick}>
+        <i className="fa fa-file"/></button>
       <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
-      <button className="btn" title="Edit" onClick={this.handleEditBtnClick}>
-        <i className="fa fa-pencil-square-o"/></button>
-      <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
-      <button className="btn btn-danger" title="Delete" onClick={this.handleDeleteBtnClick}>
-        <i className="fa fa-trash-o"/></button>
-    </div>
+        <button className="btn" title="Add" onClick={this.handleCreateBtnClick}><i className="fa fa-plus"/></button>
+        <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
+        <button className="btn" title="Edit" onClick={this.handleEditBtnClick}>
+          <i className="fa fa-pencil-square-o"/></button>
+        <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
+        <button className="btn btn-danger" title="Delete" onClick={this.handleDeleteBtnClick}>
+          <i className="fa fa-trash-o"/></button>
+      </div>
   );
 
   renderEditingButtons = () => (
@@ -139,6 +142,13 @@ export default class EntityExplorer extends Component {
     }
   };
 
+  handleFileBtnClick = () => {
+    if (this.props.status === STATUS_DEFAULT) {
+      const inputFile = document.getElementById('woff').files;
+      const file = inputFile[0];
+      this.props.upload(file);
+    }
+  };
 
   handleEditBtnClick = () => {
     if (this.props.status === STATUS_DEFAULT && this.props.selectedRowId > -1) {
@@ -224,3 +234,4 @@ export default class EntityExplorer extends Component {
     );
   }
 }
+
