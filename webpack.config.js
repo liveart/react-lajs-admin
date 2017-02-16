@@ -1,8 +1,7 @@
 const webpack = require('webpack');
-const validate = require('webpack-validator');
 const path = require("path");
 
-module.exports = validate({
+module.exports = {
   context: __dirname,
 
   entry: './client/src/',
@@ -14,11 +13,15 @@ module.exports = validate({
   },
 
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    modules: [
+      path.join(__dirname, "src"),
+      "node_modules"
+    ]
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js?$/,
         exclude: /node_modules/,
@@ -34,7 +37,7 @@ module.exports = validate({
   plugins: [
     new webpack.ProvidePlugin({
       'Promise': 'es6-promise',
-      'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+      'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
     })
   ]
-});
+};
