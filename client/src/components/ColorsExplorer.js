@@ -30,17 +30,7 @@ export default class EntityExplorer extends Component {
           <h1>Navigator</h1>
         </section>
         <section className='content'>
-          <Grid>
-            <Row>
-              <a className='btn btn-app'><i className='fa fa-plus'/>Add</a>
-            </Row>
-            <Row>
-              <Col md={2}/>
-              <Col md={8}>
-                <ColorsTableContainer />
-              </Col>
-            </Row>
-          </Grid>
+          <ColorsTableContainer />
         </section>
       </main>
     );

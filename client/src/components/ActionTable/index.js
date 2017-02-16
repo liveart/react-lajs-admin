@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {findDOMNode} from 'react-dom';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 
 export default class Table extends Component {
   static propTypes = {
@@ -94,33 +94,31 @@ export default class Table extends Component {
   };
 
   renderTable = (data, headings) => (
-    <section>
-      <div className='box box-info'>
-        <div className='box-header with-border'>
-          <h3 className='box-title'>Title</h3> //TODO
-          <div className='box-tools pull-right'>
-            <button type='button' className='btn btn-box-tool'/>
-            <button type='button' className='btn btn-box-tool'/>
-          </div>
+    <section className='box box-info'>
+      <div className='box-header with-border'>
+        <h3 className='box-title'>Title</h3> //TODO
+        <div className='box-tools pull-right'>
+          <button type='button' className='btn btn-box-tool'/>
+          <button type='button' className='btn btn-box-tool'/>
         </div>
-        <div className='box-body'>
-          <div className='table-responsive'>
-            <table className='table no-margin'>
-              <thead>
-              <tr>
-                {this.renderTableHeadings(data)}
-              </tr>
-              </thead>
-              <tbody>
-              {this.props.status === STATUS_CREATING ? this.renderCreatingRow(data) : null}
-              {this.renderTableData(data)}
-              </tbody>
-            </table>
-          </div>
+      </div>
+      <div className='box-body'>
+        <div className='table-responsive'>
+          <table className='table no-margin'>
+            <thead>
+            <tr>
+              {this.renderTableHeadings(data)}
+            </tr>
+            </thead>
+            <tbody>
+            {this.props.status === STATUS_CREATING ? this.renderCreatingRow(data) : null}
+            {this.renderTableData(data)}
+            </tbody>
+          </table>
         </div>
-        <div className='box-footer clearfix'>
-          <a>View All</a>
-        </div>
+      </div>
+      <div className='box-footer clearfix'>
+        <a>View All</a>
       </div>
     </section>
   );
@@ -129,26 +127,43 @@ export default class Table extends Component {
     this.renderEditingButtons() : this.renderDefButtons());
 
   renderDefButtons = () => (
-    <div className='box-tools'>
-      <button className='btn' title='Add' onClick={this.handleCreateBtnClick}><i className='fa fa-plus'/></button>
-      <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
-      <button className="btn" title="Edit" onClick={this.handleEditBtnClick}>
-        <i className="fa fa-pencil-square-o"/></button>
-      <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
-      <button className="btn btn-danger" title="Delete" onClick={this.handleDeleteBtnClick}>
-        <i className="fa fa-trash-o"/></button>
+    <div>
+      <a className='btn btn-app' onClick={this.handleCreateBtnClick}><i className='fa fa-plus'/>Add
+        new {' ' + this.props.title}
+      </a>
+      <a className='btn btn-app' onClick={this.handleEditBtnClick}><i className='fa fa-pencil-square-o'/>Edit
+        {' ' + this.props.title}
+      </a>
+      <a className='btn btn-app' onClick={this.handleDeleteBtnClick}><i className='fa fa-trash-o'/>Delete
+        {' ' + this.props.title}
+      </a>
     </div>
   );
 
   renderEditingButtons = () => (
-    <div className='box-tools'>
-      <button className='btn btn-success' title='Save' onClick={this.handleSaveBtnClick}>
-        <i className='fa fa-check'/></button>
-      <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
-      <button className='btn btn-danger' title='Cancel' onClick={this.handleCancelBtnClick}>
-        <i className='fa fa-ban'/></button>
+    <div>
+      <a className='btn btn-app' onClick={this.handleSaveBtnClick}><i className='fa fa-check'/>Save</a>
+      <a className='btn btn-app' onClick={this.handleCancelBtnClick}><i className='fa fa-ban'/>Cancel</a>
     </div>
   );
+
+  renderExplorer = explorerData => (
+    <div className='list-group'>
+      {this.renderExplorerData(explorerData)}
+    </div>
+  );
+
+  renderExplorerData = explorerData => {
+    if (!explorerData.length) {
+      return null;
+    }
+
+    return explorerData.map((item, i) => {
+      return (
+        <button key={i} type='button' className='list-group-item'>{item.name}</button>)
+    });
+
+  };
 
   handleRowClick = id => {
     if (this.props.selectedRowId !== id) {
@@ -207,8 +222,17 @@ export default class Table extends Component {
     const {title, explorerData, headings, data} = this.props;
     return (
       <section>
-        {this.renderButtons()}
-        {this.renderTable(data, headings)}
+        <div className='row'>
+          <div className='col-lg-2'>
+            {this.renderButtons()}
+          </div>
+          <div className='col-lg-4'>
+            {this.renderExplorer(explorerData)}
+          </div>
+          <div className='col-lg-6'>
+            {this.renderTable(data, headings)}
+          </div>
+        </div>
       </section>
     );
   }
