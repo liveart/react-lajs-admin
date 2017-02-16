@@ -1,7 +1,7 @@
 {
   "name": "Font",
   "base": "PersistedModel",
-  "idInjection": false,
+  "idInjection": true,
   "properties": {
     "name": {
       "type": "string",

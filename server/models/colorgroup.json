@@ -1,7 +1,7 @@
 {
   "name": "colorgroup",
   "base": "PersistedModel",
-  "idInjection": false,
+  "idInjection": true,
   "properties": {
     "name": {
       "type": "string",

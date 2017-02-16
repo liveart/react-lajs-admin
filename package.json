@@ -17,6 +17,7 @@
     "loopback": "^3.2.1",
     "loopback-boot": "^2.6.5",
     "loopback-component-explorer": "^4.1.0",
+    "loopback-connector-mongodb": "^3.0.1",
     "loopback-connector-sqlite3": "^1.2.0",
     "loopback-datasource-juggler": "^3.2.0",
     "react": "^15.4.1",
