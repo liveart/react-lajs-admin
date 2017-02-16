@@ -1,4 +1,4 @@
-import {put} from 'redux-saga/effects';
+import {put, call} from 'redux-saga/effects';
 import * as actionTypes from '../actionTypes/fonts';
 
 
@@ -46,9 +46,11 @@ export function* createFont(action) {
 export function* uploadFont(action) {
   try {
     const containerName = '/api/containers/woff/upload';
+    const data = new FormData();
+    data.append('file', action.fileFont);
     const req = yield fetch(containerName, {
       method: 'POST',
-      body: JSON.stringify(action.fileFont)
+      body: data
     });
     const json = yield req.json();
     if (!(req.status >= 200 && req.status < 300)) {
