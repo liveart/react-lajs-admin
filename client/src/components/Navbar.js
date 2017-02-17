@@ -23,6 +23,11 @@ export default class NavBar extends Component {
                 <i className="fa fa-font"/> <span>Fonts</span>
               </Link>
             </li>
+            <li>
+              <Link to="/colors" activeClassName="active">
+                <i className="fa fa-paint-brush"/> <span>Colors</span>
+              </Link>
+            </li>
             <li className="header">ADDITIONAL</li>
             <li><a href="#"><i className="fa fa-cog"/><span>Settings</span></a></li>
             <li><a href="#" onClick={this.props.logOut}><i className="fa fa-sign-out"/><span>Log out</span></a></li>

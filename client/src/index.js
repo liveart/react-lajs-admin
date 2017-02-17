@@ -9,6 +9,7 @@ import configureStore from './store/configureStore.dev';
 import AppContainer from './containers/AppContainer';
 import OverviewContainer from './containers/OverviewContainer';
 import FontsListContainer from './containers/FontsListContainer';
+import ColorsExplorer from './components/ColorsExplorer';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = configureStore(sagaMiddleware);
@@ -22,6 +23,7 @@ ReactDOM.render((
       <Route path="/" component={AppContainer}>
         <IndexRoute component={OverviewContainer}/>
         <Route path="/fonts" component={FontsListContainer}/>
+        <Route path="/colors" component={ColorsExplorer}/>
       </Route>
     </Router>
   </Provider>

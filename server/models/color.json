@@ -1,5 +1,5 @@
 {
-  "name": "Font",
+  "name": "color",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
@@ -10,30 +10,18 @@
         "columnName": "name"
       }
     },
-    "fontFamily": {
+    "colorgroup_name": {
       "type": "string",
       "required": true,
       "sqlite3": {
-        "columnName": "fontFamily"
+        "columnName": "colorgroup_name"
       }
     },
-    "vector": {
+    "value": {
       "type": "string",
       "required": true,
       "sqlite3": {
-        "columnName": "vector"
-      }
-    },
-    "boldAllowed": {
-      "type": "string",
-      "sqlite3": {
-        "columnName": "boldAllowed"
-      }
-    },
-    "italicAllowed": {
-      "type": "string",
-      "sqlite3": {
-        "columnName": "italicAllowed"
+        "columnName": "value"
       }
     }
   },

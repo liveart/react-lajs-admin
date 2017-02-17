@@ -14,30 +14,38 @@
     ]
   },
   "User": {
-    "dataSource": "db"
+    "dataSource": "remote-dev-mongo"
   },
   "AccessToken": {
-    "dataSource": "db",
+    "dataSource": "remote-dev-mongo",
     "public": false
   },
   "ACL": {
-    "dataSource": "db",
+    "dataSource": "remote-dev-mongo",
     "public": false
   },
   "RoleMapping": {
-    "dataSource": "db",
+    "dataSource": "remote-dev-mongo",
     "public": false
   },
   "Role": {
-    "dataSource": "db",
+    "dataSource": "remote-dev-mongo",
     "public": false
   },
   "Font": {
-    "dataSource": "sqlite3",
+    "dataSource": "remote-dev-mongo",
     "public": true
   },
   "Client": {
-    "dataSource": "sqlite3",
+    "dataSource": "remote-dev-mongo",
+    "public": true
+  },
+  "colorgroup": {
+    "dataSource": "remote-dev-mongo",
+    "public": true
+  },
+  "color": {
+    "dataSource": "remote-dev-mongo",
     "public": true
   }
 }

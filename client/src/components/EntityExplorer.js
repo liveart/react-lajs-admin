@@ -7,7 +7,7 @@ export default class EntityExplorer extends Component {
   static propTypes = {
     selectedRowId: PropTypes.number.isRequired,
     status: PropTypes.string.isRequired,
-    loading: PropTypes.bool.isRequired,
+    loading: PropTypes.bool,
     entitiesList: PropTypes.array.isRequired,
     error: PropTypes.string,
     fetchEntities: PropTypes.func.isRequired,

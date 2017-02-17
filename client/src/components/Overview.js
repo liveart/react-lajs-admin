@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import InfoWidget from './InfoWidget';
 import {Link} from 'react-router';
+import {Row, Col, Grid} from 'react-bootstrap';
 
 export default class Overview extends Component {
   static propTypes = {
@@ -21,8 +22,18 @@ export default class Overview extends Component {
     );
   };
 
+  renderColorsNumber = colorsNumber => {
+    return (
+      <Link to='/colors'>
+        <InfoWidget title='Colors' number={colorsNumber} iconClass='fa fa-paint-brush'/>
+      </Link>
+    );
+  };
+
   render() {
-    const {fontsNumber, loading} = this.props;
+    const {fontsNumber, fontsLoading} = this.props;
+    const {colorsNumber, colorsLoading} = this.props;
+    const loading = fontsLoading || colorsLoading;
     if (loading) {
       return (
         <main>
@@ -42,7 +53,12 @@ export default class Overview extends Component {
           <h1>Overview</h1>
         </section>
         <section className="content">
-          {this.renderFontsNumber(fontsNumber)}
+          <Grid>
+            <Row>
+              <Col md={3}>{this.renderFontsNumber(fontsNumber)}</Col>
+              <Col md={3}>{this.renderColorsNumber(colorsNumber)}</Col>
+            </Row>
+          </Grid>
         </section>
       </div>
     );
