@@ -1,0 +1,30 @@
+{
+  "name": "FontFile",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "font-family": {
+      "type": "string",
+      "required": true
+    },
+    "src": {
+      "type": "string",
+      "required": true
+    },
+    "font-weight": {
+      "type": "string",
+      "required": true
+    },
+    "font-style": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

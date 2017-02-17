@@ -49,15 +49,6 @@ export function* deleteFont(action) {
     yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
 }
-export function* uploadFont(action) {
-  try {
-    const data = new FormData();
-    data.append('file', action.fileFont);
-    yield* api.upload(endpointUpload, data);
-    yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
-  } catch (e) {
-    yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
-  }
-}
+
 
 

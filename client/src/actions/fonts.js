@@ -19,13 +19,6 @@ export const createFont = font => {
   };
 };
 
-export const uploadFont = fileFont => {
-  return {
-    type: actionTypes.UPLOAD_FONT,
-    fileFont
-  };
-};
-
 export const editFont = (id, font) => {
   return {
     type: actionTypes.EDIT_FONT,

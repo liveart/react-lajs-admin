@@ -1,5 +1,6 @@
 import {connect} from 'react-redux';
-import {fetchFonts, createFont, uploadFont, editFont, deleteFont} from '../actions/fonts';
+import {fetchFonts, createFont, editFont, deleteFont} from '../actions/fonts';
+import {fetchFontFiles, createFontFile, uploadFontFile, editFontFile, deleteFontFile} from '../actions/fontFiles';
 import {selectRow, enableEditing, enableCreating, enableDefaultStatus} from '../actions/table';
 import EntityExplorer from '../components/EntityExplorer';
 
@@ -35,8 +36,8 @@ const mapDispatchToProps = dispatch => {
     createEntity(font) {
       dispatch(createFont(font));
     },
-    upload(fileFont) {
-      dispatch(uploadFont(fileFont));
+    upload(fileWOFF) {
+      dispatch(uploadFontFile(fileWOFF));
     },
     editEntity(id, newFont) {
       dispatch(editFont(id, newFont));

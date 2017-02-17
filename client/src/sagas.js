@@ -36,6 +36,7 @@ import * as colorsWatchers from './sagas/watchers/colors';
 import * as colorgroupsWatchers from './sagas/watchers/colorgroups';
 
 import * as fontsWatchers from './sagas/watchers/fonts';
+import * as fontFilesWatchers from './sagas/watchers/fontFiles';
 
 export default function* root() {
   yield [
@@ -53,8 +54,13 @@ export default function* root() {
     fork(fontsWatchers.watchFetchFonts),
     fork(fontsWatchers.watchFetchFontsNumber),
     fork(fontsWatchers.watchCreateFont),
-    fork(fontsWatchers.watchUploadFont),
     fork(fontsWatchers.watchEditFont),
-    fork(fontsWatchers.watchDeleteFont)
+    fork(fontsWatchers.watchDeleteFont),
+    fork(fontFilesWatchers.watchFetchFontFiles),
+    fork(fontFilesWatchers.watchFetchFontFilesNumber),
+    fork(fontFilesWatchers.watchCreateFontFile),
+    fork(fontFilesWatchers.watchUploadFontFile),
+    fork(fontFilesWatchers.watchEditFontFile),
+    fork(fontFilesWatchers.watchDeleteFontFile)
   ];
 }

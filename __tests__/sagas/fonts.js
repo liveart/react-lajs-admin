@@ -53,18 +53,6 @@ describe('fonts saga', () => {
     expect(v.type).toEqual(actionTypes.FONTS_OPERATION_FAILURE);
   });
 
-  test('should process uploading', () => {
-    const g = sagas.uploadFont({fontFile: {}});
-    const v = g.next().value;
-    expect(v.type).toEqual(actionTypes.FONTS_OPERATION_SUCCESS);
-  });
-
-  test('should process uploading with error', () => {
-    const g = sagas.uploadFont();
-    const v = g.next().value;
-    expect(v.type).toEqual(actionTypes.FONTS_OPERATION_FAILURE);
-  });
-
 
 
 });

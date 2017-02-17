@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux';
 import fonts from './fonts';
+import fontFiles from './fontFiles';
 import table from './table';
 import user from './user';
 import colors from './colors';
@@ -8,6 +9,7 @@ import {routerReducer} from 'react-router-redux';
 
 const rootReducer = combineReducers({
   fonts,
+  fontFiles,
   table,
   user,
   colors,
