@@ -16,7 +16,7 @@ npm install
 ### Starting the server
 ##### For development:
 ```
-npm run startDev
+npm run start:dev
 ```
 
 ##### For production:

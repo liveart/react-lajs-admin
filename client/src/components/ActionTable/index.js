@@ -155,7 +155,8 @@ export default class Table extends Component {
 
     return explorerData.map((item, i) => {
       return (
-        <button key={i} type='button' className='list-group-item'>{item.name}</button>)
+        <button key={i} type='button' className='list-group-item'>{item.name}</button>
+      );
     });
 
   };

@@ -5,3 +5,4 @@
 /server/boot/authentication.js
 /client/src/assets/js/
 /__tests__/
+/coverage/

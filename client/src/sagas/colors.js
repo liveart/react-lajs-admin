@@ -1,86 +1,50 @@
 import * as actionTypes from '../actionTypes/colors';
-import {put} from 'redux-saga/effects';
+import {dispatch} from './sagaFuncs';
+import * as api from './api';
 
 const endpoint = 'colors';
 
 export function* fetchColors() {
   try {
-    const req = yield fetch('/api/' + endpoint);
-    const json = yield req.json();
-    yield put({type: actionTypes.COLOR_OPERATION_SUCCESS, colors: json});
+    const res = yield* api.retrieve(endpoint);
+    yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS, colors: res});
   } catch (e) {
-    yield put({type: actionTypes.COLOR_OPERATION_FAILURE, message: e.statusText});
+    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
   }
 }
 
 export function* fetchColorsNumber() {
   try {
-    const req = yield fetch('/api/' + endpoint + '/count');
-    const json = yield req.json();
-    yield put({type: actionTypes.COLOR_OPERATION_SUCCESS, colorsNumber: json.count});
+    const res = yield* api.retrieveNumber(endpoint);
+    yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS, colorsNumber: res});
   } catch (e) {
-    yield put({type: actionTypes.COLOR_OPERATION_FAILURE, message: e.statusText});
+    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
   }
 }
 
 export function* createColor(action) {
   try {
-    const req = yield fetch('/api/' + endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(action.color)
-    });
-    const json = yield req.json();
-    if (!(req.status >= 200 && req.status < 300)) {
-      throw new Error(json.error.message);
-    }
-
-    yield put({type: actionTypes.COLOR_OPERATION_SUCCESS});
-    yield put({type: actionTypes.FETCH_COLORS});
+    yield* api.create(endpoint, action.color);
+    yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS});
   } catch (e) {
-    yield put({type: actionTypes.COLOR_OPERATION_FAILURE, message: e.message});
+    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
   }
 }
 
 export function* editColor(action) {
   try {
-    const req = yield fetch('/api/' + endpoint + '/' + action.id, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(action.newColor)
-    });
-    const json = yield req.json();
-    if (!(req.status >= 200 && req.status < 300)) {
-      throw new Error(json.error.message);
-    }
-
-    yield put({type: actionTypes.COLOR_OPERATION_SUCCESS});
-    yield put({type: actionTypes.FETCH_COLORS});
+    yield* api.update(endpoint, action.newColor, action.id);
+    yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS});
   } catch (e) {
-    yield put({type: actionTypes.COLOR_OPERATION_FAILURE, message: e.message});
+    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
   }
 }
 
 export function* deleteColor(action) {
   try {
-    const req = yield fetch('/api/' + endpoint + '/' + action.id, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    const json = yield req.json();
-    if (!(req.status >= 200 && req.status < 300)) {
-      throw new Error(json.error.message);
-    }
-
-    yield put({type: actionTypes.COLOR_OPERATION_SUCCESS});
-    yield put({type: actionTypes.FETCH_COLORS});
+    yield* api.remove(endpoint, action.id);
+    yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS});
   } catch (e) {
-    yield put({type: actionTypes.COLOR_OPERATION_FAILURE, message: e.message});
+    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
   }
 }
