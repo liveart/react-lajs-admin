@@ -51,9 +51,5 @@
   "container": {
     "dataSource": "storage",
     "public": true
-  },
-  "file": {
-    "dataSource": "storage",
-    "public": true
   }
 }

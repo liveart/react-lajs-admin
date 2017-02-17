@@ -13,7 +13,6 @@ export function* create(endpoint, obj) {
 
 export function* retrieve(endpoint) {
   const req = yield fetch(apiRoot + endpoint);
-  const json = yield req.json();
   if (!(req.status >= 200 && req.status < 300)) {
     throw req.statusText;
   }
@@ -42,6 +41,14 @@ export function* remove(endpoint, id) {
     headers: {
       'Content-Type': 'application/json'
     }
+  });
+  return (yield req.json());
+}
+
+export function* upload(endpoint, obj) {
+  const req = yield fetch(apiRoot + endpoint + '/upload', {
+    method: 'POST',
+    body: obj
   });
   return (yield req.json());
 }

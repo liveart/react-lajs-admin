@@ -14,6 +14,8 @@ api.update = jest.fn().mockImplementation(() => ({}));
 
 api.remove = jest.fn().mockImplementation(() => ({}));
 
+api.upload = jest.fn().mockImplementation(() => ({}));
+
 
 describe('mock api', () => {
   test('intentionally left blank', () => {

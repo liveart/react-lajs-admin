@@ -1,106 +1,63 @@
 import {put, call} from 'redux-saga/effects';
 import * as actionTypes from '../actionTypes/fonts';
+import {dispatch} from './sagaFuncs';
+import * as api from './api';
 
+const endpoint = 'fonts';
+const endpointUpload = 'containers/woff';
 
 export function* fetchFonts() {
   try {
-    const req = yield fetch('/api/fonts');
-    const json = yield req.json();
-    yield put({type: actionTypes.FONTS_OPERATION_SUCCESS, fonts: json});
+    const res = yield* api.retrieve(endpoint);
+    yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS, fonts: res});
   } catch (e) {
-    yield put({type: actionTypes.FONTS_OPERATION_FAILURE, message: e.statusText});
+    yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
 }
-
 export function* fetchFontsNumber() {
   try {
-    const req = yield fetch('/api/fonts/count');
-    const json = yield req.json();
-    yield put({type: actionTypes.FONTS_OPERATION_SUCCESS, fontsNumber: json.count});
+    const res = yield* api.retrieveNumber(endpoint);
+    yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS, fontsNumber: res});
   } catch (e) {
-    yield put({type: actionTypes.FONTS_OPERATION_FAILURE, message: e.statusText});
+    yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
 }
 
 export function* createFont(action) {
   try {
-    const req = yield fetch('/api/fonts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(action.font)
-    });
-    const json = yield req.json();
-    if (!(req.status >= 200 && req.status < 300)) {
-      throw new Error(json.error.message);
-    }
-
-    yield put({type: actionTypes.FONTS_OPERATION_SUCCESS});
-    yield put({type: actionTypes.FETCH_FONTS});
+    yield* api.create(endpoint, action.font);
+    yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
   } catch (e) {
-    yield put({type: actionTypes.FONTS_OPERATION_FAILURE, message: e.message});
-  }
-}
-
-export function* uploadFont(action) {
-  try {
-    const containerName = '/api/containers/woff/upload';
-    const data = new FormData();
-    data.append('file', action.fileFont);
-    const req = yield fetch(containerName, {
-      method: 'POST',
-      body: data
-    });
-    const json = yield req.json();
-    if (!(req.status >= 200 && req.status < 300)) {
-      throw new Error(json.error.message);
-    }
-
-    yield put({type: actionTypes.FONTS_OPERATION_SUCCESS});
-    yield put({type: actionTypes.FETCH_FONTS});
-  } catch (e) {
-    yield put({type: actionTypes.FONTS_OPERATION_FAILURE, message: e.message});
+    yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
 }
 
 export function* editFont(action) {
   try {
-    const req = yield fetch('/api/fonts/' + action.id, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(action.newFont)
-    });
-    const json = yield req.json();
-    if (!(req.status >= 200 && req.status < 300)) {
-      throw new Error(json.error.message);
-    }
-
-    yield put({type: actionTypes.FONTS_OPERATION_SUCCESS});
-    yield put({type: actionTypes.FETCH_FONTS});
+    yield* api.update(endpoint, action.newFont, action.id);
+    yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
   } catch (e) {
-    yield put({type: actionTypes.FONTS_OPERATION_FAILURE, message: e.message});
+    yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
 }
 
 export function* deleteFont(action) {
   try {
-    const req = yield fetch('/api/fonts/' + action.id, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    const json = yield req.json();
-    if (!(req.status >= 200 && req.status < 300)) {
-      throw new Error(json.error.message);
-    }
-
-    yield put({type: actionTypes.FONTS_OPERATION_SUCCESS});
-    yield put({type: actionTypes.FETCH_FONTS});
+    yield* api.remove(endpoint, action.id);
+    yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
   } catch (e) {
-    yield put({type: actionTypes.FONTS_OPERATION_FAILURE, message: e.message});
+    yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
 }
+export function* uploadFont(action) {
+  try {
+    const data = new FormData();
+    data.append('file', action.fileFont);
+    yield* api.upload(endpointUpload, data);
+    yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
+  } catch (e) {
+    yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
+  }
+}
+
+

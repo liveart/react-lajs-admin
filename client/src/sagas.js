@@ -49,7 +49,7 @@ export default function* root() {
     fork(colorgroupsWatchers.watchFetchColorgroupsNumber),
     fork(colorgroupsWatchers.watchCreateColorgroup),
     fork(colorgroupsWatchers.watchDeleteColorgroup),
-    fork(colorgroupsWatchers.watchEditColorgroup)
+    fork(colorgroupsWatchers.watchEditColorgroup),
     fork(fontsWatchers.watchFetchFonts),
     fork(fontsWatchers.watchFetchFontsNumber),
     fork(fontsWatchers.watchCreateFont),
