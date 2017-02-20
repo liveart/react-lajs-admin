@@ -6,12 +6,12 @@ import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../de
 export default class Table extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    explorerData: PropTypes.arrayOf(PropTypes.any),
+    secondaryData: PropTypes.arrayOf(PropTypes.any),
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     error: PropTypes.string,
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
-    fetchExplorerData: PropTypes.func.isRequired,
+    fetchSecondaryData: PropTypes.func.isRequired,
     selectedRowId: PropTypes.string,
     status: PropTypes.string.isRequired,
     selectRow: PropTypes.func.isRequired,
@@ -24,7 +24,7 @@ export default class Table extends Component {
   };
 
   componentWillMount() {
-    this.props.fetchExplorerData();
+    this.props.fetchSecondaryData();
     this.editingEntityInput = {};
     this.newEntityInput = {};
     this.props.fetchData();
@@ -62,16 +62,18 @@ export default class Table extends Component {
     );
   };
 
-  renderTableData = data => {
+  renderTableData = (tableId, data) => {
     if (!data.length) {
       return null;
     }
+
+    let handleClick = tableId === 0 ? this.handleRowClick : this.handleRowClickSecondTable;
 
     return data.map((item, k) => {
       if (this.props.status === STATUS_EDITING && item[ID_PROP] === this.props.selectedRowId) {
         return (
           <tr key={k}
-              onClick={() => this.handleRowClick(item[ID_PROP])}>
+              onClick={() => handleClick(item[ID_PROP])}>
             {Object.getOwnPropertyNames(data[0]).map((prop, j) => {
               if (prop === ID_PROP) {
                 return (
@@ -93,7 +95,7 @@ export default class Table extends Component {
 
       return (
         <tr key={k} className={item[ID_PROP] === this.props.selectedRowId ? 'selected' : null}
-            onClick={() => this.handleRowClick(item[ID_PROP])}>
+            onClick={() => handleClick(item[ID_PROP])}>
           {Object.getOwnPropertyNames(data[0]).map((prop, j) => {
             if (prop === ID_PROP) {
               return (
@@ -120,7 +122,7 @@ export default class Table extends Component {
             </thead>
             <tbody>
             {this.props.status === STATUS_CREATING ? this.renderCreatingRow(data) : null}
-            {this.renderTableData(data)}
+            {this.renderTableData(0, data)}
             </tbody>
           </table>
         </div>
@@ -134,13 +136,18 @@ export default class Table extends Component {
   );
 
   renderDefButtons = () => (
-
     <div>
       <a className='btn btn-app' onClick={this.handleCreateBtnClick}><i className='fa fa-plus'/>Add
       </a>
       <a className='btn btn-app' onClick={this.handleEditBtnClick}><i className='fa fa-pencil-square-o'/>Edit
       </a>
       <a className='btn btn-app' onClick={this.handleDeleteBtnClick}><i className='fa fa-trash-o'/>Delete
+      </a>
+      <a className='btn btn-app' onClick={() => {
+        this.props.fetchData();
+        this.props.fetchSecondaryData()
+      }}>
+        <i className='fa fa-refresh'/>Sync
       </a>
     </div>
   );
@@ -152,34 +159,33 @@ export default class Table extends Component {
     </div>
   );
 
-  renderExplorer = explorerData => (
-    <div className='panel panel-default'>
-      <div className='panel-heading'>
-        <p>Groups</p>
+  renderSecondaryTable = data => (
+    <section className='panel panel-default'>
+      <div>
+        <div className='table-responsive'>
+          <table className='table no-margin'>
+            <thead>
+            <tr>
+              {this.renderTableHeadings(data)}
+            </tr>
+            </thead>
+            <tbody>
+            {this.renderTableData(1, data)}
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div className='list-group'>
-        {this.renderExplorerData(explorerData)}
-      </div>
-    </div>
+    </section>
   );
-
-  renderExplorerData = explorerData => {
-    if (!explorerData.length) {
-      return null;
-    }
-
-    return explorerData.map((item, i) => {
-      return (
-        <button key={i} type='button' className='list-group-item'>{item.name}</button>
-      );
-    });
-
-  };
 
   handleRowClick = id => {
     if (this.props.selectedRowId !== id) {
       this.props.selectRow(id);
     }
+  };
+
+  handleRowClickSecondTable = id => {
+    // TODO
   };
 
   handleCreateBtnClick = () => {
@@ -230,12 +236,12 @@ export default class Table extends Component {
   };
 
   render() {
-    const {title, explorerData, headings, data} = this.props;
+    const {title, secondaryData, headings, data} = this.props;
     return (
       <section>
         <div className='row'>
           <div className='col-lg-3'>
-            {this.renderExplorer(explorerData)}
+            {this.renderSecondaryTable(secondaryData)}
           </div>
           <div className='col-lg-7'>
             {this.renderTable(data, headings)}

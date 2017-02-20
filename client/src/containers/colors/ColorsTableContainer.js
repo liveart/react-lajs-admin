@@ -14,7 +14,7 @@ const mapStateToProps = state => {
 
   return {
     title: 'Colors',
-    explorerData: colorgroups,
+    secondaryData: colorgroups,
     data: colors,
     error,
     loading,
@@ -28,11 +28,11 @@ const mapDispatchToProps = dispatch => {
     fetchData() {
       dispatch(fetchColors());
     },
-    fetchExplorerData() {
+    fetchSecondaryData() {
       dispatch(fetchColorgroups());
     },
-    selectRow(id) {
-      dispatch(selectRow(id));
+    selectRow(table, id) {
+      dispatch(selectRow(table, id));
     },
     enableEditing() {
       dispatch(enableEditing());
