@@ -90,7 +90,9 @@ export default class EntityExplorer extends Component {
   renderEntitiesTable = entities => (
     <Table responsive hover fill>
       <thead>
-      <tr>{this.renderEntitiesTableHeading(entities)}</tr>
+      <tr>
+        {this.renderEntitiesTableHeading(entities)}
+      </tr>
       </thead>
       <tbody>
       {this.props.status === STATUS_CREATING ? this.renderCreatingRow(entities) : null}
@@ -103,21 +105,27 @@ export default class EntityExplorer extends Component {
   renderButtons = () => (this.props.status === STATUS_EDITING || this.props.status === STATUS_CREATING ?
     this.renderEditingButtons() : this.renderDefButtons());
 
+
+  renderFileUpload = () => (
+    <label className="btn btn-default btn-file">
+      Upload <input type="file" accept=".woff" id="woff"/>
+    </label>
+  );
+
+
   renderDefButtons = () => (
-    <div class="box">
-      <input className="form-inline" type="file" accept=".woff" id="woff"/>
-      <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
+    <div className="box-tools">
       <button className="btn" title="AddWOFF" onClick={this.handleFileBtnClick}>
         <i className="fa fa-file"/></button>
       <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
-        <button className="btn" title="Add" onClick={this.handleCreateBtnClick}><i className="fa fa-plus"/></button>
-        <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
-        <button className="btn" title="Edit" onClick={this.handleEditBtnClick}>
-          <i className="fa fa-pencil-square-o"/></button>
-        <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
-        <button className="btn btn-danger" title="Delete" onClick={this.handleDeleteBtnClick}>
-          <i className="fa fa-trash-o"/></button>
-      </div>
+      <button className="btn" title="Add" onClick={this.handleCreateBtnClick}><i className="fa fa-plus"/></button>
+      <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
+      <button className="btn" title="Edit" onClick={this.handleEditBtnClick}>
+        <i className="fa fa-pencil-square-o"/></button>
+      <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
+      <button className="btn btn-danger" title="Delete" onClick={this.handleDeleteBtnClick}>
+        <i className="fa fa-trash-o"/></button>
+    </div>
   );
 
   renderEditingButtons = () => (
@@ -221,6 +229,7 @@ export default class EntityExplorer extends Component {
               <div className="box box-default">
                 <div className="box-header with-border">
                   <h3 className="box-title">Fonts</h3>
+                  {this.renderFileUpload()}
                   {this.renderButtons()}
                 </div>
                 <div className="box-body" style={{'maxHeight': '80vh', 'overflowY': 'scroll'}}>

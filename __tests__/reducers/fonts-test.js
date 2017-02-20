@@ -59,8 +59,7 @@ describe('fonts reducer', () => {
         fontsLoading: false
       })).toEqual({
       ...INITIAL_STATE, fontsList: [{a: 1, b: 2}],
-      fontsNumber: 5,
-      fontsError: null,
+      fontsNumber: 5,fontsError: null,
       fontsLoading: false
     });
   });
