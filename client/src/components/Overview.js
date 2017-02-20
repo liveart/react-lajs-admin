@@ -6,12 +6,16 @@ import {Row, Col, Grid} from 'react-bootstrap';
 export default class Overview extends Component {
   static propTypes = {
     fontsNumber: PropTypes.number.isRequired,
+    colorsNumber: PropTypes.number.isRequired,
     loading: PropTypes.bool.isRequired,
-    error: PropTypes.object
+    error: PropTypes.object,
+    fetchFontsNumber: PropTypes.func.isRequired,
+    fetchColorsNumber: PropTypes.func.isRequired
   };
 
   componentWillMount() {
     this.props.fetchFontsNumber();
+    this.props.fetchColorsNumber();
   }
 
   renderFontsNumber = fontsNumber => {

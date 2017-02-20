@@ -2,7 +2,7 @@ import {SELECT_ROW, ENABLE_EDITING, ENABLE_CREATING, ENABLE_DEFAULT_STATUS} from
 import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 
 const INITIAL_STATE = {
-  selectedRowId: -1,
+  selectedRowId: null,
   status: STATUS_DEFAULT
 };
 

@@ -20,8 +20,8 @@ export function* retrieve(endpoint) {
 }
 
 export function* retrieveNumber(endpoint) {
-  const req = yield fetch(apiRoot + endpoint + 'count');
-  return (yield req.json());
+  const req = yield fetch(apiRoot + endpoint + '/count');
+  return (yield req.json()).count;
 }
 
 export function* update(endpoint, obj, id) {

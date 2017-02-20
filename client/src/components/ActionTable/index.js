@@ -12,7 +12,7 @@ export default class Table extends Component {
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     fetchExplorerData: PropTypes.func.isRequired,
-    selectedRowId: PropTypes.number.isRequired,
+    selectedRowId: PropTypes.string,
     status: PropTypes.string.isRequired,
     selectRow: PropTypes.func.isRequired,
     enableEditing: PropTypes.func.isRequired,
@@ -34,7 +34,14 @@ export default class Table extends Component {
     if (!data.length) {
       return null;
     }
-    return Object.getOwnPropertyNames(data[0]).map((prop, i) => (<th key={i}>{prop}</th>));
+    return Object.getOwnPropertyNames(data[0]).map((prop, i) => {
+      if (prop === ID_PROP) {
+        return (
+          null
+        );
+      }
+      else return (<th key={i}>{prop}</th>)
+    });
   };
 
   renderCreatingRow = data => {
@@ -48,7 +55,7 @@ export default class Table extends Component {
           return null;
         }
 
-        return (<td key={i}><FormControl type="text" ref={input => this.newEntityInput[prop] = input}/>
+        return (<td key={i}><FormControl type='text' ref={input => this.newEntityInput[prop] = input}/>
         </td>);
       })
       }</tr>
@@ -60,20 +67,20 @@ export default class Table extends Component {
       return null;
     }
 
-    return data.map(item => {
+    return data.map((item, k) => {
       if (this.props.status === STATUS_EDITING && item[ID_PROP] === this.props.selectedRowId) {
         return (
-          <tr key={item[ID_PROP]}
+          <tr key={k}
               onClick={() => this.handleRowClick(item[ID_PROP])}>
             {Object.getOwnPropertyNames(data[0]).map((prop, j) => {
               if (prop === ID_PROP) {
                 return (
-                  <td key={j}>{item[prop]}</td>
+                  null
                 );
               }
 
               return (
-                <td key={j}><FormControl type="text"
+                <td key={j}><FormControl type='text'
                                          defaultValue={typeof item[prop] === 'object' && !item[prop] ? '' :
                                            item[prop]}
                                          ref={input => this.editingEntityInput[prop] = input}/>
@@ -85,9 +92,17 @@ export default class Table extends Component {
       }
 
       return (
-        <tr key={item[ID_PROP]} className={item[ID_PROP] === this.props.selectedRowId ? 'selected' : null}
+        <tr key={k} className={item[ID_PROP] === this.props.selectedRowId ? 'selected' : null}
             onClick={() => this.handleRowClick(item[ID_PROP])}>
-          {Object.getOwnPropertyNames(data[0]).map((prop, j) => (<td key={j}>{item[prop]}</td>))}
+          {Object.getOwnPropertyNames(data[0]).map((prop, j) => {
+            if (prop === ID_PROP) {
+              return (
+                null
+              );
+            } else return (
+              <td key={j}>{item[prop]}</td>
+            )
+          })}
         </tr>
       );
     });
@@ -174,19 +189,19 @@ export default class Table extends Component {
   };
 
   handleEditBtnClick = () => {
-    if (this.props.status === STATUS_DEFAULT && this.props.selectedRowId > -1) {
+    if (this.props.status === STATUS_DEFAULT) {
       this.props.enableEditing();
     }
   };
 
   handleDeleteBtnClick = () => {
-    if (this.props.status === STATUS_DEFAULT && this.props.selectedRowId > -1) {
+    if (this.props.status === STATUS_DEFAULT) {
       this.props.deleteEntity(this.props.selectedRowId);
     }
   };
 
   handleSaveBtnClick = () => {
-    if (this.props.status === STATUS_EDITING && this.props.selectedRowId > -1 && this.props.data.length) {
+    if (this.props.status === STATUS_EDITING && this.props.data.length) {
       const properties = Object.getOwnPropertyNames(this.props.data[0]);
       const entity = {};
       properties.forEach(prop => {
