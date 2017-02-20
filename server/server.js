@@ -2,11 +2,23 @@
 
 const loopback = require('loopback');
 const boot = require('loopback-boot');
+const path = require('path');
 
 const app = module.exports = loopback();
 
 const helmet = require('helmet');
 app.use(helmet());
+
+app.use(loopback.static(path.join(__dirname, '../client/public/')));
+app.get('/', function (req, res) {
+  res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
+});
+app.get('/fonts', function (req, res) {
+  res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
+});
+app.get('/colors', function (req, res) {
+  res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
+});
 
 app.start = function () {
   // start the web server

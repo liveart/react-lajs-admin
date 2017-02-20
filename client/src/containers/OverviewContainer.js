@@ -1,5 +1,6 @@
 import {connect} from 'react-redux';
 import {fetchFontsNumber} from '../actions/fonts';
+import {fetchColorsNumber} from '../actions/colors';
 import Overview from '../components/Overview';
 
 const mapStateToProps = state => {
@@ -19,6 +20,9 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchFontsNumber() {
       dispatch(fetchFontsNumber());
+    },
+    fetchColorsNumber() {
+      dispatch(fetchColorsNumber());
     }
   };
 };

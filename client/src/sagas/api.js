@@ -13,7 +13,6 @@ export function* create(endpoint, obj) {
 
 export function* retrieve(endpoint) {
   const req = yield fetch(apiRoot + endpoint);
-  const json = yield req.json();
   if (!(req.status >= 200 && req.status < 300)) {
     throw req.statusText;
   }
@@ -21,8 +20,8 @@ export function* retrieve(endpoint) {
 }
 
 export function* retrieveNumber(endpoint) {
-  const req = yield fetch(apiRoot + endpoint + 'count');
-  return (yield req.json());
+  const req = yield fetch(apiRoot + endpoint + '/count');
+  return (yield req.json()).count;
 }
 
 export function* update(endpoint, obj, id) {
