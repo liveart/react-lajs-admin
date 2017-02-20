@@ -1,9 +1,8 @@
-import {put, call} from 'redux-saga/effects';
 import * as actionTypes from '../actionTypes/fontFiles';
 import {dispatch} from './sagaFuncs';
 import * as api from './api';
 
-const endpoint = 'fonts';
+const endpoint = 'fontFiles';
 const endpointUpload = 'containers/woff';
 
 export function* fetchFontFiles() {

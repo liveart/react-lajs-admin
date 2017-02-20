@@ -5,7 +5,7 @@ import reducer from '../../client/src/reducers/table';
 import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../client/src/definitions';
 
 const INITIAL_STATE = {
-  selectedRowId: -1,
+  selectedRowId: null,
   status: STATUS_DEFAULT
 };
 

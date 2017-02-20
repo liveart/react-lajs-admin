@@ -38,7 +38,7 @@ describe('color saga', () => {
   });
 
   test('should process deleting with error', () => {
-    expect([...sagas.editColor()].pop().type).toEqual(actionTypes.COLOR_OPERATION_FAILURE);
+    expect([...sagas.deleteColor()].pop().type).toEqual(actionTypes.COLOR_OPERATION_FAILURE);
   });
 
 });

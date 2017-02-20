@@ -24,7 +24,9 @@ api.remove = jest.fn(function*() {
   yield {};
 });
 
-api.upload = jest.fn().mockImplementation(() => ({}));
+api.upload = jest.fn(function*() {
+  yield {};
+});
 
 
 describe('mock api', () => {
