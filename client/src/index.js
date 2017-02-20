@@ -20,10 +20,10 @@ sagaMiddleware.run(sagaWatchers);
 ReactDOM.render((
   <Provider store={store}>
     <Router history={history}>
-      <Route path="/" component={AppContainer}>
+      <Route path='/' component={AppContainer}>
         <IndexRoute component={OverviewContainer}/>
-        <Route path="/fonts" component={FontsListContainer}/>
-        <Route path="/colors" component={ColorsExplorer}/>
+        <Route path='/fonts' component={FontsListContainer}/>
+        <Route path='/colors' component={ColorsExplorer}/>
       </Route>
     </Router>
   </Provider>
