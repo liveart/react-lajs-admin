@@ -6,6 +6,11 @@ export default class NavBar extends Component {
     logOut: PropTypes.func.isRequired
   };
 
+  handleLogOut = () => {
+    localStorage.removeItem('token');
+    this.props.logOut();
+  };
+
   render() {
     return (
       <aside className="main-sidebar">
@@ -30,7 +35,7 @@ export default class NavBar extends Component {
             </li>
             <li className="header">ADDITIONAL</li>
             <li><a href="#"><i className="fa fa-cog"/><span>Settings</span></a></li>
-            <li><a href="#" onClick={this.props.logOut}><i className="fa fa-sign-out"/><span>Log out</span></a></li>
+            <li><a href="#" onClick={this.handleLogOut}><i className="fa fa-sign-out"/><span>Log out</span></a></li>
           </ul>
         </section>
       </aside>
