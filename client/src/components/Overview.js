@@ -51,10 +51,10 @@ export default class Overview extends Component {
 
     return (
       <div>
-        <section className="content-header">
+        <section className='content-header'>
           <h1>Overview</h1>
         </section>
-        <section className="content">
+        <section className='content'>
           <Grid>
             <Row>
               <Col md={3}>{this.renderFontsNumber(fontsNumber)}</Col>

@@ -25,20 +25,15 @@ export default class Header extends Component {
 
   render() {
     return (
-      <header className="main-header">
-        <Link to="/" className="logo">
-          <span className="logo-mini"><b>LA</b>A</span>
-          <span className="logo-lg"><b>LiveArt</b>Admin</span>
+      <header className='main-header'>
+        <Link to='/' className='logo'>
+          <span className='logo-mini'><b>LA</b>A</span>
+          <span className='logo-lg'><b>LiveArt</b>Admin</span>
         </Link>
-        <nav className="navbar navbar-static-top" role="navigation">
-          <a href="#" className="sidebar-toggle" role="button" onClick={this.pushMenu}>
-            <span className="sr-only">Toggle navigation</span>
+        <nav className='navbar navbar-static-top' role='navigation'>
+          <a href='#' className='sidebar-toggle' role='button' onClick={this.pushMenu}>
+            <span className='sr-only'>Toggle navigation</span>
           </a>
-          <div className="navbar-custom-menu">
-            <ul className="nav navbar-nav">
-              <li><Link to="/profile">{this.props.email}</Link></li>
-            </ul>
-          </div>
         </nav>
       </header>
     );

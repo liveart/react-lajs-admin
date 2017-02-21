@@ -102,9 +102,14 @@ export default class Table extends Component {
                   return null;
                 }
               }
-              return (
-                <td key={j}>{item[prop]}</td>
-              );
+
+              if (prop === 'value') {
+                return <td key={j}>
+                  {item[prop]}
+                  <div className='preview' style={{background: item[prop]}}></div>
+                </td>;
+              }
+              return <td key={j}>{item[prop]}</td>;
             }
           })}
         </tr>
