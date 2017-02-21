@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {findDOMNode} from 'react-dom';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 
 export default class Table extends Component {
   static propTypes = {
@@ -68,9 +68,6 @@ export default class Table extends Component {
     }
 
     return data.map((item, k) => {
-      if (!(typeof this.props.selected2RowId === 'object' && !this.props.selected2RowId)) {
-        this.props.enableDefaultStatus();
-      }
 
       if (this.props.status === STATUS_EDITING && item[ID_PROP] === this.props.selectedRowId) {
         return (
@@ -101,7 +98,7 @@ export default class Table extends Component {
             } else {
               if (!(typeof this.props.selected2RowId === 'object' && !this.props.selected2RowId)) {
                 if (item['colorgroup_name'] !== this.props.secondaryData.filter(
-                  group => group.id === this.props.selected2RowId)[0].name) {
+                    group => group.id === this.props.selected2RowId)[0].name) {
                   return null;
                 }
               }
@@ -227,10 +224,13 @@ export default class Table extends Component {
   );
 
   handleRowClick = id => {
-    this.props.selectRow(id);
+    if (this.props.status !== STATUS_EDITING) {
+      this.props.selectRow(id);
+    }
   };
 
   handleRowClickSecondTable = id => {
+    this.props.enableDefaultStatus();
     this.props.selectSecondaryRow(id);
   };
 
@@ -274,6 +274,7 @@ export default class Table extends Component {
       this.props.createEntity(entity);
     }
     this.props.enableDefaultStatus();
+    setTimeout(this.props.fetchData, 1000);
   };
 
   handleCancelBtnClick = () => {
@@ -283,21 +284,44 @@ export default class Table extends Component {
   };
 
   render() {
-    const {secondaryData, headings, data} = this.props;
+    const {secondaryData, headings, data, loading, error} = this.props;
+
+    if (loading) {
+      return (
+        <main>
+          <div className='loader'></div>
+          <section className='content-header'>
+            <h1>Loading...</h1>
+          </section>
+          <section className='content'>
+          </section>
+        </main>
+      );
+    }
+
+    if (error) {
+      return (<div className='alert alert-danger'>Error: {error}</div>);
+    }
+
     return (
-      <section>
-        <div className='row'>
-          <div className='col-lg-3'>
-            {this.renderSecondaryTable(secondaryData)}
+      <main>
+        <section className='content-header'>
+          <h1>Navigator</h1>
+        </section>
+        <section className='content'>
+          <div className='row'>
+            <div className='col-lg-3'>
+              {this.renderSecondaryTable(secondaryData)}
+            </div>
+            <div className='col-lg-7'>
+              {this.renderTable(data, headings)}
+            </div>
+            <div className='col-lg-2'>
+              {this.renderButtons()}
+            </div>
           </div>
-          <div className='col-lg-7'>
-            {this.renderTable(data, headings)}
-          </div>
-          <div className='col-lg-2'>
-            {this.renderButtons()}
-          </div>
-        </div>
-      </section>
+        </section>
+      </main>
     );
   }
 }
