@@ -3,7 +3,7 @@ import {fetchColors, createColor, editColor, deleteColor} from '../../actions/co
 
 import {selectRow, selectSecondaryRow, enableEditing, enableCreating, enableDefaultStatus} from '../../actions/table';
 import {fetchColorgroups} from '../../actions/colorgroups';
-import Table from '../../components/Colors';
+import Table from '../../components/colors/Colors';
 
 const mapStateToProps = state => {
   const {colors, colorsError, colorsLoading} = state.colors;
@@ -13,7 +13,7 @@ const mapStateToProps = state => {
   const {selectedRowId, selected2RowId, status} = state.table;
 
   return {
-    title: 'Colors',
+    title: 'colors',
     secondaryData: colorgroups,
     data: colors,
     error,

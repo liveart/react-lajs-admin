@@ -22,7 +22,7 @@ tr.selected {
     width: 200px;
     height: 2px;
     background-color: #6b00b9;
-    animation: loading 2s linear infinite;
+    animation: loading 0.5s linear infinite;
 }
 
 @keyframes loading {
