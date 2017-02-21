@@ -1,7 +1,7 @@
 import * as actionTypes from '../actionTypes/colorgroups';
 
 const INITIAL_STATE = {
-  colorgroups: [], colorgroupsNumber: 0, error: null, loading: false
+  colorgroups: [], colorgroupsNumber: 0, selectedGroup: null, error: null, loading: false
 };
 
 export default function (state = INITIAL_STATE, action) {

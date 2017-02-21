@@ -9,11 +9,11 @@ export default class InfoWidget extends Component {
 
   render() {
     return (
-      <div className="info-box">
-        <span className="info-box-icon bg-red"><i className={this.props.iconClass}/></span>
-        <div className="info-box-content">
-          <span className="info-box-text">{this.props.title}</span>
-          <span className="info-box-number">{this.props.number}</span>
+      <div className='info-box'>
+        <span className='info-box-icon bg-red'><i className={this.props.iconClass}/></span>
+        <div className='info-box-content'>
+          <span className='info-box-text'>{this.props.title}</span>
+          <span className='info-box-number'>{this.props.number}</span>
         </div>
       </div>
     );

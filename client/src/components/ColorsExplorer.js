@@ -1,6 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import {findDOMNode} from 'react-dom';
-import {Grid, Col, Row} from 'react-bootstrap';
 import ColorsTableContainer from '../containers/colors/ColorsTableContainer';
 
 export default class EntityExplorer extends Component {

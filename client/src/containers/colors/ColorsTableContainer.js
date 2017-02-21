@@ -1,16 +1,16 @@
 import {connect} from 'react-redux';
 import {fetchColors, createColor, editColor, deleteColor} from '../../actions/colors';
 
-import {selectRow, enableEditing, enableCreating, enableDefaultStatus} from '../../actions/table';
+import {selectRow, selectSecondaryRow, enableEditing, enableCreating, enableDefaultStatus} from '../../actions/table';
 import {fetchColorgroups} from '../../actions/colorgroups';
-import Table from '../../components/ActionTable/index';
+import Table from '../../components/Colors';
 
 const mapStateToProps = state => {
   const {colors, colorsError, colorsLoading} = state.colors;
   const {colorgroups, colorgroupsError, colorgroupsLoading} = state.colorgroups;
   const error = colorsError || colorgroupsError;
   const loading = !!(colorsLoading || colorgroupsLoading);
-  const {selectedRowId, status} = state.table;
+  const {selectedRowId, selected2RowId, status} = state.table;
 
   return {
     title: 'Colors',
@@ -19,6 +19,7 @@ const mapStateToProps = state => {
     error,
     loading,
     selectedRowId,
+    selected2RowId,
     status
   };
 };
@@ -31,8 +32,11 @@ const mapDispatchToProps = dispatch => {
     fetchSecondaryData() {
       dispatch(fetchColorgroups());
     },
-    selectRow(table, id) {
-      dispatch(selectRow(table, id));
+    selectRow(id) {
+      dispatch(selectRow(id));
+    },
+    selectSecondaryRow(id) {
+      dispatch(selectSecondaryRow(id));
     },
     enableEditing() {
       dispatch(enableEditing());
