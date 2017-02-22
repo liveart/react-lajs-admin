@@ -2,9 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {findDOMNode} from 'react-dom';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
-import {ChromePicker} from 'react-color';
 import * as ColorModel from '../../../../common/models/color.json';
-
 const Color = ColorModel.properties;
 import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
 const Colorgroup = ColorgroupModel.properties;
@@ -39,9 +37,11 @@ export default class Table extends Component {
   renderTableHeadings = object => {
     return Object.getOwnPropertyNames(object).map((prop, i) => {
       if (prop === ID_PROP) {
-        return null;
+        return (
+          null
+        );
       } else {
-        return <th key={i}>{prop}</th>;
+        return (<th key={i}>{prop}</th>);
       }
     });
   };
@@ -53,16 +53,11 @@ export default class Table extends Component {
           return null;
         }
 
-        return <td key={i}><FormControl type='text' ref={input => this.newEntityInput[prop] = input}/>
-        </td>;
+        return (<td key={i}><FormControl type='text' ref={input => this.newEntityInput[prop] = input}/>
+        </td>);
       })}
       </tr>
     );
-  };
-
-  handleColorChange = color => {
-    console.log('ASDASDSAD');
-    console.log(color);
   };
 
   renderTableData = (data, object) => {
@@ -213,6 +208,7 @@ export default class Table extends Component {
   );
 
   renderSecondaryTable = (data, object) => (
+
     <section className='panel panel-default'>
       <div style={{'maxHeight': '60vh', 'overflow': 'scroll'}}>
         <div className='table-responsive'>
@@ -231,26 +227,9 @@ export default class Table extends Component {
     </section>
   );
 
-  renderColorInfoBox = object => (
-    <section>
-        {Object.getOwnPropertyNames(object).map((prop, i) => {
-          if (prop === ID_PROP) {
-            return null;
-          } else {
-            return <div className='input-group'>
-              <span className='input-group-addon' id='sizing-addon2'>{prop}</span>
-              <input type='text' className='form-control' placeholder={prop}/>
-            </div>
-          }
-        })}
-      <ChromePicker/>
-    </section>
-  );
-
   handleRowClick = id => {
     if (this.props.status !== STATUS_EDITING) {
       this.props.selectRow(id);
-
     }
   };
 
@@ -336,18 +315,14 @@ export default class Table extends Component {
         <section className='content'>
           <div className='row'>
             <div className='col-lg-4'>
-              {this.renderColorInfoBox(Color)}
+              {this.renderSecondaryTable(secondaryData, Colorgroup)}
+              <p>{secondaryTitle + ': ' + secondaryData.length}</p>
             </div>
-            <div className='col-lg-6'>
+            <div className='col-lg-8'>
               {this.renderTable(data, Color)}
 
               {this.renderButtons()}
               <p>{title + ': ' + data.length}</p>
-            </div>
-            <div className='col-lg-2'>
-
-              {this.renderSecondaryTable(secondaryData, Colorgroup)}
-              <p>{secondaryTitle + ': ' + secondaryData.length}</p>
             </div>
           </div>
         </section>

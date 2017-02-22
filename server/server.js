@@ -19,6 +19,9 @@ app.get('/fonts', function (req, res) {
 app.get('/colors', function (req, res) {
   res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
 });
+app.get('/colorgroups', function (req, res) {
+  res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
+});
 
 app.start = function () {
   // start the web server
