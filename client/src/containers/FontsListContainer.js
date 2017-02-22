@@ -5,12 +5,12 @@ import {selectRow, enableEditing, enableCreating, enableDefaultStatus} from '../
 import EntityExplorer from '../components/EntityExplorer';
 
 const mapStateToProps = state => {
-  const {fontsList, error, loading} = state.fonts;
+  const {fontsList, error, fontsLoading} = state.fonts;
   const {selectedRowId, status} = state.table;
   return {
     entitiesList: fontsList,
     error,
-    loading,
+    loading: fontsLoading,
     selectedRowId,
     status
   };
