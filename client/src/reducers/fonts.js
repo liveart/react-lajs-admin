@@ -1,7 +1,7 @@
 import * as actionType from '../actionTypes/fonts';
 
 const INITIAL_STATE = {
-  fontsList: [], fontsNumber: 0, fontsError: null, fontsLoading: false
+  fonts: [], fontsNumber: 0, fontsError: null, fontsLoading: false
 };
 
 export default function (state = INITIAL_STATE, action) {
@@ -10,7 +10,7 @@ export default function (state = INITIAL_STATE, action) {
     case actionType.FONTS_OPERATION_SUCCESS:
       return {
         ...state,
-        fontsList: action.fonts || state.fontsList,
+        fonts: action.fonts || state.fonts,
         fontsNumber: action.fontsNumber || state.fontsNumber,
         fontsError: null,
         fontsLoading: false
@@ -19,7 +19,7 @@ export default function (state = INITIAL_STATE, action) {
       fontsError = action.message;
       return {...state, fontsError, fontsLoading: false};
     case actionType.FETCH_FONTS:
-      return {...state, fontsList: [], fontsError: null, fontsLoading: true};
+      return {...state, fonts: [], fontsError: null, fontsLoading: true};
     case actionType.FETCH_FONTS_NUMBER:
       return {...state, fontsNumber: 0, fontsError: null, fontsLoading: true};
     case actionType.CREATE_FONT:
