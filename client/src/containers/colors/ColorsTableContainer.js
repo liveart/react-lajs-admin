@@ -14,6 +14,7 @@ const mapStateToProps = state => {
 
   return {
     title: 'Colors',
+    secondaryTitle: 'Color Groups',
     secondaryData: colorgroups,
     data: colors,
     error,
