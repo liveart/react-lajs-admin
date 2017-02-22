@@ -6,7 +6,7 @@ export const ENABLE_DEFAULT_STATUS = 'ENABLE_DEFAULT_STATUS';
 
 export const selectRow = selectedId => {
   return {
-    type: actionTypes.SELECT_ROW,
+    type: SELECT_ROW,
     selectedRowId: selectedId
   };
 };
@@ -20,24 +20,18 @@ export const selectSecondaryRow = selectedId => {
 
 export const enableEditing = () => {
   return {
-    type: actionTypes.ENABLE_EDITING
+    type: ENABLE_EDITING
   };
 };
 
 export const enableCreating = () => {
   return {
-    type: actionTypes.ENABLE_CREATING
-  };
-};
-
-export const enableUploading = () => {
-  return {
-    type: actionTypes.ENABLE_UPLOADING
+    type: ENABLE_CREATING
   };
 };
 
 export const enableDefaultStatus = () => {
   return {
-    type: actionTypes.ENABLE_DEFAULT_STATUS
+    type: ENABLE_DEFAULT_STATUS
   };
 };

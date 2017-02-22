@@ -5,16 +5,18 @@ import {Row, Col, Grid} from 'react-bootstrap';
 
 export default class Overview extends Component {
   static propTypes = {
-    fontsNumber: PropTypes.number.isRequired,
+    numbers: PropTypes.number.isRequired,
     colorsNumber: PropTypes.number.isRequired,
     loading: PropTypes.bool.isRequired,
     error: PropTypes.object,
     fetchFontsNumber: PropTypes.func.isRequired,
+    fetchFontFilesNumber: PropTypes.func.isRequired,
     fetchColorsNumber: PropTypes.func.isRequired
   };
 
   componentWillMount() {
     this.props.fetchFontsNumber();
+    this.props.fetchFontFilesNumber();
     this.props.fetchColorsNumber();
   }
 
@@ -35,7 +37,7 @@ export default class Overview extends Component {
   };
 
   render() {
-    const {fontsNumber, colorsNumber, loading} = this.props;
+    const {numbers, colorsNumber, loading} = this.props;
     if (loading) {
       return (
         <main>
@@ -57,7 +59,7 @@ export default class Overview extends Component {
         <section className='content'>
           <Grid>
             <Row>
-              <Col md={3}>{this.renderFontsNumber(fontsNumber)}</Col>
+              <Col md={3}>{this.renderFontsNumber(numbers)}</Col>
               <Col md={3}>{this.renderColorsNumber(colorsNumber)}</Col>
             </Row>
           </Grid>

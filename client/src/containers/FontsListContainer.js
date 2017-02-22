@@ -1,28 +1,40 @@
 import {connect} from 'react-redux';
 import {fetchFonts, createFont, editFont, deleteFont} from '../actions/fonts';
 import {fetchFontFiles, createFontFile, uploadFontFile, editFontFile, deleteFontFile} from '../actions/fontFiles';
-import {selectRow, enableEditing, enableCreating, enableDefaultStatus} from '../actions/table';
-import EntityExplorer from '../components/EntityExplorer';
+import {selectRow, selectSecondaryRow, enableEditing, enableCreating, enableDefaultStatus} from '../actions/table';
+import Table from '../components/Fonts';
 
 const mapStateToProps = state => {
-  const {fontsList, error, fontsLoading} = state.fonts;
-  const {selectedRowId, status} = state.table;
+  const {fontsList, fontsError, fontsLoading} = state.fonts;
+  const {fontFilesList, errorFontFiles, fontFilesLoading} = state.fontFiles;
+  const error = fontsError || errorFontFiles;
+  const loading = !!(fontsLoading || fontFilesLoading);
+  const {selectedRowId, selected2RowId, status} = state.table;
   return {
-    entitiesList: fontsList,
+    title: 'fontsList',
+    secondaryData: fontFilesList,
+    data: fontsList,
     error,
-    loading: fontsLoading,
+    loading,
     selectedRowId,
+    selected2RowId,
     status
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchEntities() {
+    fetchData() {
       dispatch(fetchFonts());
+    },
+    fetchSecondaryData() {
+      dispatch(fetchFontFiles());
     },
     selectRow(id) {
       dispatch(selectRow(id));
+    },
+    selectSecondaryRow(id) {
+      dispatch(selectSecondaryRow(id));
     },
     enableEditing() {
       dispatch(enableEditing());
@@ -36,16 +48,26 @@ const mapDispatchToProps = dispatch => {
     createEntity(font) {
       dispatch(createFont(font));
     },
-    upload(fileWOFF) {
-      dispatch(uploadFontFile(fileWOFF));
+    createSecondaryEntity(fontFile) {
+      dispatch(createFontFile(fontFile));
     },
     editEntity(id, newFont) {
       dispatch(editFont(id, newFont));
     },
+    editSecondaryEntity(id, newFontFile) {
+      dispatch(editFontFile(id, newFontFile));
+    },
     deleteEntity(id) {
       dispatch(deleteFont(id));
-    }
+    },
+    deleteSecondaryEntity(id) {
+      dispatch(deleteFontFile(id));
+    },
+    upload(fileWOFF) {
+      dispatch(uploadFontFile(fileWOFF));
+    },
+
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EntityExplorer);
+export default connect(mapStateToProps, mapDispatchToProps)(Table);

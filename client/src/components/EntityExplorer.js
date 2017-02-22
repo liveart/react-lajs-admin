@@ -99,9 +99,6 @@ export default class EntityExplorer extends Component {
         <a href='api/fontFiles'>view CSS</a>
       </tr>
       <tr>
-        <a href='api/fontFiles' download='fonts.css'>download CSS</a>
-      </tr>
-      <tr>
         {this.renderEntitiesTableHeading(entities)}
       </tr>
       </thead>
@@ -184,7 +181,22 @@ export default class EntityExplorer extends Component {
       data.push( ']');
       const blob = new Blob(data, {type: "application/json"});
       saveAs(blob, "fonts.json");
-        }
+    }
+  };
+
+  handleCSSDownloadBtnClick = () => {
+    if (this.props.status === STATUS_DEFAULT) {
+      const fonts = this.props.entitiesList;
+      const data = [];
+      fonts.forEach(function(entry) {
+        data.push('@font-face {\n');
+        data.push(entry);
+        data.push( '}\n');
+      });
+      data.push( ']');
+      const blob = new Blob(data, {type: "application/json"});
+      saveAs(blob, "fonts.json");
+    }
   };
 
   handleEditBtnClick = () => {
