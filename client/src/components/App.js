@@ -7,7 +7,8 @@ export default class App extends Component {
   static propTypes = {
     email: PropTypes.string,
     token: PropTypes.string,
-    error: PropTypes.string
+    error: PropTypes.string,
+    restoreUserToken: PropTypes.func.isRequired
   };
 
   renderError = () => {
@@ -17,26 +18,32 @@ export default class App extends Component {
     }
 
     return (
-      <div className="row col-md-offset-5 col-md-2">
-        <div className="callout callout-danger lead">{this.props.error}</div>
+      <div className='row col-md-offset-5 col-md-2'>
+        <div className='callout callout-danger lead'>{this.props.error}</div>
       </div>
     );
   };
 
   render() {
     if (typeof this.props.token !== 'string') {
-      return (<div>
-        <LoginForm/>
-        {this.renderError()}
-      </div>);
+      if (typeof localStorage.token !== 'string') {
+        return (<div>
+          <LoginForm/>
+          {this.renderError()}
+        </div>);
+      } else {
+        this.props.restoreUserToken(localStorage.token);
+      }
     }
+
+    localStorage.token = this.props.token;
 
     const {children} = this.props;
     return (
       <div>
         <Header email={this.props.email}/>
         <NavbarContainer/>
-        <main className="content-wrapper">
+        <main className='content-wrapper'>
           {children}
         </main>
       </div>);

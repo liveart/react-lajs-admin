@@ -24,6 +24,11 @@ export default function (state = INITIAL_STATE, action) {
         error: null,
         loading: true
       };
+    case actionType.RESTORE_USER_TOKEN:
+      return {
+        ...state,
+        token: action.token
+      };
     case actionType.GET_TOKEN_RESULT:
       error = action.message || '';
       return {

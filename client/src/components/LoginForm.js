@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import {Button, FormControl} from 'react-bootstrap';
+import {FormControl} from 'react-bootstrap';
 
 export default class LoginForm extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {email: '', password: ''};
   }
 
@@ -24,26 +23,27 @@ export default class LoginForm extends Component {
   render() {
     return (
       <section>
-        <div className="login-box">
-          <div className="login-logo">
+        <div className='login-box'>
+          <div className='login-logo'>
             <b>LiveArt</b>Admin
           </div>
-          <div className="login-box-body">
-            <p className="login-box-msg">Log In</p>
-            <div className="form-group has-feedback">
+          <div className='login-box-body'>
+            <p className='login-box-msg'>Log In</p>
+            <div className='form-group has-feedback'>
               <p>Email:</p>
-              <FormControl type="email" value={this.state.email} onChange={this.handleEmailInputChange}/>
+              <FormControl type='email' value={this.state.email} onChange={this.handleEmailInputChange}/>
             </div>
-            <div className="form-group has-feedback">
+            <div className='form-group has-feedback'>
               <p>Password:</p>
-              <FormControl type="password" value={this.state.password} onChange={this.handlePasswordInputChange}/>
+              <FormControl type='password' value={this.state.password} onChange={this.handlePasswordInputChange}/>
             </div>
-            <div className="row">
-              <div className="col-xs-8">
+            <div className='row'>
+              <div className='col-xs-8'>
               </div>
-              <div className="col-xs-4">
-                <Button className="btn btn-default btn-block btn-flat" onClick={this.handleLoginBtnClick}>
-                  Log In</Button>
+              <div className='col-xs-4'>
+                <button className='btn btn-primary btn-block' onClick={this.handleLoginBtnClick}>
+                  Log In
+                </button>
               </div>
             </div>
           </div>

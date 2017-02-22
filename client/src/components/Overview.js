@@ -35,17 +35,15 @@ export default class Overview extends Component {
   };
 
   render() {
-    const {fontsNumber, fontsLoading} = this.props;
-    const {colorsNumber, colorsLoading} = this.props;
-    const loading = fontsLoading || colorsLoading;
+    const {fontsNumber, colorsNumber, loading} = this.props;
     if (loading) {
       return (
         <main>
-          <div className="loader"></div>
-          <section className="content-header">
+          <div className='loader'></div>
+          <section className='content-header'>
             <h1>Loading...</h1>
           </section>
-          <section className="content">
+          <section className='content'>
           </section>
         </main>
       );
@@ -53,10 +51,10 @@ export default class Overview extends Component {
 
     return (
       <div>
-        <section className="content-header">
+        <section className='content-header'>
           <h1>Overview</h1>
         </section>
-        <section className="content">
+        <section className='content'>
           <Grid>
             <Row>
               <Col md={3}>{this.renderFontsNumber(fontsNumber)}</Col>
