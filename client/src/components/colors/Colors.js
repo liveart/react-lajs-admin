@@ -157,6 +157,40 @@ export default class Table extends Component {
     });
   };
 
+  renderBox = (data, heading) => (
+    <div className='col-md-12'>
+      <div className='box'>
+        <div className='box-header with-border'>
+          <h3 className='box-title'>{this.props.title}</h3>
+          <div className='box-body'>
+            <div className='row'>
+              <div className='col-md-4'>
+                {this.renderSecondaryTable(data)}
+              </div>
+              <div className='col-md-8'>
+                {this.renderTable(data, heading)}
+              </div>
+            </div>
+          </div>
+          <div className='box-footer'>
+            <div className='row'>
+              <div className='col-md-4'>
+                <div className='description-block border-right'>
+                  
+                </div>
+              </div>
+              <div className='col-md-8'>
+                <div className='description-block border-left pull-right'>
+                  {this.renderButtons()}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   renderTable = (data, headings) => (
     <section className='panel panel-default'>
       <div>
@@ -312,14 +346,8 @@ export default class Table extends Component {
         </section>
         <section className='content'>
           <div className='row'>
-            <div className='col-lg-3'>
-              {this.renderSecondaryTable(secondaryData)}
-            </div>
-            <div className='col-lg-7'>
-              {this.renderTable(data, headings)}
-            </div>
-            <div className='col-lg-2'>
-              {this.renderButtons()}
+            <div className='col-lg-12'>
+              {this.renderBox(data, headings)}
             </div>
           </div>
         </section>
