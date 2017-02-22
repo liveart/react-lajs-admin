@@ -3,6 +3,9 @@ import {FormControl} from 'react-bootstrap';
 import {findDOMNode} from 'react-dom';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 
+import * as ColorModel from '../../../../common/models/color.json';
+const Color = ColorModel.properties;
+
 export default class Table extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
@@ -30,11 +33,8 @@ export default class Table extends Component {
     this.props.fetchData();
   }
 
-  renderTableHeadings = data => {
-    if (!data.length) {
-      return null;
-    }
-    return Object.getOwnPropertyNames(data[0]).map((prop, i) => {
+  renderTableHeadings = () => {
+    return Object.getOwnPropertyNames(Color).map((prop, i) => {
       if (prop === ID_PROP) {
         return (
           null
@@ -45,12 +45,9 @@ export default class Table extends Component {
     });
   };
 
-  renderCreatingRow = data => {
-    if (!data.length) {
-      return null;
-    }
+  renderCreatingRow = () => {
     return (
-      <tr>{Object.getOwnPropertyNames(data[0]).map((prop, i) => {
+      <tr>{Object.getOwnPropertyNames(Color).map((prop, i) => {
         if (prop === ID_PROP) {
           return null;
         }
@@ -73,7 +70,7 @@ export default class Table extends Component {
         return (
           <tr key={k}
               onClick={() => this.handleRowClick(item[ID_PROP])}>
-            {Object.getOwnPropertyNames(data[0]).map((prop, j) => {
+            {Object.getOwnPropertyNames(Color).map((prop, j) => {
               if (prop === ID_PROP) {
                 return null;
               }
@@ -92,7 +89,7 @@ export default class Table extends Component {
       return (
         <tr key={k} className={item[ID_PROP] === this.props.selectedRowId ? 'selected' : null}
             onClick={() => this.handleRowClick(item[ID_PROP])}>
-          {Object.getOwnPropertyNames(data[0]).map((prop, j) => {
+          {Object.getOwnPropertyNames(Color).map((prop, j) => {
             if (prop === ID_PROP) {
               return null;
             } else {
@@ -127,7 +124,7 @@ export default class Table extends Component {
         return (
           <tr key={k}
               onClick={() => this.handleRowClickSecondTable(item[ID_PROP])}>
-            {Object.getOwnPropertyNames(data[0]).map((prop, j) => {
+            {Object.getOwnPropertyNames(Color).map((prop, j) => {
               if (prop === ID_PROP) {
                 return null;
               }
@@ -146,7 +143,7 @@ export default class Table extends Component {
       return (
         <tr key={k} className={item[ID_PROP] === this.props.selected2RowId ? 'selected' : null}
             onClick={() => this.handleRowClickSecondTable(item[ID_PROP])}>
-          {Object.getOwnPropertyNames(data[0]).map((prop, j) => {
+          {Object.getOwnPropertyNames(Color).map((prop, j) => {
             if (prop === ID_PROP) {
               return null;
             } else {
@@ -160,6 +157,40 @@ export default class Table extends Component {
     });
   };
 
+  renderBox = (data, heading) => (
+    <div className='col-md-12'>
+      <div className='box'>
+        <div className='box-header with-border'>
+          <h3 className='box-title'>{this.props.title}</h3>
+          <div className='box-body'>
+            <div className='row'>
+              <div className='col-md-4'>
+                {this.renderSecondaryTable(data)}
+              </div>
+              <div className='col-md-8'>
+                {this.renderTable(data, heading)}
+              </div>
+            </div>
+          </div>
+          <div className='box-footer'>
+            <div className='row'>
+              <div className='col-md-4'>
+                <div className='description-block border-right'>
+                  
+                </div>
+              </div>
+              <div className='col-md-8'>
+                <div className='description-block border-left pull-right'>
+                  {this.renderButtons()}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   renderTable = (data, headings) => (
     <section className='panel panel-default'>
       <div>
@@ -167,11 +198,11 @@ export default class Table extends Component {
           <table className='table no-margin'>
             <thead>
             <tr>
-              {this.renderTableHeadings(data)}
+              {this.renderTableHeadings()}
             </tr>
             </thead>
             <tbody>
-            {this.props.status === STATUS_CREATING ? this.renderCreatingRow(data) : null}
+            {this.props.status === STATUS_CREATING ? this.renderCreatingRow() : null}
             {this.renderTableData(data)}
             </tbody>
           </table>
@@ -216,7 +247,7 @@ export default class Table extends Component {
           <table className='table no-margin'>
             <thead>
             <tr>
-              {this.renderTableHeadings(data)}
+              {this.renderTableHeadings()}
             </tr>
             </thead>
             <tbody>
@@ -259,8 +290,8 @@ export default class Table extends Component {
   };
 
   handleSaveBtnClick = () => {
-    if (this.props.status === STATUS_EDITING && this.props.data.length) {
-      const properties = Object.getOwnPropertyNames(this.props.data[0]);
+    if (this.props.status === STATUS_EDITING) {
+      const properties = Object.getOwnPropertyNames(Color);
       const entity = {};
       properties.forEach(prop => {
         if (prop !== ID_PROP) {
@@ -269,7 +300,7 @@ export default class Table extends Component {
       });
       this.props.editEntity(this.props.selectedRowId, entity);
     } else if (this.props.status === STATUS_CREATING) {
-      const properties = Object.getOwnPropertyNames(this.props.data[0]);
+      const properties = Object.getOwnPropertyNames(Color);
       const entity = {};
       properties.forEach(prop => {
         if (prop !== ID_PROP) {
@@ -315,14 +346,8 @@ export default class Table extends Component {
         </section>
         <section className='content'>
           <div className='row'>
-            <div className='col-lg-3'>
-              {this.renderSecondaryTable(secondaryData)}
-            </div>
-            <div className='col-lg-7'>
-              {this.renderTable(data, headings)}
-            </div>
-            <div className='col-lg-2'>
-              {this.renderButtons()}
+            <div className='col-lg-12'>
+              {this.renderBox(data, headings)}
             </div>
           </div>
         </section>
