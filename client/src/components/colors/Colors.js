@@ -2,9 +2,10 @@ import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {findDOMNode} from 'react-dom';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
-
 import * as ColorModel from '../../../../common/models/color.json';
 const Color = ColorModel.properties;
+import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
+const Colorgroup = ColorgroupModel.properties;
 
 export default class Table extends Component {
   static propTypes = {
@@ -33,8 +34,8 @@ export default class Table extends Component {
     this.props.fetchData();
   }
 
-  renderTableHeadings = () => {
-    return Object.getOwnPropertyNames(Color).map((prop, i) => {
+  renderTableHeadings = object => {
+    return Object.getOwnPropertyNames(object).map((prop, i) => {
       if (prop === ID_PROP) {
         return (
           null
@@ -59,7 +60,7 @@ export default class Table extends Component {
     );
   };
 
-  renderTableData = data => {
+  renderTableData = (data, object) => {
     if (!data.length) {
       return null;
     }
@@ -70,7 +71,7 @@ export default class Table extends Component {
         return (
           <tr key={k}
               onClick={() => this.handleRowClick(item[ID_PROP])}>
-            {Object.getOwnPropertyNames(Color).map((prop, j) => {
+            {Object.getOwnPropertyNames(object).map((prop, j) => {
               if (prop === ID_PROP) {
                 return null;
               }
@@ -89,7 +90,7 @@ export default class Table extends Component {
       return (
         <tr key={k} className={item[ID_PROP] === this.props.selectedRowId ? 'selected' : null}
             onClick={() => this.handleRowClick(item[ID_PROP])}>
-          {Object.getOwnPropertyNames(Color).map((prop, j) => {
+          {Object.getOwnPropertyNames(object).map((prop, j) => {
             if (prop === ID_PROP) {
               return null;
             } else {
@@ -114,7 +115,7 @@ export default class Table extends Component {
     });
   };
 
-  renderSecondaryTableData = data => {
+  renderSecondaryTableData = (data, object) => {
     if (!data.length) {
       return null;
     }
@@ -124,7 +125,7 @@ export default class Table extends Component {
         return (
           <tr key={k}
               onClick={() => this.handleRowClickSecondTable(item[ID_PROP])}>
-            {Object.getOwnPropertyNames(Color).map((prop, j) => {
+            {Object.getOwnPropertyNames(object).map((prop, j) => {
               if (prop === ID_PROP) {
                 return null;
               }
@@ -143,7 +144,7 @@ export default class Table extends Component {
       return (
         <tr key={k} className={item[ID_PROP] === this.props.selected2RowId ? 'selected' : null}
             onClick={() => this.handleRowClickSecondTable(item[ID_PROP])}>
-          {Object.getOwnPropertyNames(Color).map((prop, j) => {
+          {Object.getOwnPropertyNames(object).map((prop, j) => {
             if (prop === ID_PROP) {
               return null;
             } else {
@@ -157,56 +158,22 @@ export default class Table extends Component {
     });
   };
 
-  renderBox = (data, heading) => (
-    <div className='col-md-12'>
-      <div className='box'>
-        <div className='box-header with-border'>
-          <h3 className='box-title'>{this.props.title}</h3>
-          <div className='box-body'>
-            <div className='row'>
-              <div className='col-md-4'>
-                {this.renderSecondaryTable(data)}
-              </div>
-              <div className='col-md-8'>
-                {this.renderTable(data, heading)}
-              </div>
-            </div>
-          </div>
-          <div className='box-footer'>
-            <div className='row'>
-              <div className='col-md-4'>
-                <div className='description-block border-right'>
-                  
-                </div>
-              </div>
-              <div className='col-md-8'>
-                <div className='description-block border-left pull-right'>
-                  {this.renderButtons()}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  renderTable = (data, headings) => (
+  renderTable = (data, object) => (
     <section className='panel panel-default'>
-      <div>
-        <div className='table-responsive'>
-          <table className='table no-margin'>
+      <div style={{'maxHeight': '60vh', 'overflow': 'scroll'}}>
+        <tb className='table-responsive'>
+          <table className='table no-margin table-hover'>
             <thead>
             <tr>
-              {this.renderTableHeadings()}
+              {this.renderTableHeadings(object)}
             </tr>
             </thead>
             <tbody>
             {this.props.status === STATUS_CREATING ? this.renderCreatingRow() : null}
-            {this.renderTableData(data)}
+            {this.renderTableData(data, object)}
             </tbody>
           </table>
-        </div>
+        </tb>
       </div>
     </section>
   );
@@ -217,7 +184,7 @@ export default class Table extends Component {
   );
 
   renderDefButtons = () => (
-    <div>
+    <div className='pull-right'>
       <a className='btn btn-app' onClick={this.handleCreateBtnClick}><i className='fa fa-plus'/>Add
       </a>
       <a className='btn btn-app' onClick={this.handleEditBtnClick}><i className='fa fa-pencil-square-o'/>Edit
@@ -234,24 +201,25 @@ export default class Table extends Component {
   );
 
   renderEditingButtons = () => (
-    <div>
+    <div className='pull-right'>
       <a className='btn btn-app' onClick={this.handleSaveBtnClick}><i className='fa fa-check'/>Save</a>
       <a className='btn btn-app' onClick={this.handleCancelBtnClick}><i className='fa fa-ban'/>Cancel</a>
     </div>
   );
 
-  renderSecondaryTable = data => (
+  renderSecondaryTable = (data, object) => (
+
     <section className='panel panel-default'>
       <div>
         <div className='table-responsive'>
           <table className='table no-margin'>
             <thead>
             <tr>
-              {this.renderTableHeadings()}
+              {this.renderTableHeadings(object)}
             </tr>
             </thead>
             <tbody>
-            {this.renderSecondaryTableData(data)}
+            {this.renderSecondaryTableData(data, object)}
             </tbody>
           </table>
         </div>
@@ -320,7 +288,7 @@ export default class Table extends Component {
   };
 
   render() {
-    const {secondaryData, headings, data, loading, error} = this.props;
+    const {secondaryData, data, loading, error, title, secondaryTitle} = this.props;
 
     if (loading) {
       return (
@@ -346,8 +314,15 @@ export default class Table extends Component {
         </section>
         <section className='content'>
           <div className='row'>
-            <div className='col-lg-12'>
-              {this.renderBox(data, headings)}
+            <div className='col-lg-4'>
+              {this.renderSecondaryTable(secondaryData, Colorgroup)}
+              <p>{secondaryTitle + ': ' + secondaryData.length}</p>
+            </div>
+            <div className='col-lg-8'>
+              {this.renderTable(data, Color)}
+
+              {this.renderButtons()}
+              <p>{title + ': ' + data.length}</p>
             </div>
           </div>
         </section>
