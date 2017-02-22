@@ -116,7 +116,7 @@ export default class EntityExplorer extends Component {
 
   renderFileUpload = () => (
     <label className="btn btn-default btn-file">
-      Upload <input type="file" accept=".woff" id="woff"/>
+      Upload <input type="file" accept=".woff" id="woff" onClick={this.handleFileBtnClick}/>
     </label>
   );
 

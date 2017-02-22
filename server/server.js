@@ -16,6 +16,9 @@ app.get('/', function (req, res) {
 app.get('/fonts', function (req, res) {
   res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
 });
+app.get('/fontFiles', function (req, res) {
+  res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
+});
 app.get('/colors', function (req, res) {
   res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
 });

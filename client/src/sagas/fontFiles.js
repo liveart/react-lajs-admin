@@ -8,7 +8,7 @@ const endpointUpload = 'containers/woff';
 export function* fetchFontFiles() {
   try {
     const res = yield* api.retrieve(endpoint);
-    yield dispatch({type: actionTypes.FONTS_FILE_OPERATION_SUCCESS, fontFile: res});
+    yield dispatch({type: actionTypes.FONTS_FILE_OPERATION_SUCCESS, fontFiles: res});
   } catch (e) {
     yield dispatch({type: actionTypes.FONTS_FILE_OPERATION_FAILURE, message: e});
   }
@@ -24,7 +24,7 @@ export function* fetchFontFilesNumber() {
 
 export function* createFontFile(action) {
   try {
-    yield* api.create(endpoint, action.font);
+    yield* api.create(endpoint, action.fontFile);
     yield dispatch({type: actionTypes.FONTS_FILE_OPERATION_SUCCESS});
   } catch (e) {
     yield dispatch({type: actionTypes.FONTS_FILE_OPERATION_FAILURE, message: e});

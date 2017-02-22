@@ -5,7 +5,8 @@ import {Row, Col, Grid} from 'react-bootstrap';
 
 export default class Overview extends Component {
   static propTypes = {
-    numbers: PropTypes.number.isRequired,
+    fontsNumber: PropTypes.number.isRequired,
+    fontFilesNumber: PropTypes.number.isRequired,
     colorsNumber: PropTypes.number.isRequired,
     loading: PropTypes.bool.isRequired,
     error: PropTypes.object,
@@ -28,6 +29,14 @@ export default class Overview extends Component {
     );
   };
 
+  renderFontFilesNumber = fontFilesNumber => {
+    return (
+      <Link to='/fontFiles'>
+        <InfoWidget title='Font Files' number={fontFilesNumber} iconClass='fa fa-font'/>
+      </Link>
+    );
+  };
+
   renderColorsNumber = colorsNumber => {
     return (
       <Link to='/colors'>
@@ -37,7 +46,7 @@ export default class Overview extends Component {
   };
 
   render() {
-    const {numbers, colorsNumber, loading} = this.props;
+    const {fontsNumber, fontFilesNumber, colorsNumber, loading} = this.props;
     if (loading) {
       return (
         <main>
@@ -59,7 +68,8 @@ export default class Overview extends Component {
         <section className='content'>
           <Grid>
             <Row>
-              <Col md={3}>{this.renderFontsNumber(numbers)}</Col>
+              <Col md={3}>{this.renderFontsNumber(fontsNumber)}</Col>
+              <Col md={3}>{this.renderFontFilesNumber(fontFilesNumber)}</Col>
               <Col md={3}>{this.renderColorsNumber(colorsNumber)}</Col>
             </Row>
           </Grid>

@@ -10,9 +10,9 @@ const mapStateToProps = state => {
   const {colorsNumber, colorsError, colorsLoading} = state.colors;
   const error = fontsError || colorsError || fontFilesError;
   const loading = !!(fontsLoading || colorsLoading || fontFilesLoading);
-  const numbers = fontsNumber + fontFilesNumber;
   return {
-    numbers,
+    fontsNumber,
+    fontFilesNumber,
     colorsNumber,
     error,
     loading
