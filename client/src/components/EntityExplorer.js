@@ -2,6 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
 import {Table, FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import {saveAs} from 'file-saver';
+
 
 export default class EntityExplorer extends Component {
   static propTypes = {
@@ -91,6 +93,15 @@ export default class EntityExplorer extends Component {
     <Table responsive hover fill>
       <thead>
       <tr>
+        <a href='api/fonts'>view JSON</a>
+      </tr>
+      <tr>
+        <a href='api/fontFiles'>view CSS</a>
+      </tr>
+      <tr>
+        <a href='api/fontFiles' download='fonts.css'>download CSS</a>
+      </tr>
+      <tr>
         {this.renderEntitiesTableHeading(entities)}
       </tr>
       </thead>
@@ -115,6 +126,9 @@ export default class EntityExplorer extends Component {
 
   renderDefButtons = () => (
     <div className="box-tools">
+      <button className="btn" title="downloadJSON" onClick={this.handleJSONDownloadBtnClick}>
+        <i className="fa fa-file"/></button>
+      <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
       <button className="btn" title="AddWOFF" onClick={this.handleFileBtnClick}>
         <i className="fa fa-file"/></button>
       <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
@@ -156,6 +170,21 @@ export default class EntityExplorer extends Component {
       const file = inputFile[0];
       this.props.upload(file);
     }
+  };
+
+  handleJSONDownloadBtnClick = () => {
+    if (this.props.status === STATUS_DEFAULT) {
+      const fonts = this.props.entitiesList;
+      const data = [];
+      data.push('"fonts": [\n');
+      fonts.forEach(function(entry) {
+        data.push(JSON.stringify(entry));
+        data.push( '\n');
+      });
+      data.push( ']');
+      const blob = new Blob(data, {type: "application/json"});
+      saveAs(blob, "fonts.json");
+        }
   };
 
   handleEditBtnClick = () => {
