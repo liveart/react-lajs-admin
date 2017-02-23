@@ -84,7 +84,8 @@ describe('table reducer', () => {
       reducer(INITIAL_STATE, {type: types.ENABLE_EDITING})
     ).toEqual({
       ...INITIAL_STATE,
-      status: STATUS_EDITING
+      status: STATUS_EDITING,
+      objectHolder: null
     })
   });
 
@@ -93,7 +94,8 @@ describe('table reducer', () => {
       reducer(INITIAL_STATE, {type: types.ENABLE_CREATING})
     ).toEqual({
       ...INITIAL_STATE,
-      status: STATUS_CREATING
+      status: STATUS_CREATING,
+      objectHolder: {}
     })
   });
 
