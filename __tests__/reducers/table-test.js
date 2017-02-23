@@ -5,7 +5,7 @@ import reducer from '../../client/src/reducers/table';
 import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../client/src/definitions';
 
 const INITIAL_STATE = {
-  selectedRowId: null,
+  selectedRowObject: null,
   selected2RowId: null,
   status: STATUS_DEFAULT
 };
@@ -18,28 +18,38 @@ describe('table reducer', () => {
   });
 
   test('should handle ' + types.SELECT_ROW, () => {
-    const selectedRowId = 42;
+    const selectedRowObject = {id: 1};
     expect(
-      reducer(INITIAL_STATE, {type: types.SELECT_ROW, selectedRowId})
+      reducer(INITIAL_STATE, {type: types.SELECT_ROW, selectedRowObject})
     ).toEqual({
       ...INITIAL_STATE,
-      selectedRowId,
+      selectedRowObject,
       status: STATUS_DEFAULT
     })
   });
 
   test('should handle unselect ' + types.SELECT_ROW, () => {
-    const selectedRowId = 42;
+    const selectedRowObject = {id: 1};
     expect(
       reducer({
-        selectedRowId: 42,
+        selectedRowObject: {id: 1},
         selected2RowId: null,
         status: STATUS_DEFAULT
-      }, {type: types.SELECT_ROW, selectedRowId})
+      }, {type: types.SELECT_ROW, selectedRowObject})
     ).toEqual({
       ...INITIAL_STATE,
-      selectedRowId: null,
       status: STATUS_DEFAULT
+    })
+  });
+
+  test('should handle ' + types.SET_EDITING_OBJECT_PROPERTY, () => {
+    const selectedRowObject = {id: 1};
+    expect(
+      reducer({...INITIAL_STATE, selectedRowObject: {id: 2}},
+        {type: types.SET_EDITING_OBJECT_PROPERTY, propertyName: 'id', value: 1})
+    ).toEqual({
+      ...INITIAL_STATE,
+      selectedRowObject
     })
   });
 
@@ -58,7 +68,7 @@ describe('table reducer', () => {
     const selected2RowId = 42;
     expect(
       reducer({
-        selectedRowId: null,
+        ...INITIAL_STATE,
         selected2RowId: 42,
         status: STATUS_DEFAULT
       }, {type: types.SELECT_2TABLE_ROW, selected2RowId})

@@ -4,12 +4,21 @@ import * as T from '../../client/src/actions/table';
 
 describe('Table Actions', () => {
   test('should create an action to select row', () => {
-    const selectedRowId = 10;
+    const selectedRowObject = {id: 1};
     const expectedAction = {
       type: T.SELECT_ROW,
-      selectedRowId
+      selectedRowObject
     };
-    expect(T.selectRow(selectedRowId)).toEqual(expectedAction);
+    expect(T.selectRow(selectedRowObject)).toEqual(expectedAction);
+  });
+
+  test('should create an action to set object property', () => {
+    const expectedAction = {
+      type: T.SET_EDITING_OBJECT_PROPERTY,
+      propertyName: 'id',
+      value: 1
+    };
+    expect(T.setEditingObjectProperty('id', 1)).toEqual(expectedAction);
   });
 
   test('should create an action to enable editing', () => {

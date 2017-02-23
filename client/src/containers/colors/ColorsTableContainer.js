@@ -1,7 +1,10 @@
 import {connect} from 'react-redux';
 import {fetchColors, createColor, editColor, deleteColor} from '../../actions/colors';
 
-import {selectRow, selectSecondaryRow, enableEditing, enableCreating, enableDefaultStatus} from '../../actions/table';
+import {
+  selectRow, selectSecondaryRow, setEditingObjectProperty,
+  enableEditing, enableCreating, enableDefaultStatus
+} from '../../actions/table';
 import {fetchColorgroups} from '../../actions/colorgroups';
 import Table from '../../components/colors/Colors';
 
@@ -10,7 +13,7 @@ const mapStateToProps = state => {
   const {colorgroups, colorgroupsError, colorgroupsLoading} = state.colorgroups;
   const error = colorsError || colorgroupsError;
   const loading = !!(colorsLoading || colorgroupsLoading);
-  const {selectedRowId, selected2RowId, status} = state.table;
+  const {selectedRowObject, selected2RowId, status} = state.table;
 
   return {
     title: 'Colors',
@@ -19,7 +22,7 @@ const mapStateToProps = state => {
     data: colors,
     error,
     loading,
-    selectedRowId,
+    selectedRowObject,
     selected2RowId,
     status
   };
@@ -33,8 +36,11 @@ const mapDispatchToProps = dispatch => {
     fetchSecondaryData() {
       dispatch(fetchColorgroups());
     },
-    selectRow(id) {
-      dispatch(selectRow(id));
+    selectRow(object) {
+      dispatch(selectRow(object));
+    },
+    setEditingObjectProperty(propertyName, value) {
+      dispatch(setEditingObjectProperty(propertyName, value));
     },
     selectSecondaryRow(id) {
       dispatch(selectSecondaryRow(id));
