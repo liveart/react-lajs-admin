@@ -26,10 +26,12 @@ export default class Table extends Component {
     createEntity: PropTypes.func.isRequired,
     editEntity: PropTypes.func.isRequired,
     deleteEntity: PropTypes.func.isRequired,
-    setEditingObjectProperty: PropTypes.func.isRequired
+    setEditingObjectProperty: PropTypes.func.isRequired,
+    restoreTableState: PropTypes.func.isRequired
   };
 
   componentWillMount() {
+    this.props.restoreTableState();
     this.props.fetchSecondaryData();
     this.props.fetchData();
   }
@@ -248,6 +250,7 @@ export default class Table extends Component {
   handleDeleteBtnClick = () => {
     if (this.props.status === STATUS_DEFAULT) {
       this.props.deleteEntity(this.props.objectHolder.id);
+      setTimeout(this.props.fetchData, 2000);
     }
   };
 

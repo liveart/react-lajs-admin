@@ -4,6 +4,7 @@ export const SELECT_2TABLE_ROW = 'SELECT_2TABLE_ROW';
 export const ENABLE_EDITING = 'ENABLE_EDITING';
 export const ENABLE_CREATING = 'ENABLE_CREATING';
 export const ENABLE_DEFAULT_STATUS = 'ENABLE_DEFAULT_STATUS';
+export const SET_INITIAL_STATE = 'SET_INITIAL_STATE';
 
 export const selectRow = selectedObject => {
   return {
@@ -42,5 +43,11 @@ export const setObjectHolderProperty = (propertyName, value) => {
     type: SET_OBJECT_HOLDER_PROPERTY,
     propertyName,
     value
+  };
+};
+
+export const setInitialState = () => {
+  return {
+    type: SET_INITIAL_STATE
   };
 };

@@ -10,13 +10,11 @@ const Colorgroup = ColorgroupModel.properties;
 export default class Table extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    secondaryData: PropTypes.arrayOf(PropTypes.any),
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     error: PropTypes.string,
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
-    fetchSecondaryData: PropTypes.func.isRequired,
-    selectedRowId: PropTypes.string,
+    objectHolder: PropTypes.object,
     status: PropTypes.string.isRequired,
     selectRow: PropTypes.func.isRequired,
     enableEditing: PropTypes.func.isRequired,
@@ -24,40 +22,44 @@ export default class Table extends Component {
     enableDefaultStatus: PropTypes.func.isRequired,
     createEntity: PropTypes.func.isRequired,
     editEntity: PropTypes.func.isRequired,
-    deleteEntity: PropTypes.func.isRequired
+    deleteEntity: PropTypes.func.isRequired,
+    setEditingObjectProperty: PropTypes.func.isRequired,
+    restoreTableState: PropTypes.func.isRequired
   };
 
   componentWillMount() {
-    this.props.fetchSecondaryData();
-    this.editingEntityInput = {};
-    this.newEntityInput = {};
+    this.props.restoreTableState();
     this.props.fetchData();
   }
 
   renderTableHeadings = object => {
     return Object.getOwnPropertyNames(object).map((prop, i) => {
       if (prop === ID_PROP) {
-        return (
-          null
-        );
+        return null;
       } else {
-        return (<th key={i}>{prop}</th>);
+        return <th key={i}>{prop}</th>;
       }
     });
   };
 
   renderCreatingRow = () => {
     return (
-      <tr>{Object.getOwnPropertyNames(Color).map((prop, i) => {
+      <tr>{Object.getOwnPropertyNames(Colorgroup).map((prop, i) => {
         if (prop === ID_PROP) {
           return null;
         }
 
-        return (<td key={i}><FormControl type='text' ref={input => this.newEntityInput[prop] = input}/>
-        </td>);
+        return <td key={i}><FormControl type='text'
+                                        value={this.props.objectHolder[prop]}
+                                        onChange={e => this.handleSelectedObjectChange(prop, e)}/>
+        </td>;
       })}
       </tr>
     );
+  };
+
+  handleSelectedObjectChange = (propertyName, event) => {
+    this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
 
   renderTableData = (data, object) => {
@@ -67,10 +69,9 @@ export default class Table extends Component {
 
     return data.map((item, k) => {
 
-      if (this.props.status === STATUS_EDITING && item[ID_PROP] === this.props.selectedRowId) {
+      if (this.props.status === STATUS_EDITING && item[ID_PROP] === this.props.objectHolder.id) {
         return (
-          <tr key={k}
-              onClick={() => this.handleRowClick(item[ID_PROP])}>
+          <tr key={k}>
             {Object.getOwnPropertyNames(object).map((prop, j) => {
               if (prop === ID_PROP) {
                 return null;
@@ -78,8 +79,8 @@ export default class Table extends Component {
 
               return (
                 <td key={j}><FormControl type='text'
-                                         defaultValue={typeof item[prop] === 'object' && !item[prop] ? '' : item[prop]}
-                                         ref={input => this.editingEntityInput[prop] = input}/>
+                                         value={this.props.objectHolder[prop]}
+                                         onChange={e => this.handleSelectedObjectChange(prop, e)}/>
                 </td>
               );
             })}
@@ -88,23 +89,17 @@ export default class Table extends Component {
       }
 
       return (
-        <tr key={k} className={item[ID_PROP] === this.props.selectedRowId ? 'selected' : null}
-            onClick={() => this.handleRowClick(item[ID_PROP])}>
+        <tr key={k}
+            className={this.props.objectHolder && item[ID_PROP] === this.props.objectHolder.id ?
+              'selected' : null}
+            onClick={() => this.handleRowClick(item)}>
           {Object.getOwnPropertyNames(object).map((prop, j) => {
             if (prop === ID_PROP) {
               return null;
             } else {
-              if (!(typeof this.props.selected2RowId === 'object' && !this.props.selected2RowId)) {
-                if (item['colorgroup_name'] !== this.props.secondaryData.filter(
-                    group => group.id === this.props.selected2RowId)[0].name) {
-                  return null;
-                }
-              }
-
               if (prop === 'value') {
                 return <td key={j}>
                   {item[prop]}
-                  <div className='preview' style={{background: item[prop]}}></div>
                 </td>;
               }
               return <td key={j}>{item[prop]}</td>;
@@ -115,52 +110,9 @@ export default class Table extends Component {
     });
   };
 
-  renderSecondaryTableData = (data, object) => {
-    if (!data.length) {
-      return null;
-    }
-
-    return data.map((item, k) => {
-      if (this.props.status === STATUS_EDITING && item[ID_PROP] === this.props.selectedRowId) {
-        return (
-          <tr key={k}
-              onClick={() => this.handleRowClickSecondTable(item[ID_PROP])}>
-            {Object.getOwnPropertyNames(object).map((prop, j) => {
-              if (prop === ID_PROP) {
-                return null;
-              }
-
-              return (
-                <td key={j}><FormControl type='text'
-                                         defaultValue={typeof item[prop] === 'object' && !item[prop] ? '' : item[prop]}
-                                         ref={input => this.editingEntityInput[prop] = input}/>
-                </td>
-              );
-            })}
-          </tr>
-        );
-      }
-
-      return (
-        <tr key={k} className={item[ID_PROP] === this.props.selected2RowId ? 'selected' : null}
-            onClick={() => this.handleRowClickSecondTable(item[ID_PROP])}>
-          {Object.getOwnPropertyNames(object).map((prop, j) => {
-            if (prop === ID_PROP) {
-              return null;
-            } else {
-              return (
-                <td key={j}>{item[prop]}</td>
-              );
-            }
-          })}
-        </tr>
-      );
-    });
-  };
-
   renderTable = (data, object) => (
-    <section className='panel panel-default'>
-      <div style={{'maxHeight': '60vh', 'overflow': 'scroll'}}>
+    <div className='panel panel-default'>
+      <div style={{'maxHeight': '60vh', 'overflowY': 'scroll'}}>
         <tb className='table-responsive'>
           <table className='table no-margin table-hover'>
             <thead>
@@ -175,7 +127,7 @@ export default class Table extends Component {
           </table>
         </tb>
       </div>
-    </section>
+    </div>
   );
 
   renderButtons = () => (
@@ -193,7 +145,6 @@ export default class Table extends Component {
       </a>
       <a className='btn btn-app' onClick={() => {
         this.props.fetchData();
-        this.props.fetchSecondaryData();
       }}>
         <i className='fa fa-refresh'/>Sync
       </a>
@@ -207,35 +158,11 @@ export default class Table extends Component {
     </div>
   );
 
-  renderSecondaryTable = (data, object) => (
-
-    <section className='panel panel-default'>
-      <div style={{'maxHeight': '60vh', 'overflow': 'scroll'}}>
-        <div className='table-responsive'>
-          <table className='table no-margin'>
-            <thead>
-            <tr>
-              {this.renderTableHeadings(object)}
-            </tr>
-            </thead>
-            <tbody>
-            {this.renderSecondaryTableData(data, object)}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-  );
-
-  handleRowClick = id => {
+  handleRowClick = object => {
     if (this.props.status !== STATUS_EDITING) {
-      this.props.selectRow(id);
-    }
-  };
+      this.props.selectRow(object);
 
-  handleRowClickSecondTable = id => {
-    this.props.enableDefaultStatus();
-    this.props.selectSecondaryRow(id);
+    }
   };
 
   handleCreateBtnClick = () => {
@@ -246,39 +173,40 @@ export default class Table extends Component {
 
   handleEditBtnClick = () => {
     if (this.props.status === STATUS_DEFAULT
-      && !(typeof this.props.selectedRowId === 'object' && !this.props.selectedRowId)) {
+      && !(typeof this.props.objectHolder === 'object' && !this.props.objectHolder)) {
       this.props.enableEditing();
     }
   };
 
   handleDeleteBtnClick = () => {
     if (this.props.status === STATUS_DEFAULT) {
-      this.props.deleteEntity(this.props.selectedRowId);
+      this.props.deleteEntity(this.props.objectHolder.id);
+      setTimeout(this.props.fetchData, 2000);
     }
   };
 
   handleSaveBtnClick = () => {
     if (this.props.status === STATUS_EDITING) {
-      const properties = Object.getOwnPropertyNames(Color);
+      const properties = Object.getOwnPropertyNames(Colorgroup);
       const entity = {};
       properties.forEach(prop => {
         if (prop !== ID_PROP) {
-          entity[prop] = findDOMNode(this.editingEntityInput[prop]).value || undefined;
+          entity[prop] = this.props.objectHolder[prop] || undefined;
         }
       });
-      this.props.editEntity(this.props.selectedRowId, entity);
+      this.props.editEntity(this.props.objectHolder.id, entity);
     } else if (this.props.status === STATUS_CREATING) {
-      const properties = Object.getOwnPropertyNames(Color);
+      const properties = Object.getOwnPropertyNames(Colorgroup);
       const entity = {};
       properties.forEach(prop => {
         if (prop !== ID_PROP) {
-          entity[prop] = findDOMNode(this.newEntityInput[prop]).value || undefined;
+          entity[prop] = this.props.objectHolder[prop] || undefined;
         }
       });
       this.props.createEntity(entity);
     }
     this.props.enableDefaultStatus();
-    setTimeout(this.props.fetchData, 0);
+    setTimeout(this.props.fetchData, 2000);
   };
 
   handleCancelBtnClick = () => {
@@ -288,7 +216,7 @@ export default class Table extends Component {
   };
 
   render() {
-    const {secondaryData, data, loading, error, title, secondaryTitle} = this.props;
+    const {data, loading, error, title} = this.props;
 
     if (loading) {
       return (
@@ -314,15 +242,14 @@ export default class Table extends Component {
         </section>
         <section className='content'>
           <div className='row'>
-            <div className='col-lg-4'>
-              {this.renderSecondaryTable(secondaryData, Colorgroup)}
-              <p>{secondaryTitle + ': ' + secondaryData.length}</p>
+            <div className='col-lg-2'>
             </div>
             <div className='col-lg-8'>
-              {this.renderTable(data, Color)}
-
+              {this.renderTable(data, Colorgroup)}
               {this.renderButtons()}
               <p>{title + ': ' + data.length}</p>
+            </div>
+            <div className='col-lg-2'>
             </div>
           </div>
         </section>
@@ -330,3 +257,4 @@ export default class Table extends Component {
     );
   }
 }
+

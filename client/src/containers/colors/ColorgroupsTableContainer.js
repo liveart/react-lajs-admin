@@ -1,26 +1,24 @@
 import {connect} from 'react-redux';
-import {fetchColors, createColor, editColor, deleteColor} from '../../actions/colors';
 
-import {selectRow, selectSecondaryRow, enableEditing, enableCreating, enableDefaultStatus} from '../../actions/table';
-import {fetchColorgroups} from '../../actions/colorgroups';
+import {
+  selectRow, setObjectHolderProperty, enableEditing, enableCreating,
+  enableDefaultStatus, setInitialState
+} from '../../actions/table';
+import {fetchColorgroups, createColorgroup, editColorgroup, deleteColorgroup} from '../../actions/colorgroups';
 import Table from '../../components/colors/Colorgroups';
 
 const mapStateToProps = state => {
-  const {colors, colorsError, colorsLoading} = state.colors;
   const {colorgroups, colorgroupsError, colorgroupsLoading} = state.colorgroups;
-  const error = colorsError || colorgroupsError;
-  const loading = !!(colorsLoading || colorgroupsLoading);
-  const {selectedRowId, selected2RowId, status} = state.table;
+  const error = colorgroupsError;
+  const loading = colorgroupsLoading;
+  const {objectHolder, status} = state.table;
 
   return {
-    title: 'Colors',
-    secondaryTitle: 'Color Groups',
-    secondaryData: colorgroups,
-    data: colors,
+    title: 'Color Groups',
+    data: colorgroups,
     error,
     loading,
-    selectedRowId,
-    selected2RowId,
+    objectHolder,
     status
   };
 };
@@ -28,16 +26,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchData() {
-      dispatch(fetchColors());
-    },
-    fetchSecondaryData() {
       dispatch(fetchColorgroups());
     },
     selectRow(id) {
       dispatch(selectRow(id));
-    },
-    selectSecondaryRow(id) {
-      dispatch(selectSecondaryRow(id));
     },
     enableEditing() {
       dispatch(enableEditing());
@@ -48,14 +40,20 @@ const mapDispatchToProps = dispatch => {
     enableDefaultStatus() {
       dispatch(enableDefaultStatus());
     },
-    createEntity(color) {
-      dispatch(createColor(color));
+    setEditingObjectProperty(propertyName, value) {
+      dispatch(setObjectHolderProperty(propertyName, value));
     },
-    editEntity(id, newColor) {
-      dispatch(editColor(id, newColor));
+    createEntity(colorgroup) {
+      dispatch(createColorgroup(colorgroup));
+    },
+    editEntity(id, newColorgroup) {
+      dispatch(editColorgroup(id, newColorgroup));
     },
     deleteEntity(id) {
-      dispatch(deleteColor(id));
+      dispatch(deleteColorgroup(id));
+    },
+    restoreTableState() {
+      dispatch(setInitialState());
     }
   };
 };

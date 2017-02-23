@@ -3,7 +3,7 @@ import {fetchColors, createColor, editColor, deleteColor} from '../../actions/co
 
 import {
   selectRow, selectSecondaryRow, setObjectHolderProperty,
-  enableEditing, enableCreating, enableDefaultStatus
+  enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../../actions/table';
 import {fetchColorgroups} from '../../actions/colorgroups';
 import Table from '../../components/colors/Colors';
@@ -62,6 +62,9 @@ const mapDispatchToProps = dispatch => {
     },
     deleteEntity(id) {
       dispatch(deleteColor(id));
+    },
+    restoreTableState() {
+      dispatch(setInitialState());
     }
   };
 };
