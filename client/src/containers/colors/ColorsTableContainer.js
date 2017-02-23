@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 import {fetchColors, createColor, editColor, deleteColor} from '../../actions/colors';
 
 import {
-  selectRow, selectSecondaryRow, setEditingObjectProperty,
+  selectRow, selectSecondaryRow, setObjectHolderProperty,
   enableEditing, enableCreating, enableDefaultStatus
 } from '../../actions/table';
 import {fetchColorgroups} from '../../actions/colorgroups';
@@ -13,7 +13,7 @@ const mapStateToProps = state => {
   const {colorgroups, colorgroupsError, colorgroupsLoading} = state.colorgroups;
   const error = colorsError || colorgroupsError;
   const loading = !!(colorsLoading || colorgroupsLoading);
-  const {selectedRowObject, selected2RowId, status} = state.table;
+  const {objectHolder, selected2RowId, status} = state.table;
 
   return {
     title: 'Colors',
@@ -22,7 +22,7 @@ const mapStateToProps = state => {
     data: colors,
     error,
     loading,
-    selectedRowObject,
+    objectHolder,
     selected2RowId,
     status
   };
@@ -40,7 +40,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(selectRow(object));
     },
     setEditingObjectProperty(propertyName, value) {
-      dispatch(setEditingObjectProperty(propertyName, value));
+      dispatch(setObjectHolderProperty(propertyName, value));
     },
     selectSecondaryRow(id) {
       dispatch(selectSecondaryRow(id));

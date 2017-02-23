@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
-import {findDOMNode} from 'react-dom';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 import {ChromePicker} from 'react-color';
 import * as ColorModel from '../../../../common/models/color.json';
@@ -18,7 +17,7 @@ export default class Table extends Component {
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     fetchSecondaryData: PropTypes.func.isRequired,
-    selectedRowObject: PropTypes.object,
+    objectHolder: PropTypes.object,
     status: PropTypes.string.isRequired,
     selectRow: PropTypes.func.isRequired,
     enableEditing: PropTypes.func.isRequired,
@@ -32,7 +31,6 @@ export default class Table extends Component {
 
   componentWillMount() {
     this.props.fetchSecondaryData();
-    this.newEntityInput = {};
     this.props.fetchData();
   }
 
@@ -53,7 +51,9 @@ export default class Table extends Component {
           return null;
         }
 
-        return <td key={i}><FormControl type='text' ref={input => this.newEntityInput[prop] = input}/>
+        return <td key={i}><FormControl type='text'
+                                        value={this.props.objectHolder[prop]}
+                                        onChange={e => this.handleSelectedObjectChange(prop, e)}/>
         </td>;
       })}
       </tr>
@@ -75,7 +75,7 @@ export default class Table extends Component {
 
     return data.map((item, k) => {
 
-      if (this.props.status === STATUS_EDITING && item[ID_PROP] === this.props.selectedRowObject.id) {
+      if (this.props.status === STATUS_EDITING && item[ID_PROP] === this.props.objectHolder.id) {
         return (
           <tr key={k}>
             {Object.getOwnPropertyNames(object).map((prop, j) => {
@@ -85,7 +85,7 @@ export default class Table extends Component {
 
               return (
                 <td key={j}><FormControl type='text'
-                                         value={this.props.selectedRowObject[prop]}
+                                         value={this.props.objectHolder[prop]}
                                          onChange={e => this.handleSelectedObjectChange(prop, e)}/>
                 </td>
               );
@@ -96,7 +96,7 @@ export default class Table extends Component {
 
       return (
         <tr key={k}
-            className={this.props.selectedRowObject && item[ID_PROP] === this.props.selectedRowObject.id ? 'selected' : null}
+            className={this.props.objectHolder && item[ID_PROP] === this.props.objectHolder.id ? 'selected' : null}
             onClick={() => this.handleRowClick(item)}>
           {Object.getOwnPropertyNames(object).map((prop, j) => {
             if (prop === ID_PROP) {
@@ -111,9 +111,8 @@ export default class Table extends Component {
 
               if (prop === 'value') {
                 return <td key={j}>
-
-                  <span className='label label-default' style={{background: item[prop]}}>{' '}</span>
                   {item[prop]}
+                  <span className='label label-default pull-right' style={{background: item[prop]}}>{' '}</span>
                 </td>;
               }
               return <td key={j}>{item[prop]}</td>;
@@ -146,7 +145,7 @@ export default class Table extends Component {
   };
 
   renderTable = (data, object) => (
-    <section className='panel panel-default'>
+    <div className='panel panel-default'>
       <div style={{'maxHeight': '60vh', 'overflowY': 'scroll'}}>
         <tb className='table-responsive'>
           <table className='table no-margin table-hover'>
@@ -162,7 +161,7 @@ export default class Table extends Component {
           </table>
         </tb>
       </div>
-    </section>
+    </div>
   );
 
   renderButtons = () => (
@@ -195,8 +194,8 @@ export default class Table extends Component {
   );
 
   renderSecondaryTable = (data, object) => (
-    <section className='panel panel-default'>
-      <div style={{'maxHeight': '60vh', 'overflow': 'scroll'}}>
+    <div className='panel panel-default'>
+      <div style={{'maxHeight': '60vh', 'overflowY': 'scroll'}}>
         <div className='table-responsive'>
           <table className='table no-margin'>
             <thead>
@@ -210,13 +209,13 @@ export default class Table extends Component {
           </table>
         </div>
       </div>
-    </section>
+    </div>
   );
 
   renderColorInfoBox = object => (
-    this.props.status === STATUS_EDITING ?
+    this.props.status === STATUS_EDITING || this.props.status === STATUS_CREATING ?
       <div>
-        <ChromePicker color={this.props.selectedRowObject.value} onChange={this.handleColorChange}/>
+        <ChromePicker color={this.props.objectHolder.value} onChange={this.handleColorChange}/>
       </div>
       : null
   );
@@ -241,14 +240,14 @@ export default class Table extends Component {
 
   handleEditBtnClick = () => {
     if (this.props.status === STATUS_DEFAULT
-      && !(typeof this.props.selectedRowObject === 'object' && !this.props.selectedRowObject)) {
+      && !(typeof this.props.objectHolder === 'object' && !this.props.objectHolder)) {
       this.props.enableEditing();
     }
   };
 
   handleDeleteBtnClick = () => {
     if (this.props.status === STATUS_DEFAULT) {
-      this.props.deleteEntity(this.props.selectedRowObject.id);
+      this.props.deleteEntity(this.props.objectHolder.id);
     }
   };
 
@@ -258,22 +257,22 @@ export default class Table extends Component {
       const entity = {};
       properties.forEach(prop => {
         if (prop !== ID_PROP) {
-          entity[prop] = this.props.selectedRowObject[prop] || undefined;
+          entity[prop] = this.props.objectHolder[prop] || undefined;
         }
       });
-      this.props.editEntity(this.props.selectedRowObject.id, entity);
+      this.props.editEntity(this.props.objectHolder.id, entity);
     } else if (this.props.status === STATUS_CREATING) {
       const properties = Object.getOwnPropertyNames(Color);
       const entity = {};
       properties.forEach(prop => {
         if (prop !== ID_PROP) {
-          entity[prop] = findDOMNode(this.newEntityInput[prop]).value || undefined;
+          entity[prop] = this.props.objectHolder[prop] || undefined;
         }
       });
       this.props.createEntity(entity);
     }
     this.props.enableDefaultStatus();
-    setTimeout(this.props.fetchData, 0);
+    setTimeout(this.props.fetchData, 2000);
   };
 
   handleCancelBtnClick = () => {
