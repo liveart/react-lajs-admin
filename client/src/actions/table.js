@@ -1,6 +1,5 @@
 export const SELECT_ROW = 'SELECT_ROW';
 export const SET_OBJECT_HOLDER_PROPERTY = 'SET_OBJECT_HOLDER_PROPERTY';
-export const SELECT_2TABLE_ROW = 'SELECT_2TABLE_ROW';
 export const ENABLE_EDITING = 'ENABLE_EDITING';
 export const ENABLE_CREATING = 'ENABLE_CREATING';
 export const ENABLE_DEFAULT_STATUS = 'ENABLE_DEFAULT_STATUS';
@@ -10,13 +9,6 @@ export const selectRow = selectedObject => {
   return {
     type: SELECT_ROW,
     objectHolder: selectedObject
-  };
-};
-
-export const selectSecondaryRow = selectedId => {
-  return {
-    type: SELECT_2TABLE_ROW,
-    selected2RowId: selectedId
   };
 };
 

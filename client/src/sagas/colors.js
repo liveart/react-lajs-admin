@@ -26,6 +26,7 @@ export function* createColor(action) {
   try {
     yield* api.create(endpoint, action.color);
     yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.FETCH_COLORS});
   } catch (e) {
     yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
   }
@@ -35,6 +36,7 @@ export function* editColor(action) {
   try {
     yield* api.update(endpoint, action.newColor, action.id);
     yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.FETCH_COLORS});
   } catch (e) {
     yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
   }
@@ -44,6 +46,7 @@ export function* deleteColor(action) {
   try {
     yield* api.remove(endpoint, action.id);
     yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.FETCH_COLORS});
   } catch (e) {
     yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
   }

@@ -2,6 +2,14 @@ tr.selected {
   background-color: #BBDEFB !important;
 }
 
+tr :hover {
+  cursor: pointer;
+}
+
+button {
+  margin: 2px;
+}
+
 .content {
   min-height: 100vh;
 }
@@ -52,5 +60,5 @@ tr.selected {
   height: 4px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  border-radius:2px
+  border-radius: 2px
 }
