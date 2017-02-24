@@ -19,6 +19,14 @@ describe('fonts saga', () => {
     expect([...sagas.fetchFonts()].pop().type).toEqual(actionTypes.FONTS_OPERATION_SUCCESS);
   });
 
+  test('should process fetching', () => {
+    expect([...sagas.fetchFontById({id: 0})].pop().type).toEqual(actionTypes.FONTS_OPERATION_SUCCESS);
+  });
+
+  test('should process fetching', () => {
+    expect([...sagas.fetchFontById()].pop().type).toEqual(actionTypes.FONTS_OPERATION_FAILURE);
+  });
+
   test('should process fetching number', () => {
     expect([...sagas.fetchFontsNumber()].pop().type).toEqual(actionTypes.FONTS_OPERATION_SUCCESS);
   });
@@ -37,5 +45,19 @@ describe('fonts saga', () => {
 
   test('should process deleting with error', () => {
     expect([...sagas.deleteFont()].pop().type).toEqual(actionTypes.FONTS_OPERATION_FAILURE);
+  });
+  test('should process uploading', () => {
+    expect([...sagas.uploadFontFile({fileWOFF: {}})].pop().type).toEqual(actionTypes.FONTS_OPERATION_SUCCESS);
+  });
+
+  test('should process uploading with error', () => {
+    expect([...sagas.uploadFontFile()].pop().type).toEqual(actionTypes.FONTS_OPERATION_FAILURE);
+  });
+  test('should process uploading', () => {
+    expect([...sagas.uploadVectors({vector: {}})].pop().type).toEqual(actionTypes.FONTS_OPERATION_SUCCESS);
+  });
+
+  test('should process uploading with error', () => {
+    expect([...sagas.uploadVectors()].pop().type).toEqual(actionTypes.FONTS_OPERATION_FAILURE);
   });
 });

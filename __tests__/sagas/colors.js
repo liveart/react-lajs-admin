@@ -21,6 +21,14 @@ describe('color saga', () => {
     expect([...sagas.fetchColors()].pop().type).toEqual(actionTypes.COLOR_OPERATION_SUCCESS);
   });
 
+  test('should process fetching', () => {
+    expect([...sagas.fetchColorById({id: 0})].pop().type).toEqual(actionTypes.COLOR_OPERATION_SUCCESS);
+  });
+
+  test('should process fetching', () => {
+    expect([...sagas.fetchColorById()].pop().type).toEqual(actionTypes.COLOR_OPERATION_FAILURE);
+  });
+
   test('should process fetching number', () => {
     expect([...sagas.fetchColorsNumber()].pop().type).toEqual(actionTypes.COLOR_OPERATION_SUCCESS);
   });

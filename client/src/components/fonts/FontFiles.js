@@ -5,6 +5,8 @@ import {saveAs} from 'file-saver';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 import * as FontFileModel from '../../../../common/models/font-file.json';
 const FontFile = FontFileModel.properties;
+const location = 'url("//localhost:3000/files/woff/';
+const locationEnd = '")';
 
 export default class Table extends Component {
   static propTypes = {
@@ -175,6 +177,11 @@ export default class Table extends Component {
 
   handleDeleteBtnClick = () => {
     if (this.props.status === STATUS_DEFAULT) {
+       // const filePath = this.props.fetchOneData(this.props.selectedRowId);
+       //console.log(filePath);
+       // const leafname = filePath.split('url("//localhost:3000/files/woff/').pop().split('")');
+        //console.log(filePath);
+     //   console.log(leafname[0]);
       this.props.deleteEntity(this.props.selectedRowId);
     }
   };
@@ -200,7 +207,7 @@ export default class Table extends Component {
           entity[prop] = findDOMNode(this.newEntityInput[prop]).value || undefined;
         }
         if (prop === 'src') {
-          entity[prop] = 'url("//localhost:3000/files/woff/' + file.name + '")';
+          entity[prop] = location + file.name + locationEnd;
         }
 
       });

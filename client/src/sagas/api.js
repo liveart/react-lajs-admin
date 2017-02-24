@@ -19,6 +19,14 @@ export function* retrieve(endpoint) {
   return (yield req.json());
 }
 
+export function* retrieveOneById(endpoint, id) {
+  const req = yield fetch(apiRoot + endpoint + '/' + id);
+  if (!(req.status >= 200 && req.status < 300)) {
+    throw req.statusText;
+  }
+  return yield req.json();
+}
+
 export function* retrieveNumber(endpoint) {
   const req = yield fetch(apiRoot + endpoint + '/count');
   return (yield req.json()).count;

@@ -4,12 +4,21 @@ import {dispatch} from './sagaFuncs';
 import * as api from './api';
 
 const endpoint = 'fonts';
-const endpointUpload = 'containers/woff';
+const endpointUpload = 'containers/fonts';
+const endpointVectors = 'containers/vectors';
 
 export function* fetchFonts() {
   try {
     const res = yield* api.retrieve(endpoint);
     yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS, fonts: res});
+  } catch (e) {
+    yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
+  }
+}
+export function* fetchFontById(action) {
+  try {
+    const res = yield* api.retrieve(endpoint, action.id);
+    yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS, font: res});
   } catch (e) {
     yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
@@ -49,6 +58,27 @@ export function* deleteFont(action) {
     yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
 }
+export function* uploadFontFile(action) {
+  try {
+    const data = new FormData();
+    data.append('file', action.fontFile);
+    yield* api.upload(endpointUpload, data);
+    yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
+  } catch (e) {
+    yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
+  }
+}
+export function* uploadVectors(action) {
+  try {
+    const data = new FormData();
+    data.append('file', action.fontFile);
+    yield* api.upload(endpointVectors, data);
+    yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
+  } catch (e) {
+    yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
+  }
+}
+
 
 
 

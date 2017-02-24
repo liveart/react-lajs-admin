@@ -10,6 +10,14 @@ describe('Font Actions', () => {
     };
     expect(FF.fetchFonts()).toEqual(expectedAction);
   });
+  test('should create an action to fetch font by id', () => {
+    const id = '15';
+    const expectedAction = {
+      type: F.FETCH_FONT_BY_ID,
+      id
+    };
+    expect(FF.fetchFontById(id)).toEqual(expectedAction);
+  });
 
   test('should create an action to fetch fonts number', () => {
     const expectedAction = {
@@ -45,5 +53,13 @@ describe('Font Actions', () => {
       id
     };
     expect(FF.deleteFont(id)).toEqual(expectedAction);
+  });
+  test('should create an action to upload a file', () => {
+    const fontFile = "fontFile";
+    const expectedAction = {
+      type: F.UPLOAD_FONT_FILE,
+      fontFile
+    };
+    expect(FF.uploadFontFile(fontFile)).toEqual(expectedAction);
   });
 });

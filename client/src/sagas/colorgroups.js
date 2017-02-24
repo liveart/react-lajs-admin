@@ -12,6 +12,14 @@ export function* fetchColorgroups() {
     yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e.statusText});
   }
 }
+export function* fetchColorgroupById(action) {
+  try {
+    const res = yield* api.retrieve(endpoint, action.id);
+    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS, colorgroup: res});
+  } catch (e) {
+    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e.statusText});
+  }
+}
 
 export function* fetchColorgroupsNumber() {
   try {

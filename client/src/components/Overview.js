@@ -6,7 +6,6 @@ import {Row, Col, Grid} from 'react-bootstrap';
 export default class Overview extends Component {
   static propTypes = {
     fontsNumber: PropTypes.number.isRequired,
-    fontFilesNumber: PropTypes.number.isRequired,
     colorsNumber: PropTypes.number.isRequired,
     loading: PropTypes.bool.isRequired,
     error: PropTypes.object,
@@ -17,7 +16,6 @@ export default class Overview extends Component {
 
   componentWillMount() {
     this.props.fetchFontsNumber();
-    this.props.fetchFontFilesNumber();
     this.props.fetchColorsNumber();
   }
 
@@ -25,14 +23,6 @@ export default class Overview extends Component {
     return (
       <Link to='/fonts'>
         <InfoWidget title='Fonts' number={fontsNumber} iconClass='fa fa-font'/>
-      </Link>
-    );
-  };
-
-  renderFontFilesNumber = fontFilesNumber => {
-    return (
-      <Link to='/fontFiles'>
-        <InfoWidget title='Font Files' number={fontFilesNumber} iconClass='fa fa-font'/>
       </Link>
     );
   };
@@ -69,7 +59,6 @@ export default class Overview extends Component {
           <Grid>
             <Row>
               <Col md={3}>{this.renderFontsNumber(fontsNumber)}</Col>
-              <Col md={3}>{this.renderFontFilesNumber(fontFilesNumber)}</Col>
               <Col md={3}>{this.renderColorsNumber(colorsNumber)}</Col>
             </Row>
           </Grid>

@@ -32,7 +32,7 @@ export default class Table extends Component {
 
   renderTableHeadings = object => {
     return Object.getOwnPropertyNames(object).map((prop, i) => {
-      if (prop === ID_PROP) {
+      if (prop === ID_PROP || prop === 'ascent' || prop === 'vector' || prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
         return (
           null
         );
@@ -68,7 +68,7 @@ export default class Table extends Component {
           <tr key={k}
               onClick={() => this.handleRowClick(item[ID_PROP])}>
             {Object.getOwnPropertyNames(object).map((prop, j) => {
-              if (prop === ID_PROP) {
+              if (prop === ID_PROP || prop === 'ascent' || prop === 'vector') {
                 return null;
               }
 
@@ -87,7 +87,7 @@ export default class Table extends Component {
         <tr key={k} className={item[ID_PROP] === this.props.selectedRowId ? 'selected' : null}
             onClick={() => this.handleRowClick(item[ID_PROP])}>
           {Object.getOwnPropertyNames(object).map((prop, j) => {
-            if (prop === ID_PROP) {
+            if (prop === ID_PROP || prop === 'ascent' || prop === 'vector' || prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
               return null;
             } else {
               if (prop === 'value') {
@@ -214,11 +214,11 @@ export default class Table extends Component {
       const fonts = this.props.data;
       const data = [];
       data.push('"fonts": [\n');
-      fonts.forEach(function(entry) {
+      fonts.forEach(function (entry) {
         data.push(JSON.stringify(entry));
-        data.push( '\n');
+        data.push('\n');
       });
-      data.push( ']');
+      data.push(']');
       const blob = new Blob(data, {type: "application/json"});
       saveAs(blob, "fonts.json");
     }

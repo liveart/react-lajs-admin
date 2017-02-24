@@ -29,11 +29,6 @@ export default class NavBar extends Component {
               </Link>
             </li>
             <li>
-              <Link to="/fontFiles" activeClassName="active">
-               <i className="fa fa-font"/> <span>Font Files</span>
-              </Link>
-            </li>
-            <li>
               <Link to="/colors" activeClassName="active">
                 <i className="fa fa-paint-brush"/> <span>Colors</span>
               </Link>

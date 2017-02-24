@@ -36,31 +36,29 @@ import * as colorsWatchers from './sagas/watchers/colors';
 import * as colorgroupsWatchers from './sagas/watchers/colorgroups';
 
 import * as fontsWatchers from './sagas/watchers/fonts';
-import * as fontFilesWatchers from './sagas/watchers/fontFiles';
 
 export default function* root() {
   yield [
     fork(watchGetUserToken),
     fork(colorsWatchers.watchFetchColors),
+    fork(colorsWatchers.watchFetchColorById),
     fork(colorsWatchers.watchFetchColorsNumber),
     fork(colorsWatchers.watchCreateColor),
     fork(colorsWatchers.watchDeleteColor),
     fork(colorsWatchers.watchEditColor),
     fork(colorgroupsWatchers.watchFetchColorgroups),
+    fork(colorgroupsWatchers.watchFetchColorgroupById),
     fork(colorgroupsWatchers.watchFetchColorgroupsNumber),
     fork(colorgroupsWatchers.watchCreateColorgroup),
     fork(colorgroupsWatchers.watchDeleteColorgroup),
     fork(colorgroupsWatchers.watchEditColorgroup),
     fork(fontsWatchers.watchFetchFonts),
+    fork(fontsWatchers.watchFetchFontById),
     fork(fontsWatchers.watchFetchFontsNumber),
     fork(fontsWatchers.watchCreateFont),
+    fork(fontsWatchers.watchUploadFontFile),
+    fork(fontsWatchers.watchUploadVectors),
     fork(fontsWatchers.watchEditFont),
-    fork(fontsWatchers.watchDeleteFont),
-    fork(fontFilesWatchers.watchFetchFontFiles),
-    fork(fontFilesWatchers.watchFetchFontFilesNumber),
-    fork(fontFilesWatchers.watchCreateFontFile),
-    fork(fontFilesWatchers.watchUploadFontFile),
-    fork(fontFilesWatchers.watchEditFontFile),
-    fork(fontFilesWatchers.watchDeleteFontFile)
+    fork(fontsWatchers.watchDeleteFont)
   ];
 }

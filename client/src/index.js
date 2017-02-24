@@ -8,7 +8,6 @@ import sagaWatchers from './sagas';
 import configureStore from './store/configureStore.dev';
 import AppContainer from './containers/AppContainer';
 import OverviewContainer from './containers/OverviewContainer';
-import FontFilesListContainer from './containers/fonts/FontFilesListContainer';
 import FontsListContainer from './containers/fonts/FontsListContainer';
 import ColorsTableContainer from './containers/colors/ColorsTableContainer';
 
@@ -24,7 +23,6 @@ ReactDOM.render((
       <Route path='/' component={AppContainer}>
         <IndexRoute component={OverviewContainer}/>
         <Route path='/fonts' component={FontsListContainer}/>
-        <Route path='/fontFiles' component={FontFilesListContainer}/>
         <Route path='/colors' component={ColorsTableContainer}/>
       </Route>
     </Router>

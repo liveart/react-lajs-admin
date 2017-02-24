@@ -6,12 +6,24 @@ export function* watchFetchFonts() {
   yield takeLatest(actionTypes.FETCH_FONTS, fontsSagas.fetchFonts);
 }
 
+export function* watchFetchFontById() {
+  yield takeLatest(actionTypes.FETCH_FONT_BY_ID, fontsSagas.fetchFontById);
+}
+
 export function* watchFetchFontsNumber() {
   yield takeLatest(actionTypes.FETCH_FONTS_NUMBER, fontsSagas.fetchFontsNumber);
 }
 
 export function* watchCreateFont() {
   yield takeLatest(actionTypes.CREATE_FONT, fontsSagas.createFont);
+}
+
+export function* watchUploadFontFile() {
+  yield takeLatest(actionTypes.UPLOAD_FONT_FILE, fontsSagas.uploadFontFile);
+}
+
+export function* watchUploadVectors() {
+  yield takeLatest(actionTypes.UPLOAD_FONT_FILE, fontsSagas.uploadVectors);
 }
 
 export function* watchEditFont() {

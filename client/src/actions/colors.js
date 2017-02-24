@@ -6,6 +6,13 @@ export const fetchColors = () => {
   };
 };
 
+export const fetchColorById = id => {
+  return {
+    type: actionTypes.FETCH_COLOR_BY_ID,
+    id
+  };
+};
+
 export const fetchColorsNumber = () => {
   return {
     type: actionTypes.FETCH_COLORS_NUMBER

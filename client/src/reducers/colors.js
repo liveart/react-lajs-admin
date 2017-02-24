@@ -1,7 +1,7 @@
 import * as actionTypes from '../actionTypes/colors';
 
 const INITIAL_STATE = {
-  colors: [], colorsNumber: 0, colorsError: null, colorsLoading: false
+  color: null, colors: [], colorsNumber: 0, colorsError: null, colorsLoading: false
 };
 
 export default function (state = INITIAL_STATE, action) {
@@ -10,6 +10,7 @@ export default function (state = INITIAL_STATE, action) {
     case actionTypes.COLOR_OPERATION_SUCCESS:
       return {
         ...state,
+        color: action.color || state.color,
         colors: action.colors || state.colors,
         colorsNumber: action.colorsNumber || state.colorsNumber,
         colorsError: null,
@@ -18,6 +19,8 @@ export default function (state = INITIAL_STATE, action) {
     case actionTypes.COLOR_OPERATION_FAILURE:
       colorsError = action.message;
       return {...state, colorsError, colorsLoading: false};
+    case actionTypes.FETCH_COLOR_BY_ID:
+      return {...state, color: null, colorsError: null, colorsLoading: true};
     case actionTypes.FETCH_COLORS:
       return {...state, colors: [], colorsError: null, colorsLoading: true};
     case actionTypes.FETCH_COLORS_NUMBER:
