@@ -1,11 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
-import {ChromePicker} from 'react-color';
-import * as ColorModel from '../../../../common/models/color.json';
-const Color = ColorModel.properties;
+import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import * as FontModel from '../../../common/models/font.json';
+const Font = FontModel.properties;
 
-export default class Table extends Component {
+export default class extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
@@ -42,10 +41,6 @@ export default class Table extends Component {
 
   handleSelectedObjectChange = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
-  };
-
-  handleColorChange = color => {
-    this.props.setEditingObjectProperty('value', color.hex);
   };
 
   renderTableSortRow = object => (
@@ -100,12 +95,6 @@ export default class Table extends Component {
               if (prop === ID_PROP) {
                 return null;
               } else {
-                if (prop === 'value') {
-                  return <td key={j}>
-                    {item[prop]}
-                    <span className='label label-default pull-right' style={{background: item[prop]}}>{' '}</span>
-                  </td>;
-                }
                 return <td key={j}>{item[prop]}</td>;
               }
 
@@ -143,7 +132,7 @@ export default class Table extends Component {
   renderDefButtons = () => (
     <div className='pull-right'>
       <button type='button' className='btn btn-default'
-              onClick={this.handleAddNew}>Add new color
+              onClick={this.handleAddNew}>Add new font
       </button>
     </div>
   );
@@ -208,7 +197,7 @@ export default class Table extends Component {
 
   handleSaveBtnClick = redirect => {
     if (this.props.status === STATUS_EDITING) {
-      const properties = Object.getOwnPropertyNames(Color);
+      const properties = Object.getOwnPropertyNames(Font);
       const entity = {};
       properties.forEach(prop => {
         if (prop !== ID_PROP) {
@@ -220,7 +209,7 @@ export default class Table extends Component {
         this.props.enableDefaultStatus()
       }
     } else if (this.props.status === STATUS_CREATING) {
-      const properties = Object.getOwnPropertyNames(Color);
+      const properties = Object.getOwnPropertyNames(Font);
       const entity = {};
       properties.forEach(prop => {
         if (prop !== ID_PROP) {
@@ -239,22 +228,10 @@ export default class Table extends Component {
   };
 
   renderInputs = () => (
-    Object.getOwnPropertyNames(Color).map((prop, key) => {
+    Object.getOwnPropertyNames(Font).map((prop, key) => {
       if (prop === ID_PROP) {
         return null;
       } else {
-        if (prop === 'value') {
-          return <div className='form-group'>
-            <div className='col-md-2'>
-              {prop}
-            </div>
-            <div className='col-md-10'>
-              <ChromePicker color={this.props.objectHolder.value}
-                            onChange={this.handleColorChange}/>
-            </div>
-          </div>;
-        }
-
         return (
           <div key={key} className='form-group'>
             <div className='col-md-2'>
@@ -293,7 +270,7 @@ export default class Table extends Component {
       </div>
       <div className='row'>
         <div className='col-md-12'>
-          {this.renderTable(this.props.data, Color)}
+          {this.renderTable(this.props.data, Font)}
         </div>
       </div>
     </section>
@@ -306,7 +283,7 @@ export default class Table extends Component {
           <section className='content'>
             <div className='box box-info'>
               <div className='box-header with-border'>
-                <h3 className='box-title'>Color information</h3>
+                <h3 className='box-title'>Font information</h3>
               </div>
               <form className='form-horizontal'>
                 <div className='box-body'>
@@ -331,7 +308,7 @@ export default class Table extends Component {
           <section className='content'>
             <div className='box box-info'>
               <div className='box-header with-border'>
-                <h3 className='box-title'>Color information</h3>
+                <h3 className='box-title'>Font information</h3>
               </div>
               <form className='form-horizontal'>
                 <div className='box-body'>

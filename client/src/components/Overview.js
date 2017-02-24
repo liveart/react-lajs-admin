@@ -38,7 +38,7 @@ export default class Overview extends Component {
     const {fontsNumber, colorsNumber, loading} = this.props;
     if (loading) {
       return (
-        <main>
+        <main style={{overflowY: 'scroll'}}>
           <div className='loader'></div>
           <section className='content-header'>
             <h1>Loading...</h1>
