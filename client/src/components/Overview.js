@@ -36,7 +36,7 @@ export default class Overview extends Component {
   };
 
   render() {
-    const {fontsNumber, fontFilesNumber, colorsNumber, loading} = this.props;
+    const {fontsNumber, colorsNumber, loading} = this.props;
     if (loading) {
       return (
         <main style={{overflowY: 'scroll'}}>

@@ -7,7 +7,7 @@ export function* watchFetchColors() {
 }
 
 export function* watchFetchColorById() {
-  yield takeLatest(actionTypes.FETCH_COLOR_BY_ID, colorSagas.fetchColorById);
+  yield takeEvery(actionTypes.FETCH_COLOR_BY_ID, colorSagas.fetchColorById);
 }
 
 export function* watchFetchColorsNumber() {

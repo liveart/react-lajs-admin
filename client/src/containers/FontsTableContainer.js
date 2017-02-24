@@ -11,11 +11,11 @@ import {
 import Fonts from '../components/Fonts';
 
 const mapStateToProps = state => {
-  const {fontsList, error, fontsLoading} = state.fonts;
+  const {fonts, error, fontsLoading} = state.fonts;
   const {status, objectHolder} = state.table;
   return {
     title: 'Fonts',
-    data: fontsList,
+    data: fonts,
     error,
     loading: fontsLoading,
     objectHolder,
