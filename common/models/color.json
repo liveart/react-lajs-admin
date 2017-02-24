@@ -12,7 +12,7 @@
     },
     "colorgroup_name": {
       "type": "string",
-      "required": true,
+      "required": false,
       "sqlite3": {
         "columnName": "colorgroup_name"
       }

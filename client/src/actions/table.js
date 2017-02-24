@@ -1,20 +1,14 @@
 export const SELECT_ROW = 'SELECT_ROW';
-export const SELECT_2TABLE_ROW = 'SELECT_2TABLE_ROW';
+export const SET_OBJECT_HOLDER_PROPERTY = 'SET_OBJECT_HOLDER_PROPERTY';
 export const ENABLE_EDITING = 'ENABLE_EDITING';
 export const ENABLE_CREATING = 'ENABLE_CREATING';
 export const ENABLE_DEFAULT_STATUS = 'ENABLE_DEFAULT_STATUS';
+export const SET_INITIAL_STATE = 'SET_INITIAL_STATE';
 
-export const selectRow = selectedId => {
+export const selectRow = selectedObject => {
   return {
     type: SELECT_ROW,
-    selectedRowId: selectedId
-  };
-};
-
-export const selectSecondaryRow = selectedId => {
-  return {
-    type: SELECT_2TABLE_ROW,
-    selected2RowId: selectedId
+    objectHolder: selectedObject
   };
 };
 
@@ -33,5 +27,19 @@ export const enableCreating = () => {
 export const enableDefaultStatus = () => {
   return {
     type: ENABLE_DEFAULT_STATUS
+  };
+};
+
+export const setObjectHolderProperty = (propertyName, value) => {
+  return {
+    type: SET_OBJECT_HOLDER_PROPERTY,
+    propertyName,
+    value
+  };
+};
+
+export const setInitialState = () => {
+  return {
+    type: SET_INITIAL_STATE
   };
 };

@@ -5,8 +5,7 @@ import reducer from '../../client/src/reducers/table';
 import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../client/src/definitions';
 
 const INITIAL_STATE = {
-  selectedRowId: null,
-  selected2RowId: null,
+  objectHolder: {},
   status: STATUS_DEFAULT
 };
 
@@ -18,54 +17,24 @@ describe('table reducer', () => {
   });
 
   test('should handle ' + types.SELECT_ROW, () => {
-    const selectedRowId = 42;
+    const objectHolder = {id: 1};
     expect(
-      reducer(INITIAL_STATE, {type: types.SELECT_ROW, selectedRowId})
+      reducer(INITIAL_STATE, {type: types.SELECT_ROW, objectHolder})
     ).toEqual({
       ...INITIAL_STATE,
-      selectedRowId,
+      objectHolder,
       status: STATUS_DEFAULT
     })
   });
 
-  test('should handle unselect ' + types.SELECT_ROW, () => {
-    const selectedRowId = 42;
+  test('should handle ' + types.SET_OBJECT_HOLDER_PROPERTY, () => {
+    const objectHolder = {id: 1};
     expect(
-      reducer({
-        selectedRowId: 42,
-        selected2RowId: null,
-        status: STATUS_DEFAULT
-      }, {type: types.SELECT_ROW, selectedRowId})
+      reducer({...INITIAL_STATE, objectHolder: {id: 2}},
+        {type: types.SET_OBJECT_HOLDER_PROPERTY, propertyName: 'id', value: 1})
     ).toEqual({
       ...INITIAL_STATE,
-      selectedRowId: null,
-      status: STATUS_DEFAULT
-    })
-  });
-
-  test('should handle ' + types.SELECT_2TABLE_ROW, () => {
-    const selected2RowId = 42;
-    expect(
-      reducer(INITIAL_STATE, {type: types.SELECT_2TABLE_ROW, selected2RowId})
-    ).toEqual({
-      ...INITIAL_STATE,
-      selected2RowId,
-      status: STATUS_DEFAULT
-    })
-  });
-
-  test('should handle unselect ' + types.SELECT_2TABLE_ROW, () => {
-    const selected2RowId = 42;
-    expect(
-      reducer({
-        selectedRowId: null,
-        selected2RowId: 42,
-        status: STATUS_DEFAULT
-      }, {type: types.SELECT_2TABLE_ROW, selected2RowId})
-    ).toEqual({
-      ...INITIAL_STATE,
-      selected2RowId: null,
-      status: STATUS_DEFAULT
+      objectHolder
     })
   });
 
@@ -74,7 +43,8 @@ describe('table reducer', () => {
       reducer(INITIAL_STATE, {type: types.ENABLE_EDITING})
     ).toEqual({
       ...INITIAL_STATE,
-      status: STATUS_EDITING
+      status: STATUS_EDITING,
+      objectHolder: {}
     })
   });
 
@@ -83,7 +53,8 @@ describe('table reducer', () => {
       reducer(INITIAL_STATE, {type: types.ENABLE_CREATING})
     ).toEqual({
       ...INITIAL_STATE,
-      status: STATUS_CREATING
+      status: STATUS_CREATING,
+      objectHolder: {}
     })
   });
 

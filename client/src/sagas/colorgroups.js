@@ -9,7 +9,7 @@ export function* fetchColorgroups() {
     const res = yield* api.retrieve(endpoint);
     yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS, colorgroups: res});
   } catch (e) {
-    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e.statusText});
+    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e});
   }
 }
 export function* fetchColorgroupById(action) {
@@ -23,39 +23,37 @@ export function* fetchColorgroupById(action) {
 
 export function* fetchColorgroupsNumber() {
   try {
-    const res = yield* api.retrieve(endpoint);
+    const res = yield* api.retrieveNumber(endpoint);
     yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS, colorgroupsNumber: res});
   } catch (e) {
-    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e.statusText});
+    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e});
   }
 }
 
 export function* createColorgroup(action) {
   try {
-    yield* api.retrieve(endpoint);
+    yield* api.create(endpoint, action.colorgroup);
     yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_COLORGROUPS});
   } catch (e) {
-    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e.message});
+    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e});
   }
 }
 
 export function* editColorgroup(action) {
   try {
-    yield* api.retrieve(endpoint, action.newColorgroup, action.id);
+    yield* api.update(endpoint, action.newColorgroup, action.id);
     yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS});
-    yield dispatch({type: actionTypes.FETCH_COLORGROUPS});
   } catch (e) {
-    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e.message});
+    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e});
   }
 }
 
 export function* deleteColorgroup(action) {
   try {
-    yield* api.retrieve(endpoint, action.id);
+    yield* api.remove(endpoint, action.id);
     yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS});
-    yield dispatch({type: actionTypes.FETCH_COLORGROUPS});
   } catch (e) {
-    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e.message});
+    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e});
   }
 }

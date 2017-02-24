@@ -43,7 +43,7 @@ export default class App extends Component {
       <div>
         <Header email={this.props.email}/>
         <NavbarContainer/>
-        <main className='content-wrapper'>
+        <main style={{height: '95vh', 'overflowY': 'scroll'}} className='content-wrapper'>
           {children}
         </main>
       </div>);
