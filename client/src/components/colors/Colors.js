@@ -70,56 +70,73 @@ export default class Table extends Component {
     this.props.setEditingObjectProperty('value', color.hex);
   };
 
+  renderTableSortRow = object => (
+    Object.getOwnPropertyNames(object).map((prop, i) => {
+      if (prop === ID_PROP) {
+        return null;
+      } else {
+        return <td key={i} style={{padding: '2px'}}>
+          <FormControl type='text'
+                       value={this.props.objectHolder[prop]}
+                       onChange={e => this.handleSelectedObjectChange(prop, e)}
+          /></td>;
+      }
+    })
+  );
+
+  sortRows = (data, object) => {
+    const rows = [];
+    for (let i = 0; i < data.length; ++i) {
+      let add = true;
+      Object.getOwnPropertyNames(object).map(prop => {
+        if (typeof this.props.objectHolder[prop] !== 'undefined' && !(data[i])[prop].includes(this.props.objectHolder[prop])) {
+          add = false;
+        }
+      });
+
+      if (add) {
+        rows.push(data[i]);
+      }
+    }
+    return rows;
+  };
+
   renderTableData = (data, object) => {
     if (!data.length) {
       return null;
     }
 
-    return data.map((item, k) => {
+    const rows = this.sortRows(data, object);
 
-      if (this.props.status === STATUS_EDITING && item[ID_PROP] === this.props.objectHolder.id) {
-        return (
-          <tr key={k}>
-            {Object.getOwnPropertyNames(object).map((prop, j) => {
-              if (prop === ID_PROP) {
-                return null;
-              }
-
-              return (
-                <td key={j}><FormControl type='text'
-                                         value={this.props.objectHolder[prop]}
-                                         onChange={e => this.handleSelectedObjectChange(prop, e)}/>
-                </td>
-              );
-            })}
-          </tr>
-        );
-      }
+    return rows.map((item, k) => {
 
       return (
         <tr key={k}
             className={this.props.objectHolder && item[ID_PROP] === this.props.objectHolder.id ? 'selected' : null}
             onClick={() => this.handleRowClick(item)}>
-          {Object.getOwnPropertyNames(object).map((prop, j) => {
-            if (prop === ID_PROP) {
-              return null;
-            } else {
-              if (!(typeof this.props.selected2RowId === 'object' && !this.props.selected2RowId)) {
-                if (item['colorgroup_name'] !== this.props.secondaryData.filter(
-                    group => group.id === this.props.selected2RowId)[0].name) {
-                  return null;
+          {
+            Object.getOwnPropertyNames(object).map((prop, j) => {
+              if (prop === ID_PROP) {
+                return null;
+              } else {
+                if (!(typeof this.props.selected2RowId === 'object' && !this.props.selected2RowId)) {
+                  if (item['colorgroup_name'] !== this.props.secondaryData.filter(
+                      group => group.id === this.props.selected2RowId)[0].name) {
+                    return null;
+                  }
                 }
+
+                if (prop === 'value') {
+                  return <td key={j}>
+                    {item[prop]}
+                    <span className='label label-default pull-right' style={{background: item[prop]}}>{' '}</span>
+                  </td>;
+                }
+                return <td key={j}>{item[prop]}</td>;
               }
 
-              if (prop === 'value') {
-                return <td key={j}>
-                  {item[prop]}
-                  <span className='label label-default pull-right' style={{background: item[prop]}}>{' '}</span>
-                </td>;
-              }
-              return <td key={j}>{item[prop]}</td>;
-            }
-          })}
+            })
+          }
         </tr>
       );
     });
@@ -148,21 +165,20 @@ export default class Table extends Component {
 
   renderTable = (data, object) => (
     <div className='panel panel-default'>
-      <div style={{'maxHeight': '60vh', 'overflowY': 'scroll'}}>
-        <tb className='table-responsive'>
-          <table className='table no-margin table-hover'>
-            <thead>
-            <tr>
-              {this.renderTableHeadings(object)}
-            </tr>
-            </thead>
-            <tbody>
-            {this.props.status === STATUS_CREATING ? this.renderCreatingRow() : null}
-            {this.renderTableData(data, object)}
-            </tbody>
-          </table>
-        </tb>
-      </div>
+      <tb className='table-responsive'>
+        <table className='table no-margin table-hover'>
+          <thead>
+          <tr>
+            {this.renderTableHeadings(object)}
+          </tr>
+          </thead>
+          <tbody>
+          {this.renderTableSortRow(object)}
+          {this.props.status === STATUS_CREATING ? this.renderCreatingRow() : null}
+          {this.renderTableData(data, object)}
+          </tbody>
+        </table>
+      </tb>
     </div>
   );
 
@@ -223,10 +239,12 @@ export default class Table extends Component {
   );
 
   handleRowClick = object => {
+    /*
     if (this.props.status !== STATUS_EDITING) {
       this.props.selectRow(object);
 
     }
+    */
   };
 
   handleRowClickSecondTable = id => {
@@ -311,17 +329,9 @@ export default class Table extends Component {
         </section>
         <section className='content'>
           <div className='row'>
-            <div className='col-lg-3'>
-              {this.renderSecondaryTable(secondaryData, Colorgroup)}
-              <p>{secondaryTitle + ': ' + secondaryData.length}</p>
-            </div>
-            <div className='col-lg-6'>
-              {this.renderTable(data, Color)}
-              {this.renderButtons()}
+            <div className='col-lg-12'>
               <p>{title + ': ' + data.length}</p>
-            </div>
-            <div className='col-lg-3'>
-              {this.renderColorInfoBox(Color)}
+              {this.renderTable(data, Color)}
             </div>
           </div>
         </section>

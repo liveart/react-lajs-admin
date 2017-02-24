@@ -5,7 +5,7 @@ import {
 import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 
 const INITIAL_STATE = {
-  objectHolder: null,
+  objectHolder: {},
   selected2RowId: null,
   status: STATUS_DEFAULT
 };

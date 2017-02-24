@@ -1,8 +1,3 @@
-tbody div {
-  overflow: scroll;
-  height: 100px;
-}
-
 tr.selected {
   background-color: #BBDEFB !important;
 }
