@@ -3,10 +3,7 @@ import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 import {ChromePicker} from 'react-color';
 import * as ColorModel from '../../../../common/models/color.json';
-
 const Color = ColorModel.properties;
-import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
-const Colorgroup = ColorgroupModel.properties;
 
 export default class Table extends Component {
   static propTypes = {
