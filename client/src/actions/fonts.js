@@ -35,7 +35,7 @@ export const uploadFontFile = fontFile => {
 
 export const uploadVectors = vectorFile => {
   return {
-    type: actionTypes.UPLOAD_FONT_FILE,
+    type: actionTypes.UPLOAD_VECTOR_FILE,
     vectorFile
   };
 };

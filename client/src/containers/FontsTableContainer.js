@@ -49,7 +49,7 @@ const mapDispatchToProps = dispatch => {
     editEntity(id, newColor) {
       dispatch(editFont(id, newColor));
     },
-    upload(fileFont) {
+    uploadFontFile(fileFont) {
       dispatch(uploadFontFile(fileFont));
     },
     uploadVector(vectorFile) {

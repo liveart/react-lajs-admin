@@ -22,7 +22,7 @@ export default class extends Component {
     deleteEntity: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
     restoreTableState: PropTypes.func.isRequired,
-    upload: PropTypes.func.isRequired,
+    uploadFontFile: PropTypes.func.isRequired,
     uploadVector: PropTypes.func.isRequired
   };
 
@@ -244,7 +244,7 @@ export default class extends Component {
   handleFileUpload = (prop, file) => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       if(prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic')
-      this.props.upload(file);
+      this.props.uploadFontFile(file);
       if(prop === 'vector')
         this.props.uploadVector(file);
     }
@@ -260,7 +260,7 @@ export default class extends Component {
         return null;
       }
 
-      if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
+      if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'fileBoldItalic') {
 
         return ( <div key={key} className='form-group'>
           <div className='col-md-2'>

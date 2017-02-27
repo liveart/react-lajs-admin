@@ -23,7 +23,7 @@ export function* watchUploadFontFile() {
 }
 
 export function* watchUploadVectors() {
-  yield takeLatest(actionTypes.UPLOAD_FONT_FILE, fontsSagas.uploadVectors);
+  yield takeLatest(actionTypes.UPLOAD_VECTOR_FILE, fontsSagas.uploadVectors);
 }
 
 export function* watchEditFont() {

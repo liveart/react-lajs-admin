@@ -55,7 +55,6 @@
     },
     "vector": {
       "type": "string",
-      "required": true,
       "sqlite3": {
         "columnName": "vector"
       }
