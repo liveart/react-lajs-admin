@@ -63,7 +63,8 @@ export default class Table extends Component {
         }
 
         if (prop === 'colorgroupId') {
-          return <td key={i}><select value={this.props.objectHolder[prop]}
+          return <td key={i}><select style={{width: '100%'}}
+                                     value={this.props.objectHolder[prop]}
                                      onChange={e => this.handleSelectedObjectChange(prop, e)}>
             <option key='defGroup' value={''}>...</option>
             {this.props.secondaryData.map((cg, key) => (
