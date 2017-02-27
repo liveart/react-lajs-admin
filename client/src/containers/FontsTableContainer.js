@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {fetchFonts, createFont, editFont, deleteFont} from '../actions/fonts';
+import {fetchFonts, createFont, editFont, deleteFont, uploadFontFile, uploadVectors} from '../actions/fonts';
 import {
   selectRow,
   enableEditing,
@@ -48,6 +48,12 @@ const mapDispatchToProps = dispatch => {
     },
     editEntity(id, newColor) {
       dispatch(editFont(id, newColor));
+    },
+    upload(fileFont) {
+      dispatch(uploadFontFile(fileFont));
+    },
+    uploadVector(vectorFile) {
+      dispatch(uploadVectors(vectorFile));
     },
     deleteEntity(id) {
       dispatch(deleteFont(id));

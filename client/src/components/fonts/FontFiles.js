@@ -186,6 +186,10 @@ export default class Table extends Component {
     }
   };
 
+  handleSelectFile = (desc, files) => {
+
+  };
+
   handleSaveBtnClick = () => {
     if (this.props.status === STATUS_EDITING) {
       const properties = Object.getOwnPropertyNames(FontFile);

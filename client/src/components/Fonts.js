@@ -21,7 +21,9 @@ export default class extends Component {
     editEntity: PropTypes.func.isRequired,
     deleteEntity: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired
+    restoreTableState: PropTypes.func.isRequired,
+    upload: PropTypes.func.isRequired,
+    uploadVector: PropTypes.func.isRequired
   };
 
   componentWillMount() {
@@ -203,6 +205,12 @@ export default class extends Component {
         if (prop !== ID_PROP) {
           entity[prop] = this.props.objectHolder[prop] || undefined;
         }
+        if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'vector') {
+          if (this.props.objectHolder[prop] !== undefined) {
+            this.handleFileUpload(prop, this.props.objectHolder[prop]);
+            entity[prop] = this.props.objectHolder[prop].name;
+          }
+        }
       });
       this.props.editEntity(this.props.objectHolder.id, entity);
       if (redirect) {
@@ -214,6 +222,12 @@ export default class extends Component {
       properties.forEach(prop => {
         if (prop !== ID_PROP) {
           entity[prop] = this.props.objectHolder[prop] || undefined;
+        }
+        if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'vector') {
+          if (this.props.objectHolder[prop] !== undefined) {
+            this.handleFileUpload(prop, this.props.objectHolder[prop]);
+            entity[prop] = this.props.objectHolder[prop].name;
+          }
         }
       });
       this.props.createEntity(entity);
@@ -227,10 +241,46 @@ export default class extends Component {
     }
   };
 
+  handleFileUpload = (prop, file) => {
+    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
+      if(prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic')
+      this.props.upload(file);
+      if(prop === 'vector')
+        this.props.uploadVector(file);
+    }
+  };
+
+  handleFileChoose = (prop, e) => {
+    this.props.setEditingObjectProperty(prop, e.target.files[0]);
+  };
+
   renderInputs = () => (
     Object.getOwnPropertyNames(Font).map((prop, key) => {
       if (prop === ID_PROP) {
         return null;
+      }
+
+      if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
+
+        return ( <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            {prop}
+          </div>
+          <div className='col-md-10'>
+            <input type='file' className='form-control' accept='.woff'
+                   onChange={e => this.handleFileChoose(prop, e)}/>
+          </div>
+        </div>);
+      } if (prop === 'vector') {
+        return ( <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            {prop}
+          </div>
+          <div className='col-md-10'>
+            <input type='file' className='form-control'
+                   onChange={e => this.handleFileChoose(prop, e)}/>
+          </div>
+        </div>);
       } else {
         return (
           <div key={key} className='form-group'>

@@ -17,46 +17,28 @@
         "columnName": "fontFamily"
       }
     },
-    "systemName":{
-      "type": "string",
-      "required": true,
-      "sqlite3": {
-        "columnName": "systemName"
-      }
-    },
     "fileNormal":{
       "type": "string",
-      "required": true,
       "sqlite3": {
         "columnName": "fileNormal"
       }
     },
     "fileBold":{
       "type": "string",
-      "required": true,
       "sqlite3": {
         "columnName": "fileBold"
       }
     },
     "fileItalic":{
       "type": "string",
-      "required": true,
       "sqlite3": {
         "columnName": "fileItalic"
       }
     },
     "fileBoldItalic":{
       "type": "string",
-      "required": true,
       "sqlite3": {
         "columnName": "fileBoldItalic"
-      }
-    },
-    "ascent": {
-      "type": "number",
-      "required": true,
-      "sqlite3": {
-        "columnName": "ascent"
       }
     },
     "boldAllowed": {
@@ -73,13 +55,6 @@
     },
     "vector": {
       "type": "string",
-      "required": true,
-      "sqlite3": {
-        "columnName": "vector"
-      }
-    },
-    "position": {
-      "type": "number",
       "required": true,
       "sqlite3": {
         "columnName": "vector"

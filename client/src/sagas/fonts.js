@@ -36,6 +36,7 @@ export function* createFont(action) {
   try {
     yield* api.create(endpoint, action.font);
     yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.FETCH_FONTS});
   } catch (e) {
     yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
@@ -45,6 +46,7 @@ export function* editFont(action) {
   try {
     yield* api.update(endpoint, action.newFont, action.id);
     yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.FETCH_FONTS});
   } catch (e) {
     yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
@@ -54,6 +56,7 @@ export function* deleteFont(action) {
   try {
     yield* api.remove(endpoint, action.id);
     yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.FETCH_FONTS});
   } catch (e) {
     yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
@@ -71,7 +74,7 @@ export function* uploadFontFile(action) {
 export function* uploadVectors(action) {
   try {
     const data = new FormData();
-    data.append('file', action.fontFile);
+    data.append('file', action.vectorFile);
     yield* api.upload(endpointVectors, data);
     yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
   } catch (e) {
