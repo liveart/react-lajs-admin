@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 import {ChromePicker} from 'react-color';
-import Dropdown from 'react-dropdown';
 import * as ColorModel from '../../../../common/models/color.json';
 const Color = ColorModel.properties;
 
@@ -28,13 +27,8 @@ export default class Table extends Component {
     restoreTableState: PropTypes.func.isRequired
   };
 
-  constructor() {
-    super();
-    this.colorgroupOptions = [];
-  }
-
   componentWillMount() {
-    this.props.restoreTableState();
+    this.props.restoreTableState(Color);
     this.props.fetchData();
     this.props.fetchSecondaryData();
   }
@@ -77,7 +71,6 @@ export default class Table extends Component {
             ))}
           </select></td>;
         }
-
         return <td key={i}>
           <FormControl type='text'
                        value={this.props.objectHolder[prop]}
@@ -93,6 +86,7 @@ export default class Table extends Component {
     const rows = [];
     for (let i = 0; i < data.length; ++i) {
       let add = true;
+      console.log(data);
       Object.getOwnPropertyNames(object).map(prop => {
         if (typeof this.props.objectHolder[prop] !== 'undefined' && !(data[i])[prop].includes(this.props.objectHolder[prop])) {
           add = false;
@@ -173,8 +167,11 @@ export default class Table extends Component {
 
   renderDefButtons = () => (
     <div className='pull-right'>
-      <button type='button' className='btn btn-default' style={{marginBottom: '3px'}}
+      <button type='button' className='btn btn-primary' style={{marginBottom: '3px'}}
               onClick={this.handleAddNew}>Add new color
+      </button>
+      <button type='button' className='btn btn-default' style={{marginBottom: '3px'}}
+              onClick={() => this.props.restoreTableState(Color)}>Reset filter
       </button>
     </div>
   );
@@ -320,9 +317,6 @@ export default class Table extends Component {
   );
 
   renderPage = () => {
-    this.props.secondaryData.forEach(cg =>
-      this.colorgroupOptions.push({value: cg.id, label: cg.name})
-    );
     if (this.props.status === STATUS_DEFAULT) {
       return this.renderDefault();
     } else if (this.props.status === STATUS_CREATING) {

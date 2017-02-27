@@ -61,8 +61,8 @@ const mapDispatchToProps = dispatch => {
     deleteEntity(id) {
       dispatch(deleteColor(id));
     },
-    restoreTableState() {
-      dispatch(setInitialState());
+    restoreTableState(object) {
+      dispatch(setInitialState(object));
     }
   };
 };

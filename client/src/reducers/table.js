@@ -29,7 +29,11 @@ export default function (state = INITIAL_STATE, action) {
     case ENABLE_DEFAULT_STATUS:
       return {...state, status: STATUS_DEFAULT, objectHolder: {}};
     case SET_INITIAL_STATE:
-      return {...INITIAL_STATE};
+      let holder = {};
+      Object.getOwnPropertyNames(action.object).map(prop => {
+        holder[prop] = '';
+      });
+      return {...INITIAL_STATE, objectHolder: Object.assign({}, holder)};
     default:
       return state;
   }

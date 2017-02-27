@@ -38,8 +38,9 @@ export const setObjectHolderProperty = (propertyName, value) => {
   };
 };
 
-export const setInitialState = () => {
+export const setInitialState = object => {
   return {
-    type: SET_INITIAL_STATE
+    type: SET_INITIAL_STATE,
+    object
   };
 };

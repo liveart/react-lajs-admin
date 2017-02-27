@@ -25,7 +25,7 @@ export default class Table extends Component {
   };
 
   componentWillMount() {
-    this.props.restoreTableState();
+    this.props.restoreTableState(Colorgroup);
     this.props.fetchData();
     this.props.fetchSecondaryData();
   }
@@ -133,8 +133,11 @@ export default class Table extends Component {
 
   renderDefButtons = () => (
     <div className='pull-right'>
-      <button type='button' className='btn btn-default' style={{marginBottom: '3px'}}
+      <button type='button' className='btn btn-primary' style={{marginBottom: '3px'}}
               onClick={this.handleAddNew}>Add new colorgroup
+      </button>
+      <button type='button' className='btn btn-default' style={{marginBottom: '3px'}}
+              onClick={() => this.props.restoreTableState(Colorgroup)}>Reset filter
       </button>
     </div>
   );
