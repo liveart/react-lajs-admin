@@ -5,23 +5,17 @@ import {
   selectRow, setObjectHolderProperty,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../../actions/table';
-import {fetchColorgroups} from '../../actions/colorgroups';
 import Table from '../../components/colors/Colors';
 
 const mapStateToProps = state => {
   const {colors, colorsError, colorsLoading} = state.colors;
-  const {colorgroups, colorgroupsError, colorgroupsLoading} = state.colorgroups;
-  const error = colorsError || colorgroupsError;
-  const loading = !!(colorsLoading || colorgroupsLoading);
   const {objectHolder, status} = state.table;
 
   return {
     title: 'Colors',
-    secondaryTitle: 'Color Groups',
-    secondaryData: colorgroups,
     data: colors,
-    error,
-    loading,
+    error: colorsError,
+    loading: colorsLoading,
     objectHolder,
     status
   };

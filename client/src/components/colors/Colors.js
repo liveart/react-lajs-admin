@@ -142,7 +142,7 @@ export default class Table extends Component {
 
   renderDefButtons = () => (
     <div className='pull-right'>
-      <button type='button' className='btn btn-default'
+      <button type='button' className='btn btn-default' style={{marginBottom: '3px'}}
               onClick={this.handleAddNew}>Add new color
       </button>
     </div>

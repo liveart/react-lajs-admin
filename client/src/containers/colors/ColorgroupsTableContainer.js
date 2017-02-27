@@ -5,17 +5,20 @@ import {
   enableDefaultStatus, setInitialState
 } from '../../actions/table';
 import {fetchColorgroups, createColorgroup, editColorgroup, deleteColorgroup} from '../../actions/colorgroups';
+import {fetchColors} from '../../actions/colors';
 import Table from '../../components/colors/Colorgroups';
 
 const mapStateToProps = state => {
   const {colorgroups, colorgroupsError, colorgroupsLoading} = state.colorgroups;
+  const {colors} = state.colors;
   const error = colorgroupsError;
   const loading = colorgroupsLoading;
   const {objectHolder, status} = state.table;
 
   return {
-    title: 'Color Groups',
+    title: 'Colors',
     data: colorgroups,
+    secondaryData: colors,
     error,
     loading,
     objectHolder,
@@ -28,8 +31,14 @@ const mapDispatchToProps = dispatch => {
     fetchData() {
       dispatch(fetchColorgroups());
     },
-    selectRow(id) {
-      dispatch(selectRow(id));
+    fetchSecondaryData() {
+      dispatch(fetchColors());
+    },
+    selectRow(object) {
+      dispatch(selectRow(object));
+    },
+    setEditingObjectProperty(propertyName, value) {
+      dispatch(setObjectHolderProperty(propertyName, value));
     },
     enableEditing() {
       dispatch(enableEditing());
@@ -39,9 +48,6 @@ const mapDispatchToProps = dispatch => {
     },
     enableDefaultStatus() {
       dispatch(enableDefaultStatus());
-    },
-    setEditingObjectProperty(propertyName, value) {
-      dispatch(setObjectHolderProperty(propertyName, value));
     },
     createEntity(colorgroup) {
       dispatch(createColorgroup(colorgroup));
