@@ -12,15 +12,17 @@ export const selectRow = selectedObject => {
   };
 };
 
-export const enableEditing = () => {
+export const enableEditing = object => {
   return {
-    type: ENABLE_EDITING
+    type: ENABLE_EDITING,
+    object
   };
 };
 
-export const enableCreating = () => {
+export const enableCreating = object => {
   return {
-    type: ENABLE_CREATING
+    type: ENABLE_CREATING,
+    object
   };
 };
 

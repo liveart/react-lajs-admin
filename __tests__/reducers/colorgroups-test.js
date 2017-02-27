@@ -5,7 +5,7 @@ import * as actionTypes from '../../client/src/actionTypes/colorgroups';
 import reducer from '../../client/src/reducers/colorgroups';
 
 const INITIAL_STATE = {
-  colorgroups: [], colorgroupsNumber: 0, error: null, loading: false
+  colorgroups: [], colorgroupsNumber: 0, colorgroupsError: null, colorgroupsLoading: false
 };
 
 describe('colorgroups reducer', () => {
@@ -19,35 +19,35 @@ describe('colorgroups reducer', () => {
     expect(
       reducer(INITIAL_STATE, {
         type: actionTypes.FETCH_COLORGROUPS
-      })).toEqual({...INITIAL_STATE, loading: true});
+      })).toEqual({...INITIAL_STATE, colorgroupsLoading: true});
   });
 
   test('should handle ' + actionTypes.FETCH_COLORGROUPS_NUMBER, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: actionTypes.FETCH_COLORGROUPS_NUMBER
-      })).toEqual({...INITIAL_STATE, loading: true});
+      })).toEqual({...INITIAL_STATE, colorgroupsLoading: true});
   });
 
   test('should handle ' + actionTypes.CREATE_COLORGROUP, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: actionTypes.CREATE_COLORGROUP
-      })).toEqual({...INITIAL_STATE, loading: true});
+      })).toEqual({...INITIAL_STATE, colorgroupsLoading: true});
   });
 
   test('should handle ' + actionTypes.EDIT_COLORGROUP, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: actionTypes.EDIT_COLORGROUP
-      })).toEqual({...INITIAL_STATE, loading: true});
+      })).toEqual({...INITIAL_STATE, colorgroupsLoading: true});
   });
 
   test('should handle ' + actionTypes.DELETE_COLORGROUP, () => {
     expect(
       reducer(INITIAL_STATE, {
         type: actionTypes.DELETE_COLORGROUP
-      })).toEqual({...INITIAL_STATE, loading: true});
+      })).toEqual({...INITIAL_STATE, colorgroupsLoading: true});
   });
 
   test('should handle ' + actionTypes.COLORGROUP_OPERATION_SUCCESS, () => {
@@ -56,14 +56,14 @@ describe('colorgroups reducer', () => {
         type: actionTypes.COLORGROUP_OPERATION_SUCCESS,
         colorgroups: [{a: 123, b: 456, c: {}}],
         colorgroupsNumber: 3,
-        error: null,
-        loading: false
+        colorgroupsError: null,
+        colorgroupsLoading: false
       })).toEqual({
       ...INITIAL_STATE,
       colorgroups: [{a: 123, b: 456, c: {}}],
       colorgroupsNumber: 3,
-      error: null,
-      loading: false
+      colorgroupsError: null,
+      colorgroupsLoading: false
     });
   });
 
@@ -74,7 +74,7 @@ describe('colorgroups reducer', () => {
         type: actionTypes.COLORGROUP_OPERATION_FAILURE,
         message: error
       })).toEqual({
-      ...INITIAL_STATE, error
+      ...INITIAL_STATE, colorgroupsError: error
     });
   });
 });

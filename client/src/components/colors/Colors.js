@@ -10,7 +10,7 @@ export default class Table extends Component {
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     secondaryData: PropTypes.arrayOf(PropTypes.any).isRequired,
-    error: PropTypes.string,
+    errors: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     fetchSecondaryData: PropTypes.func.isRequired,
@@ -56,31 +56,32 @@ export default class Table extends Component {
   };
 
   renderTableSortRow = object => (
-    <tr key='sortRow'>
-      {Object.getOwnPropertyNames(object).map((prop, i) => {
-        if (prop === ID_PROP) {
-          return null;
-        }
+    this.props.data.length === 0 ? null :
+      <tr key='sortRow'>
+        {Object.getOwnPropertyNames(object).map((prop, i) => {
+          if (prop === ID_PROP) {
+            return null;
+          }
 
-        if (prop === 'colorgroupId') {
-          return <td key={i}><select style={{width: '100%'}}
-                                     value={this.props.objectHolder[prop]}
-                                     onChange={e => this.handleSelectedObjectChange(prop, e)}>
-            <option key='defGroup' value={''}>...</option>
-            {this.props.secondaryData.map((cg, key) => (
-              <option key={key} value={cg.id}>{cg.name}</option>
-            ))}
-          </select></td>;
+          if (prop === 'colorgroupId') {
+            return <td key={i}><select style={{width: '100%'}}
+                                       value={this.props.objectHolder[prop]}
+                                       onChange={e => this.handleSelectedObjectChange(prop, e)}>
+              <option key='defGroup' value={''}>...</option>
+              {this.props.secondaryData.map((cg, key) => (
+                <option key={key} value={cg.id}>{cg.name}</option>
+              ))}
+            </select></td>;
+          }
+          return <td key={i}>
+            <FormControl type='text'
+                         value={this.props.objectHolder[prop]}
+                         onChange={e => this.handleSelectedObjectChange(prop, e)}
+            />
+          </td>;
+        })
         }
-        return <td key={i}>
-          <FormControl type='text'
-                       value={this.props.objectHolder[prop]}
-                       onChange={e => this.handleSelectedObjectChange(prop, e)}
-          />
-        </td>;
-      })
-      }
-    </tr>
+      </tr>
   );
 
   sortRows = (data, object) => {
@@ -148,7 +149,7 @@ export default class Table extends Component {
       <tb className='table-responsive'>
         <table className='table no-margin table-hover table-bordered'>
           <thead>
-          <tr>
+          <tr key='trhead'>
             {this.renderTableHeadings(object)}
           </tr>
           </thead>
@@ -217,14 +218,14 @@ export default class Table extends Component {
 
   handleEdit = object => {
     if (this.props.status === STATUS_DEFAULT) {
-      this.props.enableEditing();
+      this.props.enableEditing(Color);
       this.props.selectRow(object);
     }
   };
 
   handleAddNew = () => {
     if (this.props.status === STATUS_DEFAULT) {
-      this.props.enableCreating();
+      this.props.enableCreating(Color);
     }
   };
 
@@ -395,7 +396,7 @@ export default class Table extends Component {
   );
 
   render() {
-    const {loading, error} = this.props;
+    const {loading, errors} = this.props;
 
     if (loading) {
       return (
@@ -410,15 +411,15 @@ export default class Table extends Component {
       );
     }
 
-    if (error) {
-      return (<div className='alert alert-danger'>Error: {error}</div>);
-    }
-
     return (
       <main>
         <div className='content-header'>
           <h1>Navigator</h1>
         </div>
+        {
+          errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>Error:
+              {err}</div>)
+        }
         {this.renderPage()}
       </main>
     );

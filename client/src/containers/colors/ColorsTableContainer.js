@@ -12,14 +12,14 @@ const mapStateToProps = state => {
   const {colors, colorsError, colorsLoading} = state.colors;
   const {colorgroups, colorgroupsError, colorgroupsLoading} = state.colorgroups;
   const {objectHolder, status} = state.table;
-  const error = !!(colorsError || colorgroupsError);
+  const errors = colorgroupsError || colorsError ? [colorsError, colorgroupsError] : [];
   const loading = colorsLoading || colorgroupsLoading;
 
   return {
     title: 'Colors',
     data: colors,
     secondaryData: colorgroups,
-    error,
+    errors,
     loading,
     objectHolder,
     status
@@ -43,11 +43,11 @@ const mapDispatchToProps = dispatch => {
     setEditingObjectProperty(propertyName, value) {
       dispatch(setObjectHolderProperty(propertyName, value));
     },
-    enableEditing() {
-      dispatch(enableEditing());
+    enableEditing(object) {
+      dispatch(enableEditing(object));
     },
-    enableCreating() {
-      dispatch(enableCreating());
+    enableCreating(object) {
+      dispatch(enableCreating(object));
     },
     enableDefaultStatus() {
       dispatch(enableDefaultStatus());

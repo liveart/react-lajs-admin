@@ -40,7 +40,7 @@ describe('table reducer', () => {
 
   test('should handle ' + types.ENABLE_EDITING, () => {
     expect(
-      reducer(INITIAL_STATE, {type: types.ENABLE_EDITING})
+      reducer(INITIAL_STATE, {type: types.ENABLE_EDITING, object: {}})
     ).toEqual({
       ...INITIAL_STATE,
       status: STATUS_EDITING,
@@ -50,7 +50,7 @@ describe('table reducer', () => {
 
   test('should handle ' + types.ENABLE_CREATING, () => {
     expect(
-      reducer(INITIAL_STATE, {type: types.ENABLE_CREATING})
+      reducer(INITIAL_STATE, {type: types.ENABLE_CREATING, object: {}})
     ).toEqual({
       ...INITIAL_STATE,
       status: STATUS_CREATING,

@@ -10,6 +10,7 @@ const INITIAL_STATE = {
 };
 
 export default function (state = INITIAL_STATE, action) {
+  let holder = {};
   switch (action.type) {
     case SELECT_ROW:
       return {
@@ -23,13 +24,18 @@ export default function (state = INITIAL_STATE, action) {
         ...state, objectHolder: Object.assign({}, newObj)
       };
     case ENABLE_EDITING:
-      return {...state, status: STATUS_EDITING};
+      Object.getOwnPropertyNames(action.object).map(prop => {
+        holder[prop] = '';
+      });
+      return {...INITIAL_STATE, status: STATUS_EDITING, objectHolder: Object.assign({}, holder)};
     case ENABLE_CREATING:
-      return {...state, status: STATUS_CREATING, objectHolder: {}};
+      Object.getOwnPropertyNames(action.object).map(prop => {
+        holder[prop] = '';
+      });
+      return {...INITIAL_STATE, status: STATUS_CREATING, objectHolder: Object.assign({}, holder)};
     case ENABLE_DEFAULT_STATUS:
       return {...state, status: STATUS_DEFAULT, objectHolder: {}};
     case SET_INITIAL_STATE:
-      let holder = {};
       Object.getOwnPropertyNames(action.object).map(prop => {
         holder[prop] = '';
       });

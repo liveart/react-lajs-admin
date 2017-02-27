@@ -9,7 +9,7 @@ export function* fetchColors() {
     const res = yield* api.retrieve(endpoint);
     yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS, colors: res});
   } catch (e) {
-    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
+    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e.message});
   }
 }
 
@@ -18,7 +18,7 @@ export function* fetchColorsNumber() {
     const res = yield* api.retrieveNumber(endpoint);
     yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS, colorsNumber: res});
   } catch (e) {
-    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
+    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e.message});
   }
 }
 
@@ -28,7 +28,7 @@ export function* createColor(action) {
     yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_COLORS});
   } catch (e) {
-    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
+    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e.message});
   }
 }
 
@@ -38,7 +38,7 @@ export function* editColor(action) {
     yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_COLORS});
   } catch (e) {
-    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
+    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e.message});
   }
 }
 
@@ -48,6 +48,6 @@ export function* deleteColor(action) {
     yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_COLORS});
   } catch (e) {
-    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
+    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e.message});
   }
 }

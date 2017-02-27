@@ -11,7 +11,7 @@ import Table from '../../components/colors/Colorgroups';
 const mapStateToProps = state => {
   const {colorgroups, colorgroupsError, colorgroupsLoading} = state.colorgroups;
   const {colors} = state.colors;
-  const error = colorgroupsError;
+  const errors = colorgroupsError ? [colorgroupsError] : [];
   const loading = colorgroupsLoading;
   const {objectHolder, status} = state.table;
 
@@ -19,7 +19,7 @@ const mapStateToProps = state => {
     title: 'Color Groups',
     data: colorgroups,
     secondaryData: colors,
-    error,
+    errors,
     loading,
     objectHolder,
     status
@@ -40,11 +40,11 @@ const mapDispatchToProps = dispatch => {
     setEditingObjectProperty(propertyName, value) {
       dispatch(setObjectHolderProperty(propertyName, value));
     },
-    enableEditing() {
-      dispatch(enableEditing());
+    enableEditing(object) {
+      dispatch(enableEditing(object));
     },
-    enableCreating() {
-      dispatch(enableCreating());
+    enableCreating(object) {
+      dispatch(enableCreating(object));
     },
     enableDefaultStatus() {
       dispatch(enableDefaultStatus());

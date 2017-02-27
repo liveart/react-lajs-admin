@@ -8,7 +8,7 @@ export default class Table extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    error: PropTypes.string,
+    errors: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     objectHolder: PropTypes.object,
@@ -112,7 +112,7 @@ export default class Table extends Component {
       <tb className='table-responsive'>
         <table className='table no-margin table-hover table-bordered'>
           <thead>
-          <tr>
+          <tr key='trhead'>
             {this.renderTableHeadings(object)}
           </tr>
           </thead>
@@ -182,14 +182,14 @@ export default class Table extends Component {
 
   handleEdit = object => {
     if (this.props.status === STATUS_DEFAULT) {
-      this.props.enableEditing();
+      this.props.enableEditing(Colorgroup);
       this.props.selectRow(object);
     }
   };
 
   handleAddNew = () => {
     if (this.props.status === STATUS_DEFAULT) {
-      this.props.enableCreating();
+      this.props.enableCreating(Colorgroup);
     }
   };
 
@@ -331,7 +331,7 @@ export default class Table extends Component {
   );
 
   render() {
-    const {loading, error} = this.props;
+    const {loading, errors} = this.props;
 
     if (loading) {
       return (
@@ -346,15 +346,17 @@ export default class Table extends Component {
       );
     }
 
-    if (error) {
-      return (<div className='alert alert-danger'>Error: {error}</div>);
-    }
+
 
     return (
       <main>
         <div className='content-header'>
           <h1>Navigator</h1>
         </div>
+        {
+          errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>Error:
+              {err}</div>)
+        }
         {this.renderPage()}
       </main>
     );

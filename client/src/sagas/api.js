@@ -8,19 +8,25 @@ export function* create(endpoint, obj) {
     },
     body: JSON.stringify(obj)
   });
+  if (!(req.status >= 200 && req.status < 300)) {
+    throw new Error (req.statusText);
+  }
   return (yield req.json());
 }
 
 export function* retrieve(endpoint) {
   const req = yield fetch(apiRoot + endpoint);
   if (!(req.status >= 200 && req.status < 300)) {
-    throw req.statusText;
+    throw new Error (req.statusText);
   }
   return (yield req.json());
 }
 
 export function* retrieveNumber(endpoint) {
   const req = yield fetch(apiRoot + endpoint + '/count');
+  if (!(req.status >= 200 && req.status < 300)) {
+    throw new Error (req.statusText);
+  }
   return (yield req.json()).count;
 }
 
@@ -32,6 +38,9 @@ export function* update(endpoint, obj, id) {
     },
     body: JSON.stringify(obj)
   });
+  if (!(req.status >= 200 && req.status < 300)) {
+    throw new Error (req.statusText);
+  }
   return (yield req.json());
 }
 
@@ -42,5 +51,8 @@ export function* remove(endpoint, id) {
       'Content-Type': 'application/json'
     }
   });
+  if (!(req.status >= 200 && req.status < 300)) {
+    throw new Error (req.statusText);
+  }
   return (yield req.json());
 }
