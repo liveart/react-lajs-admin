@@ -1,9 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
-import {findDOMNode} from 'react-dom';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
-import * as ColorModel from '../../../../common/models/color.json';
-const Color = ColorModel.properties;
 import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
 const Colorgroup = ColorgroupModel.properties;
 
@@ -28,38 +25,57 @@ export default class Table extends Component {
   };
 
   componentWillMount() {
-    this.props.restoreTableState();
+    this.props.restoreTableState(Colorgroup);
     this.props.fetchData();
+    this.props.fetchSecondaryData();
   }
 
-  renderTableHeadings = object => {
-    return Object.getOwnPropertyNames(object).map((prop, i) => {
+  renderTableHeadings = object => (
+    Object.getOwnPropertyNames(object).map((prop, i) => {
       if (prop === ID_PROP) {
         return null;
       } else {
         return <th key={i}>{prop}</th>;
       }
-    });
-  };
-
-  renderCreatingRow = () => {
-    return (
-      <tr>{Object.getOwnPropertyNames(Colorgroup).map((prop, i) => {
-        if (prop === ID_PROP) {
-          return null;
-        }
-
-        return <td key={i}><FormControl type='text'
-                                        value={this.props.objectHolder[prop]}
-                                        onChange={e => this.handleSelectedObjectChange(prop, e)}/>
-        </td>;
-      })}
-      </tr>
-    );
-  };
+    })
+  );
 
   handleSelectedObjectChange = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
+  };
+
+  renderTableSortRow = object => (
+    <tr key='sortRow'>
+      {Object.getOwnPropertyNames(object).map((prop, i) => {
+        if (prop === ID_PROP) {
+          return null;
+        } else {
+          return <td key={i}>
+            <FormControl type='text'
+                         value={this.props.objectHolder[prop]}
+                         onChange={e => this.handleSelectedObjectChange(prop, e)}
+            />
+          </td>;
+        }
+      })}
+    </tr>
+  );
+
+  sortRows = (data, object) => {
+    const rows = [];
+    for (let i = 0; i < data.length; ++i) {
+      let add = true;
+      Object.getOwnPropertyNames(object).map(prop => {
+        if (typeof this.props.objectHolder[prop] !== 'undefined' && !(data[i])[prop].includes(this.props.objectHolder[prop])) {
+          add = false;
+        }
+      });
+
+      if (add) {
+        rows.push(data[i]);
+      }
+    }
+    return rows;
   };
 
   renderTableData = (data, object) => {
@@ -67,44 +83,25 @@ export default class Table extends Component {
       return null;
     }
 
-    return data.map((item, k) => {
+    const rows = this.sortRows(data, object);
 
-      if (this.props.status === STATUS_EDITING && item[ID_PROP] === this.props.objectHolder.id) {
-        return (
-          <tr key={k}>
-            {Object.getOwnPropertyNames(object).map((prop, j) => {
-              if (prop === ID_PROP) {
-                return null;
-              }
-
-              return (
-                <td key={j}><FormControl type='text'
-                                         value={this.props.objectHolder[prop]}
-                                         onChange={e => this.handleSelectedObjectChange(prop, e)}/>
-                </td>
-              );
-            })}
-          </tr>
-        );
-      }
+    return rows.map((item, k) => {
 
       return (
-        <tr key={k}
-            className={this.props.objectHolder && item[ID_PROP] === this.props.objectHolder.id ?
-              'selected' : null}
-            onClick={() => this.handleRowClick(item)}>
-          {Object.getOwnPropertyNames(object).map((prop, j) => {
-            if (prop === ID_PROP) {
-              return null;
-            } else {
-              if (prop === 'value') {
-                return <td key={j}>
-                  {item[prop]}
-                </td>;
+        <tr key={k} onClick={() => this.handleEdit(item)}>
+          {
+            Object.getOwnPropertyNames(object).map((prop, j) => {
+              if (prop === ID_PROP) {
+                return null;
+              } else {
+                return <td key={j}>{item[prop]}
+                  <span
+                    className='label label-primary pull-right'>colors:
+                    {' ' + this.props.secondaryData.filter(c => c.colorgroupId === item.id).length}
+                  </span></td>;
               }
-              return <td key={j}>{item[prop]}</td>;
-            }
-          })}
+            })
+          }
         </tr>
       );
     });
@@ -112,21 +109,20 @@ export default class Table extends Component {
 
   renderTable = (data, object) => (
     <div className='panel panel-default'>
-      <div style={{'maxHeight': '60vh', 'overflowY': 'scroll'}}>
-        <tb className='table-responsive'>
-          <table className='table no-margin table-hover'>
-            <thead>
-            <tr>
-              {this.renderTableHeadings(object)}
-            </tr>
-            </thead>
-            <tbody>
-            {this.props.status === STATUS_CREATING ? this.renderCreatingRow() : null}
-            {this.renderTableData(data, object)}
-            </tbody>
-          </table>
-        </tb>
-      </div>
+      <tb className='table-responsive'>
+        <table className='table no-margin table-hover table-bordered'>
+          <thead>
+          <tr>
+            {this.renderTableHeadings(object)}
+          </tr>
+          </thead>
+          <tbody>
+          {this.renderTableSortRow(object)}
+          {this.props.status === STATUS_CREATING ? this.renderCreatingRow() : null}
+          {this.renderTableData(data, object)}
+          </tbody>
+        </table>
+      </tb>
     </div>
   );
 
@@ -137,55 +133,74 @@ export default class Table extends Component {
 
   renderDefButtons = () => (
     <div className='pull-right'>
-      <a className='btn btn-app' onClick={this.handleCreateBtnClick}><i className='fa fa-plus'/>Add
-      </a>
-      <a className='btn btn-app' onClick={this.handleEditBtnClick}><i className='fa fa-pencil-square-o'/>Edit
-      </a>
-      <a className='btn btn-app' onClick={this.handleDeleteBtnClick}><i className='fa fa-trash-o'/>Delete
-      </a>
-      <a className='btn btn-app' onClick={() => {
-        this.props.fetchData();
-      }}>
-        <i className='fa fa-refresh'/>Sync
-      </a>
+      <button type='button' className='btn btn-primary' style={{marginBottom: '3px'}}
+              onClick={this.handleAddNew}>Add new colorgroup
+      </button>
+      <button type='button' className='btn btn-default' style={{marginBottom: '3px'}}
+              onClick={() => this.props.restoreTableState(Colorgroup)}>Reset filter
+      </button>
     </div>
   );
 
   renderEditingButtons = () => (
-    <div className='pull-right'>
-      <a className='btn btn-app' onClick={this.handleSaveBtnClick}><i className='fa fa-check'/>Save</a>
-      <a className='btn btn-app' onClick={this.handleCancelBtnClick}><i className='fa fa-ban'/>Cancel</a>
+    <div>
+      <div className='pull-left'>
+        <button type='button' className='btn btn-default'
+                onClick={this.handleCancelBtnClick}>Cancel
+        </button>
+        <button type='button' className='btn btn-default'>Reset</button>
+      </div>
+      <div className='pull-right'>
+        <button type='button' className='btn btn-primary'
+                onClick={() => this.handleSaveBtnClick(true)}>Save
+        </button>
+        <button type='button' className='btn btn-primary'
+                onClick={() => this.handleSaveBtnClick(false)}>Save and
+          continue edit
+        </button>
+        <button type='button' className='btn btn-danger'
+                onClick={this.handleDeleteBtnClick}>Delete
+        </button>
+      </div>
     </div>
   );
 
-  handleRowClick = object => {
-    if (this.props.status !== STATUS_EDITING) {
-      this.props.selectRow(object);
+  renderCreatingButtons = () => (
+    <div>
+      <div className='pull-left'>
+        <button type='button' className='btn btn-default'
+                onClick={this.handleCancelBtnClick}>Cancel
+        </button>
+      </div>
+      <div className='pull-right'>
+        <button type='button' className='btn btn-primary'
+                onClick={() => this.handleSaveBtnClick(true)}>Save
+        </button>
+      </div>
+    </div>
+  );
 
+  handleEdit = object => {
+    if (this.props.status === STATUS_DEFAULT) {
+      this.props.enableEditing();
+      this.props.selectRow(object);
     }
   };
 
-  handleCreateBtnClick = () => {
+  handleAddNew = () => {
     if (this.props.status === STATUS_DEFAULT) {
       this.props.enableCreating();
     }
   };
 
-  handleEditBtnClick = () => {
-    if (this.props.status === STATUS_DEFAULT
-      && !(typeof this.props.objectHolder === 'object' && !this.props.objectHolder)) {
-      this.props.enableEditing();
-    }
-  };
-
   handleDeleteBtnClick = () => {
-    if (this.props.status === STATUS_DEFAULT) {
+    if (this.props.status === STATUS_EDITING) {
       this.props.deleteEntity(this.props.objectHolder.id);
-      setTimeout(this.props.fetchData, 2000);
+      this.props.enableDefaultStatus();
     }
   };
 
-  handleSaveBtnClick = () => {
+  handleSaveBtnClick = redirect => {
     if (this.props.status === STATUS_EDITING) {
       const properties = Object.getOwnPropertyNames(Colorgroup);
       const entity = {};
@@ -195,6 +210,9 @@ export default class Table extends Component {
         }
       });
       this.props.editEntity(this.props.objectHolder.id, entity);
+      if (redirect) {
+        this.props.enableDefaultStatus()
+      }
     } else if (this.props.status === STATUS_CREATING) {
       const properties = Object.getOwnPropertyNames(Colorgroup);
       const entity = {};
@@ -204,9 +222,8 @@ export default class Table extends Component {
         }
       });
       this.props.createEntity(entity);
+      this.props.enableDefaultStatus();
     }
-    this.props.enableDefaultStatus();
-    setTimeout(this.props.fetchData, 2000);
   };
 
   handleCancelBtnClick = () => {
@@ -215,8 +232,106 @@ export default class Table extends Component {
     }
   };
 
+  renderInputs = () => (
+    Object.getOwnPropertyNames(Colorgroup).map((prop, key) => {
+      if (prop === ID_PROP) {
+        return null;
+      } else {
+        return (
+          <div key={key} className='form-group'>
+            <div className='col-md-2'>
+              {prop}
+            </div>
+            <div className='col-md-10'>
+              <input type='text' className='form-control'
+                     value={this.props.objectHolder[prop]}
+                     onChange={e => this.handleSelectedObjectChange(prop, e)}/>
+            </div>
+          </div>
+        );
+      }
+    })
+  );
+
+  renderPage = () => {
+    if (this.props.status === STATUS_DEFAULT) {
+      return this.renderDefault();
+    } else if (this.props.status === STATUS_CREATING) {
+      return this.renderCreating();
+    } else if (this.props.status === STATUS_EDITING) {
+      return this.renderEditing();
+    }
+  };
+
+  renderDefault = () => (
+    <section className='content'>
+      <div className='row'>
+        <div className='col-md-6'>
+          <p>{this.props.title + ': ' + this.props.data.length}</p>
+        </div>
+        <div className='col-md-6'>
+          {this.renderDefButtons()}
+        </div>
+      </div>
+      <div className='row'>
+        <div className='col-md-12'>
+          {this.renderTable(this.props.data, Colorgroup)}
+        </div>
+      </div>
+    </section>
+  );
+
+  renderCreating = () => (
+    <section>
+      <div className='row'>
+        <div className='col-md-12'>
+          <section className='content'>
+            <div className='box box-info'>
+              <div className='box-header with-border'>
+                <h3 className='box-title'>Colorgroup information</h3>
+              </div>
+              <form className='form-horizontal'>
+                <div className='box-body'>
+                  {this.renderInputs()}
+                </div>
+                <div className='box-footer'>
+                  {this.renderCreatingButtons()}
+                </div>
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+
+    </section>
+  );
+
+  renderEditing = () => (
+    <section>
+      <div className='row'>
+        <div className='col-md-12'>
+          <section className='content'>
+            <div className='box box-info'>
+              <div className='box-header with-border'>
+                <h3 className='box-title'>Colorgroup information</h3>
+              </div>
+              <form className='form-horizontal'>
+                <div className='box-body'>
+                  {this.renderInputs()}
+                </div>
+                <div className='box-footer'>
+                  {this.renderEditingButtons()}
+                </div>
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  );
+
   render() {
-    const {data, loading, error, title} = this.props;
+    const {loading, error} = this.props;
 
     if (loading) {
       return (
@@ -237,24 +352,11 @@ export default class Table extends Component {
 
     return (
       <main>
-        <section className='content-header'>
+        <div className='content-header'>
           <h1>Navigator</h1>
-        </section>
-        <section className='content'>
-          <div className='row'>
-            <div className='col-lg-2'>
-            </div>
-            <div className='col-lg-8'>
-              {this.renderTable(data, Colorgroup)}
-              {this.renderButtons()}
-              <p>{title + ': ' + data.length}</p>
-            </div>
-            <div className='col-lg-2'>
-            </div>
-          </div>
-        </section>
+        </div>
+        {this.renderPage()}
       </main>
     );
   }
 }
-
