@@ -3,6 +3,7 @@ import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 import * as FontModel from '../../../common/models/font.json';
 const Font = FontModel.properties;
+const location = 'localhost:3000/files/fonts/';
 
 export default class extends Component {
   static propTypes = {
@@ -35,9 +36,18 @@ export default class extends Component {
     Object.getOwnPropertyNames(object).map((prop, i) => {
       if (prop === ID_PROP) {
         return null;
-      } else {
-        return <th key={i}>{prop}</th>;
       }
+
+      if (prop === 'fileNormal') {
+        return <th key={i}>Files</th>;
+      }
+
+      if (prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
+        return null;
+      }
+
+      return <th key={i}>{prop}</th>;
+
     })
   );
 
@@ -50,14 +60,37 @@ export default class extends Component {
       {Object.getOwnPropertyNames(object).map((prop, i) => {
         if (prop === ID_PROP) {
           return null;
-        } else {
-          return <td key={i}>
-            <FormControl type='text'
-                         value={this.props.objectHolder[prop]}
-                         onChange={e => this.handleSelectedObjectChange(prop, e)}
-            />
-          </td>;
         }
+        if (prop === 'fileNormal') {
+          return <th key={i}></th>;
+        }
+        if (prop === 'vector') {
+          return <th key={i}></th>;
+        }
+
+
+        if (prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
+          return null;
+        }
+        if (prop === 'boldAllowed' || prop === 'italicAllowed') {
+          return (<td key={i}>
+            <select type='text' className='form-control'
+                    value={this.props.objectHolder[prop]}
+                    onChange={e => this.handleSelectedObjectChange(prop, e)}>
+              <option value=''>...</option>
+              <option value='true'>yes</option>
+              <option value='false'>no</option>
+            </select>
+          </td>);
+        }
+        return <td key={i}>
+          <FormControl type='text'
+                       value={this.props.objectHolder[prop]}
+                       onChange={e => this.handleSelectedObjectChange(prop, e)}
+          />
+        </td>;
+
+
       })}
     </tr>
   );
@@ -96,9 +129,25 @@ export default class extends Component {
             Object.getOwnPropertyNames(object).map((prop, j) => {
               if (prop === ID_PROP) {
                 return null;
-              } else {
-                return <td key={j}>{item[prop]}</td>;
               }
+              if (prop === 'fileNormal')
+                return <tr><h5> Normal - <a href={location + item['fileNormal']}>{item['fileNormal']}</a></h5></tr>;
+              if (prop === 'fileBold')
+                return <tr><h5>Bold - <a href={location + item['fileBold']}> {item['fileBold']}</a></h5></tr>;
+              if (prop === 'fileItalic')
+                return <tr><h5>Italic -<a href={location + item['fileItalic']}> {item['fileItalic']}</a></h5></tr>;
+              if (prop === 'fileBoldItalic')
+                return <tr><h5>Bold & Italic - <a href={location + item['fileBoldItalic']}>{item['fileBoldItalic']}</a>
+                </h5></tr>;
+              if (prop === 'boldAllowed' || prop === 'italicAllowed') {
+                if (item[prop] === true)
+                  return <td key={j}>YES</td>;
+                if (item[prop] === false)
+                  return <td key={j}>NO</td>;
+              }
+
+              return <td key={j}>{item[prop]}</td>;
+
 
             })
           }
@@ -243,9 +292,9 @@ export default class extends Component {
 
   handleFileUpload = (prop, file) => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      if(prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic')
-      this.props.uploadFontFile(file);
-      if(prop === 'vector')
+      if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic')
+        this.props.uploadFontFile(file);
+      if (prop === 'vector')
         this.props.uploadVector(file);
     }
   };
@@ -271,7 +320,8 @@ export default class extends Component {
                    onChange={e => this.handleFileChoose(prop, e)}/>
           </div>
         </div>);
-      } if (prop === 'vector') {
+      }
+      if (prop === 'vector') {
         return ( <div key={key} className='form-group'>
           <div className='col-md-2'>
             {prop}
@@ -281,20 +331,38 @@ export default class extends Component {
                    onChange={e => this.handleFileChoose(prop, e)}/>
           </div>
         </div>);
-      } else {
-        return (
-          <div key={key} className='form-group'>
-            <div className='col-md-2'>
-              {prop}
-            </div>
-            <div className='col-md-10'>
-              <input type='text' className='form-control'
-                     value={this.props.objectHolder[prop]}
-                     onChange={e => this.handleSelectedObjectChange(prop, e)}/>
-            </div>
-          </div>
-        );
       }
+      if (prop === 'boldAllowed' || prop === 'italicAllowed') {
+        return ( <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            {prop}
+          </div>
+          <div className='col-md-10'>
+            <select type='text' className='form-control'
+                    value={this.props.objectHolder[prop]}
+                    onChange={e => this.handleSelectedObjectChange(prop, e)}>
+              <option value=''></option>
+              <option value='true'>YES</option>
+              <option value='false'>NO</option>
+            </select>
+
+          </div>
+        </div>);
+      }
+
+      return (
+        <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            {prop}
+          </div>
+          <div className='col-md-10'>
+            <input type='text' className='form-control'
+                   value={this.props.objectHolder[prop]}
+                   onChange={e => this.handleSelectedObjectChange(prop, e)}/>
+          </div>
+        </div>
+      );
+
     })
   );
 
