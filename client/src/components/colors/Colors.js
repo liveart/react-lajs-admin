@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 import {ChromePicker} from 'react-color';
+import Dropdown from 'react-dropdown';
 import * as ColorModel from '../../../../common/models/color.json';
 const Color = ColorModel.properties;
 
@@ -9,9 +10,11 @@ export default class Table extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
+    secondaryData: PropTypes.arrayOf(PropTypes.any).isRequired,
     error: PropTypes.string,
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
+    fetchSecondaryData: PropTypes.func.isRequired,
     objectHolder: PropTypes.object,
     status: PropTypes.string.isRequired,
     selectRow: PropTypes.func.isRequired,
@@ -25,18 +28,28 @@ export default class Table extends Component {
     restoreTableState: PropTypes.func.isRequired
   };
 
+  constructor() {
+    super();
+    this.colorgroupOptions = [];
+  }
+
   componentWillMount() {
     this.props.restoreTableState();
     this.props.fetchData();
+    this.props.fetchSecondaryData();
   }
 
   renderTableHeadings = object => (
     Object.getOwnPropertyNames(object).map((prop, i) => {
       if (prop === ID_PROP) {
         return null;
-      } else {
-        return <th key={i}>{prop}</th>;
       }
+      if (prop === 'colorgroupId') {
+        return <th key={i}>group</th>;
+      }
+
+      return <th key={i}>{prop}</th>;
+
     })
   );
 
@@ -53,15 +66,26 @@ export default class Table extends Component {
       {Object.getOwnPropertyNames(object).map((prop, i) => {
         if (prop === ID_PROP) {
           return null;
-        } else {
-          return <td key={i}>
-            <FormControl type='text'
-                         value={this.props.objectHolder[prop]}
-                         onChange={e => this.handleSelectedObjectChange(prop, e)}
-            />
-          </td>;
         }
-      })}
+
+        if (prop === 'colorgroupId') {
+          return <td key={i}><select value={this.props.objectHolder[prop]}
+                                     onChange={e => this.handleSelectedObjectChange(prop, e)}>
+            <option key='defGroup' value={''}>...</option>
+            {this.props.secondaryData.map((cg, key) => (
+              <option key={key} value={cg.id}>{cg.name}</option>
+            ))}
+          </select></td>;
+        }
+
+        return <td key={i}>
+          <FormControl type='text'
+                       value={this.props.objectHolder[prop]}
+                       onChange={e => this.handleSelectedObjectChange(prop, e)}
+          />
+        </td>;
+      })
+      }
     </tr>
   );
 
@@ -82,6 +106,11 @@ export default class Table extends Component {
     return rows;
   };
 
+  getGroupById = id => {
+    let groups = this.props.secondaryData.filter(cg => (cg.id === id));
+    return groups.length ? groups[0].name : null;
+  };
+
   renderTableData = (data, object) => {
     if (!data.length) {
       return null;
@@ -92,23 +121,26 @@ export default class Table extends Component {
     return rows.map((item, k) => {
 
       return (
-        <tr key={k}
-            className={this.props.objectHolder && item[ID_PROP] === this.props.objectHolder.id ? 'selected' : null}
-            onClick={() => this.handleEdit(item)}>
+        <tr key={k} onClick={() => this.handleEdit(item)}>
           {
             Object.getOwnPropertyNames(object).map((prop, j) => {
               if (prop === ID_PROP) {
                 return null;
-              } else {
-                if (prop === 'value') {
-                  return <td key={j}>
-                    {item[prop]}
-                    <span className='label label-default pull-right' style={{background: item[prop]}}>{' '}</span>
-                  </td>;
-                }
-                return <td key={j}>{item[prop]}</td>;
               }
 
+              if (prop === 'colorgroupId') {
+                return <td key={j}>
+                  {this.getGroupById(item[prop])}
+                </td>;
+              }
+
+              if (prop === 'value') {
+                return <td key={j}>
+                  {item[prop]}
+                  <span className='label label-default pull-right' style={{background: item[prop]}}>{' '}</span>
+                </td>;
+              }
+              return <td key={j}>{item[prop]}</td>;
             })
           }
         </tr>
@@ -127,7 +159,6 @@ export default class Table extends Component {
           </thead>
           <tbody>
           {this.renderTableSortRow(object)}
-          {this.props.status === STATUS_CREATING ? this.renderCreatingRow() : null}
           {this.renderTableData(data, object)}
           </tbody>
         </table>
@@ -255,6 +286,23 @@ export default class Table extends Component {
           </div>;
         }
 
+        if (prop === 'colorgroupId') {
+          return <div className='form-group'>
+            <div className='col-md-2'>
+              Group
+            </div>
+            <div className='col-md-10'>
+              <select onChange={e => this.handleSelectedObjectChange(prop, e)}
+                      value={this.props.objectHolder[prop]}>
+                <option key='defGroup' value={''}>...</option>
+                {this.props.secondaryData.map((cg, key) => (
+                  <option key={key} value={cg.id}>{cg.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>;
+        }
+
         return (
           <div key={key} className='form-group'>
             <div className='col-md-2'>
@@ -272,6 +320,9 @@ export default class Table extends Component {
   );
 
   renderPage = () => {
+    this.props.secondaryData.forEach(cg =>
+      this.colorgroupOptions.push({value: cg.id, label: cg.name})
+    );
     if (this.props.status === STATUS_DEFAULT) {
       return this.renderDefault();
     } else if (this.props.status === STATUS_CREATING) {

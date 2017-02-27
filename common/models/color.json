@@ -5,28 +5,25 @@
   "properties": {
     "name": {
       "type": "string",
-      "required": true,
-      "sqlite3": {
-        "columnName": "name"
-      }
+      "required": true
     },
-    "colorgroup_name": {
+    "colorgroupId": {
       "type": "string",
-      "required": false,
-      "sqlite3": {
-        "columnName": "colorgroup_name"
-      }
+      "required": false
     },
     "value": {
       "type": "string",
-      "required": true,
-      "sqlite3": {
-        "columnName": "value"
-      }
+      "required": true
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "colorgroup": {
+      "type": "belongsTo",
+      "model": "colorgroup",
+      "foreignKey": "colorgroupId"
+    }
+  },
   "acls": [],
   "methods": {}
 }

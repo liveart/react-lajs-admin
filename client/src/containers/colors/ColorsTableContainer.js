@@ -1,5 +1,6 @@
 import {connect} from 'react-redux';
 import {fetchColors, createColor, editColor, deleteColor} from '../../actions/colors';
+import {fetchColorgroups, createColorgroup} from '../../actions/colorgroups';
 
 import {
   selectRow, setObjectHolderProperty,
@@ -9,13 +10,17 @@ import Table from '../../components/colors/Colors';
 
 const mapStateToProps = state => {
   const {colors, colorsError, colorsLoading} = state.colors;
+  const {colorgroups, colorgroupsError, colorgroupsLoading} = state.colorgroups;
   const {objectHolder, status} = state.table;
+  const error = !!(colorsError || colorgroupsError);
+  const loading = colorsLoading || colorgroupsLoading;
 
   return {
     title: 'Colors',
     data: colors,
-    error: colorsError,
-    loading: colorsLoading,
+    secondaryData: colorgroups,
+    error,
+    loading,
     objectHolder,
     status
   };
@@ -25,6 +30,12 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchData() {
       dispatch(fetchColors());
+    },
+    fetchSecondaryData() {
+      dispatch(fetchColorgroups());
+    },
+    createColorgroup(colorgroup) {
+      dispatch(createColorgroup(colorgroup));
     },
     selectRow(object) {
       dispatch(selectRow(object));

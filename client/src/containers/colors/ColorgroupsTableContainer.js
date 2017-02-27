@@ -16,7 +16,7 @@ const mapStateToProps = state => {
   const {objectHolder, status} = state.table;
 
   return {
-    title: 'Colors',
+    title: 'Color Groups',
     data: colorgroups,
     secondaryData: colors,
     error,

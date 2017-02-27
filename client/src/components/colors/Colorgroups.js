@@ -88,9 +88,7 @@ export default class Table extends Component {
     return rows.map((item, k) => {
 
       return (
-        <tr key={k}
-            className={this.props.objectHolder && item[ID_PROP] === this.props.objectHolder.id ? 'selected' : null}
-            onClick={() => this.handleEdit(item)}>
+        <tr key={k} onClick={() => this.handleEdit(item)}>
           {
             Object.getOwnPropertyNames(object).map((prop, j) => {
               if (prop === ID_PROP) {
@@ -99,10 +97,9 @@ export default class Table extends Component {
                 return <td key={j}>{item[prop]}
                   <span
                     className='label label-primary pull-right'>colors:
-                    {' ' + this.props.secondaryData.filter(c => c.colorgroup_name === item.name).length}
+                    {' ' + this.props.secondaryData.filter(c => c.colorgroupId === item.id).length}
                   </span></td>;
               }
-
             })
           }
         </tr>
