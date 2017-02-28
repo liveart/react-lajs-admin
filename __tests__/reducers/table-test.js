@@ -27,17 +27,6 @@ describe('table reducer', () => {
     })
   });
 
-  test('should handle ' + types.SET_OBJECT_HOLDER_PROPERTY, () => {
-    const objectHolder = {id: 1};
-    expect(
-      reducer({...INITIAL_STATE, objectHolder: {id: 2}},
-        {type: types.SET_OBJECT_HOLDER_PROPERTY, propertyName: 'id', value: 1})
-    ).toEqual({
-      ...INITIAL_STATE,
-      objectHolder
-    })
-  });
-
   test('should handle ' + types.ENABLE_EDITING, () => {
     expect(
       reducer(INITIAL_STATE, {type: types.ENABLE_EDITING, object: {}})
