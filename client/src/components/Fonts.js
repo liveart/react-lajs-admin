@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 import * as FontModel from '../../../common/models/font.json';
+import {saveAs} from 'file-saver';
 const Font = FontModel.properties;
 const location = 'localhost:3000/files/fonts/';
 
@@ -34,16 +35,12 @@ export default class extends Component {
 
   renderTableHeadings = object => (
     Object.getOwnPropertyNames(object).map((prop, i) => {
-      if (prop === ID_PROP) {
+      if (prop === ID_PROP || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'boldAllowed' || prop === 'italicAllowed' || prop === 'vector') {
         return null;
       }
 
       if (prop === 'fileNormal') {
         return <th key={i}>Files</th>;
-      }
-
-      if (prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
-        return null;
       }
 
       return <th key={i}>{prop}</th>;
@@ -58,7 +55,7 @@ export default class extends Component {
   renderTableSortRow = object => (
     <tr key='sortRow'>
       {Object.getOwnPropertyNames(object).map((prop, i) => {
-        if (prop === ID_PROP) {
+        if (prop === ID_PROP || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'boldAllowed' || prop === 'italicAllowed' || prop === 'vector') {
           return null;
         }
         if (prop === 'fileNormal') {
@@ -68,21 +65,6 @@ export default class extends Component {
           return <th key={i}></th>;
         }
 
-
-        if (prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
-          return null;
-        }
-        if (prop === 'boldAllowed' || prop === 'italicAllowed') {
-          return (<td key={i}>
-            <select type='text' className='form-control'
-                    value={this.props.objectHolder[prop]}
-                    onChange={e => this.handleSelectedObjectChange(prop, e)}>
-              <option value=''>...</option>
-              <option value='true'>yes</option>
-              <option value='false'>no</option>
-            </select>
-          </td>);
-        }
         return <td key={i}>
           <FormControl type='text'
                        value={this.props.objectHolder[prop]}
@@ -127,34 +109,30 @@ export default class extends Component {
             onClick={() => this.handleEdit(item)}>
           {
             Object.getOwnPropertyNames(object).map((prop, j) => {
-              if (prop === ID_PROP) {
+              if (prop === ID_PROP || prop === 'boldAllowed' || prop === 'italicAllowed' || prop === 'vector') {
                 return null;
               }
-              if (prop === 'fileNormal')
-                return <tr><h5> Normal - <a href={location + item['fileNormal']}>{item['fileNormal']}</a></h5></tr>;
-              if (prop === 'fileBold')
-                return <tr><h5>Bold - <a href={location + item['fileBold']}> {item['fileBold']}</a></h5></tr>;
-              if (prop === 'fileItalic')
-                return <tr><h5>Italic -<a href={location + item['fileItalic']}> {item['fileItalic']}</a></h5></tr>;
-              if (prop === 'fileBoldItalic')
-                return <tr><h5>Bold & Italic - <a href={location + item['fileBoldItalic']}>{item['fileBoldItalic']}</a>
-                </h5></tr>;
-              if (prop === 'boldAllowed' || prop === 'italicAllowed') {
-                if (item[prop] === true)
-                  return <td key={j}>YES</td>;
-                if (item[prop] === false)
-                  return <td key={j}>NO</td>;
+              if (prop === 'fileNormal') {
+                return (
+                  <td key={j}>
+                    <h5>Normal - <a href={location + item.fileNormal}>{item.fileNormal}</a></h5>
+                    <h5>Bold - <a href={location + item.fileBold}> {item.fileBold}</a></h5>
+                    <h5>Italic - <a href={location + item.fileItalic}> {item.fileItalic}</a></h5>
+                    <h5>Bold & Italic - <a href={location + item.fileBoldItalic}>{item.fileBoldItalic}</a></h5>
+                  </td>
+                )
               }
-
+              if (prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
+                return null;
+              }
               return <td key={j}>{item[prop]}</td>;
-
-
             })
           }
         </tr>
       );
     });
   };
+
 
   renderTable = (data, object) => (
     <div className='panel panel-default'>
@@ -185,8 +163,80 @@ export default class extends Component {
       <button type='button' className='btn btn-default'
               onClick={this.handleAddNew}>Add new font
       </button>
+      <button type='button' className='btn btn-default'
+              onClick={this.handleCSSDownloadBtnClick}>CSS
+      </button>
+      <button type='button' className='btn btn-default'
+              onClick={this.handleJSONDownloadBtnClick}>JSON
+      </button>
     </div>
   );
+
+  handleJSONDownloadBtnClick = () => {
+    if (this.props.status === STATUS_DEFAULT) {
+      const fonts = this.props.data;
+      const data = [];
+      data.push('"fonts": [\n');
+      fonts.forEach(entry => {
+        data.push('{');
+        Object.getOwnPropertyNames(entry).map(prop => {
+          if (prop === 'id' || prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
+            return null;
+          }
+          data.push('' + '"' + prop + '":' + ' ' + '"' + entry[prop] + '" ');
+        });
+        data.push('}\n');
+
+      });
+      data.push(']');
+      const blob = new Blob(data, {type: "application/json"});
+      saveAs(blob, "fonts.json");
+    }
+  };
+
+  handleCSSDownloadBtnClick = () => {
+    if (this.props.status === STATUS_DEFAULT) {
+      const fonts = this.props.data;
+      const data = [];
+      fonts.forEach(font => {
+        if (font.fileNormal) {
+          data.push('@font-face {\n');
+          data.push("    font-family: '" + font.fontFamily + "';\n");
+          data.push('    src: url("//' + location + font.fileNormal + '");\n');
+          data.push("    font-weight: normal;\n");
+          data.push("    font-style: normal;\n");
+          data.push('}\n');
+        }
+        if (font.fileBold) {
+          data.push('@font-face {\n');
+          data.push("    font-family: '" + font.fontFamily + "';\n");
+          data.push('    src: url("//' + location + font.fileBold + '");\n');
+          data.push("    font-weight: bold;\n");
+          data.push("    font-style: normal;\n");
+          data.push('}\n');
+        }
+        if (font.fileItalic) {
+          data.push('@font-face {\n');
+          data.push("    font-family: '" + font.fontFamily + "';\n");
+          data.push('    src: url("//' + location + font.fileItalic + '");\n');
+          data.push("    font-weight: normal;\n");
+          data.push("    font-style: italic;\n");
+          data.push('}\n');
+        }
+        if (font.fileBoldItalic) {
+          data.push('@font-face {\n');
+          data.push("    font-family: '" + font.fontFamily + "';\n");
+          data.push('    src: url("//' + location + font.fileBoldItalic + '");\n');
+          data.push("    font-weight: bold;\n");
+          data.push("    font-style: italic;\n");
+          data.push('}\n');
+        }
+
+      });
+      const blob = new Blob(data, {type: "font/css"});
+      saveAs(blob, "fonts.css");
+    }
+  };
 
   renderEditingButtons = () => (
     <div>
@@ -341,7 +391,7 @@ export default class extends Component {
             <select type='text' className='form-control'
                     value={this.props.objectHolder[prop]}
                     onChange={e => this.handleSelectedObjectChange(prop, e)}>
-              <option value=''></option>
+              <option value=''>...</option>
               <option value='true'>YES</option>
               <option value='false'>NO</option>
             </select>
