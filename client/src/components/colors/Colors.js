@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
-import {ChromePicker} from 'react-color';
+import {SketchPicker} from 'react-color';
 import * as ColorModel from '../../../../common/models/color.json';
 const Color = ColorModel.properties;
 
@@ -84,13 +84,15 @@ export default class Table extends Component {
       </tr>
   );
 
-  sortRows = (data, object) => {
+  sortRows = (data, object)  => {
     const rows = [];
     for (let i = 0; i < data.length; ++i) {
       let add = true;
-      console.log(data);
+
       Object.getOwnPropertyNames(object).map(prop => {
-        if (typeof this.props.objectHolder[prop] !== 'undefined' && !(data[i])[prop].includes(this.props.objectHolder[prop])) {
+        if (typeof (this.props.data[i])[prop] === 'undefined') {
+          add = this.props.objectHolder[prop] === '';
+        } else if (!(data[i])[prop].includes(this.props.objectHolder[prop])) {
           add = false;
         }
       });
@@ -233,6 +235,7 @@ export default class Table extends Component {
     if (this.props.status === STATUS_EDITING) {
       this.props.deleteEntity(this.props.objectHolder.id);
       this.props.enableDefaultStatus();
+      this.props.restoreTableState(Color);
     }
   };
 
@@ -247,7 +250,8 @@ export default class Table extends Component {
       });
       this.props.editEntity(this.props.objectHolder.id, entity);
       if (redirect) {
-        this.props.enableDefaultStatus()
+        this.props.enableDefaultStatus();
+        this.props.restoreTableState(Color);
       }
     } else if (this.props.status === STATUS_CREATING) {
       const properties = Object.getOwnPropertyNames(Color);
@@ -259,12 +263,14 @@ export default class Table extends Component {
       });
       this.props.createEntity(entity);
       this.props.enableDefaultStatus();
+      this.props.restoreTableState(Color);
     }
   };
 
   handleCancelBtnClick = () => {
     if (this.props.status !== STATUS_DEFAULT) {
       this.props.enableDefaultStatus();
+      this.props.restoreTableState(Color);
     }
   };
 
@@ -279,7 +285,7 @@ export default class Table extends Component {
               {prop}
             </div>
             <div className='col-md-10'>
-              <ChromePicker color={this.props.objectHolder.value}
+              <SketchPicker color={this.props.objectHolder.value}
                             onChange={this.handleColorChange}/>
             </div>
           </div>;
