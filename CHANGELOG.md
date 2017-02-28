@@ -1,12 +1,8 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## 0.2.0
 ### Added
-- SQLite DB as datasource
-- HeaderBar
-- NavBar
-- Fonts API
-- Fonts Widget for the Dashboard
-- Entity Explorer for listing, editing and creating
-- Loading animation
+- Colors panel
+- Colorgroups panel
+- Font panel

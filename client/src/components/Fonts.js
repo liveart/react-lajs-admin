@@ -248,7 +248,6 @@ export default class extends Component {
         <button type='button' className='btn btn-default'
                 onClick={this.handleCancelBtnClick}>Cancel
         </button>
-        <button type='button' className='btn btn-default'>Reset</button>
       </div>
       <div className='pull-right'>
         <button type='button' className='btn btn-primary'
