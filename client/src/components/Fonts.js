@@ -170,33 +170,10 @@ export default class extends Component {
       <button type='button' className='btn btn-default'
               onClick={this.handleCSSDownloadBtnClick}>CSS
       </button>
-      <button type='button' className='btn btn-default'
-              onClick={this.handleJSONDownloadBtnClick}>JSON
+      <button type='button' className='btn btn-default'>JSON
       </button>
     </div>
   );
-
-  handleJSONDownloadBtnClick = () => {
-    if (this.props.status === STATUS_DEFAULT) {
-      const fonts = this.props.data;
-      const data = [];
-      data.push('"fonts": [\n');
-      fonts.forEach(entry => {
-        data.push('{');
-        Object.getOwnPropertyNames(entry).map(prop => {
-          if (prop === 'id' || prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
-            return null;
-          }
-          data.push('' + '"' + prop + '":' + ' ' + '"' + entry[prop] + '" ');
-        });
-        data.push('}\n');
-
-      });
-      data.push(']');
-      const blob = new Blob(data, {type: "application/json"});
-      saveAs(blob, "fonts.json");
-    }
-  };
 
   handleCSSDownloadBtnClick = () => {
     if (this.props.status === STATUS_DEFAULT) {

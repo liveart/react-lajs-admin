@@ -18,7 +18,7 @@ export default function (state = INITIAL_STATE, action) {
       };
     case actionTypes.COLORGROUP_OPERATION_FAILURE:
       error = action.message;
-      return {...state, error, loading: false};
+      return {...state, error, colorgroupsLoading: false};
     case actionTypes.FETCH_COLORGROUP_BY_ID:
       return {...state, colorgroup: null, colorgroupsError: null, colorgroupsLoading: true};
     case actionTypes.FETCH_COLORGROUPS:

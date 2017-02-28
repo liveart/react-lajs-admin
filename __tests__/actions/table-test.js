@@ -10,16 +10,7 @@ describe('Table Actions', () => {
       type: T.SELECT_ROW,
       objectHolder
     };
-    expect(TT.selectRow(selectedRowId)).toEqual(expectedAction);
-  });
-
-  test('should create an action to set object property', () => {
-    const expectedAction = {
-      type: T.SET_OBJECT_HOLDER_PROPERTY,
-      propertyName: 'id',
-      value: 1
-    };
-    expect(T.setObjectHolderProperty('id', 1)).toEqual(expectedAction);
+    expect(TT.selectRow(objectHolder)).toEqual(expectedAction);
   });
 
   test('should create an action to enable editing', () => {
