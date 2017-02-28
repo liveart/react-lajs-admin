@@ -1,7 +1,7 @@
 import * as actionTypes from '../actionTypes/colorgroups';
 
 const INITIAL_STATE = {
-  colorgroup: null, colorgroups: [], colorgroupsNumber: 0, error: null, loading: false
+  colorgroup: null, colorgroups: [], colorgroupsNumber: 0, colorgroupsError: null, colorgroupsLoading: false
 };
 
 export default function (state = INITIAL_STATE, action) {
@@ -20,7 +20,7 @@ export default function (state = INITIAL_STATE, action) {
       error = action.message;
       return {...state, error, loading: false};
     case actionTypes.FETCH_COLORGROUP_BY_ID:
-      return {...state, colorgroup: null, error: null, loading: true};
+      return {...state, colorgroup: null, colorgroupsError: null, colorgroupsLoading: true};
     case actionTypes.FETCH_COLORGROUPS:
       return {...state, colorgroups: [], colorgroupsError: null, colorgroupsLoading: true};
     case actionTypes.FETCH_COLORGROUPS_NUMBER:
