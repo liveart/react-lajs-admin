@@ -170,8 +170,6 @@ export default class extends Component {
       <button type='button' className='btn btn-default'
               onClick={this.handleCSSDownloadBtnClick}>CSS
       </button>
-      <button type='button' className='btn btn-default'>JSON
-      </button>
     </div>
   );
 
