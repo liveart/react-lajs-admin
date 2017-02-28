@@ -4,7 +4,7 @@ import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../defin
 import * as FontModel from '../../../common/models/font.json';
 import {saveAs} from 'file-saver';
 const Font = FontModel.properties;
-const location = 'localhost:3000/files/fonts/';
+const location = '/files/fonts/';
 
 export default class extends Component {
   static propTypes = {
@@ -206,7 +206,7 @@ export default class extends Component {
         if (font.fileNormal) {
           data.push('@font-face {\n');
           data.push("    font-family: '" + font.fontFamily + "';\n");
-          data.push('    src: url("//' + location + font.fileNormal + '");\n');
+          data.push('    src: url("/' + location + font.fileNormal + '");\n');
           data.push("    font-weight: normal;\n");
           data.push("    font-style: normal;\n");
           data.push('}\n');
@@ -214,7 +214,7 @@ export default class extends Component {
         if (font.fileBold) {
           data.push('@font-face {\n');
           data.push("    font-family: '" + font.fontFamily + "';\n");
-          data.push('    src: url("//' + location + font.fileBold + '");\n');
+          data.push('    src: url("/' + location + font.fileBold + '");\n');
           data.push("    font-weight: bold;\n");
           data.push("    font-style: normal;\n");
           data.push('}\n');
@@ -222,7 +222,7 @@ export default class extends Component {
         if (font.fileItalic) {
           data.push('@font-face {\n');
           data.push("    font-family: '" + font.fontFamily + "';\n");
-          data.push('    src: url("//' + location + font.fileItalic + '");\n');
+          data.push('    src: url("/' + location + font.fileItalic + '");\n');
           data.push("    font-weight: normal;\n");
           data.push("    font-style: italic;\n");
           data.push('}\n');
@@ -230,7 +230,7 @@ export default class extends Component {
         if (font.fileBoldItalic) {
           data.push('@font-face {\n');
           data.push("    font-family: '" + font.fontFamily + "';\n");
-          data.push('    src: url("//' + location + font.fileBoldItalic + '");\n');
+          data.push('    src: url("/' + location + font.fileBoldItalic + '");\n');
           data.push("    font-weight: bold;\n");
           data.push("    font-style: italic;\n");
           data.push('}\n');
