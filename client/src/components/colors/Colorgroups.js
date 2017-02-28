@@ -20,9 +20,15 @@ export default class Table extends Component {
     createEntity: PropTypes.func.isRequired,
     editEntity: PropTypes.func.isRequired,
     deleteEntity: PropTypes.func.isRequired,
+    deleteSecondary: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
     restoreTableState: PropTypes.func.isRequired
   };
+
+  constructor() {
+    super();
+    this.state = {deleting: false};
+  }
 
   componentWillMount() {
     this.props.restoreTableState(Colorgroup);
@@ -65,8 +71,11 @@ export default class Table extends Component {
     const rows = [];
     for (let i = 0; i < data.length; ++i) {
       let add = true;
+
       Object.getOwnPropertyNames(object).map(prop => {
-        if (typeof this.props.objectHolder[prop] !== 'undefined' && !(data[i])[prop].includes(this.props.objectHolder[prop])) {
+        if (typeof (this.props.data[i])[prop] === 'undefined') {
+          add = this.props.objectHolder[prop] === '';
+        } else if (!(data[i])[prop].includes(this.props.objectHolder[prop])) {
           add = false;
         }
       });
@@ -142,28 +151,46 @@ export default class Table extends Component {
     </div>
   );
 
-  renderEditingButtons = () => (
-    <div>
-      <div className='pull-left'>
-        <button type='button' className='btn btn-default'
-                onClick={this.handleCancelBtnClick}>Cancel
-        </button>
-        <button type='button' className='btn btn-default'>Reset</button>
+  renderEditingButtons = () => {
+    if (this.state.deleting) {
+      return (
+        <div>
+          <div className='pull-right'>
+            <button type='button' className='btn btn-danger'
+                    onClick={() => this.handleDeleteBtnClick(true)}>Delete
+            </button>
+            <button type='button' className='btn btn-default'
+                    onClick={() => {
+                      this.setState({deleting: false})
+                    }}>Cancel
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div>
+        <div className='pull-left'>
+          <button type='button' className='btn btn-default'
+                  onClick={this.handleCancelBtnClick}>Cancel
+          </button>
+          <button type='button' className='btn btn-default'>Reset</button>
+        </div>
+        <div className='pull-right'>
+          <button type='button' className='btn btn-primary'
+                  onClick={() => this.handleSaveBtnClick(true)}>Save
+          </button>
+          <button type='button' className='btn btn-primary'
+                  onClick={() => this.handleSaveBtnClick(false)}>Save and
+            continue edit
+          </button>
+          <button type='button' className='btn btn-danger'
+                  onClick={() => this.handleDeleteBtnClick(false)}>Delete
+          </button>
+        </div>
       </div>
-      <div className='pull-right'>
-        <button type='button' className='btn btn-primary'
-                onClick={() => this.handleSaveBtnClick(true)}>Save
-        </button>
-        <button type='button' className='btn btn-primary'
-                onClick={() => this.handleSaveBtnClick(false)}>Save and
-          continue edit
-        </button>
-        <button type='button' className='btn btn-danger'
-                onClick={this.handleDeleteBtnClick}>Delete
-        </button>
-      </div>
-    </div>
-  );
+    );
+  };
 
   renderCreatingButtons = () => (
     <div>
@@ -193,10 +220,21 @@ export default class Table extends Component {
     }
   };
 
-  handleDeleteBtnClick = () => {
+  handleDeleteBtnClick = (confirmed) => {
     if (this.props.status === STATUS_EDITING) {
-      this.props.deleteEntity(this.props.objectHolder.id);
-      this.props.enableDefaultStatus();
+      if (confirmed) {
+        this.props.secondaryData.map(c => {
+          if (c.colorgroupId === this.props.objectHolder.id) {
+            this.props.deleteSecondary(c.id);
+          }
+        });
+        this.props.deleteEntity(this.props.objectHolder.id);
+        this.props.enableDefaultStatus();
+        this.props.restoreTableState(Colorgroup);
+        this.setState({deleting: false});
+      } else {
+        this.setState({deleting: true});
+      }
     }
   };
 
@@ -211,7 +249,8 @@ export default class Table extends Component {
       });
       this.props.editEntity(this.props.objectHolder.id, entity);
       if (redirect) {
-        this.props.enableDefaultStatus()
+        this.props.enableDefaultStatus();
+        this.props.restoreTableState(Colorgroup);
       }
     } else if (this.props.status === STATUS_CREATING) {
       const properties = Object.getOwnPropertyNames(Colorgroup);
@@ -223,34 +262,55 @@ export default class Table extends Component {
       });
       this.props.createEntity(entity);
       this.props.enableDefaultStatus();
+      this.props.restoreTableState(Colorgroup);
     }
   };
 
   handleCancelBtnClick = () => {
     if (this.props.status !== STATUS_DEFAULT) {
       this.props.enableDefaultStatus();
+      this.props.restoreTableState(Colorgroup);
     }
   };
 
-  renderInputs = () => (
-    Object.getOwnPropertyNames(Colorgroup).map((prop, key) => {
+  renderInputs = () => {
+    if (this.state.deleting) {
+      return (
+        <div className='form-group'>
+          <div className='col-md-3'>
+          </div>
+          <div className='col-md-6'>
+            <h1>Are you sure?</h1>
+
+            <h4>All the colors linked to this group will be lost.</h4>
+          </div>
+          <div className='col-md-3'>
+          </div>
+        </div>
+      );
+    }
+    return Object.getOwnPropertyNames(Colorgroup).map((prop, key) => {
       if (prop === ID_PROP) {
         return null;
-      } else {
-        return (
-          <div key={key} className='form-group'>
-            <div className='col-md-2'>
-              {prop}
-            </div>
-            <div className='col-md-10'>
-              <input type='text' className='form-control'
-                     value={this.props.objectHolder[prop]}
-                     onChange={e => this.handleSelectedObjectChange(prop, e)}/>
-            </div>
-          </div>
-        );
       }
+      return (
+        <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            {prop}
+          </div>
+          <div className='col-md-10'>
+            <input type='text' className='form-control'
+                   value={this.props.objectHolder[prop]}
+                   onChange={e => this.handleSelectedObjectChange(prop, e)}/>
+          </div>
+        </div>
+      );
     })
+  };
+
+  renderColorStats = () => (
+    <p><b>{this.props.secondaryData.filter(c => c.colorgroupId === this.props.objectHolder.id).length + ' '}</b>
+      colors in this group.</p>
   );
 
   renderPage = () => {
@@ -282,27 +342,24 @@ export default class Table extends Component {
   );
 
   renderCreating = () => (
-    <section>
+    <section className='content'>
       <div className='row'>
         <div className='col-md-12'>
-          <section className='content'>
-            <div className='box box-info'>
-              <div className='box-header with-border'>
-                <h3 className='box-title'>Colorgroup information</h3>
-              </div>
-              <form className='form-horizontal'>
-                <div className='box-body'>
-                  {this.renderInputs()}
-                </div>
-                <div className='box-footer'>
-                  {this.renderCreatingButtons()}
-                </div>
-              </form>
+          <div className='box box-info'>
+            <div className='box-header with-border'>
+              <h3 className='box-title'>Colorgroup information</h3>
             </div>
-          </section>
+            <form className='form-horizontal'>
+              <div className='box-body'>
+                {this.renderInputs()}
+              </div>
+              <div className='box-footer'>
+                {this.renderCreatingButtons()}
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-
     </section>
   );
 
@@ -318,6 +375,7 @@ export default class Table extends Component {
               <form className='form-horizontal'>
                 <div className='box-body'>
                   {this.renderInputs()}
+                  {this.renderColorStats()}
                 </div>
                 <div className='box-footer'>
                   {this.renderEditingButtons()}
@@ -345,8 +403,6 @@ export default class Table extends Component {
         </main>
       );
     }
-
-
 
     return (
       <main>
