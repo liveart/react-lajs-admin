@@ -10,7 +10,7 @@ export default class extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    error: PropTypes.string,
+    errors: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     objectHolder: PropTypes.object,
@@ -29,7 +29,7 @@ export default class extends Component {
   };
 
   componentWillMount() {
-    this.props.restoreTableState();
+    this.props.restoreTableState(Font);
     this.props.fetchData();
   }
 
@@ -82,7 +82,11 @@ export default class extends Component {
     for (let i = 0; i < data.length; ++i) {
       let add = true;
       Object.getOwnPropertyNames(object).map(prop => {
-        if (typeof this.props.objectHolder[prop] !== 'undefined' && !(data[i])[prop].includes(this.props.objectHolder[prop])) {
+        if (typeof (this.props.data[i])[prop] === 'undefined') {
+          add = this.props.objectHolder[prop] === '';
+        } else if (typeof (data[i])[prop] === 'boolean') {
+          add = true;
+        } else if (!(data[i])[prop].includes(this.props.objectHolder[prop])) {
           add = false;
         }
       });
@@ -120,7 +124,7 @@ export default class extends Component {
                     <h5>Italic - <a href={location + item.fileItalic}> {item.fileItalic}</a></h5>
                     <h5>Bold & Italic - <a href={location + item.fileBoldItalic}>{item.fileBoldItalic}</a></h5>
                   </td>
-                )
+                );
               }
               if (prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
                 return null;
@@ -159,7 +163,7 @@ export default class extends Component {
   );
 
   renderDefButtons = () => (
-    <div className='pull-right'>
+    <div className='pull-right' style={{marginBottom: '3px'}}>
       <button type='button' className='btn btn-default'
               onClick={this.handleAddNew}>Add new font
       </button>
@@ -233,8 +237,8 @@ export default class extends Component {
         }
 
       });
-      const blob = new Blob(data, {type: "font/css"});
-      saveAs(blob, "fonts.css");
+      const blob = new Blob(data, {type: 'text/plain'});
+      saveAs(blob, 'fonts.css');
     }
   };
 
@@ -278,14 +282,14 @@ export default class extends Component {
 
   handleEdit = object => {
     if (this.props.status === STATUS_DEFAULT) {
-      this.props.enableEditing();
+      this.props.enableEditing(Font);
       this.props.selectRow(object);
     }
   };
 
   handleAddNew = () => {
     if (this.props.status === STATUS_DEFAULT) {
-      this.props.enableCreating();
+      this.props.enableCreating(Font);
     }
   };
 
@@ -293,6 +297,7 @@ export default class extends Component {
     if (this.props.status === STATUS_EDITING) {
       this.props.deleteEntity(this.props.objectHolder.id);
       this.props.enableDefaultStatus();
+      this.props.restoreTableState(Font);
     }
   };
 
@@ -313,7 +318,8 @@ export default class extends Component {
       });
       this.props.editEntity(this.props.objectHolder.id, entity);
       if (redirect) {
-        this.props.enableDefaultStatus()
+        this.props.enableDefaultStatus();
+        this.props.restoreTableState(Font);
       }
     } else if (this.props.status === STATUS_CREATING) {
       const properties = Object.getOwnPropertyNames(Font);
@@ -331,12 +337,14 @@ export default class extends Component {
       });
       this.props.createEntity(entity);
       this.props.enableDefaultStatus();
+      this.props.restoreTableState(Font);
     }
   };
 
   handleCancelBtnClick = () => {
     if (this.props.status !== STATUS_DEFAULT) {
       this.props.enableDefaultStatus();
+      this.props.restoreTableState(Font);
     }
   };
 
@@ -494,7 +502,7 @@ export default class extends Component {
   );
 
   render() {
-    const {loading, error} = this.props;
+    const {loading, errors} = this.props;
 
     if (loading) {
       return (
@@ -509,15 +517,15 @@ export default class extends Component {
       );
     }
 
-    if (error) {
-      return (<div className='alert alert-danger'>Error: {error}</div>);
-    }
-
     return (
       <main>
         <div className='content-header'>
           <h1>Navigator</h1>
         </div>
+        {
+          errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>Error:
+              {err}</div>)
+        }
         {this.renderPage()}
       </main>
     );

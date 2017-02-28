@@ -11,12 +11,13 @@ import {
 import Fonts from '../components/Fonts';
 
 const mapStateToProps = state => {
-  const {fonts, error, fontsLoading} = state.fonts;
+  const {fonts, fontsError, fontsLoading} = state.fonts;
   const {status, objectHolder} = state.table;
+  const errors = fontsError ? [fontsError] : [];
   return {
     title: 'Fonts',
     data: fonts,
-    error,
+    errors,
     loading: fontsLoading,
     objectHolder,
     status
@@ -34,11 +35,11 @@ const mapDispatchToProps = dispatch => {
     setEditingObjectProperty(propertyName, value) {
       dispatch(setObjectHolderProperty(propertyName, value));
     },
-    enableEditing() {
-      dispatch(enableEditing());
+    enableEditing(object) {
+      dispatch(enableEditing(object));
     },
-    enableCreating() {
-      dispatch(enableCreating());
+    enableCreating(object) {
+      dispatch(enableCreating(object));
     },
     enableDefaultStatus() {
       dispatch(enableDefaultStatus());
@@ -58,8 +59,8 @@ const mapDispatchToProps = dispatch => {
     deleteEntity(id) {
       dispatch(deleteFont(id));
     },
-    restoreTableState() {
-      dispatch(setInitialState());
+    restoreTableState(object) {
+      dispatch(setInitialState(object));
     }
   };
 };

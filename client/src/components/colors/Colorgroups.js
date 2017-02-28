@@ -161,7 +161,7 @@ export default class Table extends Component {
             </button>
             <button type='button' className='btn btn-default'
                     onClick={() => {
-                      this.setState({deleting: false})
+                      this.setState({deleting: false});
                     }}>Cancel
             </button>
           </div>
@@ -305,7 +305,7 @@ export default class Table extends Component {
           </div>
         </div>
       );
-    })
+    });
   };
 
   renderColorStats = () => (
