@@ -22,6 +22,14 @@ export function* retrieve(endpoint) {
   return (yield req.json());
 }
 
+export function* retrieveOneById(endpoint, id) {
+  const req = yield fetch(apiRoot + endpoint + '/' + id);
+  if (!(req.status >= 200 && req.status < 300)) {
+    throw req.statusText;
+  }
+  return yield req.json();
+}
+
 export function* retrieveNumber(endpoint) {
   const req = yield fetch(apiRoot + endpoint + '/count');
   if (!(req.status >= 200 && req.status < 300)) {
@@ -54,5 +62,13 @@ export function* remove(endpoint, id) {
   if (!(req.status >= 200 && req.status < 300)) {
     throw new Error (req.statusText);
   }
+  return (yield req.json());
+}
+
+export function* upload(endpoint, obj) {
+  const req = yield fetch(apiRoot + endpoint + '/upload', {
+    method: 'POST',
+    body: obj
+  });
   return (yield req.json());
 }

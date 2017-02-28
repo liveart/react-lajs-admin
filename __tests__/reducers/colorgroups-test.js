@@ -5,7 +5,7 @@ import * as actionTypes from '../../client/src/actionTypes/colorgroups';
 import reducer from '../../client/src/reducers/colorgroups';
 
 const INITIAL_STATE = {
-  colorgroups: [], colorgroupsNumber: 0, colorgroupsError: null, colorgroupsLoading: false
+  colorgroup: null, colorgroups: [], colorgroupsNumber: 0, error: null, loading: false
 };
 
 describe('colorgroups reducer', () => {
@@ -20,6 +20,13 @@ describe('colorgroups reducer', () => {
       reducer(INITIAL_STATE, {
         type: actionTypes.FETCH_COLORGROUPS
       })).toEqual({...INITIAL_STATE, colorgroupsLoading: true});
+  });
+
+  test('should handle ' + actionTypes.FETCH_COLORGROUP_BY_ID, () => {
+    expect(
+      reducer(INITIAL_STATE, {
+        type: actionTypes.FETCH_COLORGROUP_BY_ID
+      })).toEqual({...INITIAL_STATE, loading: true});
   });
 
   test('should handle ' + actionTypes.FETCH_COLORGROUPS_NUMBER, () => {
@@ -54,12 +61,14 @@ describe('colorgroups reducer', () => {
     expect(
       reducer(INITIAL_STATE, {
         type: actionTypes.COLORGROUP_OPERATION_SUCCESS,
+        colorgroup: {a: 123},
         colorgroups: [{a: 123, b: 456, c: {}}],
         colorgroupsNumber: 3,
         colorgroupsError: null,
         colorgroupsLoading: false
       })).toEqual({
       ...INITIAL_STATE,
+      colorgroup: {a: 123},
       colorgroups: [{a: 123, b: 456, c: {}}],
       colorgroupsNumber: 3,
       colorgroupsError: null,

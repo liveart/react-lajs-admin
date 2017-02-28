@@ -6,6 +6,10 @@ export function* watchFetchColorgroups() {
   yield takeEvery(actionTypes.FETCH_COLORGROUPS, colorgroupSagas.fetchColorgroups);
 }
 
+export function* watchFetchColorgroupById() {
+  yield takeEvery(actionTypes.FETCH_COLORGROUP_BY_ID, colorgroupSagas.fetchColorgroupById);
+}
+
 export function* watchFetchColorgroupsNumber() {
   yield takeEvery(actionTypes.FETCH_COLORGROUPS_NUMBER, colorgroupSagas.fetchColorgroupsNumber);
 }

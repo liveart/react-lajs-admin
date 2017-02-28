@@ -4,7 +4,7 @@ import * as actionTypes from '../../client/src/actionTypes/colors';
 import reducer from '../../client/src/reducers/colors';
 
 const INITIAL_STATE = {
-  colors: [], colorsNumber: 0, colorsError: null, colorsLoading: false
+  color: null, colors: [], colorsNumber: 0, colorsError: null, colorsLoading: false
 };
 
 describe('colors reducer', () => {
@@ -18,6 +18,13 @@ describe('colors reducer', () => {
     expect(
       reducer(INITIAL_STATE, {
         type: actionTypes.FETCH_COLORS
+      })).toEqual({...INITIAL_STATE, colorsLoading: true});
+  });
+
+  test('should handle ' + actionTypes.FETCH_COLOR_BY_ID, () => {
+    expect(
+      reducer(INITIAL_STATE, {
+        type: actionTypes.FETCH_COLOR_BY_ID
       })).toEqual({...INITIAL_STATE, colorsLoading: true});
   });
 
@@ -53,12 +60,14 @@ describe('colors reducer', () => {
     expect(
       reducer(INITIAL_STATE, {
         type: actionTypes.COLOR_OPERATION_SUCCESS,
+        color: {a: 1},
         colors: [{a: 1, b: 2}],
         colorsNumber: 5,
         colorsError: null,
         colorsLoading: false
       })).toEqual({
       ...INITIAL_STATE,
+      color: {a: 1},
       colors: [{a: 1, b: 2}],
       colorsNumber: 5,
       colorsError: null,

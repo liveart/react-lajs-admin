@@ -1,10 +1,10 @@
 'use strict';
 
-import * as types from '../../client/src/actions/fonts';
+import * as types from '../../client/src/actionTypes/fonts';
 import reducer from '../../client/src/reducers/fonts';
 
 const INITIAL_STATE = {
-  fontsList: [], fontsNumber: 0, fontsError: null, fontsLoading: false
+  font: null, fonts: [], fontsNumber: 0, fontsError: null, fontsLoading: false
 };
 
 describe('fonts reducer', () => {
@@ -21,6 +21,13 @@ describe('fonts reducer', () => {
       })).toEqual({...INITIAL_STATE, fontsLoading: true});
   });
 
+  test('should handle ' + types.FETCH_FONT_BY_ID, () => {
+    expect(
+      reducer(INITIAL_STATE, {
+        type: types.FETCH_FONT_BY_ID
+      })).toEqual({...INITIAL_STATE, fontsLoading: true});
+  });
+
   test('should handle ' + types.FETCH_FONTS_NUMBER, () => {
     expect(
       reducer(INITIAL_STATE, {
@@ -34,6 +41,14 @@ describe('fonts reducer', () => {
         type: types.CREATE_FONT
       })).toEqual({...INITIAL_STATE, fontsLoading: true});
   });
+
+  test('should handle ' + types.UPLOAD_FONT_FILE, () => {
+    expect(
+      reducer(INITIAL_STATE, {
+        type: types.UPLOAD_FONT_FILE
+      })).toEqual({...INITIAL_STATE, fontsLoading: true});
+  });
+
 
   test('should handle ' + types.EDIT_FONT, () => {
     expect(
@@ -53,14 +68,16 @@ describe('fonts reducer', () => {
     expect(
       reducer(INITIAL_STATE, {
         type: types.FONTS_OPERATION_SUCCESS,
+        font: {a: 1},
         fonts: [{a: 1, b: 2}],
         fontsNumber: 5,
         fontsError: null,
         fontsLoading: false
       })).toEqual({
-      ...INITIAL_STATE, fontsList: [{a: 1, b: 2}],
-      fontsNumber: 5,
-      fontsError: null,
+      ...INITIAL_STATE,
+      font: {a: 1},
+      fonts: [{a: 1, b: 2}],
+      fontsNumber: 5,fontsError: null,
       fontsLoading: false
     });
   });

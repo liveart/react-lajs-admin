@@ -2,7 +2,9 @@ import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 import * as FontModel from '../../../common/models/font.json';
+import {saveAs} from 'file-saver';
 const Font = FontModel.properties;
+const location = 'localhost:3000/files/fonts/';
 
 export default class extends Component {
   static propTypes = {
@@ -21,7 +23,9 @@ export default class extends Component {
     editEntity: PropTypes.func.isRequired,
     deleteEntity: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired
+    restoreTableState: PropTypes.func.isRequired,
+    uploadFontFile: PropTypes.func.isRequired,
+    uploadVector: PropTypes.func.isRequired
   };
 
   componentWillMount() {
@@ -31,11 +35,16 @@ export default class extends Component {
 
   renderTableHeadings = object => (
     Object.getOwnPropertyNames(object).map((prop, i) => {
-      if (prop === ID_PROP) {
+      if (prop === ID_PROP || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'boldAllowed' || prop === 'italicAllowed' || prop === 'vector') {
         return null;
-      } else {
-        return <th key={i}>{prop}</th>;
       }
+
+      if (prop === 'fileNormal') {
+        return <th key={i}>Files</th>;
+      }
+
+      return <th key={i}>{prop}</th>;
+
     })
   );
 
@@ -46,16 +55,24 @@ export default class extends Component {
   renderTableSortRow = object => (
     <tr key='sortRow'>
       {Object.getOwnPropertyNames(object).map((prop, i) => {
-        if (prop === ID_PROP) {
+        if (prop === ID_PROP || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'boldAllowed' || prop === 'italicAllowed' || prop === 'vector') {
           return null;
-        } else {
-          return <td key={i}>
-            <FormControl type='text'
-                         value={this.props.objectHolder[prop]}
-                         onChange={e => this.handleSelectedObjectChange(prop, e)}
-            />
-          </td>;
         }
+        if (prop === 'fileNormal') {
+          return <th key={i}></th>;
+        }
+        if (prop === 'vector') {
+          return <th key={i}></th>;
+        }
+
+        return <td key={i}>
+          <FormControl type='text'
+                       value={this.props.objectHolder[prop]}
+                       onChange={e => this.handleSelectedObjectChange(prop, e)}
+          />
+        </td>;
+
+
       })}
     </tr>
   );
@@ -92,18 +109,30 @@ export default class extends Component {
             onClick={() => this.handleEdit(item)}>
           {
             Object.getOwnPropertyNames(object).map((prop, j) => {
-              if (prop === ID_PROP) {
+              if (prop === ID_PROP || prop === 'boldAllowed' || prop === 'italicAllowed' || prop === 'vector') {
                 return null;
-              } else {
-                return <td key={j}>{item[prop]}</td>;
               }
-
+              if (prop === 'fileNormal') {
+                return (
+                  <td key={j}>
+                    <h5>Normal - <a href={location + item.fileNormal}>{item.fileNormal}</a></h5>
+                    <h5>Bold - <a href={location + item.fileBold}> {item.fileBold}</a></h5>
+                    <h5>Italic - <a href={location + item.fileItalic}> {item.fileItalic}</a></h5>
+                    <h5>Bold & Italic - <a href={location + item.fileBoldItalic}>{item.fileBoldItalic}</a></h5>
+                  </td>
+                )
+              }
+              if (prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
+                return null;
+              }
+              return <td key={j}>{item[prop]}</td>;
             })
           }
         </tr>
       );
     });
   };
+
 
   renderTable = (data, object) => (
     <div className='panel panel-default'>
@@ -134,8 +163,80 @@ export default class extends Component {
       <button type='button' className='btn btn-default'
               onClick={this.handleAddNew}>Add new font
       </button>
+      <button type='button' className='btn btn-default'
+              onClick={this.handleCSSDownloadBtnClick}>CSS
+      </button>
+      <button type='button' className='btn btn-default'
+              onClick={this.handleJSONDownloadBtnClick}>JSON
+      </button>
     </div>
   );
+
+  handleJSONDownloadBtnClick = () => {
+    if (this.props.status === STATUS_DEFAULT) {
+      const fonts = this.props.data;
+      const data = [];
+      data.push('"fonts": [\n');
+      fonts.forEach(entry => {
+        data.push('{');
+        Object.getOwnPropertyNames(entry).map(prop => {
+          if (prop === 'id' || prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
+            return null;
+          }
+          data.push('' + '"' + prop + '":' + ' ' + '"' + entry[prop] + '" ');
+        });
+        data.push('}\n');
+
+      });
+      data.push(']');
+      const blob = new Blob(data, {type: "application/json"});
+      saveAs(blob, "fonts.json");
+    }
+  };
+
+  handleCSSDownloadBtnClick = () => {
+    if (this.props.status === STATUS_DEFAULT) {
+      const fonts = this.props.data;
+      const data = [];
+      fonts.forEach(font => {
+        if (font.fileNormal) {
+          data.push('@font-face {\n');
+          data.push("    font-family: '" + font.fontFamily + "';\n");
+          data.push('    src: url("//' + location + font.fileNormal + '");\n');
+          data.push("    font-weight: normal;\n");
+          data.push("    font-style: normal;\n");
+          data.push('}\n');
+        }
+        if (font.fileBold) {
+          data.push('@font-face {\n');
+          data.push("    font-family: '" + font.fontFamily + "';\n");
+          data.push('    src: url("//' + location + font.fileBold + '");\n');
+          data.push("    font-weight: bold;\n");
+          data.push("    font-style: normal;\n");
+          data.push('}\n');
+        }
+        if (font.fileItalic) {
+          data.push('@font-face {\n');
+          data.push("    font-family: '" + font.fontFamily + "';\n");
+          data.push('    src: url("//' + location + font.fileItalic + '");\n');
+          data.push("    font-weight: normal;\n");
+          data.push("    font-style: italic;\n");
+          data.push('}\n');
+        }
+        if (font.fileBoldItalic) {
+          data.push('@font-face {\n');
+          data.push("    font-family: '" + font.fontFamily + "';\n");
+          data.push('    src: url("//' + location + font.fileBoldItalic + '");\n');
+          data.push("    font-weight: bold;\n");
+          data.push("    font-style: italic;\n");
+          data.push('}\n');
+        }
+
+      });
+      const blob = new Blob(data, {type: "font/css"});
+      saveAs(blob, "fonts.css");
+    }
+  };
 
   renderEditingButtons = () => (
     <div>
@@ -203,6 +304,12 @@ export default class extends Component {
         if (prop !== ID_PROP) {
           entity[prop] = this.props.objectHolder[prop] || undefined;
         }
+        if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'vector') {
+          if (this.props.objectHolder[prop] !== undefined) {
+            this.handleFileUpload(prop, this.props.objectHolder[prop]);
+            entity[prop] = this.props.objectHolder[prop].name;
+          }
+        }
       });
       this.props.editEntity(this.props.objectHolder.id, entity);
       if (redirect) {
@@ -214,6 +321,12 @@ export default class extends Component {
       properties.forEach(prop => {
         if (prop !== ID_PROP) {
           entity[prop] = this.props.objectHolder[prop] || undefined;
+        }
+        if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'vector') {
+          if (this.props.objectHolder[prop] !== undefined) {
+            this.handleFileUpload(prop, this.props.objectHolder[prop]);
+            entity[prop] = this.props.objectHolder[prop].name;
+          }
         }
       });
       this.props.createEntity(entity);
@@ -227,24 +340,79 @@ export default class extends Component {
     }
   };
 
+  handleFileUpload = (prop, file) => {
+    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
+      if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic')
+        this.props.uploadFontFile(file);
+      if (prop === 'vector')
+        this.props.uploadVector(file);
+    }
+  };
+
+  handleFileChoose = (prop, e) => {
+    this.props.setEditingObjectProperty(prop, e.target.files[0]);
+  };
+
   renderInputs = () => (
     Object.getOwnPropertyNames(Font).map((prop, key) => {
       if (prop === ID_PROP) {
         return null;
-      } else {
-        return (
-          <div key={key} className='form-group'>
-            <div className='col-md-2'>
-              {prop}
-            </div>
-            <div className='col-md-10'>
-              <input type='text' className='form-control'
-                     value={this.props.objectHolder[prop]}
-                     onChange={e => this.handleSelectedObjectChange(prop, e)}/>
-            </div>
-          </div>
-        );
       }
+
+      if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'fileBoldItalic') {
+
+        return ( <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            {prop}
+          </div>
+          <div className='col-md-10'>
+            <input type='file' className='form-control' accept='.woff'
+                   onChange={e => this.handleFileChoose(prop, e)}/>
+          </div>
+        </div>);
+      }
+      if (prop === 'vector') {
+        return ( <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            {prop}
+          </div>
+          <div className='col-md-10'>
+            <input type='file' className='form-control'
+                   onChange={e => this.handleFileChoose(prop, e)}/>
+          </div>
+        </div>);
+      }
+      if (prop === 'boldAllowed' || prop === 'italicAllowed') {
+        return ( <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            {prop}
+          </div>
+          <div className='col-md-10'>
+            <select type='text' className='form-control'
+                    value={this.props.objectHolder[prop]}
+                    onChange={e => this.handleSelectedObjectChange(prop, e)}>
+              <option value=''>...</option>
+              <option value='true'>YES</option>
+              <option value='false'>NO</option>
+            </select>
+
+          </div>
+        </div>);
+      }
+
+      return (
+        <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            {prop}
+          </div>
+          <div className='col-md-10'>
+            <input type='text' className='form-control'
+                   value={this.props.objectHolder[prop]}
+                   onChange={e => this.handleSelectedObjectChange(prop, e)}/>
+          </div>
+        </div>
+      );
+
     })
   );
 

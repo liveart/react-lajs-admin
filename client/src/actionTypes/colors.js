@@ -1,4 +1,5 @@
 export const FETCH_COLORS = 'FETCH_COLORS';
+export const FETCH_COLOR_BY_ID = 'FETCH_COLOR_BY_ID';
 export const FETCH_COLORS_NUMBER = 'FETCH_COLORS_NUMBER';
 export const CREATE_COLOR = 'CREATE_COLOR';
 export const EDIT_COLOR = 'EDIT_COLOR';

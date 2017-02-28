@@ -13,6 +13,15 @@ export function* fetchColors() {
   }
 }
 
+export function* fetchColorById(action) {
+  try {
+    const res = yield* api.retrieve(endpoint, action.id);
+    yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS, color: res});
+  } catch (e) {
+    yield dispatch({type: actionTypes.COLOR_OPERATION_FAILURE, message: e});
+  }
+}
+
 export function* fetchColorsNumber() {
   try {
     const res = yield* api.retrieveNumber(endpoint);

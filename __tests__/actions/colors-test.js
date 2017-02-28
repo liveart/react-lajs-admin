@@ -10,6 +10,14 @@ describe('Color Actions', () => {
     };
     expect(C.fetchColors()).toEqual(expectedAction);
   });
+  test('should create an action to fetch color by id', () => {
+    const id = 15;
+    const expectedAction = {
+      type: actionTypes.FETCH_COLOR_BY_ID,
+      id
+    };
+    expect(C.fetchColorById(id)).toEqual(expectedAction);
+  });
 
   test('should create an action to fetch colors number', () => {
     const expectedAction = {

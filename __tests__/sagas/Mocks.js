@@ -24,6 +24,11 @@ api.remove = jest.fn(function*() {
   yield {};
 });
 
+api.upload = jest.fn(function*() {
+  yield {};
+});
+
+
 describe('mock api', () => {
   test('intentionally left blank', () => {
     //

@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {fetchFonts, createFont, editFont, deleteFont} from '../actions/fonts';
+import {fetchFonts, createFont, editFont, deleteFont, uploadFontFile, uploadVectors} from '../actions/fonts';
 import {
   selectRow,
   enableEditing,
@@ -11,11 +11,11 @@ import {
 import Fonts from '../components/Fonts';
 
 const mapStateToProps = state => {
-  const {fontsList, error, fontsLoading} = state.fonts;
+  const {fonts, error, fontsLoading} = state.fonts;
   const {status, objectHolder} = state.table;
   return {
     title: 'Fonts',
-    data: fontsList,
+    data: fonts,
     error,
     loading: fontsLoading,
     objectHolder,
@@ -48,6 +48,12 @@ const mapDispatchToProps = dispatch => {
     },
     editEntity(id, newColor) {
       dispatch(editFont(id, newColor));
+    },
+    uploadFontFile(fileFont) {
+      dispatch(uploadFontFile(fileFont));
+    },
+    uploadVector(vectorFile) {
+      dispatch(uploadVectors(vectorFile));
     },
     deleteEntity(id) {
       dispatch(deleteFont(id));

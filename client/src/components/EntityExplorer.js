@@ -2,6 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
 import {Table, FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import {saveAs} from 'file-saver';
+
 
 export default class EntityExplorer extends Component {
   static propTypes = {
@@ -16,6 +18,7 @@ export default class EntityExplorer extends Component {
     enableCreating: PropTypes.func.isRequired,
     enableDefaultStatus: PropTypes.func.isRequired,
     createEntity: PropTypes.func.isRequired,
+    upload: PropTypes.func.isRequired,
     editEntity: PropTypes.func.isRequired,
     deleteEntity: PropTypes.func.isRequired
   };
@@ -53,7 +56,6 @@ export default class EntityExplorer extends Component {
     if (!entities.length) {
       return null;
     }
-
     return entities.map(item => {
       if (this.props.status === STATUS_EDITING && item[ID_PROP] === this.props.selectedRowId) {
         return (
@@ -90,7 +92,15 @@ export default class EntityExplorer extends Component {
   renderEntitiesTable = entities => (
     <Table responsive hover fill>
       <thead>
-      <tr>{this.renderEntitiesTableHeading(entities)}</tr>
+      <tr>
+        <a href='api/fonts'>view JSON</a>
+      </tr>
+      <tr>
+        <a href='api/fontFiles'>view CSS</a>
+      </tr>
+      <tr>
+        {this.renderEntitiesTableHeading(entities)}
+      </tr>
       </thead>
       <tbody>
       {this.props.status === STATUS_CREATING ? this.renderCreatingRow(entities) : null}
@@ -99,11 +109,26 @@ export default class EntityExplorer extends Component {
     </Table>
   );
 
+
   renderButtons = () => (this.props.status === STATUS_EDITING || this.props.status === STATUS_CREATING ?
     this.renderEditingButtons() : this.renderDefButtons());
 
+
+  renderFileUpload = () => (
+    <label className="btn btn-default btn-file">
+      Upload <input type="file" accept=".woff" id="woff" onClick={this.handleFileBtnClick}/>
+    </label>
+  );
+
+
   renderDefButtons = () => (
     <div className="box-tools">
+      <button className="btn" title="downloadJSON" onClick={this.handleJSONDownloadBtnClick}>
+        <i className="fa fa-file"/></button>
+      <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
+      <button className="btn" title="AddWOFF" onClick={this.handleFileBtnClick}>
+        <i className="fa fa-file"/></button>
+      <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
       <button className="btn" title="Add" onClick={this.handleCreateBtnClick}><i className="fa fa-plus"/></button>
       <div style={{'width': '5px', 'height': 'auto', 'display': 'inline-block'}}></div>
       <button className="btn" title="Edit" onClick={this.handleEditBtnClick}>
@@ -133,6 +158,44 @@ export default class EntityExplorer extends Component {
   handleCreateBtnClick = () => {
     if (this.props.status === STATUS_DEFAULT) {
       this.props.enableCreating();
+    }
+  };
+
+  handleFileBtnClick = () => {
+    if (this.props.status === STATUS_DEFAULT) {
+      const inputFile = document.getElementById('woff').files;
+      const file = inputFile[0];
+      this.props.upload(file);
+    }
+  };
+
+  handleJSONDownloadBtnClick = () => {
+    if (this.props.status === STATUS_DEFAULT) {
+      const fonts = this.props.entitiesList;
+      const data = [];
+      data.push('"fonts": [\n');
+      fonts.forEach(function(entry) {
+        data.push(JSON.stringify(entry));
+        data.push( '\n');
+      });
+      data.push( ']');
+      const blob = new Blob(data, {type: "application/json"});
+      saveAs(blob, "fonts.json");
+    }
+  };
+
+  handleCSSDownloadBtnClick = () => {
+    if (this.props.status === STATUS_DEFAULT) {
+      const fonts = this.props.entitiesList;
+      const data = [];
+      fonts.forEach(function(entry) {
+        data.push('@font-face {\n');
+        data.push(entry);
+        data.push( '}\n');
+      });
+      data.push( ']');
+      const blob = new Blob(data, {type: "application/json"});
+      saveAs(blob, "fonts.json");
     }
   };
 
@@ -207,6 +270,7 @@ export default class EntityExplorer extends Component {
               <div className="box box-default">
                 <div className="box-header with-border">
                   <h3 className="box-title">Fonts</h3>
+                  {this.renderFileUpload()}
                   {this.renderButtons()}
                 </div>
                 <div className="box-body" style={{'maxHeight': '80vh', 'overflowY': 'scroll'}}>
@@ -220,3 +284,4 @@ export default class EntityExplorer extends Component {
     );
   }
 }
+
