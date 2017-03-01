@@ -5,7 +5,7 @@ import {
   enableDefaultStatus, setInitialState
 } from '../../actions/table';
 import {fetchColorgroups, createColorgroup, editColorgroup, deleteColorgroup} from '../../actions/colorgroups';
-import {fetchColors, deleteColor} from '../../actions/colors';
+import {fetchColors, deleteColor, editColor} from '../../actions/colors';
 import Table from '../../components/colors/Colorgroups';
 
 const mapStateToProps = state => {
@@ -60,6 +60,9 @@ const mapDispatchToProps = dispatch => {
     },
     deleteSecondary(id) {
       dispatch(deleteColor(id));
+    },
+    editSecondary(id, newColor) {
+      dispatch(editColor(id, newColor));
     },
     restoreTableState(object) {
       dispatch(setInitialState(object));
