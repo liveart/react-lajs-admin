@@ -226,6 +226,8 @@ export default class Table extends Component {
 
   handleDeleteBtnClick = (confirmed) => {
     if (this.props.status === STATUS_EDITING) {
+      this.props.fetchData();
+      this.props.fetchSecondaryData();
       if (confirmed) {
         if (this.state.selectedValue === DELETE_COLORS) {
           this.props.secondaryData.map(c => {
