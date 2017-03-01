@@ -1,0 +1,67 @@
+{
+  "name": "Font",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "sqlite3": {
+        "columnName": "name"
+      }
+    },
+    "fontFamily": {
+      "type": "string",
+      "required": true,
+      "sqlite3": {
+        "columnName": "fontFamily"
+      }
+    },
+    "fileNormal":{
+      "type": "string",
+      "sqlite3": {
+        "columnName": "fileNormal"
+      }
+    },
+    "fileBold":{
+      "type": "string",
+      "sqlite3": {
+        "columnName": "fileBold"
+      }
+    },
+    "fileItalic":{
+      "type": "string",
+      "sqlite3": {
+        "columnName": "fileItalic"
+      }
+    },
+    "fileBoldItalic":{
+      "type": "string",
+      "sqlite3": {
+        "columnName": "fileBoldItalic"
+      }
+    },
+    "boldAllowed": {
+      "type": "boolean",
+      "sqlite3": {
+        "columnName": "boldAllowed"
+      }
+    },
+    "italicAllowed": {
+      "type": "boolean",
+      "sqlite3": {
+        "columnName": "italicAllowed"
+      }
+    },
+    "vector": {
+      "type": "string",
+      "sqlite3": {
+        "columnName": "vector"
+      }
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

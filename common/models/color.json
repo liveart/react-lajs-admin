@@ -1,0 +1,29 @@
+{
+  "name": "color",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "colorgroupId": {
+      "type": "string",
+      "required": false
+    },
+    "value": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "colorgroup": {
+      "type": "belongsTo",
+      "model": "colorgroup",
+      "foreignKey": "colorgroupId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

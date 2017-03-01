@@ -1,33 +1,43 @@
-const node_dir = __dirname + '/node_modules';
+const webpack = require('webpack');
+const path = require("path");
 
 module.exports = {
-  context: __dirname + "/client/src",
+  context: __dirname,
 
-  entry: {
-    javascript: "./app.js"
-  },
+  entry: './client/src/',
 
   output: {
-    filename: "app.js",
-    path: __dirname + "/client/dist",
+    filename: 'bundle.js',
+    publicPath: '/assets/',
+    path: path.resolve(__dirname, "client/dist"),
   },
 
   resolve: {
-    alias: {
-      react: node_dir + '/react',
-      reactDom: node_dir + '/react-dom',
-      velocity: node_dir + '/velocity-animate'
-    },
-    extensions: ['', '.js', '.jsx', '.json']
+    extensions: ['.js', '.jsx'],
+    modules: [
+      path.join(__dirname, "src"),
+      "node_modules"
+    ]
   },
 
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.js?$/,
         exclude: /node_modules/,
-        loaders: ["babel-loader"]
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015'],
+          plugins: ['transform-runtime', 'transform-class-properties']
+        }
       }
     ]
-  }
+  },
+
+  plugins: [
+    new webpack.ProvidePlugin({
+      'Promise': 'es6-promise',
+      'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
+    })
+  ]
 };
