@@ -10,7 +10,6 @@ export default class Overview extends Component {
     loading: PropTypes.bool.isRequired,
     error: PropTypes.object,
     fetchFontsNumber: PropTypes.func.isRequired,
-    fetchFontFilesNumber: PropTypes.func.isRequired,
     fetchColorsNumber: PropTypes.func.isRequired
   };
 
