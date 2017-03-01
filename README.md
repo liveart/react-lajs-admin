@@ -25,3 +25,11 @@ npm start
 ```
 Note that the bundle file dependency has to be changed to _/dist/bundle.js_ when running the version that is in 
 development branch without dev server (which is not recommended).
+
+
+
+### API endpoints for LA component:
+
+colors: */api/liveart/colors*
+
+fonts: */api/liveart/fonts*
