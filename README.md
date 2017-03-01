@@ -25,6 +25,3 @@ npm start
 ```
 Note that the bundle file dependency has to be changed to _/dist/bundle.js_ when running the version that is in 
 development branch without dev server (which is not recommended).
-
-Any version from master branch will have everything ready and 
-set up for production use.
