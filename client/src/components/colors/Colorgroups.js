@@ -1,8 +1,13 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
+import {RadioGroup, Radio} from 'react-radio-group';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
 const Colorgroup = ColorgroupModel.properties;
+
+const DELETE_COLORS = 'DELETE_COLORS';
+const MOVE_COLORS_TO_OTHER_GROUP = 'MOVE_COLORS_TO_OTHER_GROUP';
+const LEAVE_COLORS_WITHOUT_GROUP = 'LEAVE_COLORS_WITHOUT_GROUP';
 
 export default class Table extends Component {
   static propTypes = {
@@ -27,7 +32,7 @@ export default class Table extends Component {
 
   constructor() {
     super();
-    this.state = {deleting: false};
+    this.state = {deleting: false, selectedValue: DELETE_COLORS, newGroup: ''};
   }
 
   componentWillMount() {
@@ -161,7 +166,7 @@ export default class Table extends Component {
             </button>
             <button type='button' className='btn btn-default'
                     onClick={() => {
-                      this.setState({deleting: false});
+                      this.setState({...this.state, deleting: false});
                     }}>Cancel
             </button>
           </div>
@@ -221,18 +226,34 @@ export default class Table extends Component {
 
   handleDeleteBtnClick = (confirmed) => {
     if (this.props.status === STATUS_EDITING) {
+      this.props.fetchData();
+      this.props.fetchSecondaryData();
       if (confirmed) {
-        this.props.secondaryData.map(c => {
-          if (c.colorgroupId === this.props.objectHolder.id) {
-            this.props.deleteSecondary(c.id);
-          }
-        });
+        if (this.state.selectedValue === DELETE_COLORS) {
+          this.props.secondaryData.map(c => {
+            if (c.colorgroupId === this.props.objectHolder.id) {
+              this.props.deleteSecondary(c.id);
+            }
+          });
+        } else if (this.state.selectedValue === MOVE_COLORS_TO_OTHER_GROUP) {
+          this.props.secondaryData.map(c => {
+            if (c.colorgroupId === this.props.objectHolder.id) {
+              this.props.editSecondary(c.id, {...c, colorgroupId: this.state.newGroup});
+            }
+          });
+        } else if (this.state.selectedValue === LEAVE_COLORS_WITHOUT_GROUP) {
+          this.props.secondaryData.map(c => {
+            if (c.colorgroupId === this.props.objectHolder.id) {
+              this.props.editSecondary(c.id, {...c, colorgroupId: ''});
+            }
+          });
+        }
         this.props.deleteEntity(this.props.objectHolder.id);
         this.props.enableDefaultStatus();
         this.props.restoreTableState(Colorgroup);
-        this.setState({deleting: false});
+        this.setState({...this.state, deleting: false});
       } else {
-        this.setState({deleting: true});
+        this.setState({...this.state, deleting: true});
       }
     }
   };
@@ -272,6 +293,18 @@ export default class Table extends Component {
     }
   };
 
+  handleColorsActionOption = option => {
+    if (this.state.deleting) {
+      this.setState({...this.state, selectedValue: option});
+    }
+  };
+
+  handleMoveToGroup = e => {
+    if (this.state.deleting) {
+      this.setState({...this.state, newGroup: e.target.value});
+    }
+  };
+
   renderInputs = () => {
     if (this.state.deleting) {
       return (
@@ -279,14 +312,34 @@ export default class Table extends Component {
           <div className='col-md-3'>
           </div>
           <div className='col-md-6'>
-            <h1>Are you sure?</h1>
-
-            <h4>All the colors linked to this group will be lost.</h4>
+            <h1>Choose an action</h1>
+            <div className='form-group'>
+              <RadioGroup name='fruit' selectedValue={this.state.selectedValue}
+                          onChange={this.handleColorsActionOption}>
+                <div className='form-group'>
+                  <Radio value={DELETE_COLORS}/>&nbsp; Delete all the colors linked to this group
+                </div>
+                <div className='form-group'>
+                  <Radio value={MOVE_COLORS_TO_OTHER_GROUP}/>&nbsp; Move colors to other group &nbsp;
+                  <select
+                    value={this.state.newGroup}
+                    onChange={this.handleMoveToGroup}>
+                    {this.props.data.map((cg, key) => (
+                      <option key={key} value={cg.id}>{cg.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className='form-group'>
+                  <Radio value={LEAVE_COLORS_WITHOUT_GROUP}/>&nbsp; Unlink and leave the colors without any group
+                </div>
+              </RadioGroup>
+            </div>
           </div>
           <div className='col-md-3'>
           </div>
         </div>
-      );
+      )
+        ;
     }
     return Object.getOwnPropertyNames(Colorgroup).map((prop, key) => {
       if (prop === ID_PROP) {
