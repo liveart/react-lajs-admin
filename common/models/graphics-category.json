@@ -1,0 +1,26 @@
+{
+  "name": "graphicsCategory",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "thumb": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
