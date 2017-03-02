@@ -1,10 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
-const DELETE_COLORS = 'DELETE_COLORS';
-const MOVE_COLORS_TO_OTHER_GROUP = 'MOVE_COLORS_TO_OTHER_GROUP';
-const LEAVE_COLORS_WITHOUT_GROUP = 'LEAVE_COLORS_WITHOUT_GROUP';
-const User = {username: '', role: ''};
+const User = {email: ''};
 
 export default class extends Component {
   static propTypes = {
@@ -20,34 +17,29 @@ export default class extends Component {
     enableCreating: PropTypes.func.isRequired,
     enableDefaultStatus: PropTypes.func.isRequired,
     registerUser: PropTypes.func.isRequired,
-    editUser: PropTypes.func.isRequired,
-    deleteUser: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired
+    restoreTableState: PropTypes.func.isRequired,
+    token: PropTypes.string
   };
 
   componentWillMount() {
     this.props.restoreTableState(User);
-    this.props.fetchUsers();
+    this.props.fetchUsers(this.props.token);
   }
 
   handleSelectedObjectChange = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
 
-  renderTableData = (data, object) => {
+  renderTableData = data => {
     if (!data.length) {
       return null;
     }
-
-    const rows = this.sortRows(data, object);
-
-    return rows.map((item, k) => {
+    return data.map((item, k) => {
 
       return (
         <tr key={k} onClick={() => this.handleEdit(item)}>
-          <td>{item.username}</td>
-          <td key={i}>{item.role}</td>
+          <td>{item.email}</td>
         </tr>
       );
     });
@@ -59,8 +51,7 @@ export default class extends Component {
         <table className='table no-margin table-hover table-bordered'>
           <thead>
           <tr key='trhead'>
-            <th>username</th>
-            <th>type</th>
+            <th>email</th>
           </tr>
           </thead>
           <tbody>
@@ -82,45 +73,27 @@ export default class extends Component {
     </div>
   );
 
-  renderEditingButtons = () => {
-    if (this.state.deleting) {
-      return (
-        <div>
-          <div className='pull-right'>
-            <button type='button' className='btn btn-danger'
-                    onClick={() => this.handleDeleteBtnClick(true)}>Delete
-            </button>
-            <button type='button' className='btn btn-default'
-                    onClick={() => {
-                      this.setState({...this.state, deleting: false});
-                    }}>Cancel
-            </button>
-          </div>
-        </div>
-      );
-    }
-    return (
-      <div>
-        <div className='pull-left'>
-          <button type='button' className='btn btn-default'
-                  onClick={this.handleCancelBtnClick}>Cancel
-          </button>
-        </div>
-        <div className='pull-right'>
-          <button type='button' className='btn btn-primary'
-                  onClick={() => this.handleSaveBtnClick(true)}>Save
-          </button>
-          <button type='button' className='btn btn-primary'
-                  onClick={() => this.handleSaveBtnClick(false)}>Save and
-            continue edit
-          </button>
-          <button type='button' className='btn btn-danger'
-                  onClick={() => this.handleDeleteBtnClick(false)}>Delete
-          </button>
-        </div>
+  renderEditingButtons = () => (
+    <div>
+      <div className='pull-left'>
+        <button type='button' className='btn btn-default'
+                onClick={this.handleCancelBtnClick}>Cancel
+        </button>
       </div>
-    );
-  };
+      <div className='pull-right'>
+        <button type='button' className='btn btn-primary'
+                onClick={() => this.handleSaveBtnClick(true)}>Save
+        </button>
+        <button type='button' className='btn btn-primary'
+                onClick={() => this.handleSaveBtnClick(false)}>Save and
+          continue edit
+        </button>
+        <button type='button' className='btn btn-danger'
+                onClick={this.handleDeleteBtnClick}>Delete
+        </button>
+      </div>
+    </div>
+  );
 
   renderCreatingButtons = () => (
     <div>
@@ -152,7 +125,7 @@ export default class extends Component {
 
   handleDeleteBtnClick = () => {
     if (this.props.status === STATUS_EDITING) {
-      this.props.deleteEntity(this.props.objectHolder.id);
+      //TODO this.props.deleteEntity(this.props.objectHolder.id);
       this.props.enableDefaultStatus();
       this.props.restoreTableState(User);
     }
@@ -194,14 +167,23 @@ export default class extends Component {
   };
 
   renderInputs = () => (
-    <div key={key} className='form-group'>
-      <div className='col-md-2'>
-        Username
-      </div>
-      <div className='col-md-10'>
-        {this.props.objectHolder['username']}
-      </div>
-    </div>
+    Object.getOwnPropertyNames(User).map((prop, key) => {
+      if (prop === ID_PROP) {
+        return null;
+      }
+      return (
+        <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            {prop}
+          </div>
+          <div className='col-md-10'>
+            <input type='text' className='form-control'
+                   value={this.props.objectHolder[prop]}
+                   onChange={e => this.handleSelectedObjectChange(prop, e)}/>
+          </div>
+        </div>
+      );
+    })
   );
 
   renderPage = () => {
@@ -260,12 +242,11 @@ export default class extends Component {
           <section className='content'>
             <div className='box box-info'>
               <div className='box-header with-border'>
-                <h3 className='box-title'>Colorgroup information</h3>
+                <h3 className='box-title'>User information</h3>
               </div>
               <form className='form-horizontal'>
                 <div className='box-body'>
                   {this.renderInputs()}
-                  {this.renderColorStats()}
                 </div>
                 <div className='box-footer'>
                   {this.renderEditingButtons()}

@@ -31,9 +31,10 @@ export const removeUserToken = () => {
   };
 };
 
-export const fetchUsers = () => {
+export const fetchUsers = token => {
   return {
-    type: FETCH_USERS
+    type: FETCH_USERS,
+    token
   };
 };
 
