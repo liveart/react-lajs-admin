@@ -22,6 +22,9 @@ app.get('/colors', function (req, res) {
 app.get('/colorgroups', function (req, res) {
   res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
 });
+app.get('/admins', function (req, res) {
+  res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
+});
 
 app.start = function () {
   // start the web server

@@ -164,11 +164,6 @@ export default class Table extends Component {
     </div>
   );
 
-  renderButtons = () => (
-    this.props.status === STATUS_EDITING || this.props.status === STATUS_CREATING ?
-      this.renderEditingButtons() : this.renderDefButtons()
-  );
-
   renderDefButtons = () => (
     <div className='pull-right'>
       <button type='button' className='btn btn-primary' style={{marginBottom: '3px'}}
