@@ -19,24 +19,27 @@ export const fetchColorsNumber = () => {
   };
 };
 
-export const createColor = color => {
+export const createColor = (color, token) => {
   return {
     type: actionTypes.CREATE_COLOR,
-    color
+    color,
+    token
   };
 };
 
-export const editColor = (id, color) => {
+export const editColor = (id, color, token) => {
   return {
     type: actionTypes.EDIT_COLOR,
     id,
-    newColor: color
+    newColor: color,
+    token
   };
 };
 
-export const deleteColor = id => {
+export const deleteColor = (id, token) => {
   return {
     type: actionTypes.DELETE_COLOR,
-    id
+    id,
+    token
   };
 };

@@ -27,7 +27,8 @@ export default class Table extends Component {
     deleteEntity: PropTypes.func.isRequired,
     deleteSecondary: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired
+    restoreTableState: PropTypes.func.isRequired,
+    token: PropTypes.func.isRequired
   };
 
   constructor() {
@@ -132,7 +133,6 @@ export default class Table extends Component {
           </thead>
           <tbody>
           {this.renderTableSortRow(object)}
-          {this.props.status === STATUS_CREATING ? this.renderCreatingRow() : null}
           {this.renderTableData(data, object)}
           </tbody>
         </table>
@@ -232,23 +232,23 @@ export default class Table extends Component {
         if (this.state.selectedValue === DELETE_COLORS) {
           this.props.secondaryData.map(c => {
             if (c.colorgroupId === this.props.objectHolder.id) {
-              this.props.deleteSecondary(c.id);
+              this.props.deleteSecondary(c.id, this.props.token);
             }
           });
         } else if (this.state.selectedValue === MOVE_COLORS_TO_OTHER_GROUP) {
           this.props.secondaryData.map(c => {
             if (c.colorgroupId === this.props.objectHolder.id) {
-              this.props.editSecondary(c.id, {...c, colorgroupId: this.state.newGroup});
+              this.props.editSecondary(c.id, {...c, colorgroupId: this.state.newGroup}, this.props.token);
             }
           });
         } else if (this.state.selectedValue === LEAVE_COLORS_WITHOUT_GROUP) {
           this.props.secondaryData.map(c => {
             if (c.colorgroupId === this.props.objectHolder.id) {
-              this.props.editSecondary(c.id, {...c, colorgroupId: ''});
+              this.props.editSecondary(c.id, {...c, colorgroupId: ''}, this.props.token);
             }
           });
         }
-        this.props.deleteEntity(this.props.objectHolder.id);
+        this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
         this.props.enableDefaultStatus();
         this.props.restoreTableState(Colorgroup);
         this.setState({...this.state, deleting: false});
@@ -267,7 +267,7 @@ export default class Table extends Component {
           entity[prop] = this.props.objectHolder[prop] || undefined;
         }
       });
-      this.props.editEntity(this.props.objectHolder.id, entity);
+      this.props.editEntity(this.props.objectHolder.id, entity, this.props.token);
       if (redirect) {
         this.props.enableDefaultStatus();
         this.props.restoreTableState(Colorgroup);
@@ -280,7 +280,7 @@ export default class Table extends Component {
           entity[prop] = this.props.objectHolder[prop] || undefined;
         }
       });
-      this.props.createEntity(entity);
+      this.props.createEntity(entity, this.props.token);
       this.props.enableDefaultStatus();
       this.props.restoreTableState(Colorgroup);
     }
