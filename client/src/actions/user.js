@@ -38,24 +38,27 @@ export const fetchUsers = token => {
   };
 };
 
-export const registerUser = user => {
+export const registerUser = (user, token) => {
   return {
     type: REGISTER_USER,
-    user
+    user,
+    token
   };
 };
 
-export const editUser = (id, user) => {
+export const editUser = (id, user, token) => {
   return {
     type: EDIT_USER,
     id,
-    newUser: user
+    newUser: user,
+    token
   };
 };
 
-export const deleteUser = (id) => {
+export const deleteUser = (id, token) => {
   return {
     type: DELETE_USER,
-    id
+    id,
+    token
   };
 };

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
-const User = {email: ''};
+const User = {email: '', password: ''};
 
 export default class extends Component {
   static propTypes = {
@@ -67,9 +67,6 @@ export default class extends Component {
       <button type='button' className='btn btn-primary' style={{marginBottom: '3px'}}
               onClick={this.handleAddNew}>Add new user
       </button>
-      <button type='button' className='btn btn-default' style={{marginBottom: '3px'}}
-              onClick={() => this.props.restoreTableState(User)}>Reset filter
-      </button>
     </div>
   );
 
@@ -78,18 +75,6 @@ export default class extends Component {
       <div className='pull-left'>
         <button type='button' className='btn btn-default'
                 onClick={this.handleCancelBtnClick}>Cancel
-        </button>
-      </div>
-      <div className='pull-right'>
-        <button type='button' className='btn btn-primary'
-                onClick={() => this.handleSaveBtnClick(true)}>Save
-        </button>
-        <button type='button' className='btn btn-primary'
-                onClick={() => this.handleSaveBtnClick(false)}>Save and
-          continue edit
-        </button>
-        <button type='button' className='btn btn-danger'
-                onClick={this.handleDeleteBtnClick}>Delete
         </button>
       </div>
     </div>
@@ -125,7 +110,7 @@ export default class extends Component {
 
   handleDeleteBtnClick = () => {
     if (this.props.status === STATUS_EDITING) {
-      //TODO this.props.deleteEntity(this.props.objectHolder.id);
+      this.props.deleteUser(this.props.objectHolder.id, this.props.token);
       this.props.enableDefaultStatus();
       this.props.restoreTableState(User);
     }
@@ -153,7 +138,7 @@ export default class extends Component {
           entity[prop] = this.props.objectHolder[prop] || undefined;
         }
       });
-      this.props.createEntity(entity);
+      this.props.registerUser(entity);
       this.props.enableDefaultStatus();
       this.props.restoreTableState(User);
     }
@@ -166,24 +151,46 @@ export default class extends Component {
     }
   };
 
-  renderInputs = () => (
-    Object.getOwnPropertyNames(User).map((prop, key) => {
-      if (prop === ID_PROP) {
-        return null;
-      }
-      return (
-        <div key={key} className='form-group'>
-          <div className='col-md-2'>
-            {prop}
-          </div>
-          <div className='col-md-10'>
-            <input type='text' className='form-control'
-                   value={this.props.objectHolder[prop]}
-                   onChange={e => this.handleSelectedObjectChange(prop, e)}/>
-          </div>
+  renderCreatingInputs = () => (
+    <div>
+      <div className='form-group'>
+        <div className='col-md-2'>
+          Email
         </div>
-      );
-    })
+        <div className='col-md-10'>
+          <input type='text' className='form-control'
+                 value={this.props.objectHolder['email']}
+                 onChange={e => this.handleSelectedObjectChange('email', e)}
+          />
+        </div>
+      </div>
+      <div className='form-group'>
+        <div className='col-md-2'>
+          Password
+        </div>
+        <div className='col-md-10'>
+          <input type='text' className='form-control'
+                 value={this.props.objectHolder['password']}
+                 onChange={e => this.handleSelectedObjectChange('password', e)}/>
+        </div>
+      </div>
+    </div>
+  );
+
+  renderEditingInputs = () => (
+    <div>
+      <div className='form-group'>
+        <div className='col-md-2'>
+          Email
+        </div>
+        <div className='col-md-10'>
+          <input type='text' className='form-control'
+                 value={this.props.objectHolder['email']}
+                 onChange={e => this.handleSelectedObjectChange('email', e)}
+                 disabled/>
+        </div>
+      </div>
+    </div>
   );
 
   renderPage = () => {
@@ -223,7 +230,7 @@ export default class extends Component {
             </div>
             <form className='form-horizontal'>
               <div className='box-body'>
-                {this.renderInputs()}
+                {this.renderCreatingInputs()}
               </div>
               <div className='box-footer'>
                 {this.renderCreatingButtons()}
@@ -246,7 +253,7 @@ export default class extends Component {
               </div>
               <form className='form-horizontal'>
                 <div className='box-body'>
-                  {this.renderInputs()}
+                  {this.renderEditingInputs()}
                 </div>
                 <div className='box-footer'>
                   {this.renderEditingButtons()}

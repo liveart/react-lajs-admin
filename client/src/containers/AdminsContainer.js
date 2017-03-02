@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {fetchUsers, registerUser} from '../actions/user';
+import {fetchUsers, registerUser, editUser, deleteUser} from '../actions/user';
 
 import {
   selectRow, setObjectHolderProperty,
@@ -44,6 +44,12 @@ const mapDispatchToProps = dispatch => {
     },
     registerUser(usr) {
       dispatch(registerUser(usr));
+    },
+    editUser(usr, token) {
+      dispatch(editUser(usr, token));
+    },
+    deleteUser(usr, token) {
+      dispatch(deleteUser(usr, token));
     },
     restoreTableState(object) {
       dispatch(setInitialState(object));

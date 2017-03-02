@@ -15,8 +15,9 @@ export function* fetchUsers(action) {
 
 export function* registerUser(action) {
   try {
-    yield* api.create(endpoint, action.user);
+    yield* api.create(endpoint, action.user, action.token);
     yield dispatch({type: actionTypes.USER_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.FETCH_USERS});
   } catch (e) {
     yield dispatch({type: actionTypes.USER_OPERATION_FAILURE, message: e});
   }
@@ -24,8 +25,9 @@ export function* registerUser(action) {
 
 export function* editUser(action) {
   try {
-    yield* api.update(endpoint, action.newUser, action.id);
+    yield* api.update(endpoint, action.newUser, action.id, action.token);
     yield dispatch({type: actionTypes.USER_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.FETCH_USERS});
   } catch (e) {
     yield dispatch({type: actionTypes.USER_OPERATION_FAILURE, message: e});
   }
@@ -33,8 +35,9 @@ export function* editUser(action) {
 
 export function* deleteUser(action) {
   try {
-    yield* api.remove(endpoint, action.id);
+    yield* api.remove(endpoint, action.id, action.token);
     yield dispatch({type: actionTypes.USER_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.FETCH_USERS});
   } catch (e) {
     yield dispatch({type: actionTypes.USER_OPERATION_FAILURE, message: e});
   }
