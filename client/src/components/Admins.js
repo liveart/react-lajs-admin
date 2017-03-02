@@ -77,6 +77,15 @@ export default class extends Component {
                 onClick={this.handleCancelBtnClick}>Cancel
         </button>
       </div>
+
+      <div className='pull-right'>
+        { this.props.data.length > 1 ? (
+            <button type='button' className='btn btn-danger'
+                    onClick={this.handleDeleteBtnClick}>Delete
+            </button>
+          ) : null
+        }
+      </div>
     </div>
   );
 
@@ -138,7 +147,7 @@ export default class extends Component {
           entity[prop] = this.props.objectHolder[prop] || undefined;
         }
       });
-      this.props.registerUser(entity);
+      this.props.registerUser(entity, this.props.token);
       this.props.enableDefaultStatus();
       this.props.restoreTableState(User);
     }
@@ -158,7 +167,7 @@ export default class extends Component {
           Email
         </div>
         <div className='col-md-10'>
-          <input type='text' className='form-control'
+          <input type='email' className='form-control'
                  value={this.props.objectHolder['email']}
                  onChange={e => this.handleSelectedObjectChange('email', e)}
           />

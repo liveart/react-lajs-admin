@@ -42,8 +42,8 @@ const mapDispatchToProps = dispatch => {
     enableDefaultStatus() {
       dispatch(enableDefaultStatus());
     },
-    registerUser(usr) {
-      dispatch(registerUser(usr));
+    registerUser(usr, token) {
+      dispatch(registerUser(usr, token));
     },
     editUser(usr, token) {
       dispatch(editUser(usr, token));

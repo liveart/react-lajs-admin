@@ -10,4 +10,12 @@ module.exports = function (Client) {
       }
     });
   });
+
+  Client.observe('before save', function (ctx, next) {
+    if (!ctx.options.accessToken) {
+      next(new Error('Log in required.'));
+    } else {
+      next();
+    }
+  });
 };
