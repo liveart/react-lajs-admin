@@ -169,7 +169,7 @@ export default class extends Component {
           Password
         </div>
         <div className='col-md-10'>
-          <input type='text' className='form-control'
+          <input type='password' className='form-control'
                  value={this.props.objectHolder['password']}
                  onChange={e => this.handleSelectedObjectChange('password', e)}/>
         </div>
