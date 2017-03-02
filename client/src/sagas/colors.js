@@ -33,7 +33,7 @@ export function* fetchColorsNumber() {
 
 export function* createColor(action) {
   try {
-    yield* api.create(endpoint, action.color);
+    yield* api.create(endpoint, action.color, action.token);
     yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_COLORS});
   } catch (e) {
@@ -43,7 +43,7 @@ export function* createColor(action) {
 
 export function* editColor(action) {
   try {
-    yield* api.update(endpoint, action.newColor, action.id);
+    yield* api.update(endpoint, action.newColor, action.id, action.token);
     yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_COLORS});
   } catch (e) {
@@ -53,7 +53,7 @@ export function* editColor(action) {
 
 export function* deleteColor(action) {
   try {
-    yield* api.remove(endpoint, action.id);
+    yield* api.remove(endpoint, action.id, action.token);
     yield dispatch({type: actionTypes.COLOR_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_COLORS});
   } catch (e) {
