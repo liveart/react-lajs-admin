@@ -24,7 +24,8 @@ export default class Table extends Component {
     editEntity: PropTypes.func.isRequired,
     deleteEntity: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired
+    restoreTableState: PropTypes.func.isRequired,
+    token: PropTypes.func.isRequired
   };
 
   componentWillMount() {
@@ -227,7 +228,7 @@ export default class Table extends Component {
 
   handleDeleteBtnClick = () => {
     if (this.props.status === STATUS_EDITING) {
-      this.props.deleteEntity(this.props.objectHolder.id);
+      this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
       this.props.enableDefaultStatus();
       this.props.restoreTableState(Color);
     }
@@ -242,7 +243,7 @@ export default class Table extends Component {
           entity[prop] = this.props.objectHolder[prop] || undefined;
         }
       });
-      this.props.editEntity(this.props.objectHolder.id, entity);
+      this.props.editEntity(this.props.objectHolder.id, entity, this.props.token);
       if (redirect) {
         this.props.enableDefaultStatus();
         this.props.restoreTableState(Color);
@@ -255,7 +256,7 @@ export default class Table extends Component {
           entity[prop] = this.props.objectHolder[prop] || undefined;
         }
       });
-      this.props.createEntity(entity);
+      this.props.createEntity(entity, this.props.token);
       this.props.enableDefaultStatus();
       this.props.restoreTableState(Color);
     }

@@ -32,7 +32,7 @@ export function* fetchColorgroupsNumber() {
 
 export function* createColorgroup(action) {
   try {
-    yield* api.create(endpoint, action.colorgroup);
+    yield* api.create(endpoint, action.colorgroup, action.token);
     yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_COLORGROUPS});
   } catch (e) {
@@ -42,7 +42,7 @@ export function* createColorgroup(action) {
 
 export function* editColorgroup(action) {
   try {
-    yield* api.update(endpoint, action.newColorgroup, action.id);
+    yield* api.update(endpoint, action.newColorgroup, action.id, action.token);
     yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_COLORGROUPS});
   } catch (e) {
@@ -52,7 +52,7 @@ export function* editColorgroup(action) {
 
 export function* deleteColorgroup(action) {
   try {
-    yield* api.remove(endpoint, action.id);
+    yield* api.remove(endpoint, action.id, action.token);
     yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_COLORGROUPS});
   } catch (e) {

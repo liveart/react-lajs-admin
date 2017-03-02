@@ -28,31 +28,37 @@ describe('Font Actions', () => {
 
   test('should create an action to create a font', () => {
     const font = {name: 'someName', description: 'description', other: 'false'};
+    const token = 'token';
     const expectedAction = {
       type: F.CREATE_FONT,
-      font
+      font,
+      token
     };
-    expect(FF.createFont(font)).toEqual(expectedAction);
+    expect(FF.createFont(font, token)).toEqual(expectedAction);
   });
 
   test('should create an action to edit a font', () => {
+    const token = 'token';
     const id = 15;
     const font = {name: 'someName', description: 'description', other: 'false'};
     const expectedAction = {
       type: F.EDIT_FONT,
       id,
-      newFont: font
+      newFont: font,
+      token
     };
-    expect(FF.editFont(id, font)).toEqual(expectedAction);
+    expect(FF.editFont(id, font, token)).toEqual(expectedAction);
   });
 
   test('should create an action to delete a font', () => {
+    const token = 'token';
     const id = 15;
     const expectedAction = {
       type: F.DELETE_FONT,
-      id
+      id,
+      token
     };
-    expect(FF.deleteFont(id)).toEqual(expectedAction);
+    expect(FF.deleteFont(id, token)).toEqual(expectedAction);
   });
   test('should create an action to upload a file', () => {
     const fontFile = "fontFile";

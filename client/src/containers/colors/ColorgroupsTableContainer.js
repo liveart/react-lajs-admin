@@ -9,6 +9,7 @@ import {fetchColors, deleteColor, editColor} from '../../actions/colors';
 import Table from '../../components/colors/Colorgroups';
 
 const mapStateToProps = state => {
+  const {token} = state.user;
   const {colorgroups, colorgroupsError, colorgroupsLoading} = state.colorgroups;
   const {colors} = state.colors;
   const errors = colorgroupsError ? [colorgroupsError] : [];
@@ -22,7 +23,8 @@ const mapStateToProps = state => {
     errors,
     loading,
     objectHolder,
-    status
+    status,
+    token
   };
 };
 
@@ -49,20 +51,20 @@ const mapDispatchToProps = dispatch => {
     enableDefaultStatus() {
       dispatch(enableDefaultStatus());
     },
-    createEntity(colorgroup) {
-      dispatch(createColorgroup(colorgroup));
+    createEntity(colorgroup, token) {
+      dispatch(createColorgroup(colorgroup, token));
     },
-    editEntity(id, newColorgroup) {
-      dispatch(editColorgroup(id, newColorgroup));
+    editEntity(id, newColorgroup, token) {
+      dispatch(editColorgroup(id, newColorgroup, token));
     },
-    deleteEntity(id) {
-      dispatch(deleteColorgroup(id));
+    deleteEntity(id, token) {
+      dispatch(deleteColorgroup(id, token));
     },
-    deleteSecondary(id) {
-      dispatch(deleteColor(id));
+    deleteSecondary(id, token) {
+      dispatch(deleteColor(id, token));
     },
-    editSecondary(id, newColor) {
-      dispatch(editColor(id, newColor));
+    editSecondary(id, newColor, token) {
+      dispatch(editColor(id, newColor, token));
     },
     restoreTableState(object) {
       dispatch(setInitialState(object));

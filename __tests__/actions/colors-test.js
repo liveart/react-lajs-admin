@@ -28,30 +28,36 @@ describe('Color Actions', () => {
 
   test('should create an action to create a color', () => {
     const color = {name: 'someName', colorgroup_name: 'colorgroup_name', value: 'value'};
+    const token = 'token';
     const expectedAction = {
       type: actionTypes.CREATE_COLOR,
-      color
+      color,
+      token
     };
-    expect(C.createColor(color)).toEqual(expectedAction);
+    expect(C.createColor(color, token)).toEqual(expectedAction);
   });
 
   test('should create an action to edit a color', () => {
     const id = 15;
+    const token = 'token';
     const color = {name: 'someName', colorgroup_name: 'colorgroup_name', value: 'value'};
     const expectedAction = {
       type: actionTypes.EDIT_COLOR,
       id,
-      newColor: color
+      newColor: color,
+      token
     };
-    expect(C.editColor(id, color)).toEqual(expectedAction);
+    expect(C.editColor(id, color, token)).toEqual(expectedAction);
   });
 
   test('should create an action to delete a color', () => {
+    const token = 'token';
     const id = 15;
     const expectedAction = {
       type: actionTypes.DELETE_COLOR,
-      id
+      id,
+      token
     };
-    expect(C.deleteColor(id)).toEqual(expectedAction);
+    expect(C.deleteColor(id,token)).toEqual(expectedAction);
   });
 });

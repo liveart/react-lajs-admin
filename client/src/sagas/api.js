@@ -1,10 +1,11 @@
 const apiRoot = '/api/';
 
-export function* create(endpoint, obj) {
+export function* create(endpoint, obj, token) {
   const req = yield fetch(apiRoot + endpoint, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': token
     },
     body: JSON.stringify(obj)
   });
@@ -38,11 +39,12 @@ export function* retrieveNumber(endpoint) {
   return (yield req.json()).count;
 }
 
-export function* update(endpoint, obj, id) {
+export function* update(endpoint, obj, id, token) {
   const req = yield fetch(apiRoot + endpoint + '/' + id, {
     method: 'PATCH',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': token
     },
     body: JSON.stringify(obj)
   });
@@ -52,11 +54,12 @@ export function* update(endpoint, obj, id) {
   return (yield req.json());
 }
 
-export function* remove(endpoint, id) {
+export function* remove(endpoint, id, token) {
   const req = yield fetch(apiRoot + endpoint + '/' + id, {
     method: 'DELETE',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': token
     }
   });
   if (!(req.status >= 200 && req.status < 300)) {
