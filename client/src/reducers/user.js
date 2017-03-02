@@ -1,7 +1,7 @@
 import * as actionType from '../actions/user';
 
 const INITIAL_STATE = {
-  email: '', password: null, token: null, loading: false, error: null
+  users: [], email: '', password: null, token: null, loading: false, error: null
 };
 
 export default function (state = INITIAL_STATE, action) {
@@ -38,6 +38,24 @@ export default function (state = INITIAL_STATE, action) {
         error,
         loading: false
       };
+    case actionType.USER_OPERATION_SUCCESS:
+      return {
+        ...state,
+        users: action.users || state.users,
+        error: null,
+        loading: false
+      };
+    case actionType.USER_OPERATION_FAILURE:
+      error = action.message;
+      return {...state, error, loading: false};
+    case actionType.FETCH_USERS:
+      return {...state, users: [], error: null, loading: true};
+    case actionType.REGISTER_USER:
+      return {...state, error: null, loading: true};
+    case actionType.EDIT_USER:
+      return {...state, error: null, loading: true};
+    case actionType.DELETE_USER:
+      return {...state, error: null, loading: true};
     default:
       return state;
   }

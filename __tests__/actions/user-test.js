@@ -20,4 +20,36 @@ describe('User Actions', () => {
     };
     expect(U.removeUserToken()).toEqual(expectedAction);
   });
+
+  test('should create an action to fetch users', () => {
+    const expectedAction = {
+      type: U.FETCH_USERS
+    };
+    expect(U.fetchUsers()).toEqual(expectedAction);
+  });
+
+  test('should create an action to register user', () => {
+    const expectedAction = {
+      type: U.REGISTER_USER
+    };
+    expect(U.registerUser()).toEqual(expectedAction);
+  });
+
+  test('should create an action to edit user', () => {
+    const id = 15;
+    const expectedAction = {
+      type: U.EDIT_USER,
+      id
+    };
+    expect(U.editUser(id)).toEqual(expectedAction);
+  });
+
+  test('should create an action to delete user', () => {
+    const id = 15;
+    const expectedAction = {
+      type: U.DELETE_USER,
+      id
+    };
+    expect(U.deleteUser(id)).toEqual(expectedAction);
+  });
 });
