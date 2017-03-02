@@ -55,5 +55,9 @@
   "FontFile": {
     "dataSource": "remote-dev-mongo",
     "public": true
+  },
+  "graphic": {
+    "dataSource": "remote-dev-mongo",
+    "public": true
   }
 }
