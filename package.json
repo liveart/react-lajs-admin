@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "eslint .",
     "build": "node ./node_modules/webpack/bin/webpack.js",
-    "start": "node ./node_modules/webpack/bin/webpack.js && node ./server/server.js",
+    "start": "node ./server/server.js",
     "start:dev": "concurrently --kill-others \"webpack-dev-server --content-base build/\" \"node ./server/server.js\"",
     "test": "jest"
   },
@@ -34,7 +34,6 @@
     "redux-logger": "^2.8.1",
     "redux-saga": "^0.14.3",
     "serve-favicon": "^2.0.1",
-    "sqlite3": "^3.1.8",
     "strong-error-handler": "^1.0.1",
     "whatwg-fetch": "^2.0.2"
   },
