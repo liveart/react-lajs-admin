@@ -19,10 +19,11 @@ export const fetchGraphicsCategoriesNumber = () => {
   };
 };
 
-export const createGraphicsCategory = graphicsCategory => {
+export const createGraphicsCategory = (graphicsCategory, token) => {
   return {
     type: actionTypes.CREATE_GRAPHICS_CATEGORIES,
-    graphicsCategory
+    graphicsCategory,
+    token
   };
 };
 
@@ -33,17 +34,19 @@ export const uploadThumbnail = thumbnail => {
   };
 };
 
-export const editGraphicsCategory = (id, graphicsCategory) => {
+export const editGraphicsCategory = (id, graphicsCategory, token) => {
   return {
     type: actionTypes.EDIT_GRAPHICS_CATEGORY,
     id,
-    newGraphicsCategory: graphicsCategory
+    newGraphicsCategory: graphicsCategory,
+    token
   };
 };
 
-export const deleteGraphicsCategory = id => {
+export const deleteGraphicsCategory = (id, token) => {
   return {
     type: actionTypes.DELETE_GRAPHICS_CATEGORY,
-    id
+    id,
+    token
   };
 };
