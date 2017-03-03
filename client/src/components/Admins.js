@@ -278,21 +278,9 @@ export default class extends Component {
   render() {
     const {loading, errors} = this.props;
 
-    if (loading) {
-      return (
-        <main>
-          <div className='loader'></div>
-          <section className='content-header'>
-            <h1>Loading...</h1>
-          </section>
-          <section className='content'>
-          </section>
-        </main>
-      );
-    }
-
     return (
       <main>
+        {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <div className='content-header'>
           <h1>Navigator</h1>
         </div>

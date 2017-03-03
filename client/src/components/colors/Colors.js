@@ -5,7 +5,7 @@ import {SketchPicker} from 'react-color';
 import * as ColorModel from '../../../../common/models/color.json';
 const Color = ColorModel.properties;
 
-export default class Table extends Component {
+export default class ColorsComponent extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
@@ -25,7 +25,7 @@ export default class Table extends Component {
     deleteEntity: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
     restoreTableState: PropTypes.func.isRequired,
-    token: PropTypes.func.isRequired
+    token: PropTypes.string
   };
 
   componentWillMount() {
@@ -85,7 +85,7 @@ export default class Table extends Component {
       </tr>
   );
 
-  sortRows = (data, object)  => {
+  sortRows = (data, object) => {
     const rows = [];
     for (let i = 0; i < data.length; ++i) {
       let add = true;
@@ -136,7 +136,8 @@ export default class Table extends Component {
               if (prop === 'value') {
                 return <td key={j}>
                   {item[prop]}
-                  <span className='label label-default pull-right' style={{background: item[prop]}}>{' '}</span>
+                  <span className='label label-default pull-right'
+                        style={{background: item[prop]}}>{' '}</span>
                 </td>;
               }
               return <td key={j}>{item[prop]}</td>;
@@ -275,7 +276,7 @@ export default class Table extends Component {
         return null;
       } else {
         if (prop === 'value') {
-          return <div className='form-group'>
+          return <div key='value' className='form-group'>
             <div className='col-md-2'>
               {prop}
             </div>
@@ -287,7 +288,7 @@ export default class Table extends Component {
         }
 
         if (prop === 'colorgroupId') {
-          return <div className='form-group'>
+          return <div key='colorgroupId' className='form-group'>
             <div className='col-md-2'>
               Group
             </div>
@@ -399,26 +400,15 @@ export default class Table extends Component {
   render() {
     const {loading, errors} = this.props;
 
-    if (loading) {
-      return (
-        <main>
-          <div className='loader'></div>
-          <section className='content-header'>
-            <h1>Loading...</h1>
-          </section>
-          <section className='content'>
-          </section>
-        </main>
-      );
-    }
-
     return (
       <main>
+        {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <div className='content-header'>
           <h1>Navigator</h1>
         </div>
         {
-          errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>Error:
+          errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>
+              Error:
               {err}</div>)
         }
         {this.renderPage()}
