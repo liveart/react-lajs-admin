@@ -27,31 +27,37 @@ describe('Colorgroups Actions', () => {
   });
 
   test('should create an action to create a colorgroup', () => {
+    const token = 'token';
     const colorgroup = {name: 'someName', colorgroup_name: 'colorgroup_name', value: 'value'};
     const expectedAction = {
       type: actionTypes.CREATE_COLORGROUP,
-      colorgroup
+      colorgroup,
+      token
     };
-    expect(C.createColorgroup(colorgroup)).toEqual(expectedAction);
+    expect(C.createColorgroup(colorgroup,token)).toEqual(expectedAction);
   });
 
   test('should create an action to edit a colorgroup', () => {
+    const token = 'token';
     const id = 15;
     const colorgroup = {name: 'someName'};
     const expectedAction = {
       type: actionTypes.EDIT_COLORGROUP,
       id,
-      newColorgroup: colorgroup
+      newColorgroup: colorgroup,
+      token
     };
-    expect(C.editColorgroup(id, colorgroup)).toEqual(expectedAction);
+    expect(C.editColorgroup(id, colorgroup,token)).toEqual(expectedAction);
   });
 
   test('should create an action to delete a colorgroup', () => {
+    const token = 'token';
     const id = 15;
     const expectedAction = {
       type: actionTypes.DELETE_COLORGROUP,
-      id
+      id,
+      token
     };
-    expect(C.deleteColorgroup(id)).toEqual(expectedAction);
+    expect(C.deleteColorgroup(id, token)).toEqual(expectedAction);
   });
 });

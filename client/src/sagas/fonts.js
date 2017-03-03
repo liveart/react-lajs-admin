@@ -34,7 +34,7 @@ export function* fetchFontsNumber() {
 
 export function* createFont(action) {
   try {
-    yield* api.create(endpoint, action.font);
+    yield* api.create(endpoint, action.font, action.token);
     yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_FONTS});
   } catch (e) {
@@ -44,7 +44,7 @@ export function* createFont(action) {
 
 export function* editFont(action) {
   try {
-    yield* api.update(endpoint, action.newFont, action.id);
+    yield* api.update(endpoint, action.newFont, action.id, action.token);
     yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_FONTS});
   } catch (e) {
@@ -54,7 +54,7 @@ export function* editFont(action) {
 
 export function* deleteFont(action) {
   try {
-    yield* api.remove(endpoint, action.id);
+    yield* api.remove(endpoint, action.id, action.token);
     yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_FONTS});
   } catch (e) {

@@ -19,10 +19,11 @@ export const fetchFontsNumber = () => {
   };
 };
 
-export const createFont = font => {
+export const createFont = (font, token) => {
   return {
     type: actionTypes.CREATE_FONT,
-    font
+    font,
+    token
   };
 };
 
@@ -40,17 +41,19 @@ export const uploadVectors = vectorFile => {
   };
 };
 
-export const editFont = (id, font) => {
+export const editFont = (id, font, token) => {
   return {
     type: actionTypes.EDIT_FONT,
     id,
-    newFont: font
+    newFont: font,
+    token
   };
 };
 
-export const deleteFont = id => {
+export const deleteFont = (id, token) => {
   return {
     type: actionTypes.DELETE_FONT,
-    id
+    id,
+    token
   };
 };

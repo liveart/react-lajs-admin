@@ -11,6 +11,7 @@ import OverviewContainer from './containers/OverviewContainer';
 import FontsTableContainer from './containers/FontsTableContainer';
 import ColorsTableContainer from './containers/colors/ColorsTableContainer';
 import ColorgroupsTableContainer from './containers/colors/ColorgroupsTableContainer';
+import AdminsContainer from './containers/AdminsContainer';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = configureStore(sagaMiddleware);
@@ -26,6 +27,7 @@ ReactDOM.render((
         <Route path='/fonts' component={FontsTableContainer}/>
         <Route path='/colors' component={ColorsTableContainer}/>
         <Route path='/colorgroups' component={ColorgroupsTableContainer}/>
+        <Route path='/admins' component={AdminsContainer}/>
       </Route>
     </Router>
   </Provider>

@@ -36,21 +36,10 @@ export default class Overview extends Component {
 
   render() {
     const {fontsNumber, colorsNumber, loading} = this.props;
-    if (loading) {
-      return (
-        <main style={{overflowY: 'scroll'}}>
-          <div className='loader'></div>
-          <section className='content-header'>
-            <h1>Loading...</h1>
-          </section>
-          <section className='content'>
-          </section>
-        </main>
-      );
-    }
 
     return (
-      <div>
+      <main>
+        {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <section className='content-header'>
           <h1>Overview</h1>
         </section>
@@ -62,7 +51,7 @@ export default class Overview extends Component {
             </Row>
           </Grid>
         </section>
-      </div>
+      </main>
     );
   }
 }
