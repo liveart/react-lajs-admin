@@ -8,9 +8,10 @@ import sagaWatchers from './sagas';
 import configureStore from './store/configureStore.dev';
 import AppContainer from './containers/AppContainer';
 import OverviewContainer from './containers/OverviewContainer';
-import FontsTableContainer from './containers/FontsTableContainer';
-import ColorsTableContainer from './containers/colors/ColorsTableContainer';
-import ColorgroupsTableContainer from './containers/colors/ColorgroupsTableContainer';
+import FontsContainer from './containers/FontsTableContainer';
+import ColorsContainer from './containers/colors/ColorsTableContainer';
+import ColorgroupsContainer from './containers/colors/ColorgroupsTableContainer';
+import GraphicsContainer from './containers/GraphicsContainer';
 import AdminsContainer from './containers/AdminsContainer';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -24,9 +25,10 @@ ReactDOM.render((
     <Router history={history}>
       <Route path='/' component={AppContainer}>
         <IndexRoute component={OverviewContainer}/>
-        <Route path='/fonts' component={FontsTableContainer}/>
-        <Route path='/colors' component={ColorsTableContainer}/>
-        <Route path='/colorgroups' component={ColorgroupsTableContainer}/>
+        <Route path='/fonts' component={FontsContainer}/>
+        <Route path='/colors' component={ColorsContainer}/>
+        <Route path='/colorgroups' component={ColorgroupsContainer}/>
+        <Route path='/graphics' component={GraphicsContainer}/>
         <Route path='/admins' component={AdminsContainer}/>
       </Route>
     </Router>

@@ -6,8 +6,9 @@
     "validateUpsert": true
   },
   "properties": {
-    "idLA": {
+    "id": {
       "type": "string",
+      "id": true,
       "required": true
     },
     "categoryId": {
