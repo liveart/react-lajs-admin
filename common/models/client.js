@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = function (Client) {
-    this.settings.maxTTL
 
   Client.observe('before delete', function (ctx, next) {
     Client.find((err, users) => {
