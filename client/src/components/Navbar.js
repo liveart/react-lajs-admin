@@ -38,6 +38,11 @@ export default class NavBar extends Component {
                 <i className='fa fa-object-group'/> <span>Color Groups</span>
               </Link>
             </li>
+            <li>
+              <Link to='/graphicsCategories' activeClassName='active'>
+                <i className='fa fa-file-picture-o'/> <span>Graphics Categories</span>
+              </Link>
+            </li>
             <li className='header'>ADDITIONAL</li>
             <li><a href='#'><i className='fa fa-cog'/><span>Settings</span></a></li>
             <li><a href='#' onClick={this.handleLogOut}><i className='fa fa-sign-out'/><span>Log out</span></a></li>

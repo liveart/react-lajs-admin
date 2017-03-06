@@ -10,12 +10,14 @@ export default class Overview extends Component {
     loading: PropTypes.bool.isRequired,
     error: PropTypes.object,
     fetchFontsNumber: PropTypes.func.isRequired,
-    fetchColorsNumber: PropTypes.func.isRequired
+    fetchColorsNumber: PropTypes.func.isRequired,
+    fetchGraphicsCategoriesNumber: PropTypes.func.isRequired
   };
 
   componentWillMount() {
     this.props.fetchFontsNumber();
     this.props.fetchColorsNumber();
+    this.props.fetchGraphicsCategoriesNumber();
   }
 
   renderFontsNumber = fontsNumber => {
@@ -34,8 +36,16 @@ export default class Overview extends Component {
     );
   };
 
+  renderGraphicsCategoriesNumber = graphicsCategoriesNumber => {
+    return (
+      <Link to='/graphicsCategories'>
+        <InfoWidget title='Graphics Categories' number={graphicsCategoriesNumber} iconClass='fa fa-file-picture-o'/>
+      </Link>
+    );
+  };
+
   render() {
-    const {fontsNumber, colorsNumber, loading} = this.props;
+    const {graphicsCategoriesNumber, fontsNumber, colorsNumber, loading} = this.props;
     if (loading) {
       return (
         <main style={{overflowY: 'scroll'}}>
@@ -59,6 +69,7 @@ export default class Overview extends Component {
             <Row>
               <Col md={3}>{this.renderFontsNumber(fontsNumber)}</Col>
               <Col md={3}>{this.renderColorsNumber(colorsNumber)}</Col>
+              <Col md={3}>{this.renderGraphicsCategoriesNumber(graphicsCategoriesNumber)}</Col>
             </Row>
           </Grid>
         </section>
