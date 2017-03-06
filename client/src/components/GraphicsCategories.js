@@ -3,6 +3,7 @@ import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 import * as GraphicsCategoryModel from '../../../common/models/graphics-category.json';
 import {saveAs} from 'file-saver';
+import * as ImageTools from '/ImageTools';
 const GraphicsCategory = GraphicsCategoryModel.properties;
 const location = '/files/thumb/';
 
@@ -283,8 +284,15 @@ export default class extends Component {
     if (this.props.status === STATUS_CREATING) {
       const prop = 'thumb';
       let image = this.props.objectHolder[prop];
-        console.log(image);
      //  saveAs(image, "thumb.png");
+      ImageTools.resize(image, {
+        width: 320, // maximum width
+        height: 240 // maximum height
+      }, function(blob, didItResize) {
+        // didItResize will be true if it managed to resize it, otherwise false (and will return the original file as 'blob')
+        saveAs(blob, "thumb.png");
+        // you can also now upload this blob using an XHR.
+      });
     }
   };
 
