@@ -4,9 +4,9 @@
   "main": "server/server.js",
   "scripts": {
     "lint": "eslint .",
-    "build": "node ./node_modules/webpack/bin/webpack.js",
+    "build": "node ./node_modules/webpack/bin/webpack.js -p --env=prod --progress --profile --colors",
     "start": "node ./server/server.js",
-    "start:dev": "concurrently --kill-others \"webpack-dev-server --content-base build/\" \"node ./server/server.js\"",
+    "start:dev": "concurrently --kill-others 'webpack-dev-server --env=dev' 'node ./server/server.js'",
     "test": "jest"
   },
   "dependencies": {

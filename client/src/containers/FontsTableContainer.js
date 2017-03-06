@@ -11,6 +11,7 @@ import {
 import Fonts from '../components/Fonts';
 
 const mapStateToProps = state => {
+  const {token} = state.user;
   const {fonts, fontsError, fontsLoading} = state.fonts;
   const {status, objectHolder} = state.table;
   const errors = fontsError ? [fontsError] : [];
@@ -20,7 +21,8 @@ const mapStateToProps = state => {
     errors,
     loading: fontsLoading,
     objectHolder,
-    status
+    status,
+    token
   };
 };
 
@@ -44,11 +46,11 @@ const mapDispatchToProps = dispatch => {
     enableDefaultStatus() {
       dispatch(enableDefaultStatus());
     },
-    createEntity(color) {
-      dispatch(createFont(color));
+    createEntity(color, token) {
+      dispatch(createFont(color, token));
     },
-    editEntity(id, newColor) {
-      dispatch(editFont(id, newColor));
+    editEntity(id, newColor, token) {
+      dispatch(editFont(id, newColor, token));
     },
     uploadFontFile(fileFont) {
       dispatch(uploadFontFile(fileFont));
@@ -56,8 +58,8 @@ const mapDispatchToProps = dispatch => {
     uploadVector(vectorFile) {
       dispatch(uploadVectors(vectorFile));
     },
-    deleteEntity(id) {
-      dispatch(deleteFont(id));
+    deleteEntity(id, token) {
+      dispatch(deleteFont(id, token));
     },
     restoreTableState(object) {
       dispatch(setInitialState(object));

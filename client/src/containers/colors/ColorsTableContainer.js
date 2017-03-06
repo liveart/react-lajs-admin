@@ -9,6 +9,7 @@ import {
 import Table from '../../components/colors/Colors';
 
 const mapStateToProps = state => {
+  const {token} = state.user;
   const {colors, colorsError, colorsLoading} = state.colors;
   const {colorgroups, colorgroupsError, colorgroupsLoading} = state.colorgroups;
   const {objectHolder, status} = state.table;
@@ -22,7 +23,8 @@ const mapStateToProps = state => {
     errors,
     loading,
     objectHolder,
-    status
+    status,
+    token
   };
 };
 
@@ -34,8 +36,8 @@ const mapDispatchToProps = dispatch => {
     fetchSecondaryData() {
       dispatch(fetchColorgroups());
     },
-    createColorgroup(colorgroup) {
-      dispatch(createColorgroup(colorgroup));
+    createColorgroup(colorgroup, token) {
+      dispatch(createColorgroup(colorgroup, token));
     },
     selectRow(object) {
       dispatch(selectRow(object));
@@ -52,14 +54,14 @@ const mapDispatchToProps = dispatch => {
     enableDefaultStatus() {
       dispatch(enableDefaultStatus());
     },
-    createEntity(color) {
-      dispatch(createColor(color));
+    createEntity(color, token) {
+      dispatch(createColor(color, token));
     },
-    editEntity(id, newColor) {
-      dispatch(editColor(id, newColor));
+    editEntity(id, newColor, token) {
+      dispatch(editColor(id, newColor, token));
     },
-    deleteEntity(id) {
-      dispatch(deleteColor(id));
+    deleteEntity(id, token) {
+      dispatch(deleteColor(id, token));
     },
     restoreTableState(object) {
       dispatch(setInitialState(object));

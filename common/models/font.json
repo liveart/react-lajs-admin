@@ -17,25 +17,25 @@
         "columnName": "fontFamily"
       }
     },
-    "fileNormal":{
+    "fileNormal": {
       "type": "string",
       "sqlite3": {
         "columnName": "fileNormal"
       }
     },
-    "fileBold":{
+    "fileBold": {
       "type": "string",
       "sqlite3": {
         "columnName": "fileBold"
       }
     },
-    "fileItalic":{
+    "fileItalic": {
       "type": "string",
       "sqlite3": {
         "columnName": "fileItalic"
       }
     },
-    "fileBoldItalic":{
+    "fileBoldItalic": {
       "type": "string",
       "sqlite3": {
         "columnName": "fileBoldItalic"
@@ -62,6 +62,19 @@
   },
   "validations": [],
   "relations": {},
-  "acls": [],
+  "acls": [
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
   "methods": {}
 }
