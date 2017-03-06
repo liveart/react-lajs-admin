@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {fetchUsers, registerUser, editUser, deleteUser} from '../actions/user';
+import {fetchUsers, registerUser, editUser, deleteUser, validateToken} from '../actions/user';
 
 import {
   selectRow, setObjectHolderProperty,
@@ -10,7 +10,7 @@ import AdminComponent from '../components/Admins';
 const mapStateToProps = state => {
   const {users, loading, error, token} = state.user;
   const {objectHolder, status} = state.table;
-  const errors = error ? [error.message] : [];
+  const errors = error ? [error] : [];
   return {
     title: 'Admins',
     token,
@@ -53,6 +53,9 @@ const mapDispatchToProps = dispatch => {
     },
     restoreTableState(object) {
       dispatch(setInitialState(object));
+    },
+    validateUserToken(token) {
+      dispatch(validateToken(token));
     }
   };
 };

@@ -1,12 +1,11 @@
 import {connect} from 'react-redux';
 import App from '../components/App';
-import {restoreUserToken} from '../actions/user';
+import {restoreUserToken, validateToken} from '../actions/user';
 
 const mapStateToProps = state => {
-  const {token, email, error} = state.user;
+  const {token, error} = state.user;
   return {
     token,
-    email,
     error
   };
 };
@@ -16,6 +15,9 @@ const mapDispatchToProps = dispatch => {
   return {
     restoreUserToken(token) {
       dispatch(restoreUserToken(token));
+    },
+    validateUserToken(token) {
+      dispatch(validateToken(token));
     }
   };
 };

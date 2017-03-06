@@ -1,47 +1,13 @@
-import {put, fork} from 'redux-saga/effects';
-import {takeLatest} from 'redux-saga';
-
-import {
-  GET_USER_TOKEN,
-  GET_TOKEN_RESULT
-} from './actions/user';
-
-
-function* getUserToken(action) {
-  try {
-    const req = yield fetch('/api/clients/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({email: action.email, password: action.password})
-    });
-    const json = yield req.json();
-    if (!(req.status >= 200 && req.status < 300)) {
-      throw new Error(json.error.message);
-    }
-
-    yield put({type: GET_TOKEN_RESULT, token: json.id});
-  } catch (e) {
-    yield put({type: GET_TOKEN_RESULT, message: e.message});
-  }
-}
-
-
-function* watchGetUserToken() {
-  yield takeLatest(GET_USER_TOKEN, getUserToken);
-}
+import {fork} from 'redux-saga/effects';
 
 import * as colorsWatchers from './sagas/watchers/colors';
 import * as colorgroupsWatchers from './sagas/watchers/colorgroups';
-
 import * as fontsWatchers from './sagas/watchers/fonts';
-
 import * as usersWatchers from './sagas/watchers/users';
 
 export default function* root() {
   yield [
-    fork(watchGetUserToken),
+    fork(usersWatchers.watchGetUserToken),
     fork(colorsWatchers.watchFetchColors),
     fork(colorsWatchers.watchFetchColorById),
     fork(colorsWatchers.watchFetchColorsNumber),
@@ -65,6 +31,7 @@ export default function* root() {
     fork(usersWatchers.watchFetchUsers),
     fork(usersWatchers.watchRegisterUser),
     fork(usersWatchers.watchEditUser),
-    fork(usersWatchers.watchDeleteUser)
+    fork(usersWatchers.watchDeleteUser),
+    fork(usersWatchers.watchValidateToken)
   ];
 }

@@ -1,4 +1,4 @@
-import {takeLatest} from 'redux-saga';
+import {takeLatest} from 'redux-saga/effects';
 import * as actionTypes from '../../actionTypes/fonts';
 import * as fontsSagas from '../fonts';
 
