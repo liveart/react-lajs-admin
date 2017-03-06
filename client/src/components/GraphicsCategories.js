@@ -255,9 +255,13 @@ export default class extends Component {
           <div className='col-md-10'>
             <input type='file' className='form-control' accept='image/*'
                    onChange={e => this.handleFileChoose(prop, e)}/>
-            <img ref='img' src="" height='100' alt="Image preview..."/>
             <canvas ref="canvas" width="100" height="100"/>
-            <img ref='imgOut' src="" height='100' alt="Image out..."/>
+            <button type='button' className='btn btn-default'
+                    onClick={this.handleDowImg}>Img
+            </button>
+            <button type='button' className='btn btn-default'
+                    onClick={this.handleFileUpload}>Up
+            </button>
           </div>
         </div>);
       }
@@ -265,9 +269,6 @@ export default class extends Component {
 
       return (
         <div key={key} className='form-group'>
-          <button type='button' className='btn btn-default'
-                  onClick={this.handleDowImg}>Img
-          </button>
           <div className='col-md-2'>
             {prop}
           </div>
@@ -285,28 +286,32 @@ export default class extends Component {
     if (this.props.status === STATUS_CREATING) {
       const prop = 'thumb';
       const image = this.props.objectHolder[prop];
-      const img = this.refs.img;
-      const imgOut = this.refs.imgOut;
+      const img = new Image();
+      let imageOut = new Image();
       const reader = new FileReader();
       reader.onload = function (e) {
         img.src = e.target.result;
       };
       reader.readAsDataURL(image);
-
       const c = this.refs.canvas;
         const ctx = c.getContext("2d");
       img.onload = function () {
-        ctx.drawImage(img, 10, 10);
+        imageOut = ctx.drawImage(img, 0, 0, 100, 100);
       };
-      const dataURL = c.toDataURL();
-     
+
 
     }
   };
 
-  handleFileUpload = (file) => {
+  handleFileUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
+      const c = this.refs.canvas;
+      let file = new Blob();
+      c.toBlob(function(blob) {
+      file = blob;
+      }, 'image/jpeg', 0.95);
       this.props.uploadThumbnail(file);
+
     }
   };
 
