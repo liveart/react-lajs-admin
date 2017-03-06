@@ -1,42 +1,20 @@
 import {connect} from 'react-redux';
-import {fetchColors, createColor, editColor, deleteColor} from '../actions/colors';
-import {fetchColorgroups, createColorgroup} from '../actions/colorgroups';
+import {fetchUsers, registerUser, editUser, deleteUser} from '../actions/user';
 
 import {
   selectRow, setObjectHolderProperty,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../actions/table';
-import Table from '../components/colors/Colors';
-/*
+import AdminComponent from '../components/Admins';
 
- title: PropTypes.string.isRequired,
- data: PropTypes.arrayOf(PropTypes.any).isRequired,
- errors: PropTypes.arrayOf(PropTypes.string),
- loading: PropTypes.bool.isRequired,
- fetchUsers: PropTypes.func.isRequired,
- objectHolder: PropTypes.object,
- status: PropTypes.string.isRequired,
- selectRow: PropTypes.func.isRequired,
- enableEditing: PropTypes.func.isRequired,
- enableCreating: PropTypes.func.isRequired,
- enableDefaultStatus: PropTypes.func.isRequired,
- registerUser: PropTypes.func.isRequired,
- editUser: PropTypes.func.isRequired,
- deleteUser: PropTypes.func.isRequired,
- setEditingObjectProperty: PropTypes.func.isRequired,
- restoreTableState: PropTypes.func.isRequired
- */
 const mapStateToProps = state => {
-  const {colors, colorsError, colorsLoading} = state.colors;
-  const {colorgroups, colorgroupsError, colorgroupsLoading} = state.colorgroups;
+  const {users, loading, error, token} = state.user;
   const {objectHolder, status} = state.table;
-  const errors = colorgroupsError || colorsError ? [colorsError, colorgroupsError] : [];
-  const loading = colorsLoading || colorgroupsLoading;
-
+  const errors = error ? [error.message] : [];
   return {
     title: 'Admins',
-    data: clients,
-    secondaryData: colorgroups,
+    token,
+    data: users,
     errors,
     loading,
     objectHolder,
@@ -46,14 +24,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchData() {
-      dispatch(fetchColors());
-    },
-    fetchSecondaryData() {
-      dispatch(fetchColorgroups());
-    },
-    createColorgroup(colorgroup) {
-      dispatch(createColorgroup(colorgroup));
+    fetchUsers(token) {
+      dispatch(fetchUsers(token));
     },
     selectRow(object) {
       dispatch(selectRow(object));
@@ -70,14 +42,14 @@ const mapDispatchToProps = dispatch => {
     enableDefaultStatus() {
       dispatch(enableDefaultStatus());
     },
-    createEntity(color) {
-      dispatch(createColor(color));
+    registerUser(usr, token) {
+      dispatch(registerUser(usr, token));
     },
-    editEntity(id, newColor) {
-      dispatch(editColor(id, newColor));
+    editUser(usr, token) {
+      dispatch(editUser(usr, token));
     },
-    deleteEntity(id) {
-      dispatch(deleteColor(id));
+    deleteUser(usr, token) {
+      dispatch(deleteUser(usr, token));
     },
     restoreTableState(object) {
       dispatch(setInitialState(object));
@@ -85,4 +57,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Table);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminComponent);
