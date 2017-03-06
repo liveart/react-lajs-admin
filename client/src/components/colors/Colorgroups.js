@@ -61,14 +61,15 @@ export default class ColorgroupsComponent extends Component {
       {Object.getOwnPropertyNames(object).map((prop, i) => {
         if (prop === ID_PROP) {
           return null;
-        } else {
-          return <td key={i}>
-            <FormControl type='text'
-                         value={this.props.objectHolder[prop]}
-                         onChange={e => this.handleSelectedObjectChange(prop, e)}
-            />
-          </td>;
         }
+
+        return <td key={i}>
+          <FormControl type='text'
+                       value={this.props.objectHolder[prop]}
+                       onChange={e => this.handleSelectedObjectChange(prop, e)}
+          />
+        </td>;
+
       })}
     </tr>
   );

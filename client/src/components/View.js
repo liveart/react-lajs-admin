@@ -62,6 +62,22 @@ export default class ViewAbstract extends Component {
             return null;
           }
 
+          if (this.props.objectHolder[prop].type === 'boolean') {
+            return <td key={i}><select style={{width: '100%'}}
+                                       value={this.props.objectHolder[prop]}
+                                       onChange={e => this.handleSelectedObjectChange(prop, e)}>
+
+              {this.props.objectHolder[prop].default ||
+              (this.props.objectHolder[prop].required && this.props.objectHolder[prop].required === true) ?
+                <option key='defGroup' value={''}>...</option>
+                : null
+              }
+              {this.props.secondaryData.map((cg, key) => (
+                <option key={key} value={cg.id}>{cg.name}</option>
+              ))}
+            </select></td>
+          }
+
           return (
             <td key={i}>
               <FormControl type='text'
