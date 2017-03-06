@@ -6,7 +6,8 @@
     "lint": "eslint .",
     "build": "node ./node_modules/webpack/bin/webpack.js -p --env=prod --progress --profile --colors",
     "start": "node ./server/server.js",
-    "start:dev": "concurrently --kill-others 'webpack-dev-server --env=dev' 'node ./server/server.js'",
+    "start:dev": "export NODE_ENV=development&&concurrently --kill-others \"webpack-dev-server --env=dev\" \"npm start\"",
+    "startWin:dev": "set NODE_ENV=development&&concurrently --kill-others \"webpack-dev-server --env=dev\" \"npm start\"",
     "test": "jest"
   },
   "dependencies": {
