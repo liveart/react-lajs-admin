@@ -19,12 +19,17 @@ export default class extends Component {
     registerUser: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
     restoreTableState: PropTypes.func.isRequired,
-    token: PropTypes.string
+    token: PropTypes.string.isRequired,
+    validateUserToken: PropTypes.func.isRequired
   };
 
   componentWillMount() {
     this.props.restoreTableState(User);
     this.props.fetchUsers(this.props.token);
+  }
+
+  componentWillReceiveProps() {
+    this.props.validateUserToken(this.props.token);
   }
 
   handleSelectedObjectChange = (propertyName, event) => {

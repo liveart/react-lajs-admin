@@ -26,7 +26,7 @@ export default class extends Component {
     restoreTableState: PropTypes.func.isRequired,
     uploadFontFile: PropTypes.func.isRequired,
     uploadVector: PropTypes.func.isRequired,
-    token: PropTypes.string
+    token: PropTypes.string.isRequired
   };
 
   componentWillMount() {

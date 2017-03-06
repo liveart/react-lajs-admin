@@ -5,11 +5,27 @@ import LoginForm from '../containers/LoginContainer';
 
 export default class App extends Component {
   static propTypes = {
-    email: PropTypes.string,
     token: PropTypes.string,
     error: PropTypes.string,
-    restoreUserToken: PropTypes.func.isRequired
+    restoreUserToken: PropTypes.func.isRequired,
+    validateUserToken: PropTypes.func.isRequired
   };
+
+  componentWillMount() {
+    if (!this.props.token && typeof localStorage.token === 'string') {
+      this.props.restoreUserToken(localStorage.token);
+    }
+
+    if (this.props.token) {
+      this.props.validateUserToken(this.props.token);
+    }
+  }
+
+  componentWillReceiveProps() {
+    if (this.props.token && (!localStorage.token || localStorage.token !== this.props.token)) {
+      localStorage.token = this.props.token;
+    }
+  }
 
   renderError = () => {
     const {error} = this.props;
@@ -25,18 +41,14 @@ export default class App extends Component {
   };
 
   render() {
-    if (typeof this.props.token !== 'string') {
-      if (typeof localStorage.token !== 'string') {
-        return (<div>
+    if (!this.props.token) {
+      return (
+        <div>
           <LoginForm/>
           {this.renderError()}
-        </div>);
-      } else {
-        this.props.restoreUserToken(localStorage.token);
-      }
+        </div>
+      );
     }
-
-    localStorage.token = this.props.token;
 
     const {children} = this.props;
     return (
