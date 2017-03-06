@@ -3,7 +3,6 @@ import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 import * as GraphicsCategoryModel from '../../../common/models/graphics-category.json';
 import {saveAs} from 'file-saver';
-import * as ImageTools from '/ImageTools';
 const GraphicsCategory = GraphicsCategoryModel.properties;
 const location = '/files/thumb/';
 
@@ -254,12 +253,14 @@ export default class extends Component {
             {prop}
           </div>
           <div className='col-md-10'>
-            <input type='file' className='form-control' accept='image/*' id='imgInp'
+            <input type='file' className='form-control' accept='image/*'
                    onChange={e => this.handleFileChoose(prop, e)}/>
+            <img ref='img' src="" height='100' alt="Image preview..."/>
+            <canvas ref="canvas" width="100" height="100"/>
+            <img ref='imgOut' src="" height='100' alt="Image out..."/>
           </div>
         </div>);
       }
-
 
 
       return (
@@ -283,20 +284,27 @@ export default class extends Component {
   handleDowImg = () => {
     if (this.props.status === STATUS_CREATING) {
       const prop = 'thumb';
-      let image = this.props.objectHolder[prop];
-     //  saveAs(image, "thumb.png");
-      ImageTools.resize(image, {
-        width: 320, // maximum width
-        height: 240 // maximum height
-      }, function(blob, didItResize) {
-        // didItResize will be true if it managed to resize it, otherwise false (and will return the original file as 'blob')
-        saveAs(blob, "thumb.png");
-        // you can also now upload this blob using an XHR.
-      });
+      const image = this.props.objectHolder[prop];
+      const img = this.refs.img;
+      const imgOut = this.refs.imgOut;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(image);
+
+      const c = this.refs.canvas;
+        const ctx = c.getContext("2d");
+      img.onload = function () {
+        ctx.drawImage(img, 10, 10);
+      };
+      const dataURL = c.toDataURL();
+     
+
     }
   };
 
-  handleFileUpload = (prop, file) => {
+  handleFileUpload = (file) => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       this.props.uploadThumbnail(file);
     }
