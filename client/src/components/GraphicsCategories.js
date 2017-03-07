@@ -25,7 +25,7 @@ export default class extends Component {
     setEditingObjectProperty: PropTypes.func.isRequired,
     restoreTableState: PropTypes.func.isRequired,
     uploadThumbnail: PropTypes.func.isRequired,
-    token: PropTypes.func.isRequired
+    token: PropTypes.string.isRequired
   };
 
   componentWillMount() {
@@ -36,6 +36,9 @@ export default class extends Component {
   renderTableHeadings = object => (
     Object.getOwnPropertyNames(object).map((prop, i) => {
       if (prop === ID_PROP) {
+        return null;
+      }
+      if (prop === 'graphicsCategoryId') {
         return null;
       }
       return <th key={i}>{prop}</th>;
@@ -54,7 +57,10 @@ export default class extends Component {
           return null;
         }
         if (prop === 'thumb') {
-          return <th key={i}></th>;
+          return <th key={i}/>;
+        }
+        if (prop === 'graphicsCategoryId') {
+          return null;
         }
         return <td key={i}>
           <FormControl type='text'
@@ -107,6 +113,12 @@ export default class extends Component {
               if (prop === ID_PROP) {
                 return null;
               }
+              if (prop === 'thumb') {
+                return <td key={j}><img src={location + item[prop]}/></td>;
+              }
+              if (prop === 'graphicsCategoryId') {
+                return null;
+              }
               return <td key={j}>{item[prop]}</td>;
             })
           }
@@ -143,7 +155,7 @@ export default class extends Component {
   renderDefButtons = () => (
     <div className='pull-right' style={{marginBottom: '3px'}}>
       <button type='button' className='btn btn-default'
-              onClick={this.handleAddNew}>Add new font
+              onClick={this.handleAddNew}>Add new category
       </button>
     </div>
   );
@@ -214,6 +226,12 @@ export default class extends Component {
         if (prop !== ID_PROP) {
           entity[prop] = this.props.objectHolder[prop] || undefined;
         }
+        if (prop === 'thumb') {
+          if (this.props.objectHolder[prop] !== undefined) {
+            this.handleFileUpload();
+            entity[prop] = this.props.objectHolder[prop].name;
+          }
+        }
       });
       this.props.editEntity(this.props.objectHolder.id, entity, this.props.token);
       if (redirect) {
@@ -226,6 +244,12 @@ export default class extends Component {
       properties.forEach(prop => {
         if (prop !== ID_PROP) {
           entity[prop] = this.props.objectHolder[prop] || undefined;
+        }
+        if (prop === 'thumb') {
+          if (this.props.objectHolder[prop] !== undefined) {
+            this.handleFileUpload();
+            entity[prop] = this.props.objectHolder[prop].name;
+          }
         }
       });
       this.props.createEntity(entity, this.props.token);
@@ -246,27 +270,41 @@ export default class extends Component {
       if (prop === ID_PROP) {
         return null;
       }
-
+      if (prop === 'graphicsCategoryId') {
+        return <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            Parent Category
+          </div>
+          <div className='col-md-10'>
+            <select onChange={e => this.handleSelectedObjectChange(prop, e)}
+                    value={this.props.objectHolder[prop]}>
+              <option key='rootCategory' value={''}>Root category</option>
+              {this.props.data.map((cg, key) => (
+                <option key={key} value={cg.id}>{cg.name}</option>
+              ))}
+            </select>
+          </div>
+        </div>;
+      }
       if (prop === 'thumb') {
         return ( <div key={key} className='form-group'>
           <div className='col-md-2'>
             {prop}
           </div>
           <div className='col-md-10'>
-            <input type='file' className='form-control' accept='image/*'
+            <input ref='file' type='file' className='form-control' accept='image/*'
                    onChange={e => this.handleFileChoose(prop, e)}/>
-            <canvas ref="canvas" width="100" height="100"/>
-            <button type='button' className='btn btn-default'
-                    onClick={this.handleDowImg}>Img
-            </button>
-            <button type='button' className='btn btn-default'
-                    onClick={this.handleFileUpload}>Up
-            </button>
+          </div>
+          <div>
+          {!this.refs.file ?
+            <div className='box-body'><img src={location + this.props.objectHolder[prop]}/></div>
+            : null}
+          <div className='box-body'>
+            <canvas ref='canvas' width='100' height='100'/>
+          </div>
           </div>
         </div>);
       }
-
-
       return (
         <div key={key} className='form-group'>
           <div className='col-md-2'>
@@ -282,8 +320,22 @@ export default class extends Component {
 
     })
   );
-  handleDowImg = () => {
-    if (this.props.status === STATUS_CREATING) {
+  handleFileUpload = () => {
+    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
+      const c = this.refs.canvas;
+      const image = this.props.objectHolder['thumb'];
+      const uploadThumbnail = (file) => {
+        this.props.uploadThumbnail(file);
+      };
+      c.toBlob(function (blob) {
+        blob.name = image.name;
+        uploadThumbnail(blob);
+      }, 'image/*', 0.95);
+    }
+  };
+  handleFileChoose = (prop, e) => {
+    this.props.setEditingObjectProperty(prop, e.target.files[0]);
+    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       const prop = 'thumb';
       const image = this.props.objectHolder[prop];
       const img = new Image();
@@ -294,29 +346,11 @@ export default class extends Component {
       };
       reader.readAsDataURL(image);
       const c = this.refs.canvas;
-        const ctx = c.getContext("2d");
+      const ctx = c.getContext("2d");
       img.onload = function () {
         imageOut = ctx.drawImage(img, 0, 0, 100, 100);
       };
-
-
     }
-  };
-
-  handleFileUpload = () => {
-    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      const c = this.refs.canvas;
-      let file = new Blob();
-      c.toBlob(function(blob) {
-      file = blob;
-      }, 'image/jpeg', 0.95);
-      this.props.uploadThumbnail(file);
-
-    }
-  };
-
-  handleFileChoose = (prop, e) => {
-    this.props.setEditingObjectProperty(prop, e.target.files[0]);
   };
 
   renderPage = () => {

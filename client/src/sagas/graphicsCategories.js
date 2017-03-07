@@ -33,7 +33,7 @@ export function* fetchGraphicsCategoriesNumber() {
 
 export function* createGraphicsCategory(action) {
   try {
-    yield* api.create(endpoint, action.font, action.token);
+    yield* api.create(endpoint, action.graphicsCategory, action.token);
     yield dispatch({type: actionTypes.GRAPHICS_CATEGORY_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_GRAPHICS_CATEGORIES});
   } catch (e) {
@@ -43,7 +43,7 @@ export function* createGraphicsCategory(action) {
 
 export function* editGraphicsCategory(action) {
   try {
-    yield* api.update(endpoint, action.newFont, action.id, action.token);
+    yield* api.update(endpoint, action.newGraphicsCategory, action.id, action.token);
     yield dispatch({type: actionTypes.GRAPHICS_CATEGORY_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_GRAPHICS_CATEGORIES});
   } catch (e) {
@@ -63,7 +63,7 @@ export function* deleteGraphicsCategory(action) {
 export function* uploadThumbnail(action) {
   try {
     const data = new FormData();
-    data.append('file', action.thumbnail);
+    data.append('blob', action.thumbnail, action.thumbnail.name);
     yield* api.upload(endpointUpload, data);
     yield dispatch({type: actionTypes.GRAPHICS_CATEGORY_SUCCESS});
   } catch (e) {
