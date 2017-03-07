@@ -20,19 +20,19 @@ if (!process.env.NODE_ENV) {
 }
 
 app.get('/', function (req, res) {
-  res.sendFile(path.resolve(__dirname, '../client/public/'));
+  res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
 });
 app.get('/fonts', function (req, res) {
-  res.sendFile(path.resolve(__dirname, '../client/public/'));
+  res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
 });
 app.get('/colors', function (req, res) {
-  res.sendFile(path.resolve(__dirname, '../client/public/'));
+  res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
 });
 app.get('/colorgroups', function (req, res) {
-  res.sendFile(path.resolve(__dirname, '../client/public/'));
+  res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
 });
 app.get('/admins', function (req, res) {
-  res.sendFile(path.resolve(__dirname, '../client/public/'));
+  res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
 });
 
 app.start = function () {

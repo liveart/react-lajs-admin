@@ -1,6 +1,6 @@
 # Admin Dashboard
 
-##### v0.0.1 
+##### v0.0.2
 
 [Change Log](./CHANGELOG.md)
 
@@ -32,4 +32,6 @@ password
 colors: */api/liveart/colors*
 
 fonts: */api/liveart/fonts*
+
+fonts CSS: */api/liveart/fontsCSS*
 
