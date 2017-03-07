@@ -8,7 +8,8 @@ export default class LoginForm extends Component {
     this.state = {email: '', password: ''};
   }
 
-  handleLoginBtnClick = () => {
+  handleLoginBtnClick = e => {
+    e.preventDefault();
     this.props.getUserToken(this.state.email, this.state.password);
   };
 
@@ -27,7 +28,7 @@ export default class LoginForm extends Component {
           <div className='login-logo'>
             <b>LiveArt</b>Admin
           </div>
-          <div className='login-box-body'>
+          <form type='submit' className='login-box-body'>
             <p className='login-box-msg'>Log In</p>
             <div className='form-group has-feedback'>
               <p>Email:</p>
@@ -46,7 +47,7 @@ export default class LoginForm extends Component {
                 </button>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </section>
     );

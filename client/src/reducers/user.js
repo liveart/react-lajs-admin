@@ -42,12 +42,20 @@ export default function (state = INITIAL_STATE, action) {
       return {
         ...state,
         users: action.users || state.users,
+        token: action.token || state.token,
         error: null,
         loading: false
       };
     case actionType.USER_OPERATION_FAILURE:
       error = action.message;
       return {...state, error, loading: false};
+    case actionType.TOKEN_VALIDATION_FAILURE:
+      return {
+        ...state,
+        token: undefined,
+        error: null,
+        loading: false
+      };
     case actionType.FETCH_USERS:
       return {...state, users: [], error: null, loading: true};
     case actionType.REGISTER_USER:

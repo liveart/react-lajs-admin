@@ -5,7 +5,6 @@ import {syncHistoryWithStore} from 'react-router-redux';
 import {Provider} from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import sagaWatchers from './sagas';
-import configureStore from './store/configureStore.dev';
 import AppContainer from './containers/AppContainer';
 import OverviewContainer from './containers/OverviewContainer';
 import FontsContainer from './containers/FontsTableContainer';
@@ -13,6 +12,18 @@ import ColorsContainer from './containers/colors/ColorsTableContainer';
 import ColorgroupsContainer from './containers/colors/ColorgroupsTableContainer';
 import GraphicsContainer from './containers/GraphicsContainer';
 import AdminsContainer from './containers/AdminsContainer';
+
+let env = 'prod';
+if (process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
+  env = 'dev';
+}
+
+let configureStore;
+if (env === 'dev') {
+  configureStore = require('./store/configureStore.dev.js');
+} else if (env === 'prod') {
+  configureStore = require('./store/configureStore.prod.js');
+}
 
 const sagaMiddleware = createSagaMiddleware();
 const store = configureStore(sagaMiddleware);
