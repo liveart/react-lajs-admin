@@ -11,6 +11,13 @@
       "id": true,
       "required": true
     },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    },
     "categoryId": {
       "type": "string",
       "required": true
@@ -28,9 +35,6 @@
       "type": [
         "object"
       ]
-    },
-    "description": {
-      "type": "string"
     },
     "multicolor": {
       "type": "boolean",

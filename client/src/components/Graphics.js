@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import {FormControl} from 'react-bootstrap';
 import View from './View';
 import * as GraphicModel from '../../../common/models/graphic.json';
 const Graphic = GraphicModel.properties;
@@ -22,13 +21,52 @@ export default class GraphicsComponent extends Component {
     deleteEntity: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
     restoreTableState: PropTypes.func.isRequired,
+    graphicsCategories: PropTypes.array.isRequired,
     token: PropTypes.string
   };
 
-  render() {
+  handleSelectedObjectChange = (propertyName, event) => {
+    this.props.setEditingObjectProperty(propertyName, event.target.value);
+  };
 
+  handleFileChoose = (prop, e) => {
+    this.props.setEditingObjectProperty(prop, e.target.files[0]);
+  };
+
+  render() {
     return (
-      <View {...this.props} objectSample={Graphic} sortingSupport={true}/>
+      <View {...this.props} objectSample={Graphic} sortingSupport={true}
+            hiddenProperties={['id', 'categoryId', 'colors', 'colorize',
+              'colorizableElements', 'multicolor', 'description', 'image']}
+            hiddenInputs={['id', 'categoryId']}
+            changedInputs={{
+              image: <input type='file' className='form-control'
+                            onChange={e => this.handleFileChoose('image', e)}/>,
+              thumb: <input type='file' className='form-control'
+                            onChange={e => this.handleFileChoose('thumb', e)}/>,
+              description: <textarea className='form-control' rows='3'
+                                     value={this.props.objectHolder['description']}
+                                     onChange={e => this.handleSelectedObjectChange('description', e)}>
+                          </textarea>,
+              colorize: <select style={{width: '100%'}}
+                                value={this.props.objectHolder['colorize']}
+                                onChange={e => this.handleSelectedObjectChange('colorize', e)}>
+                <option value={false}>No</option>
+                <option value={true}>Yes</option>
+              </select>
+
+            }}
+            customInputs={{
+              category: <select style={{width: '100%'}}
+                                value={this.props.objectHolder['categoryId']}
+                                onChange={e => this.handleSelectedObjectChange('categoryId', e)}>
+                <option key='defGroup' value={''}>Root category</option>
+                {this.props.graphicsCategories.map((gc, key) => (
+                  <option key={key} value={gc.id}>{gc.name}</option>
+                ))}
+              </select>
+            }}
+      />
     );
   }
 }

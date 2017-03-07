@@ -20,6 +20,7 @@ const mapStateToProps = state => {
     loading: graphicsLoading,
     objectHolder,
     status,
+    graphicsCategories: [{id: 1, name: 'first'}, {id: 2, name: 'second'}],
     token
   };
 };

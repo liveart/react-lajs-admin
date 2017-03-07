@@ -1,4 +1,4 @@
-import {takeEvery} from 'redux-saga';
+import {takeEvery} from 'redux-saga/effects';
 import * as actionTypes from '../../actionTypes/graphics';
 import * as graphicsSagas from '../graphics';
 

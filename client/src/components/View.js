@@ -24,6 +24,9 @@ export default class ViewAbstract extends Component {
     objectSample: PropTypes.object.isRequired,
     sortingSupport: PropTypes.bool,
     hiddenProperties: PropTypes.array,
+    hiddenInputs: PropTypes.array,
+    changedInputs: PropTypes.object,
+    customInputs: PropTypes.object,
     renderHeadings: PropTypes.func
   };
 
@@ -75,7 +78,7 @@ export default class ViewAbstract extends Component {
               {this.props.secondaryData.map((cg, key) => (
                 <option key={key} value={cg.id}>{cg.name}</option>
               ))}
-            </select></td>
+            </select></td>;
           }
 
           return (
@@ -96,12 +99,15 @@ export default class ViewAbstract extends Component {
       let add = true;
 
       Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
+        if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
+          return;
+        }
         if (typeof (this.props.data[i])[prop] !== 'object') {
           if (typeof (this.props.data[i])[prop] === 'undefined') {
             add = this.props.objectHolder[prop] === '';
           } else if (typeof (this.props.data[i])[prop] === 'boolean') {
             add = true;
-          } else if (!(this.props.data[i])[prop].includes(this.props.objectHolder[prop])) {
+          } else if (!(this.props.data[i])[prop].indexOf(this.props.objectHolder[prop]) > -1) {
             add = false;
           }
         }
@@ -266,24 +272,53 @@ export default class ViewAbstract extends Component {
 
   renderInputs = () => (
     Object.getOwnPropertyNames(this.props.objectSample).map((prop, key) => {
-      if (prop === ID_PROP) {
+      if (this.props.hiddenInputs.indexOf(prop) > -1) {
         return null;
-      } else {
-        return (
-          <div key={key} className='form-group'>
-            <div className='col-md-2'>
-              {prop}
-            </div>
-            <div className='col-md-10'>
-              <input type='text' className='form-control'
-                     value={this.props.objectHolder[prop]}
-                     onChange={e => this.handleSelectedObjectChange(prop, e)}/>
-            </div>
-          </div>
-        );
       }
+      return (
+        <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            <p className={'' + (this.props.objectSample[prop].required ? 'req' : '')}>
+              {prop}
+            </p>
+          </div>
+          <div className='col-md-10'>
+            {
+              this.props.changedInputs && this.props.changedInputs.hasOwnProperty(prop) ?
+                this.props.changedInputs[prop] :
+                <input type='text' className='form-control'
+                       value={this.props.objectHolder[prop]}
+                       onChange={e => this.handleSelectedObjectChange(prop, e)}/>
+            }
+
+          </div>
+        </div>
+      );
+
     })
   );
+
+  renderCustomInputs = () => {
+    if (!this.props.customInputs) {
+      return null;
+    }
+    return Object.getOwnPropertyNames(this.props.customInputs).map((prop, key) => {
+      return (
+        <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            <p className={'' + (this.props.customInputs[prop].required ? 'req' : '')}>
+              {prop}
+            </p>
+          </div>
+          <div className='col-md-10'>
+            {
+              this.props.customInputs[prop]
+            }
+          </div>
+        </div>
+      );
+    });
+  };
 
   renderPage = () => {
     if (this.props.status === STATUS_DEFAULT) {
@@ -325,6 +360,7 @@ export default class ViewAbstract extends Component {
               <form className='form-horizontal'>
                 <div className='box-body'>
                   {this.renderInputs()}
+                  {this.renderCustomInputs()}
                 </div>
                 <div className='box-footer'>
                   {this.renderCreatingButtons()}

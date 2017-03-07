@@ -10,6 +10,11 @@ button {
   margin: 2px;
 }
 
+.req:after {
+  content: " *";
+  color: red;
+}
+
 .content {
   min-height: 100vh;
 }
