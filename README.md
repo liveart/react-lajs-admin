@@ -32,4 +32,5 @@ password
 colors: */api/liveart/colors*
 
 fonts: */api/liveart/fonts*
+fonts CSS: */api/liveart/fontsCSS*
 
