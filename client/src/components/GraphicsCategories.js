@@ -278,9 +278,12 @@ export default class extends Component {
           <div className='col-md-10'>
             <select onChange={e => this.handleSelectedObjectChange(prop, e)}
                     value={this.props.objectHolder[prop]}>
-              <option key='rootCategory' value={''}>Root category</option>
+              <option key='rootCategory' value={' '}>Root category</option>
               {this.props.data.map((cg, key) => (
-                this.props.objectHolder[ID_PROP] !== cg.id ?  <option key={key} value={cg.id}>{cg.name}</option> : null
+                this.props.objectHolder[ID_PROP] !== cg.id ?
+                  this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId ?
+                    <option key={key} value={cg.id}>{cg.name}</option> :
+                    <option disabled='disabled' key={key} value={cg.id}>{cg.name} </option> : null
               ))}
             </select>
           </div>
