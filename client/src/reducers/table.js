@@ -30,15 +30,20 @@ export default function (state = INITIAL_STATE, action) {
       return {...INITIAL_STATE, status: STATUS_EDITING, objectHolder: Object.assign({}, holder)};
     case ENABLE_CREATING:
       Object.getOwnPropertyNames(action.object).map(prop => {
-        holder[prop] = '';
+        if (typeof action.object[prop].default !== 'undefined') {
+          holder[prop] = action.object[prop].default;
+        } else {
+          holder[prop] = '';
+        }
       });
       return {...INITIAL_STATE, status: STATUS_CREATING, objectHolder: Object.assign({}, holder)};
     case ENABLE_DEFAULT_STATUS:
       return {...state, status: STATUS_DEFAULT, objectHolder: {}};
     case SET_INITIAL_STATE:
       Object.getOwnPropertyNames(action.object).map(prop => {
-        holder[prop] = '';
-      });
+          holder[prop] = '';
+        }
+      );
       return {...INITIAL_STATE, objectHolder: Object.assign({}, holder)};
     default:
       return state;

@@ -46,13 +46,36 @@ export default class GraphicsComponent extends Component {
   render() {
     return (
       <View {...this.props} objectSample={Graphic} sortingSupport={true}
-            hiddenProperties={['id', 'categoryId', 'colors', 'colorize',
+            hiddenProperties={['id', 'colors', 'colorize',
               'colorizableElements', 'multicolor', 'description', 'image']}
             hiddenInputs={['id', 'categoryId']}
             representations={{
               thumb: {
                 getElem: val => <img src={`/files/graphicThumbs/${val}`} alt='thumb' style={{width: 100}}/>,
                 sortable: false
+              },
+              image: {
+                getElem: val => <img src={`/files/graphicImages/${val}`} alt='image' style={{width: 100}}/>,
+                sortable: false
+              },
+              categoryId: {
+                getElem: val => {
+                  let cat = this.props.graphicsCategories.find(c => String(c.id) === val);
+                  if (cat) {
+                    return cat.name;
+                  }
+
+                  return '';
+                },
+                sortable: true,
+                sortElem: <select className='form-control'
+                                  value={this.props.objectHolder['categoryId']}
+                                  onChange={e => this.handleSelectedObjectChange('categoryId', e)}>
+                  <option key='any' value=''>...</option>
+                  {this.props.graphicsCategories.map((cat, key) => <option key={key}
+                                                                           value={cat.id}>{cat.name}</option>)}
+                </select>,
+                header: 'category'
               }
             }}
             changedInputs={{

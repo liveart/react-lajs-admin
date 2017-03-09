@@ -56,7 +56,8 @@ export default class extends Component {
   renderTableSortRow = object => (
     <tr key='sortRow'>
       {Object.getOwnPropertyNames(object).map((prop, i) => {
-        if (prop === ID_PROP || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'boldAllowed' || prop === 'italicAllowed' || prop === 'vector') {
+        if (prop === ID_PROP || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic'
+          || prop === 'boldAllowed' || prop === 'italicAllowed' || prop === 'vector') {
           return null;
         }
         if (prop === 'fileNormal') {
@@ -83,6 +84,9 @@ export default class extends Component {
     for (let i = 0; i < data.length; ++i) {
       let add = true;
       Object.getOwnPropertyNames(object).map(prop => {
+        if (!add) {
+          return;
+        }
         if (typeof (this.props.data[i])[prop] === 'undefined') {
           add = this.props.objectHolder[prop] === '';
         } else if (typeof (data[i])[prop] === 'boolean') {

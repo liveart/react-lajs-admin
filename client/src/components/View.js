@@ -28,8 +28,7 @@ export default class ViewAbstract extends Component {
     hiddenInputs: PropTypes.array,
     changedInputs: PropTypes.object,
     customInputs: PropTypes.object,
-    representations: PropTypes.object,
-    renderHeadings: PropTypes.func
+    representations: PropTypes.object
   };
 
   constructor(props) {
@@ -49,13 +48,14 @@ export default class ViewAbstract extends Component {
   }
 
   renderTableHeadings = () => {
-    if (typeof this.props.renderHeadings === 'function') {
-      return this.props.renderHeadings();
-    }
-
     return Object.getOwnPropertyNames(this.props.objectSample).map((prop, i) => {
       if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
         return null;
+      }
+
+      if (this.props.representations && this.props.representations.hasOwnProperty(prop)
+        && this.props.representations[prop].header) {
+        return <th key={i}>{this.props.representations[prop].header}</th>;
       }
 
       return <th key={i}>{prop}</th>;
@@ -78,26 +78,14 @@ export default class ViewAbstract extends Component {
             return null;
           }
 
-          if (this.props.representations && this.props.representations.hasOwnProperty(prop)
-            && !this.props.representations.hasOwnProperty(prop).sortable) {
-            return <td key={i}></td>;
+          if (this.props.representations && this.props.representations.hasOwnProperty(prop)) {
+            if (!this.props.representations[prop].sortable) {
+              return <td key={i}></td>;
+            } else if (this.props.representations[prop].sortElem) {
+              return <td key={i}>{this.props.representations[prop].sortElem}</td>
+            }
           }
 
-          if (typeof this.props.objectHolder[prop] === 'boolean') {
-            return <td key={i}><select className='form-control'
-                                       value={this.props.objectHolder[prop]}
-                                       onChange={e => this.handleSelectedObjectChange(prop, e)}>
-
-              {this.props.objectHolder[prop].default ||
-              (this.props.objectHolder[prop].required && this.props.objectHolder[prop].required === true) ?
-                <option key='defGroup' value={''}>...</option>
-                : null
-              }
-              {this.props.secondaryData.map((cg, key) => (
-                <option key={key} value={cg.id}>{cg.name}</option>
-              ))}
-            </select></td>;
-          }
 
           return (
             <td key={i}><FormControl type='text'
@@ -116,14 +104,17 @@ export default class ViewAbstract extends Component {
       let add = true;
 
       Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
+        if (!add) {
+          return;
+        }
         if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
           add = true;
-        } else if (typeof (this.props.data[i])[prop] !== 'object') {
+        } else if (typeof this.props.objectHolder[prop] !== 'object') {
           if (typeof (this.props.data[i])[prop] === 'undefined') {
             add = this.props.objectHolder[prop] === '';
           } else if (typeof (this.props.data[i])[prop] === 'boolean') {
             add = true;
-          } else if (!(this.props.data[i])[prop].indexOf(this.props.objectHolder[prop]) > -1) {
+          } else if (!(this.props.data[i])[prop].includes(this.props.objectHolder[prop])) {
             add = false;
           }
         }
@@ -154,7 +145,6 @@ export default class ViewAbstract extends Component {
               }
 
               if (this.props.representations.hasOwnProperty(prop)) {
-                console.log('asdasd');
                 return <td key={j}>{this.props.representations[prop].getElem(item[prop])}</td>;
               }
 
@@ -319,6 +309,14 @@ export default class ViewAbstract extends Component {
               <input type='text' className='form-control'
                      value={this.props.objectHolder[prop]}
                      onChange={e => this.handleSelectedObjectChange(prop, e)}/>
+          }
+
+          {
+            this.props.status === STATUS_EDITING &&
+            this.props.representations && this.props.representations.hasOwnProperty(prop) ?
+              <div
+                style={{marginTop: 3}}>{this.props.representations[prop].getElem(this.props.objectHolder[prop])}</div> :
+              null
           }
         </div>
       </div>

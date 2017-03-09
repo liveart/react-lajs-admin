@@ -80,6 +80,9 @@ export default class ColorgroupsComponent extends Component {
       let add = true;
 
       Object.getOwnPropertyNames(object).map(prop => {
+        if (!add) {
+          return;
+        }
         if (typeof (this.props.data[i])[prop] === 'undefined') {
           add = this.props.objectHolder[prop] === '';
         } else if (!(data[i])[prop].includes(this.props.objectHolder[prop])) {
