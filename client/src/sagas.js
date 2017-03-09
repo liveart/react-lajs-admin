@@ -38,6 +38,8 @@ export default function* root() {
     fork(graphicsWatchers.watchCreateGraphic),
     fork(graphicsWatchers.watchDeleteGraphic),
     fork(graphicsWatchers.watchEditGraphic),
+    fork(graphicsWatchers.watchUploadGraphicImage),
+    fork(graphicsWatchers.watchUploadGraphicThumb),
     fork(usersWatchers.watchDeleteUser),
     fork(usersWatchers.watchValidateToken)
   ];

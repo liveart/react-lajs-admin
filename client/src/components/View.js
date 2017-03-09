@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import {checkNotEmpty} from '../FormValidation';
 
 export default class ViewAbstract extends Component {
   static propTypes = {
@@ -27,8 +28,20 @@ export default class ViewAbstract extends Component {
     hiddenInputs: PropTypes.array,
     changedInputs: PropTypes.object,
     customInputs: PropTypes.object,
+    representations: PropTypes.object,
     renderHeadings: PropTypes.func
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {empty: []};
+  }
+
+  componentWillUpdate() {
+    if (this.state.empty.length) {
+      this.setState({empty: []});
+    }
+  }
 
   componentWillMount() {
     this.props.restoreTableState(this.props.objectSample);
@@ -65,8 +78,13 @@ export default class ViewAbstract extends Component {
             return null;
           }
 
-          if (this.props.objectHolder[prop].type === 'boolean') {
-            return <td key={i}><select style={{width: '100%'}}
+          if (this.props.representations && this.props.representations.hasOwnProperty(prop)
+            && !this.props.representations.hasOwnProperty(prop).sortable) {
+            return <td key={i}></td>;
+          }
+
+          if (typeof this.props.objectHolder[prop] === 'boolean') {
+            return <td key={i}><select className='form-control'
                                        value={this.props.objectHolder[prop]}
                                        onChange={e => this.handleSelectedObjectChange(prop, e)}>
 
@@ -82,11 +100,10 @@ export default class ViewAbstract extends Component {
           }
 
           return (
-            <td key={i}>
-              <FormControl type='text'
-                           value={this.props.objectHolder[prop]}
-                           onChange={e => this.handleSelectedObjectChange(prop, e)}
-              />
+            <td key={i}><FormControl type='text'
+                                     value={this.props.objectHolder[prop]}
+                                     onChange={e => this.handleSelectedObjectChange(prop, e)}
+            />
             </td>);
         })
         }
@@ -100,9 +117,8 @@ export default class ViewAbstract extends Component {
 
       Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
         if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
-          return;
-        }
-        if (typeof (this.props.data[i])[prop] !== 'object') {
+          add = true;
+        } else if (typeof (this.props.data[i])[prop] !== 'object') {
           if (typeof (this.props.data[i])[prop] === 'undefined') {
             add = this.props.objectHolder[prop] === '';
           } else if (typeof (this.props.data[i])[prop] === 'boolean') {
@@ -136,6 +152,12 @@ export default class ViewAbstract extends Component {
               if (this.props.hiddenProperties && this.props.hiddenProperties.includes(prop)) {
                 return null;
               }
+
+              if (this.props.representations.hasOwnProperty(prop)) {
+                console.log('asdasd');
+                return <td key={j}>{this.props.representations[prop].getElem(item[prop])}</td>;
+              }
+
               if (typeof item[prop] === 'object') {
                 return <td key={j}></td>;
               }
@@ -236,27 +258,36 @@ export default class ViewAbstract extends Component {
   };
 
   handleSaveBtnClick = redirect => {
-    if (this.props.status === STATUS_EDITING) {
-      const properties = Object.getOwnPropertyNames(this.props.objectSample);
-      const entity = {};
-      properties.forEach(prop => {
-        if (prop !== ID_PROP) {
+    const properties = Object.getOwnPropertyNames(this.props.objectSample);
+    const empty = properties.filter(p => p !== ID_PROP &&
+    (!checkNotEmpty(this.props.objectHolder[p]) && this.props.objectSample[p].required));
+    if (empty.length) {
+      this.setState({...this.state, empty: [...empty]});
+      return;
+    }
+    const entity = {};
+    properties.forEach(prop => {
+      if (prop !== ID_PROP) {
+        if (this.props.changedInputs && this.props.changedInputs[prop]
+          && typeof this.props.changedInputs[prop].saveF === 'function') {
+          if (this.props.objectHolder[prop] && this.props.objectHolder !== '') {
+            this.props.changedInputs[prop].saveF(this.props.objectHolder[prop]);
+            console.log(this.props.objectHolder[prop].name);
+            entity[prop] = this.props.objectHolder[prop].name;
+          }
+        } else {
           entity[prop] = this.props.objectHolder[prop] || undefined;
         }
-      });
+      }
+    });
+    if (this.props.status === STATUS_EDITING) {
       this.props.editEntity(this.props.objectHolder.id, entity, this.props.token);
       if (redirect) {
         this.props.enableDefaultStatus();
         this.props.restoreTableState(this.props.objectSample);
       }
     } else if (this.props.status === STATUS_CREATING) {
-      const properties = Object.getOwnPropertyNames(this.props.objectSample);
-      const entity = {};
-      properties.forEach(prop => {
-        if (prop !== ID_PROP) {
-          entity[prop] = this.props.objectHolder[prop] || undefined;
-        }
-      });
+
       this.props.createEntity(entity, this.props.token);
       this.props.enableDefaultStatus();
       this.props.restoreTableState(this.props.objectSample);
@@ -270,33 +301,30 @@ export default class ViewAbstract extends Component {
     }
   };
 
-  renderInputs = () => (
-    Object.getOwnPropertyNames(this.props.objectSample).map((prop, key) => {
-      if (this.props.hiddenInputs.indexOf(prop) > -1) {
-        return null;
-      }
-      return (
-        <div key={key} className='form-group'>
-          <div className='col-md-2'>
-            <p className={'' + (this.props.objectSample[prop].required ? 'req' : '')}>
-              {prop}
-            </p>
-          </div>
-          <div className='col-md-10'>
-            {
-              this.props.changedInputs && this.props.changedInputs.hasOwnProperty(prop) ?
-                this.props.changedInputs[prop] :
-                <input type='text' className='form-control'
-                       value={this.props.objectHolder[prop]}
-                       onChange={e => this.handleSelectedObjectChange(prop, e)}/>
-            }
-
-          </div>
+  renderInputs = () => Object.getOwnPropertyNames(this.props.objectSample).map((prop, key) => {
+    if (this.props.hiddenInputs.indexOf(prop) > -1) {
+      return null;
+    }
+    return (
+      <div key={key} className='form-group'>
+        <div className='col-md-2'>
+          <p className={'' + (this.props.objectSample[prop].required ? 'req' : '')}>
+            {prop}
+          </p>
         </div>
-      );
+        <div className='col-md-10'>
+          {
+            this.props.changedInputs && this.props.changedInputs.hasOwnProperty(prop) ?
+              this.props.changedInputs[prop].elem :
+              <input type='text' className='form-control'
+                     value={this.props.objectHolder[prop]}
+                     onChange={e => this.handleSelectedObjectChange(prop, e)}/>
+          }
+        </div>
+      </div>
+    );
 
-    })
-  );
+  });
 
   renderCustomInputs = () => {
     if (!this.props.customInputs) {
@@ -312,7 +340,7 @@ export default class ViewAbstract extends Component {
           </div>
           <div className='col-md-10'>
             {
-              this.props.customInputs[prop]
+              this.props.customInputs[prop].elem
             }
           </div>
         </div>
@@ -324,9 +352,9 @@ export default class ViewAbstract extends Component {
     if (this.props.status === STATUS_DEFAULT) {
       return this.renderDefault();
     } else if (this.props.status === STATUS_CREATING) {
-      return this.renderCreating();
+      return this.renderChanging();
     } else if (this.props.status === STATUS_EDITING) {
-      return this.renderEditing();
+      return this.renderChanging();
     }
   };
 
@@ -348,7 +376,7 @@ export default class ViewAbstract extends Component {
     </section>
   );
 
-  renderCreating = () => (
+  renderChanging = () => (
     <section>
       <div className='row'>
         <div className='col-md-12'>
@@ -363,33 +391,11 @@ export default class ViewAbstract extends Component {
                   {this.renderCustomInputs()}
                 </div>
                 <div className='box-footer'>
-                  {this.renderCreatingButtons()}
+                  {this.props.status === STATUS_CREATING ? this.renderCreatingButtons() : null}
+                  {this.props.status === STATUS_EDITING ? this.renderEditingButtons() : null}
                 </div>
-              </form>
-            </div>
-          </section>
-        </div>
-      </div>
-
-    </section>
-  );
-
-  renderEditing = () => (
-    <section>
-      <div className='row'>
-        <div className='col-md-12'>
-          <section className='content'>
-            <div className='box box-info'>
-              <div className='box-header with-border'>
-                <h3 className='box-title'>{`${this.props.title} information`}</h3>
-              </div>
-              <form className='form-horizontal'>
-                <div className='box-body'>
-                  {this.renderInputs()}
-                </div>
-                <div className='box-footer'>
-                  {this.renderEditingButtons()}
-                </div>
+                {this.state.empty.length ?
+                  <div className='text-red pull-right'>Please fill all the required fields.</div> : null}
               </form>
             </div>
           </section>

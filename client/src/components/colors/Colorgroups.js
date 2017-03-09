@@ -322,9 +322,9 @@ export default class ColorgroupsComponent extends Component {
                 </div>
                 <div className='form-group'>
                   <Radio value={MOVE_COLORS_TO_OTHER_GROUP}/>&nbsp; Move colors to other group &nbsp;
-                  <select
-                    value={this.state.newGroup}
-                    onChange={this.handleMoveToGroup}>
+                  <select className='form-control'
+                          value={this.state.newGroup}
+                          onChange={this.handleMoveToGroup}>
                     {this.props.data.map((cg, key) => (
                       <option key={key} value={cg.id}>{cg.name}</option>
                     ))}

@@ -3,6 +3,8 @@ import {dispatch} from './sagaFuncs';
 import * as api from './api';
 
 const endpoint = 'graphics';
+const imagesEndpoint = 'containers/graphicImages';
+const thumbsEndpoint = 'containers/graphicThumbs';
 
 export function* fetchGraphics() {
   try {
@@ -24,7 +26,7 @@ export function* fetchGraphicsNumber() {
 
 export function* createGraphic(action) {
   try {
-    yield* api.create(endpoint, action.color, action.token);
+    yield* api.create(endpoint, action.graphic, action.token);
     yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_GRAPHICS});
   } catch (e) {
@@ -49,5 +51,29 @@ export function* deleteGraphic(action) {
     yield dispatch({type: actionTypes.FETCH_GRAPHICS});
   } catch (e) {
     yield dispatch({type: actionTypes.GRAPHIC_OPERATION_FAILURE, message: e.message});
+  }
+}
+
+export function* uploadGraphicImage(action) {
+  try {
+    const data = new FormData();
+    data.append('file', action.imageFile);
+    yield* api.upload(imagesEndpoint, data);
+    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.FETCH_GRAPHICS});
+  } catch (e) {
+    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_FAILURE, message: e});
+  }
+}
+
+export function* uploadGraphicThumb(action) {
+  try {
+    const data = new FormData();
+    data.append('file', action.thumbFile);
+    yield* api.upload(thumbsEndpoint, data);
+    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.FETCH_GRAPHICS});
+  } catch (e) {
+    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_FAILURE, message: e});
   }
 }

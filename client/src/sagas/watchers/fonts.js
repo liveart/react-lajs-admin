@@ -33,4 +33,3 @@ export function* watchEditFont() {
 export function* watchDeleteFont() {
   yield takeLatest(actionTypes.DELETE_FONT, fontsSagas.deleteFont);
 }
-

@@ -20,6 +20,20 @@ export const createGraphic = (graphic, token) => {
   };
 };
 
+export const uploadGraphicImage = imageFile => {
+  return {
+    type: actionTypes.UPLOAD_GRAPHIC_IMAGE,
+    imageFile
+  };
+};
+
+export const uploadGraphicThumb = thumbFile => {
+  return {
+    type: actionTypes.UPLOAD_GRAPHIC_THUMB,
+    thumbFile
+  };
+};
+
 export const editGraphic = (id, graphic, token) => {
   return {
     type: actionTypes.EDIT_GRAPHIC,

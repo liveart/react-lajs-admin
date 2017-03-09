@@ -1,5 +1,8 @@
 import {connect} from 'react-redux';
-import {fetchGraphics, createGraphic, editGraphic, deleteGraphic} from '../actions/graphics';
+import {
+  fetchGraphics, createGraphic, editGraphic, deleteGraphic,
+  uploadGraphicImage, uploadGraphicThumb
+} from '../actions/graphics';
 
 import {
   selectRow, setObjectHolderProperty,
@@ -56,6 +59,12 @@ const mapDispatchToProps = dispatch => {
     },
     restoreTableState(object) {
       dispatch(setInitialState(object));
+    },
+    uploadGraphicImage(file) {
+      dispatch(uploadGraphicImage(file));
+    },
+    uploadGraphicThumb(file) {
+      dispatch(uploadGraphicThumb(file));
     }
   };
 };

@@ -231,7 +231,8 @@ export default class extends Component {
         if (prop !== ID_PROP) {
           entity[prop] = this.props.objectHolder[prop] || undefined;
         }
-        if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'vector') {
+        if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic'
+          || prop === 'vector') {
           if (this.props.objectHolder[prop] !== undefined) {
             this.handleFileUpload(prop, this.props.objectHolder[prop]);
             entity[prop] = this.props.objectHolder[prop].name;
@@ -250,7 +251,8 @@ export default class extends Component {
         if (prop !== ID_PROP) {
           entity[prop] = this.props.objectHolder[prop] || undefined;
         }
-        if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'vector') {
+        if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic'
+          || prop === 'vector') {
           if (this.props.objectHolder[prop] !== undefined) {
             this.handleFileUpload(prop, this.props.objectHolder[prop]);
             entity[prop] = this.props.objectHolder[prop].name;
@@ -325,8 +327,8 @@ export default class extends Component {
                     value={this.props.objectHolder[prop]}
                     onChange={e => this.handleSelectedObjectChange(prop, e)}>
               <option value=''>...</option>
-              <option value='true'>YES</option>
-              <option value='false'>NO</option>
+              <option value='true'>Yes</option>
+              <option value='false'>No</option>
             </select>
 
           </div>
