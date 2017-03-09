@@ -280,7 +280,7 @@ export default class extends Component {
                     value={this.props.objectHolder[prop]}>
               <option key='rootCategory' value={''}>Root category</option>
               {this.props.data.map((cg, key) => (
-                <option key={key} value={cg.id}>{cg.name}</option>
+                this.props.objectHolder[ID_PROP] !== cg.id ?  <option key={key} value={cg.id}>{cg.name}</option> : null
               ))}
             </select>
           </div>
@@ -292,16 +292,19 @@ export default class extends Component {
             {prop}
           </div>
           <div className='col-md-10'>
-            <input ref='file' type='file' className='form-control' accept='image/*'
+            <input type='file' className='form-control' accept='image/*'
                    onChange={e => this.handleFileChoose(prop, e)}/>
           </div>
-          <div>
-          {!this.refs.file ?
-            <div className='box-body'><img src={location + this.props.objectHolder[prop]}/></div>
-            : null}
-          <div className='box-body'>
-            <canvas ref='canvas' width='100' height='100'/>
+          <div className='col-md-2'>
           </div>
+          <div className='col-md-10'>
+            {!this.props.objectHolder[prop].name && this.props.status === STATUS_EDITING ?
+              <div style={{float: 'left'}} className='box-body'><img src={location + this.props.objectHolder[prop]}/>
+              </div>
+              : null}
+            <div style={{float: 'left'}} className='box-body'>
+              <canvas ref='canvas' width='100' height='100'/>
+            </div>
           </div>
         </div>);
       }
