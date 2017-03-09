@@ -2,9 +2,12 @@ import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 import * as GraphicsCategoryModel from '../../../common/models/graphics-category.json';
-import {saveAs} from 'file-saver';
+import {RadioGroup, Radio} from 'react-radio-group';
 const GraphicsCategory = GraphicsCategoryModel.properties;
 const location = '/files/thumb/';
+
+const DELETE_CATEGORY = 'DELETE_CATEGORY';
+const MOVE_GRAPHICS_TO_OTHER_CATEGORY = 'MOVE_GRAPHICS_TO_OTHER_CATEGORY';
 
 export default class extends Component {
   static propTypes = {
@@ -25,12 +28,18 @@ export default class extends Component {
     setEditingObjectProperty: PropTypes.func.isRequired,
     restoreTableState: PropTypes.func.isRequired,
     uploadThumbnail: PropTypes.func.isRequired,
+    deleteThumbnail: PropTypes.func.isRequired,
     token: PropTypes.string.isRequired
   };
 
   componentWillMount() {
     this.props.restoreTableState(GraphicsCategory);
     this.props.fetchData();
+  }
+
+  constructor() {
+    super();
+    this.state = {deleting: false, selectedValue: DELETE_CATEGORY, newGraphicsCategory: ''};
   }
 
   renderTableHeadings = object => (
@@ -160,8 +169,24 @@ export default class extends Component {
     </div>
   );
 
-  renderEditingButtons = () => (
-    <div>
+  renderEditingButtons = () => {
+    if (this.state.deleting) {
+      return (
+        <div>
+          <div className='pull-right'>
+            <button type='button' className='btn btn-danger'
+                    onClick={() => this.handleDeleteBtnClick(true)}>Delete
+            </button>
+            <button type='button' className='btn btn-default'
+                    onClick={() => {
+                      this.setState({...this.state, deleting: false});
+                    }}>Cancel
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return (<div>
       <div className='pull-left'>
         <button type='button' className='btn btn-default'
                 onClick={this.handleCancelBtnClick}>Cancel
@@ -179,8 +204,8 @@ export default class extends Component {
                 onClick={this.handleDeleteBtnClick}>Delete
         </button>
       </div>
-    </div>
-  );
+    </div>)
+  };
 
   renderCreatingButtons = () => (
     <div>
@@ -210,11 +235,32 @@ export default class extends Component {
     }
   };
 
-  handleDeleteBtnClick = () => {
+  handleDeleteBtnClick = (confirmed) => {
     if (this.props.status === STATUS_EDITING) {
-      this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
-      this.props.enableDefaultStatus();
-      this.props.restoreTableState(GraphicsCategory);
+      this.props.fetchData();
+      if (this.state.deleting && confirmed) {
+        if (this.state.selectedValue === DELETE_CATEGORY) {
+          this.props.data.map(c => {
+            if (c.graphicsCategoryId === this.props.objectHolder.id) {
+              this.props.deleteEntity(c.id, this.props.token);
+              this.props.deleteThumbnail(c.thumb);
+            }
+          });
+        } else if (this.state.selectedValue === MOVE_GRAPHICS_TO_OTHER_CATEGORY) {
+          this.props.data.map(c => {
+            if (c.graphicsCategoryId === this.props.objectHolder.id) {
+              this.props.editEntity(c.id, {...c, graphicsCategoryId: this.state.newGraphicsCategory}, this.props.token);
+            }
+          });
+        }
+        this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
+        this.props.deleteThumbnail(this.props.objectHolder.thumb);
+        this.props.enableDefaultStatus();
+        this.props.restoreTableState(GraphicsCategory);
+        this.setState({...this.state, deleting: false});
+      } else {
+        this.setState({...this.state, deleting: true});
+      }
     }
   };
 
@@ -230,6 +276,12 @@ export default class extends Component {
           if (this.props.objectHolder[prop] !== undefined) {
             this.handleFileUpload();
             entity[prop] = this.props.objectHolder[prop].name;
+            this.props.data.map(c => {
+              if (c.id === this.props.objectHolder[ID_PROP]) {
+                console.log(c.thumb);
+                this.props.deleteThumbnail(c.thumb);
+              }
+            });
           }
         }
       });
@@ -262,6 +314,55 @@ export default class extends Component {
     if (this.props.status !== STATUS_DEFAULT) {
       this.props.enableDefaultStatus();
       this.props.restoreTableState(GraphicsCategory);
+    }
+  };
+
+  handleCategoryActionOption = option => {
+    if (this.state.deleting) {
+      this.setState({...this.state, selectedValue: option});
+    }
+  };
+  handleMoveToCategory = e => {
+    if (this.state.deleting) {
+      this.setState({...this.state, newGraphicsCategory: e.target.value});
+    }
+  };
+
+  renderDelete = () => {
+    if (this.state.deleting) {
+      return (
+        <div className='form-group'>
+          <div className='col-md-3'>
+          </div>
+          <div className='col-md-6'>
+            <h1>Choose an action</h1>
+            <div className='form-group'>
+              <RadioGroup name='fruit' selectedValue={this.state.selectedValue}
+                          onChange={this.handleCategoryActionOption}>
+                <div className='form-group'>
+                  <Radio value={DELETE_CATEGORY}/>&nbsp; Delete all the category linked to this category
+                </div>
+                <div className='form-group'>
+                  <Radio value={MOVE_GRAPHICS_TO_OTHER_CATEGORY}/>&nbsp; Move category to other category &nbsp;
+                  <select
+                    value={this.state.newGraphicsCategory}
+                    onChange={this.handleMoveToCategory}>
+                    <option key='rootCategory' value={' '}>Root category</option>
+                    {this.props.data.map((cg, key) => (
+                      this.props.objectHolder[ID_PROP] !== cg.id ?
+                        this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId ?
+                          <option key={key} value={cg.id}>{cg.name}</option> :
+                          <option disabled='disabled' key={key} value={cg.id}>{cg.name} </option> : null
+                    ))}
+                  </select>
+                </div>
+              </RadioGroup>
+            </div>
+          </div>
+          <div className='col-md-3'>
+          </div>
+        </div>
+      );
     }
   };
 
@@ -423,7 +524,7 @@ export default class extends Component {
               </div>
               <form className='form-horizontal'>
                 <div className='box-body'>
-                  {this.renderInputs()}
+                  {!this.state.deleting ? this.renderInputs() : this.renderDelete()}
                 </div>
                 <div className='box-footer'>
                   {this.renderEditingButtons()}

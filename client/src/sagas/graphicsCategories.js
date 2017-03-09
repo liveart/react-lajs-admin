@@ -60,11 +60,21 @@ export function* deleteGraphicsCategory(action) {
     yield dispatch({type: actionTypes.GRAPHICS_CATEGORY_FAILURE, message: e});
   }
 }
+
 export function* uploadThumbnail(action) {
   try {
     const data = new FormData();
     data.append('blob', action.thumbnail, action.thumbnail.name);
     yield* api.upload(endpointUpload, data);
+    yield dispatch({type: actionTypes.GRAPHICS_CATEGORY_SUCCESS});
+  } catch (e) {
+    yield dispatch({type: actionTypes.GRAPHICS_CATEGORY_FAILURE, message: e});
+  }
+}
+
+export function* deleteThumbnail(action) {
+  try {
+    yield* api.deleteFile(endpointUpload + '/files/' + action.name);
     yield dispatch({type: actionTypes.GRAPHICS_CATEGORY_SUCCESS});
   } catch (e) {
     yield dispatch({type: actionTypes.GRAPHICS_CATEGORY_FAILURE, message: e});

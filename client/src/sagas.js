@@ -73,6 +73,7 @@ export default function* root() {
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategoriesNumber),
     fork(graphicsCategoriesWatchers.watchCreateGraphicsCategory),
     fork(graphicsCategoriesWatchers.watchUploadThumbnail),
+    fork(graphicsCategoriesWatchers.watchDeleteThumbnail),
     fork(graphicsCategoriesWatchers.watchEditGraphicsCategory),
     fork(graphicsCategoriesWatchers.watchDeleteGraphicsCategory),
   ];

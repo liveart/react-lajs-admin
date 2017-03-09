@@ -33,6 +33,8 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     case actionType.UPLOAD_THUMBNAIL:
       return {...state, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
+    case actionType.DELETE_THUMBNAIL:
+      return {...state, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     case actionType.EDIT_GRAPHICS_CATEGORY:
       return {...state, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     case actionType.DELETE_GRAPHICS_CATEGORY:

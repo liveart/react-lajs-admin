@@ -1,5 +1,12 @@
 import {connect} from 'react-redux';
-import {fetchGraphicsCategories, createGraphicsCategory, deleteGraphicsCategory, editGraphicsCategory, uploadThumbnail} from '../actions/graphicsCategories';
+import {
+  fetchGraphicsCategories,
+  createGraphicsCategory,
+  deleteGraphicsCategory,
+  editGraphicsCategory,
+  uploadThumbnail,
+  deleteThumbnail
+} from '../actions/graphicsCategories';
 import {
   selectRow,
   enableEditing,
@@ -11,6 +18,7 @@ import {
 import GraphicsCategories from '../components/GraphicsCategories';
 
 const mapStateToProps = state => {
+
   const {token} = state.user;
   const {graphicsCategories, graphicsCategoriesError, graphicsCategoriesLoading} = state.graphicsCategories;
   const {status, objectHolder} = state.table;
@@ -54,6 +62,9 @@ const mapDispatchToProps = dispatch => {
     },
     uploadThumbnail(thumbnail) {
       dispatch(uploadThumbnail(thumbnail));
+    },
+    deleteThumbnail(name) {
+      dispatch(deleteThumbnail(name));
     },
     deleteEntity(id, token) {
       dispatch(deleteGraphicsCategory(id, token));
