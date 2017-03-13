@@ -4,12 +4,12 @@ import {
   uploadGraphicImage, uploadGraphicThumb
 } from '../actions/graphics';
 import {
-  fetchColorizableElements, createColorizableElement, editColorizableElement, deleteColorizableElement
-} from '../actions/colorizableElement';
-import {
   selectRow, setObjectHolderProperty,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../actions/table';
+import {
+  fetchColorizables
+} from '../actions/colorizable';
 import Graphics from '../components/Graphics';
 
 const mapStateToProps = state => {
@@ -68,8 +68,8 @@ const mapDispatchToProps = dispatch => {
     uploadGraphicThumb(file) {
       dispatch(uploadGraphicThumb(file));
     },
-    fetchColorizableElements() {
-      dispatch(fetchColorizableElements());
+    fetchColorizables(graphicId) {
+      dispatch(fetchColorizables(graphicId));
     }
   };
 };

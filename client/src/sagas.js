@@ -5,7 +5,7 @@ import * as colorgroupsWatchers from './sagas/watchers/colorgroups';
 import * as fontsWatchers from './sagas/watchers/fonts';
 import * as usersWatchers from './sagas/watchers/users';
 import * as graphicsWatchers from './sagas/watchers/graphics';
-import * as colorizableElementWatchers from './sagas/watchers/colorizableElement';
+import * as colorizablesWatchers from './sagas/watchers/colorizable'
 
 import * as graphicsCategoriesWatchers from './sagas/watchers/graphicsCategories';
 
@@ -45,10 +45,6 @@ export default function* root() {
     fork(graphicsWatchers.watchUploadGraphicThumb),
     fork(usersWatchers.watchDeleteUser),
     fork(usersWatchers.watchValidateToken),
-    fork(colorizableElementWatchers.watchFetchColorizableElements),
-    fork(colorizableElementWatchers.watchCreateColorizableElement),
-    fork(colorizableElementWatchers.watchEditColorizableElement),
-    fork(colorizableElementWatchers.watchDeleteColorizableElement),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategories),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategoryById),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategoriesNumber),
@@ -57,6 +53,9 @@ export default function* root() {
     fork(graphicsCategoriesWatchers.watchDeleteThumbnail),
     fork(graphicsCategoriesWatchers.watchEditGraphicsCategory),
     fork(graphicsCategoriesWatchers.watchDeleteGraphicsCategory),
-    fork(usersWatchers.watchValidateToken)
+    fork(colorizablesWatchers.watchFetchColorizables),
+    fork(colorizablesWatchers.watchCreateColorizable),
+    fork(colorizablesWatchers.watchEditColorizable),
+    fork(colorizablesWatchers.watchDeleteColorizable)
   ];
 }

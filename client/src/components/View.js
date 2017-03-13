@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, STATUS_CONFIRM_DELETE} from '../definitions';
 import {checkNotEmpty} from '../FormValidation';
 
 export default class ViewAbstract extends Component {
@@ -23,12 +23,15 @@ export default class ViewAbstract extends Component {
     restoreTableState: PropTypes.func.isRequired,
     token: PropTypes.string,
     objectSample: PropTypes.object.isRequired,
-    handleDelete: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func,
+    deleteConfirmation: PropTypes.bool,
+    enableConfirmDelete: PropTypes.func,
     sortingSupport: PropTypes.bool,
     hiddenProperties: PropTypes.array,
     hiddenInputs: PropTypes.array,
     changedInputs: PropTypes.object,
     customInputs: PropTypes.object,
+    beforeStatusHook: PropTypes.func,
     representations: PropTypes.object
   };
 
@@ -229,6 +232,9 @@ export default class ViewAbstract extends Component {
 
   handleEdit = object => {
     if (this.props.status === STATUS_DEFAULT) {
+      if (typeof this.props.beforeStatusHook === 'function') {
+        this.props.beforeStatusHook(STATUS_EDITING);
+      }
       this.props.enableEditing(this.props.objectSample);
       this.props.selectRow(object);
     }
@@ -242,13 +248,17 @@ export default class ViewAbstract extends Component {
 
   handleDeleteBtnClick = () => {
     if (this.props.status === STATUS_EDITING) {
-      if (typeof this.props.handleDelete === 'function') {
-        this.props.handleDelete(this.props.objectHolder.id);
+      if (typeof this.props.deleteConfirmation === 'boolean' && this.props.deleteConfirmation === true) {
+        this.props.enableConfirmDelete();
       } else {
-        this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
+        if (typeof this.props.handleDelete === 'function') {
+          this.props.handleDelete(this.props.objectHolder.id);
+        } else {
+          this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
+        }
+        this.props.enableDefaultStatus();
+        this.props.restoreTableState(this.props.objectSample);
       }
-      this.props.enableDefaultStatus();
-      this.props.restoreTableState(this.props.objectSample);
     }
   };
 
@@ -358,6 +368,8 @@ export default class ViewAbstract extends Component {
       return this.renderChanging();
     } else if (this.props.status === STATUS_EDITING) {
       return this.renderChanging();
+    } else if (this.props.status === STATUS_CONFIRM_DELETE) {
+      return this.renderDeleteConfirmation();
     }
   };
 
@@ -406,6 +418,44 @@ export default class ViewAbstract extends Component {
       </div>
     </section>
   );
+
+  renderDeleteConfirmation = () => (
+    <section>
+      <div className='row'>
+        <div className='col-md-12'>
+          <section className='content'>
+            <div className='box box-info'>
+              <div className='box-header with-border'>
+                <h3 className='box-title'>{`${this.props.title} information`}</h3>
+              </div>
+              <form className='form-horizontal'>
+                <div className='box-body'>
+                  {this.renderDeleteConfirmationDialog()}
+                </div>
+                <div className='box-footer'>
+                  {this.renderDeleteConfirmationButtons()}
+                </div>
+                {this.state.empty.length ?
+                  <div className='text-red pull-right'>Please fill all the required fields.</div> : null}
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  );
+
+  renderDeleteConfirmationDialog = () => {
+    if (typeof this.props.renderDeleteConfirmationDialog === 'function') {
+      return this.props.renderDeleteConfirmationDialog();
+    }
+  };
+
+  renderDeleteConfirmationButtons = () => {
+    if (typeof this.props.renderDeleteConfirmationButtons === 'function') {
+      return this.props.renderDeleteConfirmationButtons();
+    }
+  };
 
   render() {
     const {loading, errors} = this.props;
