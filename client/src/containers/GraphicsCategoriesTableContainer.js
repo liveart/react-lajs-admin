@@ -13,12 +13,18 @@ import {
   enableCreating,
   enableDefaultStatus,
   setObjectHolderProperty,
-  setInitialState
+  setInitialState,
+  enableConfirmDelete
 } from '../actions/table';
+import {
+  fetchGraphics,
+  deleteGraphic,
+  editGraphic
+} from '../actions/graphics';
 import GraphicsCategories from '../components/GraphicsCategories';
 
 const mapStateToProps = state => {
-
+  const {graphics} = state.graphics;
   const {token} = state.user;
   const {graphicsCategories, graphicsCategoriesError, graphicsCategoriesLoading} = state.graphicsCategories;
   const {status, objectHolder} = state.table;
@@ -26,6 +32,7 @@ const mapStateToProps = state => {
   return {
     title: 'Graphics Categorie',
     data: graphicsCategories,
+    secondaryData: graphics,
     errors,
     loading: graphicsCategoriesLoading,
     objectHolder,
@@ -71,7 +78,20 @@ const mapDispatchToProps = dispatch => {
     },
     restoreTableState(object) {
       dispatch(setInitialState(object));
-    }
+    },
+    enableConfirmDelete() {
+      dispatch(enableConfirmDelete());
+    },
+    fetchSecondaryData() {
+      dispatch(fetchGraphics());
+    },
+    editSecondaryEntity(id, newGraphic, token) {
+      dispatch(editGraphic(id, newGraphic, token));
+    },
+    deleteSecondaryEntity(id, token) {
+      dispatch(deleteGraphic(id, token));
+    },
+
   };
 };
 
