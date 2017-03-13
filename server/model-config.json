@@ -63,5 +63,9 @@
   "colorizableElement": {
     "dataSource": "remote-dev-mongo",
     "public": true
+  },
+  "ColorizableElementColor": {
+    "dataSource": "remote-dev-mongo",
+    "public": true
   }
 }

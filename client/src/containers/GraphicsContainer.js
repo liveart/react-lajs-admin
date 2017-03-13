@@ -3,7 +3,9 @@ import {
   fetchGraphics, createGraphic, editGraphic, deleteGraphic,
   uploadGraphicImage, uploadGraphicThumb
 } from '../actions/graphics';
-
+import {
+  fetchColorizableElements, createColorizableElement, editColorizableElement, deleteColorizableElement
+} from '../actions/colorizableElement';
 import {
   selectRow, setObjectHolderProperty,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
@@ -65,6 +67,9 @@ const mapDispatchToProps = dispatch => {
     },
     uploadGraphicThumb(file) {
       dispatch(uploadGraphicThumb(file));
+    },
+    fetchColorizableElements() {
+      dispatch(fetchColorizableElements());
     }
   };
 };

@@ -39,7 +39,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "colorizableElements": {
+      "type": "hasMany",
+      "model": "colorizableElement",
+      "foreignKey": ""
+    }
+  },
   "acls": [],
   "methods": {}
 }
