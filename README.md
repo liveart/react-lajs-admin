@@ -1,11 +1,14 @@
 # Admin Dashboard
 
-##### v0.0.1 
+##### v0.0.2
 
 [Change Log](./CHANGELOG.md)
 
 
 ## Getting Started
+
+## Requirements
+- **Node**: v5.10.0 or Higher
 
 ### Installing packages
 
@@ -29,4 +32,6 @@ password
 colors: */api/liveart/colors*
 
 fonts: */api/liveart/fonts*
+
+fonts CSS: */api/liveart/fontsCSS*
 

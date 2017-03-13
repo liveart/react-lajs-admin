@@ -1,10 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
-const DELETE_COLORS = 'DELETE_COLORS';
-const MOVE_COLORS_TO_OTHER_GROUP = 'MOVE_COLORS_TO_OTHER_GROUP';
-const LEAVE_COLORS_WITHOUT_GROUP = 'LEAVE_COLORS_WITHOUT_GROUP';
-const User = {username: '', role: ''};
+const User = {email: '', password: ''};
 
 export default class extends Component {
   static propTypes = {
@@ -20,34 +17,34 @@ export default class extends Component {
     enableCreating: PropTypes.func.isRequired,
     enableDefaultStatus: PropTypes.func.isRequired,
     registerUser: PropTypes.func.isRequired,
-    editUser: PropTypes.func.isRequired,
-    deleteUser: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired
+    restoreTableState: PropTypes.func.isRequired,
+    token: PropTypes.string.isRequired,
+    validateUserToken: PropTypes.func.isRequired
   };
 
   componentWillMount() {
     this.props.restoreTableState(User);
-    this.props.fetchUsers();
+    this.props.fetchUsers(this.props.token);
+  }
+
+  componentWillReceiveProps() {
+    this.props.validateUserToken(this.props.token);
   }
 
   handleSelectedObjectChange = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
 
-  renderTableData = (data, object) => {
+  renderTableData = data => {
     if (!data.length) {
       return null;
     }
-
-    const rows = this.sortRows(data, object);
-
-    return rows.map((item, k) => {
+    return data.map((item, k) => {
 
       return (
         <tr key={k} onClick={() => this.handleEdit(item)}>
-          <td>{item.username}</td>
-          <td key={i}>{item.role}</td>
+          <td>{item.email}</td>
         </tr>
       );
     });
@@ -59,8 +56,7 @@ export default class extends Component {
         <table className='table no-margin table-hover table-bordered'>
           <thead>
           <tr key='trhead'>
-            <th>username</th>
-            <th>type</th>
+            <th>email</th>
           </tr>
           </thead>
           <tbody>
@@ -76,51 +72,27 @@ export default class extends Component {
       <button type='button' className='btn btn-primary' style={{marginBottom: '3px'}}
               onClick={this.handleAddNew}>Add new user
       </button>
-      <button type='button' className='btn btn-default' style={{marginBottom: '3px'}}
-              onClick={() => this.props.restoreTableState(User)}>Reset filter
-      </button>
     </div>
   );
 
-  renderEditingButtons = () => {
-    if (this.state.deleting) {
-      return (
-        <div>
-          <div className='pull-right'>
-            <button type='button' className='btn btn-danger'
-                    onClick={() => this.handleDeleteBtnClick(true)}>Delete
-            </button>
-            <button type='button' className='btn btn-default'
-                    onClick={() => {
-                      this.setState({...this.state, deleting: false});
-                    }}>Cancel
-            </button>
-          </div>
-        </div>
-      );
-    }
-    return (
-      <div>
-        <div className='pull-left'>
-          <button type='button' className='btn btn-default'
-                  onClick={this.handleCancelBtnClick}>Cancel
-          </button>
-        </div>
-        <div className='pull-right'>
-          <button type='button' className='btn btn-primary'
-                  onClick={() => this.handleSaveBtnClick(true)}>Save
-          </button>
-          <button type='button' className='btn btn-primary'
-                  onClick={() => this.handleSaveBtnClick(false)}>Save and
-            continue edit
-          </button>
-          <button type='button' className='btn btn-danger'
-                  onClick={() => this.handleDeleteBtnClick(false)}>Delete
-          </button>
-        </div>
+  renderEditingButtons = () => (
+    <div>
+      <div className='pull-left'>
+        <button type='button' className='btn btn-default'
+                onClick={this.handleCancelBtnClick}>Cancel
+        </button>
       </div>
-    );
-  };
+
+      <div className='pull-right'>
+        { this.props.data.length > 1 ? (
+            <button type='button' className='btn btn-danger'
+                    onClick={this.handleDeleteBtnClick}>Delete
+            </button>
+          ) : null
+        }
+      </div>
+    </div>
+  );
 
   renderCreatingButtons = () => (
     <div>
@@ -152,7 +124,7 @@ export default class extends Component {
 
   handleDeleteBtnClick = () => {
     if (this.props.status === STATUS_EDITING) {
-      this.props.deleteEntity(this.props.objectHolder.id);
+      this.props.deleteUser(this.props.objectHolder.id, this.props.token);
       this.props.enableDefaultStatus();
       this.props.restoreTableState(User);
     }
@@ -180,7 +152,7 @@ export default class extends Component {
           entity[prop] = this.props.objectHolder[prop] || undefined;
         }
       });
-      this.props.createEntity(entity);
+      this.props.registerUser(entity, this.props.token);
       this.props.enableDefaultStatus();
       this.props.restoreTableState(User);
     }
@@ -193,13 +165,44 @@ export default class extends Component {
     }
   };
 
-  renderInputs = () => (
-    <div key={key} className='form-group'>
-      <div className='col-md-2'>
-        Username
+  renderCreatingInputs = () => (
+    <div>
+      <div className='form-group'>
+        <div className='col-md-2'>
+          Email
+        </div>
+        <div className='col-md-10'>
+          <input type='email' className='form-control'
+                 value={this.props.objectHolder['email']}
+                 onChange={e => this.handleSelectedObjectChange('email', e)}
+          />
+        </div>
       </div>
-      <div className='col-md-10'>
-        {this.props.objectHolder['username']}
+      <div className='form-group'>
+        <div className='col-md-2'>
+          Password
+        </div>
+        <div className='col-md-10'>
+          <input type='password' className='form-control'
+                 value={this.props.objectHolder['password']}
+                 onChange={e => this.handleSelectedObjectChange('password', e)}/>
+        </div>
+      </div>
+    </div>
+  );
+
+  renderEditingInputs = () => (
+    <div>
+      <div className='form-group'>
+        <div className='col-md-2'>
+          Email
+        </div>
+        <div className='col-md-10'>
+          <input type='text' className='form-control'
+                 value={this.props.objectHolder['email']}
+                 onChange={e => this.handleSelectedObjectChange('email', e)}
+                 disabled/>
+        </div>
       </div>
     </div>
   );
@@ -241,7 +244,7 @@ export default class extends Component {
             </div>
             <form className='form-horizontal'>
               <div className='box-body'>
-                {this.renderInputs()}
+                {this.renderCreatingInputs()}
               </div>
               <div className='box-footer'>
                 {this.renderCreatingButtons()}
@@ -260,12 +263,11 @@ export default class extends Component {
           <section className='content'>
             <div className='box box-info'>
               <div className='box-header with-border'>
-                <h3 className='box-title'>Colorgroup information</h3>
+                <h3 className='box-title'>User information</h3>
               </div>
               <form className='form-horizontal'>
                 <div className='box-body'>
-                  {this.renderInputs()}
-                  {this.renderColorStats()}
+                  {this.renderEditingInputs()}
                 </div>
                 <div className='box-footer'>
                   {this.renderEditingButtons()}
@@ -281,21 +283,9 @@ export default class extends Component {
   render() {
     const {loading, errors} = this.props;
 
-    if (loading) {
-      return (
-        <main>
-          <div className='loader'></div>
-          <section className='content-header'>
-            <h1>Loading...</h1>
-          </section>
-          <section className='content'>
-          </section>
-        </main>
-      );
-    }
-
     return (
       <main>
+        {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <div className='content-header'>
           <h1>Navigator</h1>
         </div>

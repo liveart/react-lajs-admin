@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 import * as FontModel from '../../../common/models/font.json';
-import {saveAs} from 'file-saver';
 const Font = FontModel.properties;
 const location = '/files/fonts/';
 
@@ -26,7 +25,7 @@ export default class extends Component {
     restoreTableState: PropTypes.func.isRequired,
     uploadFontFile: PropTypes.func.isRequired,
     uploadVector: PropTypes.func.isRequired,
-    token: PropTypes.func.isRequired
+    token: PropTypes.string.isRequired
   };
 
   componentWillMount() {
@@ -36,7 +35,8 @@ export default class extends Component {
 
   renderTableHeadings = object => (
     Object.getOwnPropertyNames(object).map((prop, i) => {
-      if (prop === ID_PROP || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'boldAllowed' || prop === 'italicAllowed' || prop === 'vector') {
+      if (prop === ID_PROP || prop === 'fileBold' || prop === 'fileItalic' ||
+        prop === 'fileBoldItalic' || prop === 'boldAllowed' || prop === 'italicAllowed' || prop === 'vector') {
         return null;
       }
 
@@ -150,7 +150,6 @@ export default class extends Component {
           </thead>
           <tbody>
           {this.renderTableSortRow(object)}
-          {this.props.status === STATUS_CREATING ? this.renderCreatingRow() : null}
           {this.renderTableData(data, object)}
           </tbody>
         </table>
@@ -158,65 +157,13 @@ export default class extends Component {
     </div>
   );
 
-  renderButtons = () => (
-    this.props.status === STATUS_EDITING || this.props.status === STATUS_CREATING ?
-      this.renderEditingButtons() : this.renderDefButtons()
-  );
-
   renderDefButtons = () => (
     <div className='pull-right' style={{marginBottom: '3px'}}>
-      <button type='button' className='btn btn-default'
+      <button type='button' className='btn btn-primary'
               onClick={this.handleAddNew}>Add new font
-      </button>
-      <button type='button' className='btn btn-default'
-              onClick={this.handleCSSDownloadBtnClick}>CSS
       </button>
     </div>
   );
-
-  handleCSSDownloadBtnClick = () => {
-    if (this.props.status === STATUS_DEFAULT) {
-      const fonts = this.props.data;
-      const data = [];
-      fonts.forEach(font => {
-        if (font.fileNormal) {
-          data.push('@font-face {\n');
-          data.push("    font-family: '" + font.fontFamily + "';\n");
-          data.push('    src: url("/' + location + font.fileNormal + '");\n');
-          data.push("    font-weight: normal;\n");
-          data.push("    font-style: normal;\n");
-          data.push('}\n');
-        }
-        if (font.fileBold) {
-          data.push('@font-face {\n');
-          data.push("    font-family: '" + font.fontFamily + "';\n");
-          data.push('    src: url("/' + location + font.fileBold + '");\n');
-          data.push("    font-weight: bold;\n");
-          data.push("    font-style: normal;\n");
-          data.push('}\n');
-        }
-        if (font.fileItalic) {
-          data.push('@font-face {\n');
-          data.push("    font-family: '" + font.fontFamily + "';\n");
-          data.push('    src: url("/' + location + font.fileItalic + '");\n');
-          data.push("    font-weight: normal;\n");
-          data.push("    font-style: italic;\n");
-          data.push('}\n');
-        }
-        if (font.fileBoldItalic) {
-          data.push('@font-face {\n');
-          data.push("    font-family: '" + font.fontFamily + "';\n");
-          data.push('    src: url("/' + location + font.fileBoldItalic + '");\n');
-          data.push("    font-weight: bold;\n");
-          data.push("    font-style: italic;\n");
-          data.push('}\n');
-        }
-
-      });
-      const blob = new Blob(data, {type: 'text/plain'});
-      saveAs(blob, 'fonts.css');
-    }
-  };
 
   renderEditingButtons = () => (
     <div>
@@ -325,10 +272,12 @@ export default class extends Component {
 
   handleFileUpload = (prop, file) => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic')
+      if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic') {
         this.props.uploadFontFile(file);
-      if (prop === 'vector')
+      }
+      if (prop === 'vector') {
         this.props.uploadVector(file);
+      }
     }
   };
 
@@ -342,7 +291,8 @@ export default class extends Component {
         return null;
       }
 
-      if (prop === 'fileNormal' || prop === 'fileBold' || prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'fileBoldItalic') {
+      if (prop === 'fileNormal' || prop === 'fileBold' ||
+        prop === 'fileItalic' || prop === 'fileBoldItalic' || prop === 'fileBoldItalic') {
 
         return ( <div key={key} className='form-group'>
           <div className='col-md-2'>
@@ -479,21 +429,9 @@ export default class extends Component {
   render() {
     const {loading, errors} = this.props;
 
-    if (loading) {
-      return (
-        <main>
-          <div className='loader'></div>
-          <section className='content-header'>
-            <h1>Loading...</h1>
-          </section>
-          <section className='content'>
-          </section>
-        </main>
-      );
-    }
-
     return (
       <main>
+        {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <div className='content-header'>
           <h1>Navigator</h1>
         </div>

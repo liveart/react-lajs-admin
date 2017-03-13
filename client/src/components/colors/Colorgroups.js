@@ -9,7 +9,7 @@ const DELETE_COLORS = 'DELETE_COLORS';
 const MOVE_COLORS_TO_OTHER_GROUP = 'MOVE_COLORS_TO_OTHER_GROUP';
 const LEAVE_COLORS_WITHOUT_GROUP = 'LEAVE_COLORS_WITHOUT_GROUP';
 
-export default class Table extends Component {
+export default class ColorgroupsComponent extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
@@ -28,7 +28,7 @@ export default class Table extends Component {
     deleteSecondary: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
     restoreTableState: PropTypes.func.isRequired,
-    token: PropTypes.func.isRequired
+    token: PropTypes.string
   };
 
   constructor() {
@@ -443,21 +443,9 @@ export default class Table extends Component {
   render() {
     const {loading, errors} = this.props;
 
-    if (loading) {
-      return (
-        <main>
-          <div className='loader'></div>
-          <section className='content-header'>
-            <h1>Loading...</h1>
-          </section>
-          <section className='content'>
-          </section>
-        </main>
-      );
-    }
-
     return (
       <main>
+        {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <div className='content-header'>
           <h1>Navigator</h1>
         </div>

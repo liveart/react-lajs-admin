@@ -10,6 +10,15 @@ const helmet = require('helmet');
 app.use(helmet());
 
 app.use(loopback.static(path.join(__dirname, '../client/public/')));
+
+if (!process.env.NODE_ENV) {
+  console.log('NODE_ENV is not set.');
+  console.log('Running production.');
+} else if (process.env.NODE_ENV === 'development') {
+  console.log('NODE_ENV: ' + process.env.NODE_ENV);
+  console.warn('Running development.');
+}
+
 app.get('/', function (req, res) {
   res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
 });

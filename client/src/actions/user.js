@@ -8,7 +8,8 @@ export const EDIT_USER = 'EDIT_USER';
 export const DELETE_USER = 'DELETE_USER';
 export const USER_OPERATION_SUCCESS = 'USER_OPERATION_SUCCESS';
 export const USER_OPERATION_FAILURE = 'USER_OPERATION_FAILURE';
-
+export const VALIDATE_TOKEN = 'VALIDATE_TOKEN';
+export const TOKEN_VALIDATION_FAILURE = 'TOKEN_VALIDATION_FAILURE';
 
 export const getUserToken = (email, password) => {
   return {
@@ -25,36 +26,47 @@ export const restoreUserToken = token => {
   };
 };
 
+export const validateToken = token => {
+  return {
+    type: VALIDATE_TOKEN,
+    token
+  };
+};
+
 export const removeUserToken = () => {
   return {
     type: REMOVE_USER_TOKEN
   };
 };
 
-export const fetchUsers = () => {
+export const fetchUsers = token => {
   return {
-    type: FETCH_USERS
+    type: FETCH_USERS,
+    token
   };
 };
 
-export const registerUser = user => {
+export const registerUser = (user, token) => {
   return {
     type: REGISTER_USER,
-    user
+    user,
+    token
   };
 };
 
-export const editUser = (id, user) => {
+export const editUser = (id, user, token) => {
   return {
     type: EDIT_USER,
     id,
-    newUser: user
+    newUser: user,
+    token
   };
 };
 
-export const deleteUser = (id) => {
+export const deleteUser = (id, token) => {
   return {
     type: DELETE_USER,
-    id
+    id,
+    token
   };
 };
