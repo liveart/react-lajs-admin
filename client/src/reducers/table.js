@@ -1,8 +1,8 @@
 import {
   SELECT_ROW, ENABLE_EDITING, ENABLE_CREATING,
-  ENABLE_DEFAULT_STATUS, SET_OBJECT_HOLDER_PROPERTY, SET_INITIAL_STATE
-} from '../actions/table';
-import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+  ENABLE_DEFAULT_STATUS, SET_OBJECT_HOLDER_PROPERTY, SET_INITIAL_STATE, ENABLE_CONFIRM_DELETE
+} from '../actionTypes/table';
+import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, STATUS_CONFIRM_DELETE} from '../definitions';
 
 const INITIAL_STATE = {
   objectHolder: {},
@@ -39,6 +39,8 @@ export default function (state = INITIAL_STATE, action) {
       return {...INITIAL_STATE, status: STATUS_CREATING, objectHolder: Object.assign({}, holder)};
     case ENABLE_DEFAULT_STATUS:
       return {...state, status: STATUS_DEFAULT, objectHolder: {}};
+    case ENABLE_CONFIRM_DELETE:
+      return {...state, status: STATUS_CONFIRM_DELETE};
     case SET_INITIAL_STATE:
       Object.getOwnPropertyNames(action.object).map(prop => {
           holder[prop] = '';

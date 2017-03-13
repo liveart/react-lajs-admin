@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import View from './View';
 import * as GraphicModel from '../../../common/models/graphic.json';
+import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 const Graphic = GraphicModel.properties;
-Graphic.colorizableElements = [];
 
 export default class GraphicsComponent extends Component {
   static propTypes = {
@@ -25,17 +25,12 @@ export default class GraphicsComponent extends Component {
     graphicsCategories: PropTypes.array.isRequired,
     uploadGraphicImage: PropTypes.func.isRequired,
     uploadGraphicThumb: PropTypes.func.isRequired,
-    fetchColorizableElements: PropTypes.func.isRequired,
     token: PropTypes.string
   };
 
   constructor(props) {
     super(props);
     this.state = {colorizableNum: 0}
-  }
-
-  componentWillMount() {
-    this.props.fetchColorizableElements();
   }
 
   handleSelectedObjectChange = (propertyName, event) => {
@@ -103,6 +98,12 @@ export default class GraphicsComponent extends Component {
       </button>
     </div>
   );
+
+  beforeStatusHook = status => {
+    if (status === STATUS_EDITING) {
+      console.log('BEFORE EDITING;')
+    }
+  };
 
   render() {
     return (
@@ -182,8 +183,9 @@ export default class GraphicsComponent extends Component {
                 </select>,
                 required: true
               }
-            }
-            }
+            }}
+
+            beforeStatusHook={this.beforeStatusHook}
       />
     );
   }
