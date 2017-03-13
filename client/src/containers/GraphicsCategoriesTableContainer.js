@@ -24,7 +24,7 @@ const mapStateToProps = state => {
   const {status, objectHolder} = state.table;
   const errors = graphicsCategoriesError ? [graphicsCategoriesError] : [];
   return {
-    title: 'Graphics Categories',
+    title: 'Graphics Categorie',
     data: graphicsCategories,
     errors,
     loading: graphicsCategoriesLoading,
