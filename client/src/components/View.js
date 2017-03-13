@@ -23,6 +23,7 @@ export default class ViewAbstract extends Component {
     restoreTableState: PropTypes.func.isRequired,
     token: PropTypes.string,
     objectSample: PropTypes.object.isRequired,
+    handleDelete: PropTypes.func.isRequired,
     sortingSupport: PropTypes.bool,
     hiddenProperties: PropTypes.array,
     hiddenInputs: PropTypes.array,
@@ -241,7 +242,11 @@ export default class ViewAbstract extends Component {
 
   handleDeleteBtnClick = () => {
     if (this.props.status === STATUS_EDITING) {
-      this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
+      if (typeof this.props.handleDelete === 'function') {
+        this.props.handleDelete(this.props.objectHolder.id);
+      } else {
+        this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
+      }
       this.props.enableDefaultStatus();
       this.props.restoreTableState(this.props.objectSample);
     }
