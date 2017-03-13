@@ -4,6 +4,7 @@ import * as colorsWatchers from './sagas/watchers/colors';
 import * as colorgroupsWatchers from './sagas/watchers/colorgroups';
 import * as fontsWatchers from './sagas/watchers/fonts';
 import * as usersWatchers from './sagas/watchers/users';
+import * as graphicsWatchers from './sagas/watchers/graphics';
 
 import * as graphicsCategoriesWatchers from './sagas/watchers/graphicsCategories';
 
@@ -33,6 +34,14 @@ export default function* root() {
     fork(usersWatchers.watchFetchUsers),
     fork(usersWatchers.watchRegisterUser),
     fork(usersWatchers.watchEditUser),
+    fork(usersWatchers.watchDeleteUser),
+    fork(graphicsWatchers.watchFetchGraphics),
+    fork(graphicsWatchers.watchFetchGraphicsNumber),
+    fork(graphicsWatchers.watchCreateGraphic),
+    fork(graphicsWatchers.watchDeleteGraphic),
+    fork(graphicsWatchers.watchEditGraphic),
+    fork(graphicsWatchers.watchUploadGraphicImage),
+    fork(graphicsWatchers.watchUploadGraphicThumb),
     fork(usersWatchers.watchDeleteUser),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategories),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategoryById),

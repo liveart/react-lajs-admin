@@ -65,7 +65,7 @@ export default class ColorsComponent extends Component {
           }
 
           if (prop === 'colorgroupId') {
-            return <td key={i}><select style={{width: '100%'}}
+            return <td key={i}><select className='form-control'
                                        value={this.props.objectHolder[prop]}
                                        onChange={e => this.handleSelectedObjectChange(prop, e)}>
               <option key='defGroup' value={''}>...</option>
@@ -91,6 +91,9 @@ export default class ColorsComponent extends Component {
       let add = true;
 
       Object.getOwnPropertyNames(object).map(prop => {
+        if (!add) {
+          return;
+        }
         if (typeof (this.props.data[i])[prop] === 'undefined') {
           add = this.props.objectHolder[prop] === '';
         } else if (!(data[i])[prop].includes(this.props.objectHolder[prop])) {
@@ -293,7 +296,8 @@ export default class ColorsComponent extends Component {
               Group
             </div>
             <div className='col-md-10'>
-              <select onChange={e => this.handleSelectedObjectChange(prop, e)}
+              <select className='form-control'
+                      onChange={e => this.handleSelectedObjectChange(prop, e)}
                       value={this.props.objectHolder[prop]}>
                 <option key='defGroup' value={''}>...</option>
                 {this.props.secondaryData.map((cg, key) => (

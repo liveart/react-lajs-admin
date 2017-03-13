@@ -1,4 +1,3 @@
-import {put, call} from 'redux-saga/effects';
 import * as actionTypes from '../actionTypes/fonts';
 import {dispatch} from './sagaFuncs';
 import * as api from './api';
@@ -61,6 +60,7 @@ export function* deleteFont(action) {
     yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
 }
+
 export function* uploadFontFile(action) {
   try {
     const data = new FormData();
@@ -71,6 +71,7 @@ export function* uploadFontFile(action) {
     yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
 }
+
 export function* uploadVectors(action) {
   try {
     const data = new FormData();
@@ -81,7 +82,3 @@ export function* uploadVectors(action) {
     yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
 }
-
-
-
-

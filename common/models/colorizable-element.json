@@ -1,0 +1,28 @@
+{
+  "name": "colorizableElement",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "id": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "graphic": {
+      "type": "belongsTo",
+      "model": "graphic",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

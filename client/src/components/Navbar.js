@@ -39,6 +39,11 @@ export default class NavBar extends Component {
               </Link>
             </li>
             <li>
+              <Link to='/graphics' activeClassName='active'>
+                <i className='fa fa-picture-o'/> <span>Graphics</span>
+              </Link>
+            </li>
+            <li>
               <Link to='/graphicsCategories' activeClassName='active'>
                 <i className='fa fa-file-picture-o'/> <span>Graphics Categories</span>
               </Link>
