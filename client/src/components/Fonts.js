@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 import * as FontModel from '../../../common/models/font.json';
-import {saveAs} from 'file-saver';
 const Font = FontModel.properties;
 const location = '/files/fonts/';
 
@@ -163,55 +162,8 @@ export default class extends Component {
       <button type='button' className='btn btn-primary'
               onClick={this.handleAddNew}>Add new font
       </button>
-      <button type='button' className='btn btn-default'
-              onClick={this.handleCSSDownloadBtnClick}>CSS
-      </button>
     </div>
   );
-
-  handleCSSDownloadBtnClick = () => {
-    if (this.props.status === STATUS_DEFAULT) {
-      const fonts = this.props.data;
-      const data = [];
-      fonts.forEach(font => {
-        if (font.fileNormal) {
-          data.push('@font-face {\n');
-          data.push("    font-family: '" + font.fontFamily + "';\n");
-          data.push('    src: url("/' + location + font.fileNormal + '");\n');
-          data.push('    font-weight: normal;\n');
-          data.push('    font-style: normal;\n');
-          data.push('}\n');
-        }
-        if (font.fileBold) {
-          data.push('@font-face {\n');
-          data.push("    font-family: '" + font.fontFamily + "';\n");
-          data.push('    src: url("/' + location + font.fileBold + '");\n');
-          data.push('    font-weight: bold;\n');
-          data.push('    font-style: normal;\n');
-          data.push('}\n');
-        }
-        if (font.fileItalic) {
-          data.push('@font-face {\n');
-          data.push("    font-family: '" + font.fontFamily + "';\n");
-          data.push('    src: url("/' + location + font.fileItalic + '");\n');
-          data.push('    font-weight: normal;\n');
-          data.push('    font-style: italic;\n');
-          data.push('}\n');
-        }
-        if (font.fileBoldItalic) {
-          data.push('@font-face {\n');
-          data.push("    font-family: '" + font.fontFamily + "';\n");
-          data.push('    src: url("/' + location + font.fileBoldItalic + '");\n');
-          data.push('    font-weight: bold;\n');
-          data.push('    font-style: italic;\n');
-          data.push('}\n');
-        }
-
-      });
-      const blob = new Blob(data, {type: 'text/plain'});
-      saveAs(blob, 'fonts.css');
-    }
-  };
 
   renderEditingButtons = () => (
     <div>
