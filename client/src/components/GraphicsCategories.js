@@ -67,6 +67,89 @@ export default class extends Component {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
 
+  renderDelete = () => {
+    if(this.state.deleting){
+      return (
+        <div className='form-group'>
+          <div className='col-md-3'>
+          </div>
+          <div className='col-md-6'>
+            <h1>Choose an action</h1>
+            <div className='form-group'>
+              <RadioGroup name='fruit' selectedValue={this.state.selectedValue}
+                          onChange={this.handleCategoryActionOption}>
+                <div className='form-group'>
+                  <Radio value={DELETE_CATEGORY}/>&nbsp; Delete all the category linked to this category
+                </div>
+                <div className='form-group'>
+                  <Radio value={MOVE_GRAPHICS_TO_OTHER_CATEGORY}/>&nbsp; Move category to other category &nbsp;
+                  <select
+                    value={this.state.newGraphicsCategory}
+                    onChange={this.handleMoveToCategory}>
+                    <option key='rootCategory' value={' '}>Root category</option>
+                    {this.props.data.map((cg, key) => (
+                      this.props.objectHolder[ID_PROP] !== cg.id ?
+                        this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId ?
+                          <option key={key} value={cg.id}>{cg.name}</option> :
+                          <option disabled='disabled' key={key} value={cg.id}>{cg.name} </option> : null
+                    ))}
+                  </select>
+                </div>
+              </RadioGroup>
+            </div>
+          </div>
+          <div className='col-md-3'>
+          </div>
+        </div>
+      );
+    }
+  };
+
+  handleDeleteBtnClick = (confirmed) => {
+    if (this.props.status === STATUS_EDITING) {
+      this.props.fetchData();
+      if (this.state.deleting && confirmed) {
+        if (this.state.selectedValue === DELETE_CATEGORY) {
+          this.props.data.map(c => {
+            if (c.graphicsCategoryId === this.props.objectHolder.id) {
+              this.props.deleteEntity(c.id, this.props.token);
+              this.props.deleteThumbnail(c.thumb);
+            }
+          });
+        } else if (this.state.selectedValue === MOVE_GRAPHICS_TO_OTHER_CATEGORY) {
+          this.props.data.map(c => {
+            if (c.graphicsCategoryId === this.props.objectHolder.id) {
+              this.props.editEntity(c.id, {...c, graphicsCategoryId: this.state.newGraphicsCategory}, this.props.token);
+            }
+          });
+        }
+        this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
+        this.props.deleteThumbnail(this.props.objectHolder.thumb);
+        this.props.enableDefaultStatus();
+        this.props.restoreTableState(GraphicsCategory);
+        this.setState({...this.state, deleting: false});
+      } else {
+        this.setState({...this.state, deleting: true});
+      }
+    }
+  };
+
+  handleCategoryActionOption = option => {
+    if (this.state.deleting) {
+      this.setState({...this.state, selectedValue: option});
+    }
+  };
+  handleMoveToCategory = e => {
+    if (this.state.deleting) {
+      this.setState({...this.state, newGraphicsCategory: e.target.value});
+    }
+  };
+
+  constructor() {
+    super();
+    this.state = {deleting: false, selectedValue: DELETE_CATEGORY, newGraphicsCategory: ''};
+  }
+
   render() {
     return (
       <View {...this.props} objectSample={GraphicsCategory} sortingSupport={true}
@@ -79,9 +162,9 @@ export default class extends Component {
               },
             }}
             changedInputs={{
-               thumb: {
-               saveF: this.handleFileUpload
-               }
+              thumb: {
+                saveF: this.handleFileUpload
+              }
             }
             }
             customInputs={{
@@ -92,7 +175,7 @@ export default class extends Component {
 
                   {typeof(this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
                     <div style={{float: 'left'}}><img
-                      style={{marginTop: 3}}  src={location + this.props.objectHolder['thumb']}/>
+                      style={{marginTop: 3}} src={location + this.props.objectHolder['thumb']}/>
                     </div>
                     : null}
                   <div style={{float: 'left'}}>
@@ -102,7 +185,7 @@ export default class extends Component {
                 required: true
               },
               category: {
-                elem: <select onChange={e => this.handleSelectedObjectChange('graphicsCategoryId', e)}
+                elem: <select className='form-control' onChange={e => this.handleSelectedObjectChange('graphicsCategoryId', e)}
                               value={this.props.objectHolder['graphicsCategoryId']}>
                   <option key='rootCategory' value={' '}>Root category</option>
                   {this.props.data.map((cg, key) => (
@@ -115,6 +198,7 @@ export default class extends Component {
               }
             }
             }
+
       />
     );
   }

@@ -48,7 +48,7 @@ export default function* root() {
     fork(colorizableElementWatchers.watchFetchColorizableElements),
     fork(colorizableElementWatchers.watchCreateColorizableElement),
     fork(colorizableElementWatchers.watchEditColorizableElement),
-    fork(colorizableElementWatchers.watchDeleteColorizableElement)
+    fork(colorizableElementWatchers.watchDeleteColorizableElement),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategories),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategoryById),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategoriesNumber),
