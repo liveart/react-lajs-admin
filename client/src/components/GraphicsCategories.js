@@ -274,7 +274,7 @@ export default class extends Component {
         }
         if (prop === 'thumb') {
           if (this.props.objectHolder[prop] !== undefined) {
-            this.handleFileUpload();
+            this.handleFileUpload(this.props.objectHolder[prop]);
             entity[prop] = this.props.objectHolder[prop].name;
             this.props.data.map(c => {
               if (c.id === this.props.objectHolder[ID_PROP]) {
@@ -299,7 +299,7 @@ export default class extends Component {
         }
         if (prop === 'thumb') {
           if (this.props.objectHolder[prop] !== undefined) {
-            this.handleFileUpload();
+            this.handleFileUpload(this.props.objectHolder[prop]);
             entity[prop] = this.props.objectHolder[prop].name;
           }
         }
@@ -427,10 +427,9 @@ export default class extends Component {
 
     })
   );
-  handleFileUpload = () => {
+  handleFileUpload = (image) => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       const c = this.refs.canvas;
-      const image = this.props.objectHolder['thumb'];
       const uploadThumbnail = (file) => {
         this.props.uploadThumbnail(file);
       };
