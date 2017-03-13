@@ -25,12 +25,24 @@ export default class GraphicsComponent extends Component {
     graphicsCategories: PropTypes.array.isRequired,
     uploadGraphicImage: PropTypes.func.isRequired,
     uploadGraphicThumb: PropTypes.func.isRequired,
+    fetchColorizables: PropTypes.func.isRequired,
+    fetchColorizableColorConnections: PropTypes.func.isRequired,
+    colorizableColorConnections: PropTypes.arrayOf(PropTypes.any).isRequired,
+    colors: PropTypes.arrayOf(PropTypes.any).isRequired,
     token: PropTypes.string
   };
 
   constructor(props) {
     super(props);
     this.state = {colorizableNum: 0}
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.status !== this.props.status && props.status === STATUS_EDITING) {
+      this.props.fetchColorizables(props.objectHolder.id);
+      this.props.fetchColorizableColorConnections();
+      this.props.fetchColors();
+    }
   }
 
   handleSelectedObjectChange = (propertyName, event) => {
@@ -50,21 +62,53 @@ export default class GraphicsComponent extends Component {
   };
 
   handleColorizableRowChange = (prop, i, objectProp, e) => {
-
+//TODO
   };
 
   renderColorizableRow = () => {
     let rows = '';
     for (let i = 0; i < this.state.colorizableNum; ++i) {
-      rows += <td><input type='text' className='form-control'
-                         value={(this.props.objectHolder['colorizableElements'])[i]['name']}
-                         onChange={e => this.handleColorizableRowChange('colorizableElements', i, 'name', e)}/></td>;
-      rows += <td><input type='text' className='form-control'
-                         value={(this.props.objectHolder['colorizableElements'])[i]['id']}
-                         onChange={e => this.handleColorizableRowChange('colorizableElements', i, 'id', e)}/></td>;
+      rows += <tr key={`inputs${i}`}>
+        <td><input type='text' className='form-control'
+                   value={(this.props.objectHolder['colorizableElements'])[i]['name']}
+                   onChange={e => this.handleColorizableRowChange('colorizableElements', i, 'name', e)}/></td>
+        <td><input type='text' className='form-control'
+                   value={(this.props.objectHolder['colorizableElements'])[i]['id']}
+                   onChange={e => this.handleColorizableRowChange('colorizableElements', i, 'id', e)}/></td>
+      </tr>;
     }
-    return rows.length ? rows : null
+    return rows.length ? rows : null;
   };
+
+  renderColorizableData = () => this.props.colorizables.map((c, key) =>
+    <tr key={key}>
+      <td>{c.name}</td>
+      <td><p>{c.id}</p>{this.renderColorsTable()}</td>
+    </tr>);
+
+  renderColorsTable = () => (
+    <table className='table'>
+      <thead>
+      <tr>
+        <th>Color name</th>
+        <th>value</th>
+      </tr>
+      </thead>
+      <tbody>
+      {this.renderColorsData()}
+      </tbody>
+    </table>
+  );
+
+  renderColorsData = () =>
+    this.props.colors && this.props.colorizableColorConnections && this.props.colorizableColorConnections.length ?
+      this.props.colors
+        .filter(c => this.props.colorizableColorConnections.filter(conn => conn.colorId === c.id).length > 0)
+        .map((c, key) =>
+          <tr key={key}>
+            <td>{c.name}</td>
+            <td>{c.value}</td>
+          </tr>) : null;
 
   changeColorizableRowsNum = inc => {
     if (inc) {
@@ -80,15 +124,14 @@ export default class GraphicsComponent extends Component {
     <div>
       <table className='table table-bordered'>
         <thead>
-        <tr key='trhead'>
+        <tr>
           <th>name</th>
           <th>id</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          {this.renderColorizableRow()}
-        </tr>
+        {this.renderColorizableData()}
+        {this.renderColorizableRow()}
         </tbody>
       </table>
       <button type='button'
@@ -98,12 +141,6 @@ export default class GraphicsComponent extends Component {
       </button>
     </div>
   );
-
-  beforeStatusHook = status => {
-    if (status === STATUS_EDITING) {
-      console.log('BEFORE EDITING;')
-    }
-  };
 
   render() {
     return (
@@ -165,9 +202,6 @@ export default class GraphicsComponent extends Component {
                   <option value={false}>No</option>
                   <option value={true}>Yes</option>
                 </select>
-              },
-              colorizableElements: {
-                elem: this.renderColorizableTable()
               }
             }
             }
@@ -182,10 +216,11 @@ export default class GraphicsComponent extends Component {
                   ))}
                 </select>,
                 required: true
+              },
+              colorizableElements: {
+                elem: this.renderColorizableTable()
               }
             }}
-
-            beforeStatusHook={this.beforeStatusHook}
       />
     );
   }

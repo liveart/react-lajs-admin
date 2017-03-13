@@ -5,7 +5,8 @@ import * as colorgroupsWatchers from './sagas/watchers/colorgroups';
 import * as fontsWatchers from './sagas/watchers/fonts';
 import * as usersWatchers from './sagas/watchers/users';
 import * as graphicsWatchers from './sagas/watchers/graphics';
-import * as colorizablesWatchers from './sagas/watchers/colorizable'
+import * as colorizablesWatchers from './sagas/watchers/colorizable';
+import * as colorizableColorConnWatchers from './sagas/watchers/colorizableColorConnection';
 
 export default function* root() {
   yield [
@@ -46,6 +47,10 @@ export default function* root() {
     fork(colorizablesWatchers.watchFetchColorizables),
     fork(colorizablesWatchers.watchCreateColorizable),
     fork(colorizablesWatchers.watchEditColorizable),
-    fork(colorizablesWatchers.watchDeleteColorizable)
+    fork(colorizablesWatchers.watchDeleteColorizable),
+    fork(colorizableColorConnWatchers.watchFetchColorizableColorConnections),
+    fork(colorizableColorConnWatchers.watchCreateColorizableColorConnection),
+    fork(colorizableColorConnWatchers.watchEditColorizableColorConnection),
+    fork(colorizableColorConnWatchers.watchDeleteColorizableColorConnection)
   ];
 }

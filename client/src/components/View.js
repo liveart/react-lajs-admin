@@ -26,12 +26,13 @@ export default class ViewAbstract extends Component {
     handleDelete: PropTypes.func,
     deleteConfirmation: PropTypes.bool,
     enableConfirmDelete: PropTypes.func,
+    renderDeleteConfirmationDialog: PropTypes.func,
+    renderDeleteConfirmationButtons: PropTypes.func,
     sortingSupport: PropTypes.bool,
     hiddenProperties: PropTypes.array,
     hiddenInputs: PropTypes.array,
     changedInputs: PropTypes.object,
     customInputs: PropTypes.object,
-    beforeStatusHook: PropTypes.func,
     representations: PropTypes.object
   };
 
@@ -232,9 +233,6 @@ export default class ViewAbstract extends Component {
 
   handleEdit = object => {
     if (this.props.status === STATUS_DEFAULT) {
-      if (typeof this.props.beforeStatusHook === 'function') {
-        this.props.beforeStatusHook(STATUS_EDITING);
-      }
       this.props.enableEditing(this.props.objectSample);
       this.props.selectRow(object);
     }
@@ -336,7 +334,6 @@ export default class ViewAbstract extends Component {
         </div>
       </div>
     );
-
   });
 
   renderCustomInputs = () => {
