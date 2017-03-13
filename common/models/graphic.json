@@ -26,11 +26,6 @@
       "type": "boolean",
       "default": false
     },
-    "colorizableElements": {
-      "type": [
-        "object"
-      ]
-    },
     "multicolor": {
       "type": "boolean",
       "default": false

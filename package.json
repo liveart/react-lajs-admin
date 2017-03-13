@@ -60,7 +60,7 @@
     "webpack-dev-server": "^2.3.0",
     "webpack-validator": "^2.3.0"
   },
-  "engineStrict" : true,
+  "engineStrict": true,
   "engines": {
     "node": ">=5.10.0"
   },
