@@ -83,14 +83,15 @@ export default class GraphicsComponent extends Component {
   renderColorizableData = () => this.props.colorizables.map((c, key) =>
     <tr key={key}>
       <td>{c.name}</td>
-      <td><p>{c.id}</p>{this.renderColorsTable()}</td>
+      <td>{c.id}</td>
+      <td>{this.renderColorsTable()}</td>
     </tr>);
 
   renderColorsTable = () => (
     <table className='table'>
       <thead>
       <tr>
-        <th>Color name</th>
+        <th>name</th>
         <th>value</th>
       </tr>
       </thead>
@@ -127,6 +128,7 @@ export default class GraphicsComponent extends Component {
         <tr>
           <th>name</th>
           <th>id</th>
+          <th>colors</th>
         </tr>
         </thead>
         <tbody>
