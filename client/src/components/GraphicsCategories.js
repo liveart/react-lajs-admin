@@ -117,14 +117,14 @@ export default class extends Component {
                   onChange={this.handleMoveGraphicToCategory}>
                   {this.props.data.map((cg, key) => (
                     this.props.objectHolder[ID_PROP] !== cg.id ?
-                        <option key={key} value={cg.id}>{cg.name}</option> : null
+                      <option key={key} value={cg.id}>{cg.name}</option> : null
                   ))}
                 </select>
               </div>
             </RadioGroup>
           </div>
         </div>
-        </div>
+      </div>
     );
   };
 
@@ -214,6 +214,11 @@ export default class extends Component {
             hiddenProperties={['id', 'graphicsCategoryId']}
             hiddenInputs={['id', 'graphicsCategoryId', 'thumb']}
             representations={{
+              name: {
+                getElem: val =>
+                  val,
+                sortable: true
+              },
               thumb: {
                 getElem: val => <img src={location + val} alt='thumb' style={{width: 100}}/>,
                 sortable: false

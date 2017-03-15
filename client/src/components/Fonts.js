@@ -70,18 +70,6 @@ export default class extends Component {
             hiddenProperties={['id', 'boldAllowed', 'italicAllowed']}
             hiddenInputs={['id']}
             representations={{
-              name: {
-                getElem: item=>
-                  item,
-                header: 'Name',
-                sortable: true
-              },
-              fontFamily: {
-                getElem: item=>
-                        item,
-                header: 'Font Family',
-                sortable: true
-              },
               fileNormal: {
                 getElem: item =>
                  <a href={location + item}>{item}</a>,
