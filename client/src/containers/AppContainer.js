@@ -3,8 +3,9 @@ import App from '../components/App';
 import {restoreUserToken, validateToken} from '../actions/user';
 
 const mapStateToProps = state => {
-  const {token, error} = state.user;
+  const {email, token, error} = state.user;
   return {
+    email,
     token,
     error
   };

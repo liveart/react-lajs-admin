@@ -3,6 +3,10 @@ import {Link} from 'react-router';
 
 export default class Header extends Component {
 
+  static PropTypes = {
+    email: PropTypes.string.isRequired
+  };
+
   pushMenu = () => {
     const body = document.body;
     if (body.clientWidth > 768) {
@@ -31,6 +35,11 @@ export default class Header extends Component {
           <a href='#' className='sidebar-toggle' role='button' onClick={this.pushMenu}>
             <span className='sr-only'>Toggle navigation</span>
           </a>
+          <div className="navbar-custom-menu">
+            <ul className="nav navbar-nav">
+              <li><Link to="/admins">{this.props.email}</Link></li>
+            </ul>
+          </div>
         </nav>
       </header>
     );

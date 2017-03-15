@@ -271,15 +271,18 @@ export default class ViewAbstract extends Component {
     const entity = {};
     properties.forEach(prop => {
       if (prop !== ID_PROP) {
+        if (this.props.status === STATUS_CREATING && this.props.objectHolder[prop] === '') {
+          return;
+        }
+
         if (this.props.changedInputs && this.props.changedInputs[prop]
           && typeof this.props.changedInputs[prop].saveF === 'function') {
-          if (this.props.objectHolder[prop] && this.props.objectHolder !== '') {
+          if (this.props.objectHolder[prop]) {
             this.props.changedInputs[prop].saveF(this.props.objectHolder[prop]);
-            console.log(this.props.objectHolder[prop].name);
             entity[prop] = this.props.objectHolder[prop].name;
           }
         } else {
-          entity[prop] = this.props.objectHolder[prop] || undefined;
+          entity[prop] = this.props.objectHolder[prop];
         }
       }
     });

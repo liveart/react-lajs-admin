@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import View from './View';
 import * as GraphicModel from '../../../common/models/graphic.json';
 import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import * as _ from 'lodash';
 const Graphic = GraphicModel.properties;
 
 export default class GraphicsComponent extends Component {
@@ -34,7 +35,14 @@ export default class GraphicsComponent extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {colorizableNum: 0}
+    this.state = {newColorizables: []};
+    if (!Array.prototype.remove) {
+      Array.prototype.remove = function (from, to) {
+        const rest = this.slice((to || from) + 1 || this.length);
+        this.length = from < 0 ? this.length + from : from;
+        return this.push.apply(this, rest);
+      };
+    }
   }
 
   componentWillReceiveProps(props) {
@@ -61,33 +69,66 @@ export default class GraphicsComponent extends Component {
     this.props.uploadGraphicThumb(file);
   };
 
-  handleColorizableRowChange = (prop, i, objectProp, e) => {
-//TODO
+  handleColorizableRowChange = (i, objectProp, e) => {
+    const items = this.state.newColorizables;
+    this.state.newColorizables.map((c, ind) => {
+      if (c.i === i) {
+        items[ind][objectProp] = e.target.value;
+      }
+    });
+    this.setState({...this.state, newColorizables: [...items]});
   };
 
-  renderColorizableRow = () => {
-    let rows = '';
-    for (let i = 0; i < this.state.colorizableNum; ++i) {
-      rows += <tr key={`inputs${i}`}>
-        <td><input type='text' className='form-control'
-                   value={(this.props.objectHolder['colorizableElements'])[i]['name']}
-                   onChange={e => this.handleColorizableRowChange('colorizableElements', i, 'name', e)}/></td>
-        <td><input type='text' className='form-control'
-                   value={(this.props.objectHolder['colorizableElements'])[i]['id']}
-                   onChange={e => this.handleColorizableRowChange('colorizableElements', i, 'id', e)}/></td>
-      </tr>;
-    }
-    return rows.length ? rows : null;
+  handleColorizableRowDelete = i => {
+    const arr = this.state.newColorizables;
+    this.state.newColorizables.map((c, ind) => {
+      if (c.i === i) {
+        arr.remove(ind);
+      }
+    });
+    this.setState({...this.state, newColorizables: [...arr]});
   };
 
-  renderColorizableData = () => this.props.colorizables.map((c, key) =>
-    <tr key={key}>
-      <td>{c.name}</td>
-      <td>{c.id}</td>
-      <td>{this.renderColorsTable()}</td>
-    </tr>);
+  renderColorizableRow = () => (
+    this.state.newColorizables.map(c =>
+      <tr key={c.i}>
+        <td>
+          <input type='text' className='form-control'
+                 value={_.filter(this.state.newColorizables, cr => cr.id === c.id)[0]['name']}
+                 onChange={e => this.handleColorizableRowChange(c.i, 'name', e)}/></td>
+        <td>
+          <input type='text' className='form-control'
+                 value={_.filter(this.state.newColorizables, cr => cr.id === c.id)[0]['id']}
+                 onChange={e => this.handleColorizableRowChange(c.i, 'id', e)}/>
+        </td>
+        <td>
+          <table className='table'>
+            <thead>
+            <tr>
+              <th>name</th>
+              <th>value</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </td>
+        <td><a className='btn btn-default' href='#' onClick={e => this.handleColorizableRowDelete(c.i)}>
+          <i className='fa fa-ban'/></a></td>
+      </tr>
+    ));
 
-  renderColorsTable = () => (
+  renderColorizableData = () =>
+    this.props.colorizables.map((c, key) =>
+      <tr key={key}>
+        <td>{c.name}</td>
+        <td>{c.id}</td>
+        <td>{this.renderColorsTable(c.id)}</td>
+        <td><a className='btn btn-default' href='#'>
+          <i className='fa fa-ban'/></a></td>
+      </tr>);
+
+  renderColorsTable = colorizableId => (
     <table className='table'>
       <thead>
       <tr>
@@ -96,29 +137,31 @@ export default class GraphicsComponent extends Component {
       </tr>
       </thead>
       <tbody>
-      {this.renderColorsData()}
+      {this.renderColorsData(colorizableId)}
       </tbody>
     </table>
   );
 
-  renderColorsData = () =>
+  renderColorsData = colorizableId =>
     this.props.colors && this.props.colorizableColorConnections && this.props.colorizableColorConnections.length ?
-      this.props.colors
-        .filter(c => this.props.colorizableColorConnections.filter(conn => conn.colorId === c.id).length > 0)
+      _.intersectionWith(this.props.colors, this.props.colorizableColorConnections,
+        (color, conn) => colorizableId === conn.colorizableElementId && color.id === conn.colorId)
         .map((c, key) =>
           <tr key={key}>
             <td>{c.name}</td>
             <td>{c.value}</td>
           </tr>) : null;
 
-  changeColorizableRowsNum = inc => {
-    if (inc) {
-      this.setState({...this.state, colorizableNum: this.state.colorizableNum + 1});
-    } else {
-      if (this.state.colorizableNum > 0) {
-        this.setState({...this.state, colorizableNum: this.state.colorizableNum - 1});
-      }
-    }
+  addColorizableRow = () => {
+    this.setState({
+      ...this.state,
+      newColorizables: [...this.state.newColorizables, {
+        i: this.state.newColorizables.length,
+        name: '',
+        id: '',
+        colors: []
+      }]
+    });
   };
 
   renderColorizableTable = () => (
@@ -129,6 +172,7 @@ export default class GraphicsComponent extends Component {
           <th>name</th>
           <th>id</th>
           <th>colors</th>
+          <th/>
         </tr>
         </thead>
         <tbody>
@@ -138,7 +182,7 @@ export default class GraphicsComponent extends Component {
       </table>
       <button type='button'
               className='btn btn-default pull-right'
-              onClick={() => this.changeColorizableRowsNum(true)}
+              onClick={() => this.addColorizableRow()}
       >Add new element
       </button>
     </div>
@@ -152,11 +196,17 @@ export default class GraphicsComponent extends Component {
             hiddenInputs={['id', 'categoryId']}
             representations={{
               thumb: {
-                getElem: val => <img src={`/files/graphicThumbs/${val}`} alt='thumb' style={{width: 100}}/>,
+                getElem: val =>
+                  val ? <a href={`/files/graphicThumbs/${val}`} className='thumbnail' style={{width: 100}}><img
+                      src={`/files/graphicThumbs/${val}`} alt='thumb'
+                      style={{width: 100}}/></a> :
+                    null,
                 sortable: false
               },
               image: {
-                getElem: val => <img src={`/files/graphicImages/${val}`} alt='image' style={{width: 100}}/>,
+                getElem: val => val ?
+                  <a href={`/files/graphicImages/${val}`} className='thumbnail' style={{width: 100}}><img
+                    src={`/files/graphicImages/${val}`} alt='image' style={{width: 100}}/></a> : null,
                 sortable: false
               },
               categoryId: {
@@ -166,7 +216,7 @@ export default class GraphicsComponent extends Component {
                     return cat.name;
                   }
 
-                  return '';
+                  return null;
                 },
                 sortable: true,
                 sortElem: <select className='form-control'

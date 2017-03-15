@@ -8,11 +8,12 @@ import {
 import AdminComponent from '../components/Admins';
 
 const mapStateToProps = state => {
-  const {users, loading, error, token} = state.user;
+  const {email, users, loading, error, token} = state.user;
   const {objectHolder, status} = state.table;
   const errors = error ? [error] : [];
   return {
     title: 'Admins',
+    email,
     token,
     data: users,
     errors,
