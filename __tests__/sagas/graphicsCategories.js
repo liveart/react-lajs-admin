@@ -30,16 +30,18 @@ describe('graphicsCategories saga', () => {
   test('should process fetching number', () => {
     expect([...sagas.fetchGraphicsCategoriesNumber()].pop().type).toEqual(actionTypes.GRAPHICS_CATEGORY_SUCCESS);
   });
-
   test('should process editing with error', () => {
     expect([...sagas.editGraphicsCategory()].pop().type).toEqual(actionTypes.GRAPHICS_CATEGORY_FAILURE);
+  });
+  test('should process editing', () => {
+    expect([...sagas.editGraphicsCategory({id: '', newGraphicsCategory: {}})].pop().type).not.toEqual(actionTypes.GRAPHICS_CATEGORY_FAILURE);
   });
 
   test('should process deleting with error', () => {
     expect([...sagas.deleteGraphicsCategory()].pop().type).toEqual(actionTypes.GRAPHICS_CATEGORY_FAILURE);
   });
   test('should process uploading', () => {
-    expect([...sagas.uploadThumbnail({thumb: {}})].pop().type).toEqual(actionTypes.GRAPHICS_CATEGORY_SUCCESS);
+    expect([...sagas.uploadThumbnail({thumbnail: {}})].pop().type).toEqual(actionTypes.GRAPHICS_CATEGORY_SUCCESS);
   });
 
   test('should process uploading with error', () => {
