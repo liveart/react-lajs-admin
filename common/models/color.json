@@ -22,12 +22,6 @@
       "type": "belongsTo",
       "model": "colorgroup",
       "foreignKey": "colorgroupId"
-    },
-    "colorizableElements": {
-      "type": "hasMany",
-      "model": "colorizableElement",
-      "foreignKey": "colorId",
-      "through": "ColorizableElementColor"
     }
   },
   "acls": [

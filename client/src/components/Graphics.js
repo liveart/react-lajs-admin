@@ -41,6 +41,18 @@ export default class GraphicsComponent extends Component {
     }
   }
 
+  handleSelectedObjectArrayChange = (arrName, ind, propName, event) => {
+    const arr = this.props.objectHolder[arrName];
+    (arr[ind])[propName] = event.target.value;
+    this.props.setEditingObjectProperty(arrName, [...arr]);
+  };
+
+  handleSelectedObjectArrayArrayChange = (fArrName, sArrName, fInd, sInd, propName, event) => {
+    const colorizables = this.props.objectHolder[fArrName];
+    ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.value;
+    this.props.setEditingObjectProperty(fArrName, [...colorizables]);
+  };
+
   handleSelectedObjectChange = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
@@ -101,34 +113,10 @@ export default class GraphicsComponent extends Component {
             </tbody>
           </table>
         </td>
-        <td><a className='btn btn-default' href='#' onClick={e => this.handleColorizableRowDelete(c.i)}>
+        <td><a className='btn btn-danger btn-xs' href='#' onClick={e => this.handleColorizableRowDelete(c.i)}>
           <i className='fa fa-ban'/></a></td>
       </tr>
     ));
-
-  renderColorsTable = colorizableId => (
-    <table className='table'>
-      <thead>
-      <tr>
-        <th>name</th>
-        <th>value</th>
-      </tr>
-      </thead>
-      <tbody>
-      {this.renderColorsData(colorizableId)}
-      </tbody>
-    </table>
-  );
-
-  renderColorsData = colorizableId =>
-    this.props.colors ?
-      _.intersectionWith(this.props.colors, this.props.colorizableColorConnections,
-        (color, conn) => colorizableId === conn.colorizableElementId && color.id === conn.colorId)
-        .map((c, key) =>
-          <tr key={key}>
-            <td>{c.name}</td>
-            <td>{c.value}</td>
-          </tr>) : null;
 
   addColorizableRow = () => {
     this.setState({
@@ -143,7 +131,7 @@ export default class GraphicsComponent extends Component {
   };
 
   renderColorizableTable = () => (
-    <div>
+    <div className='panel panel-default'>
       <table className='table table-bordered'>
         <thead>
         <tr>
@@ -157,28 +145,65 @@ export default class GraphicsComponent extends Component {
         {this.props.objectHolder.colorizables ?
           this.props.objectHolder.colorizables.map((c, key) =>
             <tr key={key}>
-              <td>{c.name}</td>
-              <td>{c.id}</td>
-              <td>{this.renderColorsTable(c.id)}</td>
-              <td><a className='btn btn-default' href='#'>
+              <td><input type='text' className='form-control'
+                         value={c.name}
+                         onChange={e => this.handleSelectedObjectArrayChange('colorizables', key, 'name', e)}/>
+              </td>
+              <td><input type='text' className='form-control'
+                         value={c.id}
+                         onChange={e => this.handleSelectedObjectArrayChange('colorizables', key, 'id', e)}/>
+              </td>
+              <td>
+                <table className='table'>
+                  <thead>
+                  <tr>
+                    <th>name</th>
+                    <th>value</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {c._colors.map((col, k) => (
+                    <tr key={k}>
+                      <td><input type='text' className='form-control'
+                                 value={col.name}
+                                 onChange={e =>
+                                   this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'name', e)}/>
+                      </td>
+                      <td><input type='text' className='form-control'
+                                 value={col.value}
+                                 onChange={e =>
+                                   this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'value', e)}/>
+
+                        <span className='label label-default pull-right'
+                              style={{background: col.value}}>{' '}</span></td>
+                    </tr>
+                  ))}
+                  </tbody>
+                </table>
+                <button type='button'
+                        className='btn btn-default pull-right'
+                        onClick={() => this.addColorRow()}
+                >Add color
+                </button>
+              </td>
+              <td><a className='btn btn-danger btn-xs' href='#'>
                 <i className='fa fa-ban'/></a></td>
             </tr>) : null}
         {this.renderColorizableRow()}
         </tbody>
       </table>
-      <button type='button'
-              className='btn btn-default pull-right'
-              onClick={() => this.addColorizableRow()}
-      >Add new element
-      </button>
+      <div className='panel-footer'>
+        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addColorizableRow()}>
+          <i className='fa fa-plus'/> Add element</a>
+      </div>
     </div>
   );
 
   render() {
     return (
-      <View {...this.props} objectSample={Graphic} sortingSupport={true}
+      <View {...this.props} objectSample={{...Graphic, colorizables: []}} sortingSupport={true}
             hiddenProperties={['id', 'colors', 'colorize',
-              'colorizableElements', 'multicolor', 'description', 'image']}
+              'colorizableElements', 'multicolor', 'description', 'image', 'colorizables']}
             hiddenInputs={['id', 'categoryId']}
             representations={{
               thumb: {
@@ -240,6 +265,9 @@ export default class GraphicsComponent extends Component {
                   <option value={false}>No</option>
                   <option value={true}>Yes</option>
                 </select>
+              },
+              colorizables: {
+                elem: this.renderColorizableTable()
               }
             }
             }
@@ -254,9 +282,6 @@ export default class GraphicsComponent extends Component {
                   ))}
                 </select>,
                 required: true
-              },
-              colorizableElements: {
-                elem: this.renderColorizableTable()
               }
             }}
       />

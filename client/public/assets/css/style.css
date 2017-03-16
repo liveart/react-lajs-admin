@@ -1,3 +1,9 @@
+@media (max-width: 767px) {
+  .ct {
+    min-height: 230vh !important;
+  }
+}
+
 tr.selected {
   background-color: #BBDEFB !important;
 }

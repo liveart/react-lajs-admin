@@ -461,7 +461,7 @@ export default class ViewAbstract extends Component {
     const {loading, errors} = this.props;
 
     return (
-      <main>
+      <div>
         {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <div className='content-header'>
           <h1>{`${this.props.title}s`}</h1>
@@ -472,7 +472,7 @@ export default class ViewAbstract extends Component {
               {err}</div>)
         }
         {this.renderPage()}
-      </main>
+      </div>
     );
   }
 }

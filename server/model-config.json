@@ -67,5 +67,9 @@
   "graphicsCategory": {
     "dataSource": "remote-dev-mongo",
     "public": true
+  },
+  "ColorEmbed": {
+    "dataSource": "remote-dev-mongo",
+    "public": true
   }
 }

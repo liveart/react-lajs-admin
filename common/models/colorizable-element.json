@@ -20,8 +20,8 @@
   "relations": {
     "colors": {
       "type": "embedsMany",
-      "model": "color",
-      "property": "colors",
+      "model": "color-embed",
+      "property": "_colors",
       "options": {
         "validate": true,
         "forceId": false
