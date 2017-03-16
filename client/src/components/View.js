@@ -87,7 +87,7 @@ export default class ViewAbstract extends Component {
             if (!this.props.representations[prop].sortable) {
               return <td key={i}></td>;
             } else if (this.props.representations[prop].sortElem) {
-              return <td key={i}>{this.props.representations[prop].sortElem}</td>
+              return <td key={i}>{this.props.representations[prop].sortElem}</td>;
             }
           }
 

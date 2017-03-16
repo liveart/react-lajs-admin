@@ -43,8 +43,8 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, status: STATUS_CONFIRM_DELETE};
     case SET_INITIAL_STATE:
       Object.getOwnPropertyNames(action.object).map(prop => {
-          holder[prop] = '';
-        }
+        holder[prop] = '';
+      }
       );
       return {...INITIAL_STATE, objectHolder: Object.assign({}, holder)};
     default:

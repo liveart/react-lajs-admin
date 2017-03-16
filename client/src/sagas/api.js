@@ -87,3 +87,10 @@ export function* upload(endpoint, obj) {
   });
   return (yield req.json());
 }
+
+export function* deleteFile(endpoint) {
+  const req = yield fetch(apiRoot + endpoint, {
+    method: 'DELETE'
+  });
+  return (yield req.json());
+}

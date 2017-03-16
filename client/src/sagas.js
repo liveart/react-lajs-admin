@@ -6,6 +6,8 @@ import * as fontsWatchers from './sagas/watchers/fonts';
 import * as usersWatchers from './sagas/watchers/users';
 import * as graphicsWatchers from './sagas/watchers/graphics';
 
+import * as graphicsCategoriesWatchers from './sagas/watchers/graphicsCategories';
+
 export default function* root() {
   yield [
     fork(usersWatchers.watchGetUserToken),
@@ -42,5 +44,13 @@ export default function* root() {
     fork(graphicsWatchers.watchUploadGraphicThumb),
     fork(usersWatchers.watchDeleteUser),
     fork(usersWatchers.watchValidateToken)
+    fork(graphicsCategoriesWatchers.watchFetchGraphicsCategories),
+    fork(graphicsCategoriesWatchers.watchFetchGraphicsCategoryById),
+    fork(graphicsCategoriesWatchers.watchFetchGraphicsCategoriesNumber),
+    fork(graphicsCategoriesWatchers.watchCreateGraphicsCategory),
+    fork(graphicsCategoriesWatchers.watchUploadThumbnail),
+    fork(graphicsCategoriesWatchers.watchDeleteThumbnail),
+    fork(graphicsCategoriesWatchers.watchEditGraphicsCategory),
+    fork(graphicsCategoriesWatchers.watchDeleteGraphicsCategory),
   ];
 }

@@ -12,6 +12,7 @@ import ColorsContainer from './containers/colors/ColorsTableContainer';
 import ColorgroupsContainer from './containers/colors/ColorgroupsTableContainer';
 import GraphicsContainer from './containers/GraphicsContainer';
 import AdminsContainer from './containers/AdminsContainer';
+import GraphicsCategoriesTableContainer from './containers/GraphicsCategoriesTableContainer';
 
 let env = 'prod';
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
@@ -41,6 +42,7 @@ ReactDOM.render((
         <Route path='/colorgroups' component={ColorgroupsContainer}/>
         <Route path='/graphics' component={GraphicsContainer}/>
         <Route path='/admins' component={AdminsContainer}/>
+        <Route path='/graphicsCategories' component={GraphicsCategoriesTableContainer}/>
       </Route>
     </Router>
   </Provider>

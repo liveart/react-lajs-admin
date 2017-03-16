@@ -16,7 +16,7 @@ const mapStateToProps = state => {
   const {status, objectHolder} = state.table;
   const errors = fontsError ? [fontsError] : [];
   return {
-    title: 'Fonts',
+    title: 'Font',
     data: fonts,
     errors,
     loading: fontsLoading,
