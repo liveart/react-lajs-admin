@@ -1,4 +1,4 @@
-import {takeLatest} from 'redux-saga';
+import {takeLatest} from 'redux-saga/effects';
 import * as actionTypes from '../../actionTypes/graphicsCategories';
 import * as graphicsCategoriesSagas from '../graphicsCategories';
 

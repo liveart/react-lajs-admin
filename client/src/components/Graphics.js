@@ -4,6 +4,8 @@ import * as GraphicModel from '../../../common/models/graphic.json';
 import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 import * as _ from 'lodash';
 const Graphic = GraphicModel.properties;
+const location = 'files/graphicThumbs/';
+const locationImage = 'files/graphicImages/';
 
 export default class GraphicsComponent extends Component {
   static propTypes = {
@@ -31,7 +33,7 @@ export default class GraphicsComponent extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {newColorizables: []};
+    this.state = {newColorizables: [], imgUrl: ''};
     if (!Array.prototype.remove) {
       Array.prototype.remove = function (from, to) {
         const rest = this.slice((to || from) + 1 || this.length);
@@ -57,16 +59,63 @@ export default class GraphicsComponent extends Component {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
 
+  handleImgAsThumb = () => {
+    this.props.setEditingObjectProperty('thumb', this.props.objectHolder['image']);
+    this.toCanvas('thumb');
+  };
+
+  toCanvas = prop => {
+    const image = this.props.objectHolder[prop];
+    const img = new Image();
+    let imageOut = new Image();
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(image);
+    const c = this.refs.canvas;
+    const ctx = c.getContext('2d');
+    img.onload = function () {
+      imageOut = ctx.drawImage(img, 0, 0, 100, 100);
+    };
+  };
   handleFileChoose = (prop, e) => {
     this.props.setEditingObjectProperty(prop, e.target.files[0]);
+    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
+      if (prop === 'image') {
+        const image = this.props.objectHolder['image'];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          this.setState({
+            ...this.state,
+            imgUrl: reader.result
+          });
+        };
+        reader.readAsDataURL(image);
+      }
+      if (prop === 'thumb') {
+        this.toCanvas(prop);
+      }
+    }
   };
+
 
   handleImageUpload = file => {
     this.props.uploadGraphicImage(file);
   };
 
-  handleThumbUpload = file => {
-    this.props.uploadGraphicThumb(file);
+  handleThumbUpload = () => {
+    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
+      const c = this.refs.canvas;
+      const image = this.props.objectHolder['thumb'];
+      const uploadThumbnail = (file) => {
+        this.props.uploadGraphicThumb(file);
+      };
+      c.toBlob(function (blob) {
+        blob.name = image.name;
+        uploadThumbnail(blob);
+      }, 'image/*', 0.95);
+    }
   };
 
   handleColorizableRowChange = (i, objectProp, e) => {
@@ -204,7 +253,7 @@ export default class GraphicsComponent extends Component {
       <View {...this.props} objectSample={{...Graphic, colorizables: []}} sortingSupport={true}
             hiddenProperties={['id', 'colors', 'colorize',
               'colorizableElements', 'multicolor', 'description', 'image', 'colorizables']}
-            hiddenInputs={['id', 'categoryId']}
+            hiddenInputs={['id', 'categoryId', 'thumb', 'image']}
             representations={{
               thumb: {
                 getElem: val =>
@@ -247,8 +296,6 @@ export default class GraphicsComponent extends Component {
                 saveF: this.handleImageUpload
               },
               thumb: {
-                elem: <input type='file' className='form-control'
-                             onChange={e => this.handleFileChoose('thumb', e)}/>,
                 saveF: this.handleThumbUpload
               },
               description: {
@@ -272,6 +319,50 @@ export default class GraphicsComponent extends Component {
             }
             }
             customInputs={{
+              image: {
+                elem: <div>
+                  <input ref='file' type='file' className='form-control' accept='image/*'
+                         onChange={e => this.handleFileChoose('image', e)}/>
+
+                  {typeof (this.props.objectHolder['image']) === 'string' && this.props.status === STATUS_EDITING ?
+                    <a href={locationImage + this.props.objectHolder['image']}
+                       className='thumbnail'
+                       style={{marginTop: 3, width: 100}}><img
+                      style={{width: 100}} src={locationImage + this.props.objectHolder['image']}/>
+                    </a>
+                    : typeof (this.props.objectHolder['image']) === 'object' ? <div><a href={this.state.imgUrl}
+                              className='thumbnail'
+                              style={{marginTop: 3, width: 100}}><img src={this.state.imgUrl}/> </a>
+                      <button type='button' className='btn btn-primary'
+                              onClick={this.handleImgAsThumb}>Set thumb
+                      </button>
+                    </div> : null }
+                </div>,
+                required: true
+              },
+              thumb: {
+                elem: <div>
+                  <input type='file' className='form-control' accept='image/*'
+                         onChange={e => this.handleFileChoose('thumb', e)}/>
+
+                  {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
+                    <div style={{float: 'left'}}><a href={location + this.props.objectHolder['thumb']}
+                                                    className='thumbnail'
+                                                    style={{marginTop: 3, width: 100}}><img
+                      style={{width: 100}} src={location + this.props.objectHolder['thumb']}/>
+                    </a>
+                    </div>
+                    : null}
+                  <div style={{float: 'left'}}>
+                    {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumb'] ?
+                      <canvas style={{marginTop: 3}} ref='canvas' width='100'
+                              height='100' hidden/> :
+                      <canvas style={{marginTop: 3}} ref='canvas' width='100'
+                              height='100'/>}
+                  </div>
+                </div>,
+                required: true
+              },
               category: {
                 elem: <select className='form-control'
                               value={this.props.objectHolder['categoryId']}

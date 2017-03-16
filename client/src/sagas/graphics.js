@@ -69,7 +69,7 @@ export function* uploadGraphicImage(action) {
 export function* uploadGraphicThumb(action) {
   try {
     const data = new FormData();
-    data.append('file', action.thumbFile);
+    data.append('blob', action.thumbFile, action.thumbFile.name);
     yield* api.upload(thumbsEndpoint, data);
     yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_GRAPHICS});
