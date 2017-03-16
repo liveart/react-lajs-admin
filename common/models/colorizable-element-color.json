@@ -1,33 +1,31 @@
 {
-  "name": "color",
+  "name": "ColorizableElementColor",
   "base": "PersistedModel",
   "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
-    "name": {
+    "colorId": {
       "type": "string",
       "required": true
     },
-    "colorgroupId": {
-      "type": "string",
-      "required": false
-    },
-    "value": {
+    "colorizableElementId": {
       "type": "string",
       "required": true
     }
   },
   "validations": [],
   "relations": {
-    "colorgroup": {
+    "color": {
       "type": "belongsTo",
-      "model": "colorgroup",
-      "foreignKey": "colorgroupId"
+      "model": "color",
+      "foreignKey": "colorId"
     },
-    "colorizableElements": {
-      "type": "hasMany",
+    "colorizableElement": {
+      "type": "belongsTo",
       "model": "colorizableElement",
-      "foreignKey": "colorId",
-      "through": "ColorizableElementColor"
+      "foreignKey": "colorizableElementId"
     }
   },
   "acls": [

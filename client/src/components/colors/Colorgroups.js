@@ -61,14 +61,15 @@ export default class ColorgroupsComponent extends Component {
       {Object.getOwnPropertyNames(object).map((prop, i) => {
         if (prop === ID_PROP) {
           return null;
-        } else {
-          return <td key={i}>
-            <FormControl type='text'
-                         value={this.props.objectHolder[prop]}
-                         onChange={e => this.handleSelectedObjectChange(prop, e)}
-            />
-          </td>;
         }
+
+        return <td key={i}>
+          <FormControl type='text'
+                       value={this.props.objectHolder[prop]}
+                       onChange={e => this.handleSelectedObjectChange(prop, e)}
+          />
+        </td>;
+
       })}
     </tr>
   );
@@ -79,6 +80,9 @@ export default class ColorgroupsComponent extends Component {
       let add = true;
 
       Object.getOwnPropertyNames(object).map(prop => {
+        if (!add) {
+          return;
+        }
         if (typeof (this.props.data[i])[prop] === 'undefined') {
           add = this.props.objectHolder[prop] === '';
         } else if (!(data[i])[prop].includes(this.props.objectHolder[prop])) {
@@ -321,9 +325,9 @@ export default class ColorgroupsComponent extends Component {
                 </div>
                 <div className='form-group'>
                   <Radio value={MOVE_COLORS_TO_OTHER_GROUP}/>&nbsp; Move colors to other group &nbsp;
-                  <select
-                    value={this.state.newGroup}
-                    onChange={this.handleMoveToGroup}>
+                  <select className='form-control'
+                          value={this.state.newGroup}
+                          onChange={this.handleMoveToGroup}>
                     {this.props.data.map((cg, key) => (
                       <option key={key} value={cg.id}>{cg.name}</option>
                     ))}

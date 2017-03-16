@@ -4,6 +4,9 @@
 
 [Change Log](./CHANGELOG.md)
 
+## Requirements
+- **Node**: v5.10.0 or Higher
+
 
 ## Getting Started
 

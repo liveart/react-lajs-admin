@@ -38,6 +38,16 @@ export default class NavBar extends Component {
                 <i className='fa fa-object-group'/> <span>Color Groups</span>
               </Link>
             </li>
+            <li>
+              <Link to='/graphics' activeClassName='active'>
+                <i className='fa fa-picture-o'/> <span>Graphics</span>
+              </Link>
+            </li>
+            <li>
+              <Link to='/graphicsCategories' activeClassName='active'>
+                <i className='fa fa-file-picture-o'/> <span>Graphics Categories</span>
+              </Link>
+            </li>
             <li className='header'>ADDITIONAL</li>
             <li>
               <Link to='/admins' activeClassName='active'>

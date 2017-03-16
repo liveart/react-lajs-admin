@@ -30,7 +30,9 @@ describe('fonts saga', () => {
   test('should process fetching number', () => {
     expect([...sagas.fetchFontsNumber()].pop().type).toEqual(actionTypes.FONTS_OPERATION_SUCCESS);
   });
-
+  test('should process editing', () => {
+    expect([...sagas.editFont({id: '', newFont: {}})].pop().type).not.toEqual(actionTypes.FONTS_OPERATION_FAILURE);
+  });
   test('should process editing with error', () => {
     expect([...sagas.editFont()].pop().type).toEqual(actionTypes.FONTS_OPERATION_FAILURE);
   });

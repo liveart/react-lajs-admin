@@ -1,40 +1,41 @@
-export const SELECT_ROW = 'SELECT_ROW';
-export const SET_OBJECT_HOLDER_PROPERTY = 'SET_OBJECT_HOLDER_PROPERTY';
-export const ENABLE_EDITING = 'ENABLE_EDITING';
-export const ENABLE_CREATING = 'ENABLE_CREATING';
-export const ENABLE_DEFAULT_STATUS = 'ENABLE_DEFAULT_STATUS';
-export const SET_INITIAL_STATE = 'SET_INITIAL_STATE';
+import * as actionTypes from '../actionTypes/table';
 
 export const selectRow = selectedObject => {
   return {
-    type: SELECT_ROW,
+    type: actionTypes.SELECT_ROW,
     objectHolder: selectedObject
   };
 };
 
 export const enableEditing = object => {
   return {
-    type: ENABLE_EDITING,
+    type: actionTypes.ENABLE_EDITING,
     object
   };
 };
 
 export const enableCreating = object => {
   return {
-    type: ENABLE_CREATING,
+    type: actionTypes.ENABLE_CREATING,
     object
+  };
+};
+
+export const enableConfirmDelete = () => {
+  return {
+    type: actionTypes.ENABLE_CONFIRM_DELETE
   };
 };
 
 export const enableDefaultStatus = () => {
   return {
-    type: ENABLE_DEFAULT_STATUS
+    type: actionTypes.ENABLE_DEFAULT_STATUS
   };
 };
 
 export const setObjectHolderProperty = (propertyName, value) => {
   return {
-    type: SET_OBJECT_HOLDER_PROPERTY,
+    type: actionTypes.SET_OBJECT_HOLDER_PROPERTY,
     propertyName,
     value
   };
@@ -42,7 +43,7 @@ export const setObjectHolderProperty = (propertyName, value) => {
 
 export const setInitialState = object => {
   return {
-    type: SET_INITIAL_STATE,
+    type: actionTypes.SET_INITIAL_STATE,
     object
   };
 };

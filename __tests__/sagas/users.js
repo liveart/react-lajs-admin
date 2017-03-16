@@ -10,9 +10,6 @@ describe('fonts saga', () => {
   test('should process register', () => {
     expect([...sagas.registerUser({user: {}})].pop().type).not.toEqual(actionTypes.USER_OPERATION_FAILURE);
   });
-  test('should process fetch users', () => {
-    expect([...sagas.fetchUsers()].pop().type).toEqual(actionTypes.USER_OPERATION_SUCCESS);
-  });
   test('should process edit', () => {
     expect([...sagas.editUser({id: ''})].pop().type).not.toEqual(actionTypes.USER_OPERATION_FAILURE);
   });
