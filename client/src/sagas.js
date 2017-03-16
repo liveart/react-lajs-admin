@@ -43,7 +43,7 @@ export default function* root() {
     fork(graphicsWatchers.watchUploadGraphicImage),
     fork(graphicsWatchers.watchUploadGraphicThumb),
     fork(usersWatchers.watchDeleteUser),
-    fork(usersWatchers.watchValidateToken)
+    fork(usersWatchers.watchValidateToken),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategories),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategoryById),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategoriesNumber),
