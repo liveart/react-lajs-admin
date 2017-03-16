@@ -1,17 +1,14 @@
 import {connect} from 'react-redux';
 import {fetchFontsNumber} from '../actions/fonts';
 import {fetchColorsNumber} from '../actions/colors';
-import {fetchGraphicsCategoriesNumber} from '../actions/graphicsCategories';
 import Overview from '../components/Overview';
 
 const mapStateToProps = state => {
-  const {graphicsCategoriesNumber, graphicsCategoriesError, graphicsCategoriesLoading} = state.graphicsCategories;
   const {fontsNumber, fontsError, fontsLoading} = state.fonts;
   const {colorsNumber, colorsError, colorsLoading} = state.colors;
   const error = fontsError || colorsError;
   const loading = !!(fontsLoading || colorsLoading);
   return {
-    graphicsCategoriesNumber,
     fontsNumber,
     colorsNumber,
     error,
@@ -26,9 +23,6 @@ const mapDispatchToProps = dispatch => {
     },
     fetchColorsNumber() {
       dispatch(fetchColorsNumber());
-    },
-    fetchGraphicsCategoriesNumber() {
-      dispatch(fetchGraphicsCategoriesNumber());
     }
   };
 };

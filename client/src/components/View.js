@@ -86,7 +86,7 @@ export default class ViewAbstract extends Component {
             if (!this.props.representations[prop].sortable) {
               return <td key={i}></td>;
             } else if (this.props.representations[prop].sortElem) {
-              return <td key={i}>{this.props.representations[prop].sortElem}</td>
+              return <td key={i}>{this.props.representations[prop].sortElem}</td>;
             }
           }
 
@@ -277,7 +277,6 @@ export default class ViewAbstract extends Component {
           && typeof this.props.changedInputs[prop].saveF === 'function') {
           if (this.props.objectHolder[prop] && this.props.objectHolder !== '') {
             this.props.changedInputs[prop].saveF(this.props.objectHolder[prop]);
-            console.log(this.props.objectHolder[prop].name);
             entity[prop] = this.props.objectHolder[prop].name;
           }
         } else {

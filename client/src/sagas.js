@@ -5,7 +5,7 @@ import * as colorgroupsWatchers from './sagas/watchers/colorgroups';
 import * as fontsWatchers from './sagas/watchers/fonts';
 import * as usersWatchers from './sagas/watchers/users';
 import * as graphicsWatchers from './sagas/watchers/graphics';
-import * as colorizablesWatchers from './sagas/watchers/colorizable'
+import * as colorizablesWatchers from './sagas/watchers/colorizable';
 
 import * as graphicsCategoriesWatchers from './sagas/watchers/graphicsCategories';
 

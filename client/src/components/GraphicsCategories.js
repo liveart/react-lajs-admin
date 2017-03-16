@@ -62,7 +62,7 @@ export default class extends Component {
       };
       reader.readAsDataURL(image);
       const c = this.refs.canvas;
-      const ctx = c.getContext("2d");
+      const ctx = c.getContext('2d');
       img.onload = function () {
         imageOut = ctx.drawImage(img, 0, 0, 100, 100);
       };
@@ -236,7 +236,7 @@ export default class extends Component {
                   <input type='file' className='form-control' accept='image/*'
                          onChange={e => this.handleFileChoose('thumb', e)}/>
 
-                  {typeof(this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
+                  {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
                     <div style={{float: 'left'}}><img
                       style={{marginTop: 3}} src={location + this.props.objectHolder['thumb']}/>
                     </div>
