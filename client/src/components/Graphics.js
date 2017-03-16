@@ -26,10 +26,6 @@ export default class GraphicsComponent extends Component {
     graphicsCategories: PropTypes.array.isRequired,
     uploadGraphicImage: PropTypes.func.isRequired,
     uploadGraphicThumb: PropTypes.func.isRequired,
-    fetchColorizables: PropTypes.func.isRequired,
-    fetchColorizableColorConnections: PropTypes.func.isRequired,
-    colorizableColorConnections: PropTypes.arrayOf(PropTypes.any).isRequired,
-    colors: PropTypes.arrayOf(PropTypes.any).isRequired,
     token: PropTypes.string
   };
 
@@ -42,14 +38,6 @@ export default class GraphicsComponent extends Component {
         this.length = from < 0 ? this.length + from : from;
         return this.push.apply(this, rest);
       };
-    }
-  }
-
-  componentWillReceiveProps(props) {
-    if (props.status !== this.props.status && props.status === STATUS_EDITING) {
-      this.props.fetchColorizables(props.objectHolder.id);
-      this.props.fetchColorizableColorConnections();
-      this.props.fetchColors();
     }
   }
 
@@ -118,16 +106,6 @@ export default class GraphicsComponent extends Component {
       </tr>
     ));
 
-  renderColorizableData = () =>
-    this.props.colorizables.map((c, key) =>
-      <tr key={key}>
-        <td>{c.name}</td>
-        <td>{c.id}</td>
-        <td>{this.renderColorsTable(c.id)}</td>
-        <td><a className='btn btn-default' href='#'>
-          <i className='fa fa-ban'/></a></td>
-      </tr>);
-
   renderColorsTable = colorizableId => (
     <table className='table'>
       <thead>
@@ -143,7 +121,7 @@ export default class GraphicsComponent extends Component {
   );
 
   renderColorsData = colorizableId =>
-    this.props.colors && this.props.colorizableColorConnections && this.props.colorizableColorConnections.length ?
+    this.props.colors ?
       _.intersectionWith(this.props.colors, this.props.colorizableColorConnections,
         (color, conn) => colorizableId === conn.colorizableElementId && color.id === conn.colorId)
         .map((c, key) =>
@@ -176,7 +154,15 @@ export default class GraphicsComponent extends Component {
         </tr>
         </thead>
         <tbody>
-        {this.renderColorizableData()}
+        {this.props.objectHolder.colorizables ?
+          this.props.objectHolder.colorizables.map((c, key) =>
+            <tr key={key}>
+              <td>{c.name}</td>
+              <td>{c.id}</td>
+              <td>{this.renderColorsTable(c.id)}</td>
+              <td><a className='btn btn-default' href='#'>
+                <i className='fa fa-ban'/></a></td>
+            </tr>) : null}
         {this.renderColorizableRow()}
         </tbody>
       </table>

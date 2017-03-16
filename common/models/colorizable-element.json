@@ -19,10 +19,13 @@
   "validations": [],
   "relations": {
     "colors": {
-      "type": "hasMany",
+      "type": "embedsMany",
       "model": "color",
-      "foreignKey": "colorizableElementId",
-      "through": "ColorizableElementColor"
+      "property": "colors",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
     }
   },
   "acls": [

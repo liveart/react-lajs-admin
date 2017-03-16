@@ -41,9 +41,13 @@
   "validations": [],
   "relations": {
     "colorizableElements": {
-      "type": "hasMany",
+      "type": "embedsMany",
       "model": "colorizableElement",
-      "foreignKey": ""
+      "property": "colorizables",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
     }
   },
   "acls": [],

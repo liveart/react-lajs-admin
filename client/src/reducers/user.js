@@ -10,7 +10,7 @@ export default function (state = INITIAL_STATE, action) {
     case actionType.REMOVE_USER_TOKEN:
       return {
         ...state,
-        email: null,
+        email: '',
         token: null,
         error: null,
         loading: false
@@ -19,7 +19,7 @@ export default function (state = INITIAL_STATE, action) {
       return {
         ...state,
         password: action.password,
-        token: null,
+        token: '',
         error: null,
         loading: true
       };

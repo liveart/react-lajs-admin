@@ -15,15 +15,16 @@ export default class App extends Component {
     if (!this.props.token && typeof localStorage.token === 'string') {
       this.props.restoreUserToken(localStorage.token);
     }
-
-    if (this.props.token) {
-      this.props.validateUserToken(this.props.token);
-    }
   }
 
-  componentWillReceiveProps() {
-    if (this.props.token && (!localStorage.token || localStorage.token !== this.props.token)) {
-      localStorage.token = this.props.token;
+  componentWillReceiveProps(props) {
+    if (props.token) {
+      if (!localStorage.token || localStorage.token !== props.token) {
+        localStorage.token = props.token;
+      }
+      if (props.token !== this.props.token) {
+        this.props.validateUserToken(props.token);
+      }
     }
   }
 

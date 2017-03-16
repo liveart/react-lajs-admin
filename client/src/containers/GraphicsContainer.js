@@ -4,38 +4,22 @@ import {
   uploadGraphicImage, uploadGraphicThumb
 } from '../actions/graphics';
 import {
-  fetchColors
-} from '../actions/colors';
-import {
-  fetchColorizableColorConnections
-} from '../actions/colorizableColorConnection';
-import {
   selectRow, setObjectHolderProperty,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../actions/table';
-import {
-  fetchColorizables
-} from '../actions/colorizable';
 import Graphics from '../components/Graphics';
 
 const mapStateToProps = state => {
   const {token} = state.user;
-  const {colors, colorsError, colorsLoading} = state.colors;
   const {graphics, graphicsError, graphicsLoading} = state.graphics;
-  const {colorizables, colorizablesError, colorizablesLoading} = state.colorizables;
-  const {colorizableColorConnections} = state.colorizableColorConns;
   const {objectHolder, status} = state.table;
-  const error = colorizablesError || graphicsError || colorsError;
-  const errors = error ? [error] : [];
+  const errors = graphicsError ? [error] : [];
 
   return {
     title: 'Graphic',
     data: graphics,
-    colors,
-    colorizables,
-    colorizableColorConnections,
     errors,
-    loading: graphicsLoading || colorizablesLoading || colorsLoading,
+    loading: graphicsLoading,
     objectHolder,
     status,
     graphicsCategories: [{id: 1, name: 'first'}, {id: 2, name: 'second'}],
@@ -80,15 +64,6 @@ const mapDispatchToProps = dispatch => {
     },
     uploadGraphicThumb(file) {
       dispatch(uploadGraphicThumb(file));
-    },
-    fetchColorizables(graphicId) {
-      dispatch(fetchColorizables(graphicId));
-    },
-    fetchColors() {
-      dispatch(fetchColors());
-    },
-    fetchColorizableColorConnections() {
-      dispatch(fetchColorizableColorConnections());
     }
   };
 };
