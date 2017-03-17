@@ -6,6 +6,7 @@ import {checkNotEmpty} from '../FormValidation';
 export default class ViewAbstract extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
+    pluralTitle: PropTypes.string,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     errors: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool.isRequired,
@@ -26,12 +27,13 @@ export default class ViewAbstract extends Component {
     handleDelete: PropTypes.func,
     deleteConfirmation: PropTypes.bool,
     enableConfirmDelete: PropTypes.func,
+    renderDeleteConfirmationDialog: PropTypes.func,
+    renderDeleteConfirmationButtons: PropTypes.func,
     sortingSupport: PropTypes.bool,
     hiddenProperties: PropTypes.array,
     hiddenInputs: PropTypes.array,
     changedInputs: PropTypes.object,
     customInputs: PropTypes.object,
-    beforeStatusHook: PropTypes.func,
     representations: PropTypes.object
   };
 
@@ -184,10 +186,10 @@ export default class ViewAbstract extends Component {
 
   renderDefButtons = () => (
     <div className='pull-right'>
-      <button type='button' className='btn btn-primary' style={{marginBottom: '3px'}}
+      <button type='button' className='btn btn-primary' style={{marginBottom: 6}}
               onClick={this.handleAddNew}>Add new {this.props.title}
       </button>
-      <button type='button' className='btn btn-default' style={{marginBottom: '3px'}}
+      <button type='button' className='btn btn-default' style={{marginBottom: 6}}
               onClick={() => this.props.restoreTableState(this.props.objectSample)}>Reset filter
       </button>
     </div>
@@ -232,9 +234,6 @@ export default class ViewAbstract extends Component {
 
   handleEdit = object => {
     if (this.props.status === STATUS_DEFAULT) {
-      if (typeof this.props.beforeStatusHook === 'function') {
-        this.props.beforeStatusHook(STATUS_EDITING);
-      }
       this.props.enableEditing(this.props.objectSample);
       this.props.selectRow(object);
     }
@@ -273,14 +272,18 @@ export default class ViewAbstract extends Component {
     const entity = {};
     properties.forEach(prop => {
       if (prop !== ID_PROP) {
+        if (this.props.status === STATUS_CREATING && this.props.objectHolder[prop] === '') {
+          return;
+        }
+
         if (this.props.changedInputs && this.props.changedInputs[prop]
           && typeof this.props.changedInputs[prop].saveF === 'function') {
-          if (this.props.objectHolder[prop] && this.props.objectHolder !== '') {
+          if (this.props.objectHolder[prop]) {
             this.props.changedInputs[prop].saveF(this.props.objectHolder[prop]);
             entity[prop] = this.props.objectHolder[prop].name;
           }
         } else {
-          entity[prop] = this.props.objectHolder[prop] || undefined;
+          entity[prop] = this.props.objectHolder[prop];
         }
       }
     });
@@ -335,7 +338,6 @@ export default class ViewAbstract extends Component {
         </div>
       </div>
     );
-
   });
 
   renderCustomInputs = () => {
@@ -460,10 +462,10 @@ export default class ViewAbstract extends Component {
     const {loading, errors} = this.props;
 
     return (
-      <main>
+      <div>
         {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <div className='content-header'>
-          <h1>{`${this.props.title}s`}</h1>
+          <h1>{this.props.pluralTitle || `${ this.props.title}s`}</h1>
         </div>
         {
           errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>
@@ -471,7 +473,7 @@ export default class ViewAbstract extends Component {
               {err}</div>)
         }
         {this.renderPage()}
-      </main>
+      </div>
     );
   }
 }

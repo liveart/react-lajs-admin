@@ -56,6 +56,8 @@ export function* validateToken(action) {
     const validated = yield req.json();
     if (!validated.token) {
       yield dispatch({type: actionTypes.TOKEN_VALIDATION_FAILURE});
+    } else {
+      yield dispatch({type: actionTypes.USER_OPERATION_SUCCESS, email: validated.email});
     }
   } catch (e) {
     yield dispatch({type: actionTypes.USER_OPERATION_FAILURE, message: e});

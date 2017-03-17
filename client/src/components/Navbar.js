@@ -18,7 +18,7 @@ export default class NavBar extends Component {
           <ul className='sidebar-menu'>
             <li className='header'>MAIN NAVIGATION</li>
             <li>
-              <Link to='/' activeClassName='active'>
+              <Link to='/'>
                 <i className='fa fa-dashboard'/><span>Overview</span>
               </Link>
             </li>
@@ -45,7 +45,7 @@ export default class NavBar extends Component {
             </li>
             <li>
               <Link to='/graphicsCategories' activeClassName='active'>
-                <i className='fa fa-file-picture-o'/> <span>Graphics Categories</span>
+                <i className='fa fa-th-list '/> <span>Graphics Categories</span>
               </Link>
             </li>
             <li className='header'>ADDITIONAL</li>
@@ -54,7 +54,7 @@ export default class NavBar extends Component {
                 <i className='fa fa-group'/><span>Admins</span>
               </Link>
             </li>
-            <li><a href='#' onClick={this.handleLogOut}><i className='fa fa-sign-out'/><span>Log out</span></a></li>
+            <li><a href='#' onClick={this.handleLogOut}><i className='fa fa-sign-out'/><span>Sign out</span></a></li>
           </ul>
         </section>
       </aside>

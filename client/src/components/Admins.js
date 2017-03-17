@@ -10,6 +10,7 @@ export default class extends Component {
     errors: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool.isRequired,
     fetchUsers: PropTypes.func.isRequired,
+    email: PropTypes.string.isRequired,
     objectHolder: PropTypes.object,
     status: PropTypes.string.isRequired,
     selectRow: PropTypes.func.isRequired,
@@ -26,9 +27,6 @@ export default class extends Component {
   componentWillMount() {
     this.props.restoreTableState(User);
     this.props.fetchUsers(this.props.token);
-  }
-
-  componentWillReceiveProps() {
     this.props.validateUserToken(this.props.token);
   }
 
@@ -44,7 +42,8 @@ export default class extends Component {
 
       return (
         <tr key={k} onClick={() => this.handleEdit(item)}>
-          <td>{item.email}</td>
+          <td>{item.email}{this.props.email === item.email ?
+            <span className='label label-primary pull-right'>you</span> : null}</td>
         </tr>
       );
     });
@@ -69,8 +68,8 @@ export default class extends Component {
 
   renderDefButtons = () => (
     <div className='pull-right'>
-      <button type='button' className='btn btn-primary' style={{marginBottom: '3px'}}
-              onClick={this.handleAddNew}>Add new user
+      <button type='button' className='btn btn-primary' style={{marginBottom: 6}}
+              onClick={this.handleAddNew}>Add new admin
       </button>
     </div>
   );
@@ -287,7 +286,7 @@ export default class extends Component {
       <main>
         {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <div className='content-header'>
-          <h1>Navigator</h1>
+          <h1>Admins</h1>
         </div>
         {
           errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>Error:

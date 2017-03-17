@@ -7,7 +7,7 @@ const INITIAL_STATE = {
   users: [], email: '', password: null, token: null, loading: false, error: null
 };
 
-describe('fonts reducer', () => {
+describe('user reducer', () => {
   test('should return the initial state', () => {
     expect(
       reducer(undefined, {})
@@ -25,7 +25,7 @@ describe('fonts reducer', () => {
         loading: false
       })).toEqual({
       ...INITIAL_STATE,
-      email: null,
+      email: '',
       password: null,
       token: null,
       error: null,
@@ -46,7 +46,7 @@ describe('fonts reducer', () => {
       ...INITIAL_STATE,
       email: '',
       password: null,
-      token: null,
+      token: '',
       error: null,
       loading: true
     });
@@ -82,10 +82,10 @@ describe('fonts reducer', () => {
         loading: false
       })).toEqual({
       ...INITIAL_STATE,
-      email: '',
+      email: null,
       password: null,
       token: null,
-      error: "",
+      error: '',
       loading: false
     });
   });

@@ -14,6 +14,7 @@ const MOVE_GRAPHICS_TO_OTHER_CATEGORY = 'MOVE_GRAPHICS_TO_OTHER_CATEGORY';
 export default class extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
+    pluralTitle: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     errors: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool.isRequired,

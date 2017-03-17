@@ -13,7 +13,8 @@
     },
     "value": {
       "type": "string",
-      "required": true
+      "required": true,
+      "default": "#000000"
     }
   },
   "validations": [],
@@ -22,12 +23,6 @@
       "type": "belongsTo",
       "model": "colorgroup",
       "foreignKey": "colorgroupId"
-    },
-    "colorizableElements": {
-      "type": "hasMany",
-      "model": "colorizableElement",
-      "foreignKey": "colorId",
-      "through": "ColorizableElementColor"
     }
   },
   "acls": [

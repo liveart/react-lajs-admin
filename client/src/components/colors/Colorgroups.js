@@ -151,10 +151,10 @@ export default class ColorgroupsComponent extends Component {
 
   renderDefButtons = () => (
     <div className='pull-right'>
-      <button type='button' className='btn btn-primary' style={{marginBottom: '3px'}}
+      <button type='button' className='btn btn-primary' style={{marginBottom: 6}}
               onClick={this.handleAddNew}>Add new colorgroup
       </button>
-      <button type='button' className='btn btn-default' style={{marginBottom: '3px'}}
+      <button type='button' className='btn btn-default' style={{marginBottom: 6}}
               onClick={() => this.props.restoreTableState(Colorgroup)}>Reset filter
       </button>
     </div>
@@ -451,7 +451,7 @@ export default class ColorgroupsComponent extends Component {
       <main>
         {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <div className='content-header'>
-          <h1>Navigator</h1>
+          <h1>Color Groups</h1>
         </div>
         {
           errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>Error:

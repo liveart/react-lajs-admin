@@ -5,7 +5,6 @@ import * as colorgroupsWatchers from './sagas/watchers/colorgroups';
 import * as fontsWatchers from './sagas/watchers/fonts';
 import * as usersWatchers from './sagas/watchers/users';
 import * as graphicsWatchers from './sagas/watchers/graphics';
-import * as colorizablesWatchers from './sagas/watchers/colorizable';
 
 import * as graphicsCategoriesWatchers from './sagas/watchers/graphicsCategories';
 
@@ -53,9 +52,5 @@ export default function* root() {
     fork(graphicsCategoriesWatchers.watchDeleteThumbnail),
     fork(graphicsCategoriesWatchers.watchEditGraphicsCategory),
     fork(graphicsCategoriesWatchers.watchDeleteGraphicsCategory),
-    fork(colorizablesWatchers.watchFetchColorizables),
-    fork(colorizablesWatchers.watchCreateColorizable),
-    fork(colorizablesWatchers.watchEditColorizable),
-    fork(colorizablesWatchers.watchDeleteColorizable)
   ];
 }

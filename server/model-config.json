@@ -68,7 +68,7 @@
     "dataSource": "remote-dev-mongo",
     "public": true
   },
-  "ColorizableElementColor": {
+  "ColorEmbed": {
     "dataSource": "remote-dev-mongo",
     "public": true
   }
