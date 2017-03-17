@@ -4,6 +4,16 @@
   }
 }
 
+body {
+  background: #d2d6de !important;
+}
+
+li a.active {
+  color: #ffffff;
+  background: #1e282c;
+  border-left-color: #3c8dbc !important;
+}
+
 tr.selected {
   background-color: #BBDEFB !important;
 }

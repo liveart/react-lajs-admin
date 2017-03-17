@@ -27,6 +27,7 @@ export default class GraphicsComponent extends Component {
     graphicsCategories: PropTypes.array.isRequired,
     uploadGraphicImage: PropTypes.func.isRequired,
     uploadGraphicThumb: PropTypes.func.isRequired,
+    fetchGraphicsCategories: PropTypes.func.isRequired,
     token: PropTypes.string
   };
 
@@ -40,6 +41,10 @@ export default class GraphicsComponent extends Component {
         return this.push.apply(this, rest);
       };
     }
+  }
+
+  componentWillMount() {
+    this.props.fetchGraphicsCategories();
   }
 
   handleSelectedObjectArrayChange = (arrName, ind, propName, event) => {
@@ -361,7 +366,7 @@ export default class GraphicsComponent extends Component {
                 elem: <select className='form-control'
                               value={this.props.objectHolder['categoryId']}
                               onChange={e => this.handleSelectedObjectChange('categoryId', e)}>
-                  <option key='defGroup' value={''}>Choose category...</option>
+                  <option key='defGroup' value={undefined}>Choose category...</option>
                   {this.props.graphicsCategories.map((gc, key) => (
                     <option key={key} value={gc.id}>{gc.name}</option>
                   ))}

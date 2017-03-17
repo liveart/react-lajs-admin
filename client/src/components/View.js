@@ -6,6 +6,7 @@ import {checkNotEmpty} from '../FormValidation';
 export default class ViewAbstract extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
+    pluralTitle: PropTypes.string,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     errors: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool.isRequired,
@@ -185,10 +186,10 @@ export default class ViewAbstract extends Component {
 
   renderDefButtons = () => (
     <div className='pull-right'>
-      <button type='button' className='btn btn-primary' style={{marginBottom: '3px'}}
+      <button type='button' className='btn btn-primary' style={{marginBottom: 6}}
               onClick={this.handleAddNew}>Add new {this.props.title}
       </button>
-      <button type='button' className='btn btn-default' style={{marginBottom: '3px'}}
+      <button type='button' className='btn btn-default' style={{marginBottom: 6}}
               onClick={() => this.props.restoreTableState(this.props.objectSample)}>Reset filter
       </button>
     </div>
@@ -464,7 +465,7 @@ export default class ViewAbstract extends Component {
       <div>
         {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <div className='content-header'>
-          <h1>{`${this.props.title}s`}</h1>
+          <h1>{this.props.pluralTitle || `${ this.props.title}s`}</h1>
         </div>
         {
           errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>

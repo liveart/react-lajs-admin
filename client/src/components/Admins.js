@@ -68,8 +68,8 @@ export default class extends Component {
 
   renderDefButtons = () => (
     <div className='pull-right'>
-      <button type='button' className='btn btn-primary' style={{marginBottom: '3px'}}
-              onClick={this.handleAddNew}>Add new user
+      <button type='button' className='btn btn-primary' style={{marginBottom: 6}}
+              onClick={this.handleAddNew}>Add new admin
       </button>
     </div>
   );
@@ -286,7 +286,7 @@ export default class extends Component {
       <main>
         {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <div className='content-header'>
-          <h1>Navigator</h1>
+          <h1>Admins</h1>
         </div>
         {
           errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>Error:

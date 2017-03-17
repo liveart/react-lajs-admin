@@ -13,7 +13,8 @@
     },
     "value": {
       "type": "string",
-      "required": true
+      "required": true,
+      "default": "#000000"
     }
   },
   "validations": [],

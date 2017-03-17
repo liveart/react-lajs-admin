@@ -4,6 +4,9 @@ import {
   uploadGraphicImage, uploadGraphicThumb
 } from '../actions/graphics';
 import {
+  fetchGraphicsCategories
+} from '../actions/graphicsCategories';
+import {
   selectRow, setObjectHolderProperty,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../actions/table';
@@ -12,6 +15,7 @@ import Graphics from '../components/Graphics';
 const mapStateToProps = state => {
   const {token} = state.user;
   const {graphics, graphicsError, graphicsLoading} = state.graphics;
+  const {graphicsCategories, graphicsCategoriesLoading} = state.graphicsCategories;
   const {objectHolder, status} = state.table;
   const errors = graphicsError ? [graphicsError] : [];
 
@@ -19,10 +23,10 @@ const mapStateToProps = state => {
     title: 'Graphic',
     data: graphics,
     errors,
-    loading: graphicsLoading,
+    loading: graphicsLoading || graphicsCategoriesLoading,
     objectHolder,
     status,
-    graphicsCategories: [{id: 1, name: 'first'}, {id: 2, name: 'second'}],
+    graphicsCategories,
     token
   };
 };
@@ -64,6 +68,9 @@ const mapDispatchToProps = dispatch => {
     },
     uploadGraphicThumb(file) {
       dispatch(uploadGraphicThumb(file));
+    },
+    fetchGraphicsCategories() {
+      dispatch(fetchGraphicsCategories());
     }
   };
 };
