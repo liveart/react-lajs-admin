@@ -54,7 +54,10 @@ export default class GraphicsComponent extends Component {
   };
 
   handleSelectedObjectArrayAddNew = (arrName, obj) => {
-    const arr = this.props.objectHolder[arrName];
+    let arr = this.props.objectHolder[arrName];
+    if (typeof arr !== 'object') {
+      arr = [];
+    }
     arr[arr.length] = {...obj};
     this.props.setEditingObjectProperty(arrName, [...arr]);
   };
@@ -66,7 +69,10 @@ export default class GraphicsComponent extends Component {
   };
 
   handleSelectedObjectArrayArrayAddNew = (fArr, sArr, colorizableKey, obj) => {
-    const arr = (this.props.objectHolder[fArr]);
+    let arr = (this.props.objectHolder[fArr]);
+    if (typeof (arr[colorizableKey])[sArr] !== 'object') {
+      (arr[colorizableKey])[sArr] = [];
+    }
     ((arr[colorizableKey])[sArr])[(arr[colorizableKey])[sArr].length] = {...obj};
     this.props.setEditingObjectProperty(fArr, [...arr]);
   };
