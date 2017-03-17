@@ -17,12 +17,13 @@ export default function (state = INITIAL_STATE, action) {
         ...state, objectHolder: Object.assign({}, action.objectHolder)
       };
 
-    case SET_OBJECT_HOLDER_PROPERTY:
+    case SET_OBJECT_HOLDER_PROPERTY: {
       let newObj = state.objectHolder;
       newObj[action.propertyName] = action.value;
       return {
         ...state, objectHolder: Object.assign({}, newObj)
       };
+    }
     case ENABLE_EDITING:
       Object.getOwnPropertyNames(action.object).map(prop => {
         holder[prop] = '';
@@ -42,10 +43,7 @@ export default function (state = INITIAL_STATE, action) {
     case ENABLE_CONFIRM_DELETE:
       return {...state, status: STATUS_CONFIRM_DELETE};
     case SET_INITIAL_STATE:
-      Object.getOwnPropertyNames(action.object).map(prop => {
-        holder[prop] = '';
-      }
-      );
+      Object.getOwnPropertyNames(action.object).map(prop => holder[prop] = '');
       return {...INITIAL_STATE, objectHolder: Object.assign({}, holder)};
     default:
       return state;

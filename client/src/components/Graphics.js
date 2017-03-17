@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import View from './View';
 import * as GraphicModel from '../../../common/models/graphic.json';
 import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
-import * as _ from 'lodash';
 const Graphic = GraphicModel.properties;
 const location = 'files/graphicThumbs/';
 const locationImage = 'files/graphicImages/';
@@ -49,6 +48,30 @@ export default class GraphicsComponent extends Component {
     this.props.setEditingObjectProperty(arrName, [...arr]);
   };
 
+  handleSelectedObjectArrayAddNew = (arrName, obj) => {
+    const arr = this.props.objectHolder[arrName];
+    arr[arr.length] = {...obj};
+    this.props.setEditingObjectProperty(arrName, [...arr]);
+  };
+
+  handleSelectedObjectArrayDeleteElement = (arrName, key) => {
+    const arr = this.props.objectHolder[arrName];
+    arr.remove(key);
+    this.props.setEditingObjectProperty(arrName, [...arr]);
+  };
+
+  handleSelectedObjectArrayArrayAddNew = (fArr, sArr, colorizableKey, obj) => {
+    const arr = (this.props.objectHolder[fArr]);
+    ((arr[colorizableKey])[sArr])[(arr[colorizableKey])[sArr].length] = {...obj};
+    this.props.setEditingObjectProperty(fArr, [...arr]);
+  };
+
+  handleSelectedObjectArrayArrayDeleteElement = (fArr, sArr, colorizableKey, key) => {
+    const arr = (this.props.objectHolder[fArr]);
+    ((arr[colorizableKey])[sArr]).remove(key);
+    this.props.setEditingObjectProperty(fArr, [...arr]);
+  };
+
   handleSelectedObjectArrayArrayChange = (fArrName, sArrName, fInd, sInd, propName, event) => {
     const colorizables = this.props.objectHolder[fArrName];
     ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.value;
@@ -79,6 +102,7 @@ export default class GraphicsComponent extends Component {
       imageOut = ctx.drawImage(img, 0, 0, 100, 100);
     };
   };
+
   handleFileChoose = (prop, e) => {
     this.props.setEditingObjectProperty(prop, e.target.files[0]);
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
@@ -99,7 +123,6 @@ export default class GraphicsComponent extends Component {
     }
   };
 
-
   handleImageUpload = file => {
     this.props.uploadGraphicImage(file);
   };
@@ -116,67 +139,6 @@ export default class GraphicsComponent extends Component {
         uploadThumbnail(blob);
       }, 'image/*', 0.95);
     }
-  };
-
-  handleColorizableRowChange = (i, objectProp, e) => {
-    const items = this.state.newColorizables;
-    this.state.newColorizables.map((c, ind) => {
-      if (c.i === i) {
-        items[ind][objectProp] = e.target.value;
-      }
-    });
-    this.setState({...this.state, newColorizables: [...items]});
-  };
-
-  handleColorizableRowDelete = i => {
-    const arr = this.state.newColorizables;
-    this.state.newColorizables.map((c, ind) => {
-      if (c.i === i) {
-        arr.remove(ind);
-      }
-    });
-    this.setState({...this.state, newColorizables: [...arr]});
-  };
-
-  renderColorizableRow = () => (
-    this.state.newColorizables.map(c =>
-      <tr key={c.i}>
-        <td>
-          <input type='text' className='form-control'
-                 value={_.filter(this.state.newColorizables, cr => cr.id === c.id)[0]['name']}
-                 onChange={e => this.handleColorizableRowChange(c.i, 'name', e)}/></td>
-        <td>
-          <input type='text' className='form-control'
-                 value={_.filter(this.state.newColorizables, cr => cr.id === c.id)[0]['id']}
-                 onChange={e => this.handleColorizableRowChange(c.i, 'id', e)}/>
-        </td>
-        <td>
-          <table className='table'>
-            <thead>
-            <tr>
-              <th>name</th>
-              <th>value</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </td>
-        <td><a className='btn btn-danger btn-xs' href='#' onClick={e => this.handleColorizableRowDelete(c.i)}>
-          <i className='fa fa-ban'/></a></td>
-      </tr>
-    ));
-
-  addColorizableRow = () => {
-    this.setState({
-      ...this.state,
-      newColorizables: [...this.state.newColorizables, {
-        i: this.state.newColorizables.length,
-        name: '',
-        id: '',
-        colors: []
-      }]
-    });
   };
 
   renderColorizableTable = () => (
@@ -203,42 +165,45 @@ export default class GraphicsComponent extends Component {
                          onChange={e => this.handleSelectedObjectArrayChange('colorizables', key, 'id', e)}/>
               </td>
               <td>
-                <table className='table'>
-                  <thead>
-                  <tr>
-                    <th>name</th>
-                    <th>value</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {c._colors.map((col, k) => (
-                    <tr key={k}>
-                      <td><input type='text' className='form-control'
-                                 value={col.name}
-                                 onChange={e =>
-                                   this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'name', e)}/>
-                      </td>
-                      <td><input type='text' className='form-control'
-                                 value={col.value}
-                                 onChange={e =>
-                                   this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'value', e)}/>
-
-                        <span className='label label-default pull-right'
-                              style={{background: col.value}}>{' '}</span></td>
+                <div className='panel panel-default'>
+                  <table className='table'>
+                    <thead>
+                    <tr>
+                      <th>name</th>
+                      <th>value</th>
+                      <th/>
                     </tr>
-                  ))}
-                  </tbody>
-                </table>
-                <button type='button'
-                        className='btn btn-default pull-right'
-                        onClick={() => this.addColorRow()}
-                >Add color
-                </button>
+                    </thead>
+                    <tbody>
+                    {c._colors.map((col, k) => (
+                      <tr key={k}>
+                        <td><input type='text' className='form-control'
+                                   value={col.name}
+                                   onChange={e =>
+                                     this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'name', e)}/>
+                        </td>
+                        <td><input type='text' className='form-control'
+                                   value={col.value}
+                                   onChange={e =>
+                                     this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'value', e)}/>
+
+                          <span className='label label-default pull-right'
+                                style={{background: col.value}}>{' '}</span></td>
+                        <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteColorRow(key, k)}>
+                          <i className='fa fa-ban'/></a></td>
+                      </tr>
+                    ))}
+                    </tbody>
+                  </table>
+                  <div className='panel-footer'>
+                    <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addColorRow(key)}>
+                      <i className='fa fa-plus'/> Add color</a>
+                  </div>
+                </div>
               </td>
-              <td><a className='btn btn-danger btn-xs' href='#'>
+              <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteColorizableRow(key)}>
                 <i className='fa fa-ban'/></a></td>
             </tr>) : null}
-        {this.renderColorizableRow()}
         </tbody>
       </table>
       <div className='panel-footer'>
@@ -246,6 +211,22 @@ export default class GraphicsComponent extends Component {
           <i className='fa fa-plus'/> Add element</a>
       </div>
     </div>
+  );
+
+  addColorizableRow = () => (
+    this.handleSelectedObjectArrayAddNew('colorizables', {name: '', id: '', _colors: []})
+  );
+
+  deleteColorizableRow = key => (
+    this.handleSelectedObjectArrayDeleteElement('colorizables', key)
+  );
+
+  addColorRow = colorizableId => (
+    this.handleSelectedObjectArrayArrayAddNew('colorizables', '_colors', colorizableId, {name: '', value: ''})
+  );
+
+  deleteColorRow = (colorizableId, key) => (
+    this.handleSelectedObjectArrayArrayDeleteElement('colorizables', '_colors', colorizableId, key)
   );
 
   render() {
@@ -313,6 +294,14 @@ export default class GraphicsComponent extends Component {
                   <option value={true}>Yes</option>
                 </select>
               },
+              multicolor: {
+                elem: <select className='form-control'
+                              value={this.props.objectHolder['multicolor']}
+                              onChange={e => this.handleSelectedObjectChange('multicolor', e)}>
+                  <option value={false}>No</option>
+                  <option value={true}>Yes</option>
+                </select>
+              },
               colorizables: {
                 elem: this.renderColorizableTable()
               }
@@ -327,16 +316,21 @@ export default class GraphicsComponent extends Component {
                   {typeof (this.props.objectHolder['image']) === 'string' && this.props.status === STATUS_EDITING ?
                     <a href={locationImage + this.props.objectHolder['image']}
                        className='thumbnail'
-                       style={{marginTop: 3, width: 100}}><img
+                       style={{marginTop: 8, width: 100}}><img
                       style={{width: 100}} src={locationImage + this.props.objectHolder['image']}/>
                     </a>
-                    : typeof (this.props.objectHolder['image']) === 'object' ? <div><a href={this.state.imgUrl}
+                    : typeof (this.props.objectHolder['image']) === 'object' ?
+                      <div><a href={this.state.imgUrl}
                               className='thumbnail'
-                              style={{marginTop: 3, width: 100}}><img src={this.state.imgUrl}/> </a>
-                      <button type='button' className='btn btn-primary'
-                              onClick={this.handleImgAsThumb}>Set thumb
-                      </button>
-                    </div> : null }
+                              style={{
+                                marginTop: 8,
+                                width: 100
+                              }}>
+                        <img src={this.state.imgUrl}/>
+                      </a>
+                        <a className='btn btn-primary btn-xs' href='#' onClick={this.handleImgAsThumb}>
+                          Use also as thumb</a>
+                      </div> : null }
                 </div>,
                 required: true
               },
@@ -348,16 +342,16 @@ export default class GraphicsComponent extends Component {
                   {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
                     <div style={{float: 'left'}}><a href={location + this.props.objectHolder['thumb']}
                                                     className='thumbnail'
-                                                    style={{marginTop: 3, width: 100}}><img
+                                                    style={{marginTop: 8, width: 100}}><img
                       style={{width: 100}} src={location + this.props.objectHolder['thumb']}/>
                     </a>
                     </div>
                     : null}
                   <div style={{float: 'left'}}>
                     {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumb'] ?
-                      <canvas style={{marginTop: 3}} ref='canvas' width='100'
+                      <canvas style={{marginTop: 8}} ref='canvas' width='100'
                               height='100' hidden/> :
-                      <canvas style={{marginTop: 3}} ref='canvas' width='100'
+                      <canvas style={{marginTop: 8}} ref='canvas' width='100'
                               height='100'/>}
                   </div>
                 </div>,

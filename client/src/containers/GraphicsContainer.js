@@ -13,7 +13,7 @@ const mapStateToProps = state => {
   const {token} = state.user;
   const {graphics, graphicsError, graphicsLoading} = state.graphics;
   const {objectHolder, status} = state.table;
-  const errors = graphicsError ? [error] : [];
+  const errors = graphicsError ? [graphicsError] : [];
 
   return {
     title: 'Graphic',
