@@ -40,15 +40,19 @@ export default class extends Component {
   };
   handleFileUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      const c = this.refs.canvas;
       const image = this.props.objectHolder['thumb'];
       const uploadThumbnail = (file) => {
         this.props.uploadThumbnail(file);
       };
-      c.toBlob(function (blob) {
-        blob.name = image.name;
-        uploadThumbnail(blob);
-      }, 'image/*', 0.95);
+      if (image.type !== 'image/svg+xml') {
+        const c = this.refs.canvas;
+        c.toBlob(function (blob) {
+          blob.name = image.name;
+          uploadThumbnail(blob);
+        }, 'image/*', 0.95);
+      } else {
+        uploadThumbnail(image);
+      }
     }
   };
   handleFileChoose = (prop, e) => {
@@ -64,6 +68,7 @@ export default class extends Component {
       reader.readAsDataURL(image);
       const c = this.refs.canvas;
       const ctx = c.getContext('2d');
+      ctx.clearRect(0, 0, 100, 100);
       img.onload = function () {
         imageOut = ctx.drawImage(img, 0, 0, 100, 100);
       };
@@ -116,11 +121,16 @@ export default class extends Component {
                 <select
                   value={this.state.newGraphic}
                   onChange={this.handleMoveGraphicToCategory}>
+                  <option key='rootCategory' value=''>...</option>
                   {this.props.data.map((cg, key) => (
                     this.props.objectHolder[ID_PROP] !== cg.id ?
-                      <option key={key} value={cg.id}>{cg.name}</option> : null
+                      this.props.objectHolder[ID_PROP] === cg.graphicsCategoryId && this.state.selectedValue === 'DELETE_CATEGORY' ?
+                        <option disabled='disabled' key={key} value={cg.id}>{cg.name}</option> :
+                        <option key={key} value={cg.id}>{cg.name} </option> : null
                   ))}
                 </select>
+                {this.state.newGraphic === '' && this.state.selectedSecondaryValue === 'MOVE_GRAPHICS_TO_OTHER_CATEGORY' ?
+                  <div className='text-red'>Please choose category.</div> : null}
               </div>
             </RadioGroup>
           </div>
@@ -128,7 +138,6 @@ export default class extends Component {
       </div>
     );
   };
-
   handleDeleteBtnClick = (confirmed) => {
     if (this.props.status === STATUS_CONFIRM_DELETE) {
       this.props.fetchData();
@@ -137,7 +146,6 @@ export default class extends Component {
           this.props.data.map(c => {
             if (c.graphicsCategoryId === this.props.objectHolder.id) {
               this.props.deleteEntity(c.id, this.props.token);
-              this.props.deleteThumbnail(c.thumb);
             }
           });
         } else if (this.state.selectedValue === MOVE_CATEGORY_TO_OTHER_CATEGORY) {
@@ -150,7 +158,7 @@ export default class extends Component {
         if (this.state.selectedSecondaryValue === DELETE_GRAPHICS) {
           this.props.secondaryData.map(c => {
             if (c.categoryId === this.props.objectHolder.id) {
-              this.props.deleteEntity(c.id, this.props.token);
+              this.props.deleteSecondaryEntity(c.id, this.props.token);
             }
           });
         } else if (this.state.selectedSecondaryValue === MOVE_GRAPHICS_TO_OTHER_CATEGORY) {
@@ -161,7 +169,6 @@ export default class extends Component {
           });
         }
         this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
-        this.props.deleteThumbnail(this.props.objectHolder.thumb);
         this.props.enableDefaultStatus();
         this.props.restoreTableState(GraphicsCategory);
       }
@@ -185,9 +192,13 @@ export default class extends Component {
   renderDeleteBtn = () => (
     <div>
       <div className='pull-right'>
-        <button type='button' className='btn btn-danger'
-                onClick={() => this.handleDeleteBtnClick(true)}>Delete
-        </button>
+        {this.state.newGraphic === '' && this.state.selectedSecondaryValue === 'MOVE_GRAPHICS_TO_OTHER_CATEGORY' ?
+          <button disabled type='button' className='btn btn-danger'
+                  onClick={() => this.handleDeleteBtnClick(true)}>Delete
+          </button> :
+          <button type='button' className='btn btn-danger'
+                  onClick={() => this.handleDeleteBtnClick(true)}>Delete
+          </button>}
         <button type='button' className='btn btn-default'
                 onClick={() => {
                   this.props.enableDefaultStatus();
@@ -215,13 +226,9 @@ export default class extends Component {
             hiddenProperties={['id', 'graphicsCategoryId']}
             hiddenInputs={['id', 'graphicsCategoryId', 'thumb']}
             representations={{
-              name: {
-                getElem: val =>
-                  val,
-                sortable: true
-              },
               thumb: {
-                getElem: val => <img src={location + val} alt='thumb' style={{width: 100}}/>,
+                getElem: val => <a href={location + val} className='thumbnail' style={{width: 100}}>
+                  <img src={location + val} alt='thumb' style={{width: 100}}/></a>,
                 sortable: false
               },
             }}
@@ -238,12 +245,18 @@ export default class extends Component {
                          onChange={e => this.handleFileChoose('thumb', e)}/>
 
                   {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
-                    <div style={{float: 'left'}}><img
-                      style={{marginTop: 3}} src={location + this.props.objectHolder['thumb']}/>
+                    <div style={{float: 'left'}}><a href={location + this.props.objectHolder['thumb']}
+                                                    className='thumbnail'
+                                                    style={{marginTop: 8, width: 100}}><img style={{width: 100}}
+                                                                                            src={location + this.props.objectHolder['thumb']}/></a>
                     </div>
                     : null}
                   <div style={{float: 'left'}}>
-                    <canvas style={{marginTop: 3}} ref='canvas' width='100' height='100'/>
+                    {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumb'] ?
+                      <canvas style={{marginTop: 8}} ref='canvas' width='100'
+                              height='100' hidden/> :
+                      <canvas style={{marginTop: 8}} ref='canvas' width='100'
+                              height='100'/>}
                   </div>
                 </div>,
                 required: true

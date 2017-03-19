@@ -140,15 +140,19 @@ export default class GraphicsComponent extends Component {
 
   handleThumbUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      const c = this.refs.canvas;
       const image = this.props.objectHolder['thumb'];
       const uploadThumbnail = (file) => {
         this.props.uploadGraphicThumb(file);
       };
-      c.toBlob(function (blob) {
-        blob.name = image.name;
-        uploadThumbnail(blob);
-      }, 'image/*', 0.95);
+      if (image.type !== 'image/svg+xml') {
+        const c = this.refs.canvas;
+        c.toBlob(function (blob) {
+          blob.name = image.name;
+          uploadThumbnail(blob);
+        }, 'image/*', 0.95);
+      } else {
+        uploadThumbnail(image);
+      }
     }
   };
 
@@ -250,8 +254,7 @@ export default class GraphicsComponent extends Component {
               thumb: {
                 getElem: val =>
                   val ? <a href={`/files/graphicThumbs/${val}`} className='thumbnail' style={{width: 100}}><img
-                      src={`/files/graphicThumbs/${val}`} alt='thumb'
-                      style={{width: 100}}/></a> :
+                      src={`/files/graphicThumbs/${val}`} alt='thumb' style={{width: 100}}/></a> :
                     null,
                 sortable: false
               },
