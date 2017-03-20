@@ -1,5 +1,4 @@
 'use strict';
 
-module.exports = function(Graphic) {
-
+module.exports = function (Graphic) {
 };

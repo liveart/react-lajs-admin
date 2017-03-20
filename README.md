@@ -38,3 +38,6 @@ fonts: */api/liveart/fonts*
 
 fonts CSS: */api/liveart/fontsCSS*
 
+graphics: */api/liveart/graphics*
+
+

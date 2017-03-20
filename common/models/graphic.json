@@ -18,9 +18,7 @@
       "required": true
     },
     "colors": {
-      "type": [
-        "string"
-      ]
+      "type": "string"
     },
     "colorize": {
       "type": "boolean",

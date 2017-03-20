@@ -49,7 +49,7 @@ function getGraphics(category, graphics) {
         categoryId: gr.categoryId,
         name: gr.name,
         description: gr.description,
-        colors: gr.colors,
+        colors: gr.colors ? JSON.parse(gr.colors) : undefined,
         colorize: gr.colorize,
         multicolor: gr.multicolor,
         thumb: GR_THUMB + gr.thumb,
@@ -145,52 +145,52 @@ module.exports = function (app) {
   });
 
   app.get('/api/' + LIVE_ART + '/fontsCSS', function (req, res) {
-    const Font = loopback.getModel('Font');
-    const fonts = [];
+      const Font = loopback.getModel('Font');
+      const fonts = [];
 
-    const NORMAL = 'normal';
-    const BOLD = 'bold';
-    const ITALIC = 'italic';
+      const NORMAL = 'normal';
+      const BOLD = 'bold';
+      const ITALIC = 'italic';
 
-    Font.find((err, fnts) => {
-      if (err) {
-        res.status(500).send('Error occurred');
-      }
-      let cssJS = {
-        type: 'stylesheet',
-        stylesheet: {
-          rules: []
+      Font.find((err, fnts) => {
+        if (err) {
+          res.status(500).send('Error occurred');
         }
-      };
-      fnts.map(font => {
-        if (font.fileNormal) {
-          cssJS.stylesheet.rules.push(
+        let cssJS = {
+          type: 'stylesheet',
+          stylesheet: {
+            rules: []
+          }
+        };
+        fnts.map(font => {
+          if (font.fileNormal) {
+            cssJS.stylesheet.rules.push(
               getFontFaceRule(font.fontFamily, font.fileNormal, NORMAL, NORMAL)
             );
-        }
-        if (font.fileBold) {
-          cssJS.stylesheet.rules.push(
+          }
+          if (font.fileBold) {
+            cssJS.stylesheet.rules.push(
               getFontFaceRule(font.fontFamily, font.fileBold, BOLD, NORMAL)
             );
-        }
+          }
 
-        if (font.fileItalic) {
-          cssJS.stylesheet.rules.push(
+          if (font.fileItalic) {
+            cssJS.stylesheet.rules.push(
               getFontFaceRule(font.fontFamily, font.fileItalic, NORMAL, ITALIC)
             );
-        }
+          }
 
-        if (font.fileBoldItalic) {
-          cssJS.stylesheet.rules.push(
+          if (font.fileBoldItalic) {
+            cssJS.stylesheet.rules.push(
               getFontFaceRule(font.fontFamily, font.fileBoldItalic, BOLD, ITALIC)
             );
-        }
+          }
+        });
+        res.set('Content-Type', 'text/css');
+        res.set('X-Content-Type-Options', 'nosniff');
+        res.send(css.stringify(cssJS));
       });
-      res.set('Content-Type', 'text/css');
-      res.set('X-Content-Type-Options', 'nosniff');
-      res.send(css.stringify(cssJS));
-    });
-  }
+    }
   )
   ;
 }
