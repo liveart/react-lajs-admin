@@ -24,7 +24,7 @@ npm install
 npm start
 ```
 
-###Default credentials:
+### Default credentials:
 ```
 admin@example.com
 
