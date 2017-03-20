@@ -87,18 +87,19 @@ export default class extends Component {
         <div className='col-md-6'>
           <h1>Choose an action</h1>
           <div className='form-group'>
-            <h3>for category</h3>
-            <RadioGroup name='fruit' selectedValue={this.state.selectedValue}
+            <h3>Linked categories</h3>
+            <RadioGroup selectedValue={this.state.selectedValue}
                         onChange={e => this.handleCategoryActionOption(e)}>
-              <div className='form-group'>
-                <Radio value={DELETE_CATEGORY}/>&nbsp; Delete all the category linked to this category
+              <div>
+                <Radio value={DELETE_CATEGORY}/>&nbsp; Delete all the categories linked to this category
               </div>
-              <div className='form-group'>
-                <Radio value={MOVE_CATEGORY_TO_OTHER_CATEGORY}/>&nbsp; Move category to other category &nbsp;
+              <div>
+                <Radio value={MOVE_CATEGORY_TO_OTHER_CATEGORY}/>&nbsp; Move all the linked categories to other
+                category &nbsp;
                 <select
                   value={this.state.newGraphicsCategory}
                   onChange={this.handleMoveToCategory}>
-                  <option key='rootCategory' value={' '}>Root category</option>
+                  <option value={''}>Root category</option>
                   {this.props.data.map((cg, key) => (
                     this.props.objectHolder[ID_PROP] !== cg.id ?
                       this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId ?
@@ -108,28 +109,26 @@ export default class extends Component {
                 </select>
               </div>
             </RadioGroup>
-          </div>
-          <div className='form-group'>
-            <h3>for graphics</h3>
-            <RadioGroup name='fruit2' selectedValue={this.state.selectedSecondaryValue}
+            <h3>Linked graphics</h3>
+            <RadioGroup selectedValue={this.state.selectedSecondaryValue}
                         onChange={e => this.handleGraphicActionOption(e)}>
-              <div className='form-group'>
+              <div>
                 <Radio value={DELETE_GRAPHICS}/>&nbsp; Delete all the graphics linked to this category
               </div>
-              <div className='form-group'>
+              <div>
                 <Radio value={MOVE_GRAPHICS_TO_OTHER_CATEGORY}/>&nbsp; Move graphics to other category &nbsp;
                 <select
                   value={this.state.newGraphic}
                   onChange={this.handleMoveGraphicToCategory}>
-                  <option key='rootCategory' value=''>...</option>
+                  <option value=''>Select category</option>
                   {this.props.data.map((cg, key) => (
                     this.props.objectHolder[ID_PROP] !== cg.id ?
-                      this.props.objectHolder[ID_PROP] === cg.graphicsCategoryId && this.state.selectedValue === 'DELETE_CATEGORY' ?
+                      this.props.objectHolder[ID_PROP] === cg.graphicsCategoryId && this.state.selectedValue === DELETE_CATEGORY ?
                         <option disabled='disabled' key={key} value={cg.id}>{cg.name}</option> :
                         <option key={key} value={cg.id}>{cg.name} </option> : null
                   ))}
                 </select>
-                {this.state.newGraphic === '' && this.state.selectedSecondaryValue === 'MOVE_GRAPHICS_TO_OTHER_CATEGORY' ?
+                {this.state.newGraphic === '' && this.state.selectedSecondaryValue === MOVE_GRAPHICS_TO_OTHER_CATEGORY ?
                   <div className='text-red'>Please choose category.</div> : null}
               </div>
             </RadioGroup>
@@ -192,7 +191,7 @@ export default class extends Component {
   renderDeleteBtn = () => (
     <div>
       <div className='pull-right'>
-        {this.state.newGraphic === '' && this.state.selectedSecondaryValue === 'MOVE_GRAPHICS_TO_OTHER_CATEGORY' ?
+        {this.state.newGraphic === '' && this.state.selectedSecondaryValue === MOVE_GRAPHICS_TO_OTHER_CATEGORY ?
           <button disabled type='button' className='btn btn-danger'
                   onClick={() => this.handleDeleteBtnClick(true)}>Delete
           </button> :
@@ -265,7 +264,7 @@ export default class extends Component {
                 elem: <select className='form-control'
                               onChange={e => this.handleSelectedObjectChange('graphicsCategoryId', e)}
                               value={this.props.objectHolder['graphicsCategoryId']}>
-                  <option key='rootCategory' value={' '}>Root category</option>
+                  <option key='rootCategory' value={''}>Root category</option>
                   {this.props.data.map((cg, key) => (
                     this.props.objectHolder[ID_PROP] !== cg.id ?
                       this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId ?

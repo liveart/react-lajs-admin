@@ -78,7 +78,7 @@ export default class ViewAbstract extends Component {
     }
 
     return (
-      <tr key='sortRow'>
+      <tr>
         {Object.getOwnPropertyNames(this.props.objectSample).map((prop, i) => {
           if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
             return null;
@@ -140,25 +140,25 @@ export default class ViewAbstract extends Component {
 
     const rows = this.sortRows();
 
-    return rows.map((item, k) => {
+    return rows.map(item => {
 
       return (
-        <tr key={k} onClick={() => this.handleEdit(item)}>
+        <tr key={item.id} onClick={() => this.handleEdit(item)}>
           {
-            Object.getOwnPropertyNames(this.props.objectSample).map((prop, j) => {
+            Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
               if (this.props.hiddenProperties && this.props.hiddenProperties.includes(prop)) {
                 return null;
               }
 
               if (this.props.representations.hasOwnProperty(prop)) {
-                return <td key={j}>{this.props.representations[prop].getElem(item[prop])}</td>;
+                return <td key={String(item.id + prop)}>{this.props.representations[prop].getElem(item[prop])}</td>;
               }
 
               if (typeof item[prop] === 'object') {
-                return <td key={j}></td>;
+                return <td key={String(item.id + prop)}/>;
               }
 
-              return <td key={j}>{item[prop]}</td>;
+              return <td key={String(item.id + prop)}>{item[prop]}</td>;
             })
           }
         </tr>
@@ -171,7 +171,7 @@ export default class ViewAbstract extends Component {
       <tb className='table-responsive'>
         <table className='table no-margin table-hover table-bordered'>
           <thead>
-          <tr key='headTrKey'>
+          <tr>
             {this.renderTableHeadings()}
           </tr>
           </thead>

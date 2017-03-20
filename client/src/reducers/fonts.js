@@ -22,7 +22,7 @@ export default function (state = INITIAL_STATE, action) {
     case actionType.FETCH_FONT_BY_ID:
       return {...state, font: null, fontsError: null, fontsLoading: true};
     case actionType.FETCH_FONTS:
-      return {...state, fonts: [], fontsError: null, fontsLoading: true};
+      return {...state, fontsError: null, fontsLoading: true};
     case actionType.FETCH_FONTS_NUMBER:
       return {...state, fontsNumber: 0, fontsError: null, fontsLoading: true};
     case actionType.CREATE_FONT:

@@ -320,20 +320,19 @@ export default class ColorgroupsComponent extends Component {
             <div className='form-group'>
               <RadioGroup name='fruit' selectedValue={this.state.selectedValue}
                           onChange={this.handleColorsActionOption}>
-                <div className='form-group'>
+                <div>
                   <Radio value={DELETE_COLORS}/>&nbsp; Delete all the colors linked to this group
                 </div>
-                <div className='form-group'>
+                <div>
                   <Radio value={MOVE_COLORS_TO_OTHER_GROUP}/>&nbsp; Move colors to other group &nbsp;
-                  <select className='form-control'
-                          value={this.state.newGroup}
+                  <select value={this.state.newGroup}
                           onChange={this.handleMoveToGroup}>
                     {this.props.data.map((cg, key) => (
                       <option key={key} value={cg.id}>{cg.name}</option>
                     ))}
                   </select>
                 </div>
-                <div className='form-group'>
+                <div>
                   <Radio value={LEAVE_COLORS_WITHOUT_GROUP}/>&nbsp; Unlink and leave the colors without any group
                 </div>
               </RadioGroup>

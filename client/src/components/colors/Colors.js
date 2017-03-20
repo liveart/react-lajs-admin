@@ -120,30 +120,30 @@ export default class ColorsComponent extends Component {
 
     const rows = this.sortRows(data, object);
 
-    return rows.map((item, k) => {
+    return rows.map(item => {
 
       return (
-        <tr key={k} onClick={() => this.handleEdit(item)}>
+        <tr key={item.id} onClick={() => this.handleEdit(item)}>
           {
-            Object.getOwnPropertyNames(object).map((prop, j) => {
+            Object.getOwnPropertyNames(object).map(prop => {
               if (prop === ID_PROP) {
                 return null;
               }
 
               if (prop === 'colorgroupId') {
-                return <td key={j}>
+                return <td key={String(item.id + prop)}>
                   {this.getGroupById(item[prop])}
                 </td>;
               }
 
               if (prop === 'value') {
-                return <td key={j}>
+                return <td key={String(item.id + prop)}>
                   {item[prop]}
                   <span className='label label-default pull-right'
                         style={{background: item[prop]}}>{' '}</span>
                 </td>;
               }
-              return <td key={j}>{item[prop]}</td>;
+              return <td key={String(item.id + prop)}>{item[prop]}</td>;
             })
           }
         </tr>

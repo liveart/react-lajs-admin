@@ -26,7 +26,7 @@ export default function (state = INITIAL_STATE, action) {
     case actionType.FETCH_GRAPHICS_CATEGORIES_BY_ID:
       return {...state, graphicsCategory: null, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     case actionType.FETCH_GRAPHICS_CATEGORIES:
-      return {...state, graphicsCategories: [], graphicsCategoriesError: null, graphicsCategoriesLoading: true};
+      return {...state, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     case actionType.FETCH_GRAPHICS_CATEGORIES_NUMBER:
       return {...state, graphicsCategoriesNumber: 0, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     case actionType.CREATE_GRAPHICS_CATEGORIES:

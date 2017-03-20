@@ -19,7 +19,7 @@ export default function (state = INITIAL_STATE, action) {
       graphicsError = action.message;
       return {...state, graphicsError, graphicsLoading: false};
     case actionTypes.FETCH_GRAPHICS:
-      return {...state, graphics: [], graphicsError: null, graphicsLoading: true};
+      return {...state, graphicsError: null, graphicsLoading: true};
     case actionTypes.FETCH_GRAPHICS_NUMBER:
       return {...state, graphicsNumber: 0, graphicsError: null, graphicsLoading: true};
     case actionTypes.CREATE_GRAPHIC:
