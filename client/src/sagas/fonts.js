@@ -8,7 +8,7 @@ const endpointVectors = 'containers/vectors';
 
 export function* fetchFonts() {
   try {
-    const res = yield* api.retrieve(endpoint);
+    const res = yield* api.retrieve(endpoint + '?filter[order]=name');
     yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS, fonts: res});
   } catch (e) {
     yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
