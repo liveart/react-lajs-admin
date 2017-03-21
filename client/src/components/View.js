@@ -147,7 +147,7 @@ export default class ViewAbstract extends Component {
         <tr key={item.id} onClick={() => this.handleEdit(item)}>
           {
             Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
-              if (this.props.hiddenProperties && this.props.hiddenProperties.includes(prop)) {
+              if (this.props.hiddenProperties && _.includes(this.props.hiddenProperties, prop)) {
                 return null;
               }
 
