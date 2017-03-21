@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, STATUS_CONFIRM_DELETE} from '../definitions';
 import {checkNotEmpty} from '../FormValidation';
+import * as _ from 'lodash';
 
 export default class ViewAbstract extends Component {
   static propTypes = {
@@ -120,7 +121,7 @@ export default class ViewAbstract extends Component {
             add = this.props.objectHolder[prop] === '';
           } else if (typeof (this.props.data[i])[prop] === 'boolean') {
             add = true;
-          } else if (!(this.props.data[i])[prop].includes(this.props.objectHolder[prop])) {
+          } else if (!_.includes((this.props.data[i])[prop], this.props.objectHolder[prop])) {
             add = false;
           }
         }
@@ -469,8 +470,8 @@ export default class ViewAbstract extends Component {
         </div>
         {
           errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>
-              Error:
-              {err}</div>)
+            Error:
+            {err}</div>)
         }
         {this.renderPage()}
       </div>

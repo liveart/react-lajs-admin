@@ -3,6 +3,7 @@ import {FormControl} from 'react-bootstrap';
 import {RadioGroup, Radio} from 'react-radio-group';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
+import * as _ from 'lodash';
 const Colorgroup = ColorgroupModel.properties;
 
 const DELETE_COLORS = 'DELETE_COLORS';
@@ -85,7 +86,7 @@ export default class ColorgroupsComponent extends Component {
         }
         if (typeof (this.props.data[i])[prop] === 'undefined') {
           add = this.props.objectHolder[prop] === '';
-        } else if (!(data[i])[prop].includes(this.props.objectHolder[prop])) {
+        } else if (!_.includes((data[i])[prop], this.props.objectHolder[prop])) {
           add = false;
         }
       });
@@ -454,7 +455,7 @@ export default class ColorgroupsComponent extends Component {
         </div>
         {
           errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>Error:
-              {err}</div>)
+            {err}</div>)
         }
         {this.renderPage()}
       </main>
