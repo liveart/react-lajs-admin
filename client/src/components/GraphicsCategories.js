@@ -91,7 +91,8 @@ export default class extends Component {
             <RadioGroup selectedValue={this.state.selectedValue}
                         onChange={e => this.handleCategoryActionOption(e)}>
               <div>
-                <Radio value={DELETE_CATEGORY}/>&nbsp; Delete all the categories linked to this category
+                <Radio value={DELETE_CATEGORY}/>&nbsp; Delete all the categories
+                linked to this category
               </div>
               <div>
                 <Radio value={MOVE_CATEGORY_TO_OTHER_CATEGORY}/>&nbsp; Move all the linked categories to other
@@ -124,7 +125,7 @@ export default class extends Component {
                   {this.props.data.map((cg, key) => (
                     this.props.objectHolder[ID_PROP] !== cg.id ?
                       this.props.objectHolder[ID_PROP] === cg.graphicsCategoryId && this.state.selectedValue === DELETE_CATEGORY ?
-                        <option disabled='disabled' key={key} value={cg.id}>{cg.name}</option> :
+                        <option disabled='disabled' key={key}>{cg.name}</option> :
                         <option key={key} value={cg.id}>{cg.name} </option> : null
                   ))}
                 </select>
@@ -137,6 +138,11 @@ export default class extends Component {
       </div>
     );
   };
+
+  handleMoveGraphicTo = () => {
+    this.setState({...this.state, newGraphic: ''});
+  };
+
   handleDeleteBtnClick = (confirmed) => {
     if (this.props.status === STATUS_CONFIRM_DELETE) {
       this.props.fetchData();
@@ -175,7 +181,12 @@ export default class extends Component {
   };
 
   handleCategoryActionOption = option => {
-    this.setState({...this.state, selectedValue: option});
+    if (option === DELETE_CATEGORY) {
+      this.setState({...this.state, selectedValue: option, newGraphic: ''});
+    } else if (option === MOVE_CATEGORY_TO_OTHER_CATEGORY) {
+      this.setState({...this.state, selectedValue: option});
+    }
+
   };
   handleMoveToCategory = e => {
     this.setState({...this.state, newGraphicsCategory: e.target.value});
