@@ -9,7 +9,7 @@ export default class ViewAbstract extends Component {
     title: PropTypes.string.isRequired,
     pluralTitle: PropTypes.string,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    errors: PropTypes.arrayOf(PropTypes.string),
+    errors: PropTypes.arrayOf(PropTypes.object),
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     objectHolder: PropTypes.object,
@@ -471,7 +471,7 @@ export default class ViewAbstract extends Component {
         {
           errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>
             Error:
-            {err}</div>)
+            {' ' + err.message}</div>)
         }
         {this.renderPage()}
       </div>

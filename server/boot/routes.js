@@ -98,7 +98,7 @@ module.exports = function (app) {
         if (cats && cats.length) {
           result.graphicsCategoriesList = [];
           _.forEach(cats, cat => {
-            if (cat.graphicsCategoryId === '') {
+            if (!cat.graphicsCategoryId || cat.graphicsCategoryId === '') {
               result.graphicsCategoriesList.push({
                 id: cat.id,
                 name: cat.name,

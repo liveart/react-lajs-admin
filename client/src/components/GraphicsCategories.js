@@ -1,11 +1,11 @@
 import React, {Component, PropTypes} from 'react';
-import {FormControl} from 'react-bootstrap';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, STATUS_CONFIRM_DELETE} from '../definitions';
+import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_CONFIRM_DELETE} from '../definitions';
 import * as GraphicsCategoryModel from '../../../common/models/graphics-category.json';
 import {RadioGroup, Radio} from 'react-radio-group';
 const GraphicsCategory = GraphicsCategoryModel.properties;
 const location = '/files/thumb/';
 import View from './View';
+import * as _ from 'lodash';
 const DELETE_CATEGORY = 'DELETE_CATEGORY';
 const MOVE_CATEGORY_TO_OTHER_CATEGORY = 'MOVE_CATEGORY_TO_OTHER_CATEGORY';
 const DELETE_GRAPHICS = 'DELETE_GRAPHICS';
@@ -16,7 +16,7 @@ export default class extends Component {
     title: PropTypes.string.isRequired,
     pluralTitle: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    errors: PropTypes.arrayOf(PropTypes.string),
+    errors: PropTypes.arrayOf(PropTypes.object),
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     objectHolder: PropTypes.object,
@@ -137,57 +137,69 @@ export default class extends Component {
       </div>
     );
   };
-  handleDeleteBtnClick = (confirmed) => {
-    if (this.props.status === STATUS_CONFIRM_DELETE) {
-      this.props.fetchData();
-      if (confirmed) {
-        if (this.state.selectedValue === DELETE_CATEGORY) {
-          this.props.data.map(c => {
-            if (c.graphicsCategoryId === this.props.objectHolder.id) {
-              this.props.deleteEntity(c.id, this.props.token);
-            }
-          });
-        } else if (this.state.selectedValue === MOVE_CATEGORY_TO_OTHER_CATEGORY) {
-          this.props.data.map(c => {
+
+  deleteRelatedCats = (catId, cats) => {
+    this.props.deleteEntity(catId, this.props.token);
+    cats = _.filter(cats, cat => cat.id !== catId);
+    cats.forEach(cat => {
+      if (cat.graphicsCategoryId === catId) {
+        this.deleteRelatedCats(cat.id, cats);
+      }
+    });
+  };
+
+  handleDeleteBtnClick = confirmed => {
+    if (this.props.status === STATUS_CONFIRM_DELETE && confirmed) {
+      if (this.state.selectedValue === DELETE_CATEGORY) {
+        const cats = [...this.props.data];
+        this.deleteRelatedCats(this.props.objectHolder.id, cats);
+      } else {
+        if (this.state.selectedValue === MOVE_CATEGORY_TO_OTHER_CATEGORY) {
+          this.props.data.forEach(c => {
             if (c.graphicsCategoryId === this.props.objectHolder.id) {
               this.props.editEntity(c.id, {...c, graphicsCategoryId: this.state.newGraphicsCategory}, this.props.token);
             }
           });
         }
         if (this.state.selectedSecondaryValue === DELETE_GRAPHICS) {
-          this.props.secondaryData.map(c => {
+          this.props.secondaryData.forEach(c => {
             if (c.categoryId === this.props.objectHolder.id) {
               this.props.deleteSecondaryEntity(c.id, this.props.token);
             }
           });
         } else if (this.state.selectedSecondaryValue === MOVE_GRAPHICS_TO_OTHER_CATEGORY) {
-          this.props.secondaryData.map(c => {
+          this.props.secondaryData.forEach(c => {
             if (c.categoryId === this.props.objectHolder.id) {
               this.props.editSecondaryEntity(c.id, {...c, categoryId: this.state.newGraphic}, this.props.token);
             }
           });
         }
         this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
-        this.props.enableDefaultStatus();
-        this.props.restoreTableState(GraphicsCategory);
       }
+      this.props.enableDefaultStatus();
+      this.props.restoreTableState(GraphicsCategory);
+
     }
   };
 
   handleCategoryActionOption = option => {
     this.setState({...this.state, selectedValue: option});
   };
+
   handleMoveToCategory = e => {
     this.setState({...this.state, newGraphicsCategory: e.target.value});
 
   };
+
   handleGraphicActionOption = option => {
     this.setState({...this.state, selectedSecondaryValue: option});
 
   };
+
   handleMoveGraphicToCategory = e => {
     this.setState({...this.state, newGraphic: e.target.value});
   };
+
   renderDeleteBtn = () => (
     <div>
       <div className='pull-right'>
@@ -265,11 +277,11 @@ export default class extends Component {
                               onChange={e => this.handleSelectedObjectChange('graphicsCategoryId', e)}
                               value={this.props.objectHolder['graphicsCategoryId']}>
                   <option key='rootCategory' value={''}>Root category</option>
-                  {this.props.data.map((cg, key) => (
+                  {this.props.data.map(cg => (
                     this.props.objectHolder[ID_PROP] !== cg.id ?
                       this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId ?
-                        <option key={key} value={cg.id}>{cg.name}</option> :
-                        <option disabled='disabled' key={key} value={cg.id}>{cg.name} </option> : null
+                        <option key={cg.id} value={cg.id}>{cg.name}</option> :
+                        <option disabled='disabled' key={cg.id} value={cg.id}>{cg.name} </option> : null
                   ))}
                 </select>
               }

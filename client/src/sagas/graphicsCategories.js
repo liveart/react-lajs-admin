@@ -1,4 +1,3 @@
-import {put, call} from 'redux-saga/effects';
 import * as actionTypes from '../actionTypes/graphicsCategories';
 import {dispatch} from './sagaFuncs';
 import * as api from './api';
