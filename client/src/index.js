@@ -14,6 +14,13 @@ import GraphicsContainer from './containers/GraphicsContainer';
 import AdminsContainer from './containers/AdminsContainer';
 import GraphicsCategoriesTableContainer from './containers/GraphicsCategoriesTableContainer';
 
+if (!String.prototype.includes) {
+  String.prototype.includes = function () {
+    'use strict';
+    return String.prototype.indexOf.apply(this, arguments) !== -1;
+  };
+}
+
 let env = 'prod';
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
   env = 'dev';
