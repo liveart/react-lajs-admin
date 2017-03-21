@@ -254,7 +254,7 @@ export default class GraphicsComponent extends Component {
               thumb: {
                 getElem: val =>
                   val ? <a href={`/files/graphicThumbs/${val}`} className='thumbnail' style={{width: 100}}><img
-                      src={`/files/graphicThumbs/${val}`} alt='thumb' style={{width: 100}}/></a> :
+                    src={`/files/graphicThumbs/${val}`} alt='thumb' style={{width: 100}}/></a> :
                     null,
                 sortable: false
               },
