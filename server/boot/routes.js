@@ -4,7 +4,7 @@ const _ = require('lodash');
 
 const GR_IMG = 'http://hive.liveartdesigner.com:3000/files/graphicImages/';
 const GR_THUMB = 'http://hive.liveartdesigner.com:3000/files/graphicThumbs/';
-const CAT_THUMB = 'http://hive.liveartdesigner.com:3000/files/thumbs/';
+const CAT_THUMB = 'http://hive.liveartdesigner.com:3000/files/thumb/';
 
 function getFontFaceRule(family, file, weight, style) {
   const location = 'http://hive.liveartdesigner.com:3000/files/fonts/';
