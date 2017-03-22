@@ -114,10 +114,10 @@ export default class extends Component {
             <RadioGroup selectedValue={this.state.selectedSecondaryValue}
                         onChange={e => this.handleGraphicActionOption(e)}>
               <div>
-                <Radio value={DELETE_GRAPHICS}/>&nbsp; Delete all the graphics linked to this category
+                <Radio value={DELETE_GRAPHICS}/>&nbsp; Delete all the linked graphics
               </div>
               <div>
-                <Radio value={MOVE_GRAPHICS_TO_OTHER_CATEGORY}/>&nbsp; Move graphics to other category &nbsp;
+                <Radio value={MOVE_GRAPHICS_TO_OTHER_CATEGORY}/>&nbsp; Move graphics of this category to other category &nbsp;
                 <select
                   value={this.state.newGraphic}
                   onChange={this.handleMoveGraphicToCategory}>
