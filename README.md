@@ -1,8 +1,11 @@
 # Admin Dashboard
 
-##### v0.0.2
+##### v0.0.3
 
 [Change Log](./CHANGELOG.md)
+
+## Requirements
+- **Node**: v5.10.0 or Higher
 
 
 ## Getting Started
@@ -21,7 +24,7 @@ npm install
 npm start
 ```
 
-###Default credentials:
+### Default credentials:
 ```
 admin@example.com
 
@@ -34,4 +37,7 @@ colors: */api/liveart/colors*
 fonts: */api/liveart/fonts*
 
 fonts CSS: */api/liveart/fontsCSS*
+
+graphics: */api/liveart/graphics*
+
 

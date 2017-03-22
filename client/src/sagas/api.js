@@ -80,10 +80,38 @@ export function* remove(endpoint, id, token) {
   return (yield req.json());
 }
 
+export function* removeWithRelated(endpoint, id, related, token) {
+  let req = yield fetch(apiRoot + endpoint + '/' + id + '/' + related, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token
+    }
+  });
+  if (req.status < 200 || req.status >= 300) {
+    throw new Error(req.statusText);
+  }
+  req = yield fetch(apiRoot + endpoint + '/' + id, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token
+    }
+  });
+  return (yield req.json());
+}
+
 export function* upload(endpoint, obj) {
   const req = yield fetch(apiRoot + endpoint + '/upload', {
     method: 'POST',
     body: obj
+  });
+  return (yield req.json());
+}
+
+export function* deleteFile(endpoint) {
+  const req = yield fetch(apiRoot + endpoint, {
+    method: 'DELETE'
   });
   return (yield req.json());
 }

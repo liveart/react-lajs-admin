@@ -3,6 +3,7 @@ import {FormControl} from 'react-bootstrap';
 import {RadioGroup, Radio} from 'react-radio-group';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
+import * as _ from 'lodash';
 const Colorgroup = ColorgroupModel.properties;
 
 const DELETE_COLORS = 'DELETE_COLORS';
@@ -61,14 +62,15 @@ export default class ColorgroupsComponent extends Component {
       {Object.getOwnPropertyNames(object).map((prop, i) => {
         if (prop === ID_PROP) {
           return null;
-        } else {
-          return <td key={i}>
-            <FormControl type='text'
-                         value={this.props.objectHolder[prop]}
-                         onChange={e => this.handleSelectedObjectChange(prop, e)}
-            />
-          </td>;
         }
+
+        return <td key={i}>
+          <FormControl type='text'
+                       value={this.props.objectHolder[prop]}
+                       onChange={e => this.handleSelectedObjectChange(prop, e)}
+          />
+        </td>;
+
       })}
     </tr>
   );
@@ -79,9 +81,12 @@ export default class ColorgroupsComponent extends Component {
       let add = true;
 
       Object.getOwnPropertyNames(object).map(prop => {
+        if (!add) {
+          return;
+        }
         if (typeof (this.props.data[i])[prop] === 'undefined') {
           add = this.props.objectHolder[prop] === '';
-        } else if (!(data[i])[prop].includes(this.props.objectHolder[prop])) {
+        } else if (!_.includes((data[i])[prop], this.props.objectHolder[prop])) {
           add = false;
         }
       });
@@ -147,10 +152,10 @@ export default class ColorgroupsComponent extends Component {
 
   renderDefButtons = () => (
     <div className='pull-right'>
-      <button type='button' className='btn btn-primary' style={{marginBottom: '3px'}}
+      <button type='button' className='btn btn-primary' style={{marginBottom: 6}}
               onClick={this.handleAddNew}>Add new colorgroup
       </button>
-      <button type='button' className='btn btn-default' style={{marginBottom: '3px'}}
+      <button type='button' className='btn btn-default' style={{marginBottom: 6}}
               onClick={() => this.props.restoreTableState(Colorgroup)}>Reset filter
       </button>
     </div>
@@ -316,20 +321,19 @@ export default class ColorgroupsComponent extends Component {
             <div className='form-group'>
               <RadioGroup name='fruit' selectedValue={this.state.selectedValue}
                           onChange={this.handleColorsActionOption}>
-                <div className='form-group'>
+                <div>
                   <Radio value={DELETE_COLORS}/>&nbsp; Delete all the colors linked to this group
                 </div>
-                <div className='form-group'>
+                <div>
                   <Radio value={MOVE_COLORS_TO_OTHER_GROUP}/>&nbsp; Move colors to other group &nbsp;
-                  <select
-                    value={this.state.newGroup}
-                    onChange={this.handleMoveToGroup}>
+                  <select value={this.state.newGroup}
+                          onChange={this.handleMoveToGroup}>
                     {this.props.data.map((cg, key) => (
                       <option key={key} value={cg.id}>{cg.name}</option>
                     ))}
                   </select>
                 </div>
-                <div className='form-group'>
+                <div>
                   <Radio value={LEAVE_COLORS_WITHOUT_GROUP}/>&nbsp; Unlink and leave the colors without any group
                 </div>
               </RadioGroup>
@@ -447,11 +451,11 @@ export default class ColorgroupsComponent extends Component {
       <main>
         {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <div className='content-header'>
-          <h1>Navigator</h1>
+          <h1>Color Groups</h1>
         </div>
         {
           errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>Error:
-              {err}</div>)
+            {err}</div>)
         }
         {this.renderPage()}
       </main>

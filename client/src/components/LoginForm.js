@@ -23,13 +23,13 @@ export default class LoginForm extends Component {
 
   render() {
     return (
-      <section>
+      <section className='lgn'>
         <div className='login-box'>
           <div className='login-logo'>
-            <b>LiveArt</b>Admin
+            <b>LiveArt</b> Control Panel
           </div>
           <form type='submit' className='login-box-body'>
-            <p className='login-box-msg'>Log In</p>
+            <p className='login-box-msg'>Sign In</p>
             <div className='form-group has-feedback'>
               <p>Email:</p>
               <FormControl type='email' value={this.state.email} onChange={this.handleEmailInputChange}/>
@@ -42,8 +42,8 @@ export default class LoginForm extends Component {
               <div className='col-xs-8'>
               </div>
               <div className='col-xs-4'>
-                <button className='btn btn-primary btn-block' onClick={this.handleLoginBtnClick}>
-                  Log In
+                <button className='btn btn-primary btn-block btn-flat' onClick={this.handleLoginBtnClick}>
+                  Sign In
                 </button>
               </div>
             </div>

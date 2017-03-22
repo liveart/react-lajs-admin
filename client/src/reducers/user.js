@@ -10,7 +10,7 @@ export default function (state = INITIAL_STATE, action) {
     case actionType.REMOVE_USER_TOKEN:
       return {
         ...state,
-        email: null,
+        email: '',
         token: null,
         error: null,
         loading: false
@@ -18,9 +18,8 @@ export default function (state = INITIAL_STATE, action) {
     case actionType.GET_USER_TOKEN:
       return {
         ...state,
-        email: action.email,
         password: action.password,
-        token: null,
+        token: '',
         error: null,
         loading: true
       };
@@ -34,6 +33,7 @@ export default function (state = INITIAL_STATE, action) {
       return {
         ...state,
         password: null,
+        email: null,
         token: action.token,
         error,
         loading: false
@@ -42,7 +42,9 @@ export default function (state = INITIAL_STATE, action) {
       return {
         ...state,
         users: action.users || state.users,
+        email: action.email || state.email,
         token: action.token || state.token,
+        password: null,
         error: null,
         loading: false
       };
@@ -52,7 +54,9 @@ export default function (state = INITIAL_STATE, action) {
     case actionType.TOKEN_VALIDATION_FAILURE:
       return {
         ...state,
-        token: undefined,
+        token: null,
+        email: null,
+        password: null,
         error: null,
         loading: false
       };

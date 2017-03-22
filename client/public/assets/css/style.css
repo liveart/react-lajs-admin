@@ -1,3 +1,19 @@
+@media (max-width: 767px) {
+  .ct {
+    min-height: 230vh !important;
+  }
+}
+
+body {
+  background: #d2d6de !important;
+}
+
+li a.active {
+  color: #ffffff;
+  background: #1e282c;
+  border-left-color: #3c8dbc !important;
+}
+
 tr.selected {
   background-color: #BBDEFB !important;
 }
@@ -8,6 +24,11 @@ tr :hover {
 
 button {
   margin: 2px;
+}
+
+.req:after {
+  content: " *";
+  color: red;
 }
 
 .content {

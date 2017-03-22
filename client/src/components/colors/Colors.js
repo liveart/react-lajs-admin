@@ -3,6 +3,7 @@ import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 import {SketchPicker} from 'react-color';
 import * as ColorModel from '../../../../common/models/color.json';
+import * as _ from 'lodash';
 const Color = ColorModel.properties;
 
 export default class ColorsComponent extends Component {
@@ -65,7 +66,7 @@ export default class ColorsComponent extends Component {
           }
 
           if (prop === 'colorgroupId') {
-            return <td key={i}><select style={{width: '100%'}}
+            return <td key={i}><select className='form-control'
                                        value={this.props.objectHolder[prop]}
                                        onChange={e => this.handleSelectedObjectChange(prop, e)}>
               <option key='defGroup' value={''}>...</option>
@@ -91,9 +92,12 @@ export default class ColorsComponent extends Component {
       let add = true;
 
       Object.getOwnPropertyNames(object).map(prop => {
+        if (!add) {
+          return;
+        }
         if (typeof (this.props.data[i])[prop] === 'undefined') {
           add = this.props.objectHolder[prop] === '';
-        } else if (!(data[i])[prop].includes(this.props.objectHolder[prop])) {
+        } else if (!_.includes((data[i])[prop], this.props.objectHolder[prop])) {
           add = false;
         }
       });
@@ -117,30 +121,30 @@ export default class ColorsComponent extends Component {
 
     const rows = this.sortRows(data, object);
 
-    return rows.map((item, k) => {
+    return rows.map(item => {
 
       return (
-        <tr key={k} onClick={() => this.handleEdit(item)}>
+        <tr key={item.id} onClick={() => this.handleEdit(item)}>
           {
-            Object.getOwnPropertyNames(object).map((prop, j) => {
+            Object.getOwnPropertyNames(object).map(prop => {
               if (prop === ID_PROP) {
                 return null;
               }
 
               if (prop === 'colorgroupId') {
-                return <td key={j}>
+                return <td key={String(item.id + prop)}>
                   {this.getGroupById(item[prop])}
                 </td>;
               }
 
               if (prop === 'value') {
-                return <td key={j}>
+                return <td key={String(item.id + prop)}>
                   {item[prop]}
                   <span className='label label-default pull-right'
                         style={{background: item[prop]}}>{' '}</span>
                 </td>;
               }
-              return <td key={j}>{item[prop]}</td>;
+              return <td key={String(item.id + prop)}>{item[prop]}</td>;
             })
           }
         </tr>
@@ -168,10 +172,10 @@ export default class ColorsComponent extends Component {
 
   renderDefButtons = () => (
     <div className='pull-right'>
-      <button type='button' className='btn btn-primary' style={{marginBottom: '3px'}}
+      <button type='button' className='btn btn-primary' style={{marginBottom: 6}}
               onClick={this.handleAddNew}>Add new color
       </button>
-      <button type='button' className='btn btn-default' style={{marginBottom: '3px'}}
+      <button type='button' className='btn btn-default' style={{marginBottom: 6}}
               onClick={() => this.props.restoreTableState(Color)}>Reset filter
       </button>
     </div>
@@ -293,7 +297,8 @@ export default class ColorsComponent extends Component {
               Group
             </div>
             <div className='col-md-10'>
-              <select onChange={e => this.handleSelectedObjectChange(prop, e)}
+              <select className='form-control'
+                      onChange={e => this.handleSelectedObjectChange(prop, e)}
                       value={this.props.objectHolder[prop]}>
                 <option key='defGroup' value={''}>...</option>
                 {this.props.secondaryData.map((cg, key) => (
@@ -404,12 +409,12 @@ export default class ColorsComponent extends Component {
       <main>
         {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
         <div className='content-header'>
-          <h1>Navigator</h1>
+          <h1>Colors</h1>
         </div>
         {
           errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>
-              Error:
-              {err}</div>)
+            Error:
+            {err}</div>)
         }
         {this.renderPage()}
       </main>

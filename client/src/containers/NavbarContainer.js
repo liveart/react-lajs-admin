@@ -3,8 +3,7 @@ import {removeUserToken} from '../actions/user';
 import Navbar from '../components/Navbar';
 
 const mapStateToProps = state => {
-  return {
-  };
+  return {};
 };
 
 const mapDispatchToProps = dispatch => {

@@ -22,7 +22,7 @@ export default function (state = INITIAL_STATE, action) {
     case actionTypes.FETCH_COLOR_BY_ID:
       return {...state, color: null, colorsError: null, colorsLoading: true};
     case actionTypes.FETCH_COLORS:
-      return {...state, colors: [], colorsError: null, colorsLoading: true};
+      return {...state, colorsError: null, colorsLoading: true};
     case actionTypes.FETCH_COLORS_NUMBER:
       return {...state, colorsNumber: 0, colorsError: null, colorsLoading: true};
     case actionTypes.CREATE_COLOR:

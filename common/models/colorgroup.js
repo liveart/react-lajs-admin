@@ -1,5 +1,5 @@
 'use strict';
 
-module.exports = function(Colorgroup) {
+module.exports = function (Colorgroup) {
 
 };

@@ -22,7 +22,7 @@ export default function (state = INITIAL_STATE, action) {
     case actionTypes.FETCH_COLORGROUP_BY_ID:
       return {...state, colorgroup: null, colorgroupsError: null, colorgroupsLoading: true};
     case actionTypes.FETCH_COLORGROUPS:
-      return {...state, colorgroups: [], colorgroupsError: null, colorgroupsLoading: true};
+      return {...state, colorgroupsError: null, colorgroupsLoading: true};
     case actionTypes.FETCH_COLORGROUPS_NUMBER:
       return {...state, colorgroupsNumber: 0, colorgroupsError: null, colorgroupsLoading: true};
     case actionTypes.CREATE_COLORGROUP:

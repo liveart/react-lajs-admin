@@ -1,0 +1,53 @@
+{
+  "name": "graphic",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    },
+    "categoryId": {
+      "type": "string",
+      "required": true
+    },
+    "colors": {
+      "type": "string"
+    },
+    "colorize": {
+      "type": "boolean",
+      "default": false
+    },
+    "multicolor": {
+      "type": "boolean",
+      "default": false
+    },
+    "thumb": {
+      "type": "string"
+    },
+    "image": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "colorizableElements": {
+      "type": "embedsMany",
+      "model": "colorizableElement",
+      "property": "colorizables",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -7,35 +7,30 @@ export default class Overview extends Component {
   static propTypes = {
     fontsNumber: PropTypes.number.isRequired,
     colorsNumber: PropTypes.number.isRequired,
+    graphicsNumber: PropTypes.number.isRequired,
     loading: PropTypes.bool.isRequired,
     error: PropTypes.object,
     fetchFontsNumber: PropTypes.func.isRequired,
-    fetchColorsNumber: PropTypes.func.isRequired
+    fetchColorsNumber: PropTypes.func.isRequired,
+    fetchGraphicsNumber: PropTypes.func.isRequired
   };
 
   componentWillMount() {
     this.props.fetchFontsNumber();
     this.props.fetchColorsNumber();
+    this.props.fetchGraphicsNumber();
   }
 
-  renderFontsNumber = fontsNumber => {
+  renderDataNumber = (title, iconName, redirect, number) => {
     return (
-      <Link to='/fonts'>
-        <InfoWidget title='Fonts' number={fontsNumber} iconClass='fa fa-font'/>
-      </Link>
-    );
-  };
-
-  renderColorsNumber = colorsNumber => {
-    return (
-      <Link to='/colors'>
-        <InfoWidget title='Colors' number={colorsNumber} iconClass='fa fa-paint-brush'/>
+      <Link to={`/${redirect}`}>
+        <InfoWidget title={title} number={number} iconClass={`fa ${iconName}`}/>
       </Link>
     );
   };
 
   render() {
-    const {fontsNumber, colorsNumber, loading} = this.props;
+    const {fontsNumber, colorsNumber, graphicsNumber, loading} = this.props;
 
     return (
       <main>
@@ -46,12 +41,13 @@ export default class Overview extends Component {
         <section className='content'>
           <Grid>
             <Row>
-              <Col md={3}>{this.renderFontsNumber(fontsNumber)}</Col>
-              <Col md={3}>{this.renderColorsNumber(colorsNumber)}</Col>
+              <Col md={3}>{this.renderDataNumber('Fonts', 'fa-font', 'fonts', fontsNumber)}</Col>
+              <Col md={3}>{this.renderDataNumber('Colors', 'fa-paint-brush', 'colors', colorsNumber)}</Col>
+              <Col md={3}>{this.renderDataNumber('Graphics', 'fa-picture-o', 'graphics', graphicsNumber)}</Col>
             </Row>
           </Grid>
         </section>
-      </main>
+      </main >
     );
   }
 }
