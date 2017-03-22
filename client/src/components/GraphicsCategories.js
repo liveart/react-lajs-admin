@@ -287,7 +287,7 @@ export default class extends Component {
                   <option key='rootCategory' value={''}>Root category</option>
                   {this.props.data.map(cg => (
                     this.props.objectHolder[ID_PROP] !== cg.id ?
-                      this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId ?
+                      (this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId)  || (cg.graphicsCategoryId === '') ?
                         <option key={cg.id} value={cg.id}>{cg.name}</option> :
                         <option disabled='disabled' key={cg.id} value={cg.id}>{cg.name} </option> : null
                   ))}
