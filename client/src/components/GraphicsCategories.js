@@ -139,12 +139,20 @@ export default class extends Component {
     );
   };
 
-  deleteRelatedCats = (catId, cats) => {
+  deleteRelatedCats = (catId, cats, graphicsAction) => {
     this.props.deleteEntity(catId, this.props.token);
+
+    if (graphicsAction !== MOVE_GRAPHICS_TO_OTHER_CATEGORY || catId !== this.props.objectHolder.id) {
+      this.props.secondaryData.forEach(g => {
+        if (g.categoryId === catId) {
+          this.props.deleteSecondaryEntity(g.id, this.props.token);
+        }
+      });
+    }
     cats = _.filter(cats, cat => cat.id !== catId);
     cats.forEach(cat => {
       if (cat.graphicsCategoryId === catId) {
-        this.deleteRelatedCats(cat.id, cats);
+        this.deleteRelatedCats(cat.id, cats, graphicsAction);
       }
     });
   };
@@ -153,7 +161,7 @@ export default class extends Component {
     if (this.props.status === STATUS_CONFIRM_DELETE && confirmed) {
       if (this.state.selectedValue === DELETE_CATEGORY) {
         const cats = [...this.props.data];
-        this.deleteRelatedCats(this.props.objectHolder.id, cats);
+        this.deleteRelatedCats(this.props.objectHolder.id, cats, this.state.selectedSecondaryValue);
       } else {
         if (this.state.selectedValue === MOVE_CATEGORY_TO_OTHER_CATEGORY) {
           this.props.data.forEach(c => {
@@ -161,21 +169,15 @@ export default class extends Component {
               this.props.editEntity(c.id, {...c, graphicsCategoryId: this.state.newGraphicsCategory}, this.props.token);
             }
           });
+          this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
         }
-        if (this.state.selectedSecondaryValue === DELETE_GRAPHICS) {
-          this.props.secondaryData.forEach(c => {
-            if (c.categoryId === this.props.objectHolder.id) {
-              this.props.deleteSecondaryEntity(c.id, this.props.token);
-            }
-          });
-        } else if (this.state.selectedSecondaryValue === MOVE_GRAPHICS_TO_OTHER_CATEGORY) {
-          this.props.secondaryData.forEach(c => {
-            if (c.categoryId === this.props.objectHolder.id) {
-              this.props.editSecondaryEntity(c.id, {...c, categoryId: this.state.newGraphic}, this.props.token);
-            }
-          });
-        }
-        this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
+      }
+      if (this.state.selectedSecondaryValue === MOVE_GRAPHICS_TO_OTHER_CATEGORY) {
+        this.props.secondaryData.forEach(c => {
+          if (c.categoryId === this.props.objectHolder.id) {
+            this.props.editSecondaryEntity(c.id, {...c, categoryId: this.state.newGraphic}, this.props.token);
+          }
+        });
       }
       this.props.enableDefaultStatus();
       this.props.restoreTableState(GraphicsCategory);
