@@ -10,9 +10,6 @@
 
 ## Getting Started
 
-## Requirements
-- **Node**: v5.10.0 or Higher
-
 ### Installing packages
 
 ```
