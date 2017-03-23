@@ -37,8 +37,16 @@ module.exports = env => ({
 
   devServer: {
     proxy: {
-      '**': {
-        target: 'http://localhost:3000',
+      '/files/**': {
+        target: 'http://localhost:3000/',
+        secure: false
+      },
+      '/api/**': {
+        target: 'http://localhost:3000/',
+        secure: false
+      },
+      '/explorer': {
+        target: 'http://localhost:3000/',
         secure: false
       }
     },
