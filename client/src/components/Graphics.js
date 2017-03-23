@@ -281,7 +281,7 @@ export default class GraphicsComponent extends Component {
                   {this.props.graphicsCategories.map((cat, key) => <option key={key}
                                                                            value={cat.id}>{cat.name}</option>)}
                 </select>,
-                header: 'category'
+                header: 'Category'
               }
             }}
             changedInputs={{

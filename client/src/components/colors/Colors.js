@@ -29,6 +29,15 @@ export default class ColorsComponent extends Component {
     token: PropTypes.string
   };
 
+  constructor(props) {
+    super(props);
+    if (!String.prototype.capitalizeFirstLetter) {
+      String.prototype.capitalizeFirstLetter = function () {
+        return this.charAt(0).toUpperCase() + this.slice(1);
+      };
+    }
+  }
+
   componentWillMount() {
     this.props.restoreTableState(Color);
     this.props.fetchData();
@@ -41,10 +50,10 @@ export default class ColorsComponent extends Component {
         return null;
       }
       if (prop === 'colorgroupId') {
-        return <th key={i}>group</th>;
+        return <th key={i}>Group</th>;
       }
 
-      return <th key={i}>{prop}</th>;
+      return <th key={i}>{prop.capitalizeFirstLetter()}</th>;
 
     })
   );
@@ -282,7 +291,7 @@ export default class ColorsComponent extends Component {
         if (prop === 'value') {
           return <div key='value' className='form-group'>
             <div className='col-md-2'>
-              {prop}
+              {prop.capitalizeFirstLetter()}
             </div>
             <div className='col-md-10'>
               <SketchPicker color={this.props.objectHolder.value}
@@ -312,7 +321,7 @@ export default class ColorsComponent extends Component {
         return (
           <div key={key} className='form-group'>
             <div className='col-md-2'>
-              {prop}
+              {prop.capitalizeFirstLetter()}
             </div>
             <div className='col-md-10'>
               <input type='text' className='form-control'

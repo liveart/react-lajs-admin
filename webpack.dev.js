@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = env => ({
   context: __dirname,
@@ -8,7 +9,7 @@ module.exports = env => ({
 
   output: {
     filename: 'bundle.js',
-    publicPath: '/assets/',
+    publicPath: '/',
     path: path.resolve(__dirname, 'client/public/dist'),
   },
 
@@ -34,6 +35,25 @@ module.exports = env => ({
     ]
   },
 
+  devServer: {
+    proxy: {
+      '/files/**': {
+        target: 'http://localhost:3000/',
+        secure: false
+      },
+      '/api/**': {
+        target: 'http://localhost:3000/',
+        secure: false
+      },
+      '/explorer': {
+        target: 'http://localhost:3000/',
+        secure: false
+      }
+    },
+    port: 8080,
+    historyApiFallback: true
+  },
+
   plugins: [
     new webpack.ProvidePlugin({
       'Promise': 'es6-promise',
@@ -41,6 +61,10 @@ module.exports = env => ({
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development')
+    }),
+    new HtmlWebpackPlugin({
+      template: 'index.template.ejs',
+      inject: 'body'
     })
   ]
 });

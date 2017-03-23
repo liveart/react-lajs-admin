@@ -41,6 +41,11 @@ export default class ViewAbstract extends Component {
   constructor(props) {
     super(props);
     this.state = {empty: []};
+    if (!String.prototype.capitalizeFirstLetter) {
+      String.prototype.capitalizeFirstLetter = function () {
+        return this.charAt(0).toUpperCase() + this.slice(1);
+      };
+    }
   }
 
   componentWillUpdate() {
@@ -65,7 +70,7 @@ export default class ViewAbstract extends Component {
         return <th key={i}>{this.props.representations[prop].header}</th>;
       }
 
-      return <th key={i}>{prop}</th>;
+      return <th key={i}>{prop.capitalizeFirstLetter()}</th>;
     });
   };
 
@@ -317,7 +322,7 @@ export default class ViewAbstract extends Component {
       <div key={key} className='form-group'>
         <div className='col-md-2'>
           <p className={'' + (this.props.objectSample[prop].required ? 'req' : '')}>
-            {prop}
+            {prop.capitalizeFirstLetter()}
           </p>
         </div>
         <div className='col-md-10'>
@@ -350,7 +355,7 @@ export default class ViewAbstract extends Component {
         <div key={key} className='form-group'>
           <div className='col-md-2'>
             <p className={'' + (this.props.customInputs[prop].required ? 'req' : '')}>
-              {prop}
+              {prop.capitalizeFirstLetter()}
             </p>
           </div>
           <div className='col-md-10'>
