@@ -2,9 +2,9 @@
 const LIVE_ART = 'liveart';
 const _ = require('lodash');
 
-const GR_IMG = '/files/graphicImages/';
-const GR_THUMB = '/files/graphicThumbs/';
-const CAT_THUMB = '/files/thumbs/';
+const GR_IMG = 'http://hive.liveartdesigner.com:3000/files/graphicImages/';
+const GR_THUMB = 'http://hive.liveartdesigner.com:3000/files/graphicThumbs/';
+const CAT_THUMB = 'http://hive.liveartdesigner.com:3000/files/thumb/';
 
 function getFontFaceRule(family, file, weight, style) {
   const location = 'http://hive.liveartdesigner.com:3000/files/fonts/';
@@ -128,7 +128,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/' + LIVE_ART + '/fonts', function (req, res) {
-    const VECTOR_ROOT = '/files/vectors/';
+    const VECTOR_ROOT = 'http://hive.liveartdesigner.com:3000/files/vectors/';
     const Font = loopback.getModel('Font');
     const fonts = [];
     Font.find((err, fnts) => {
