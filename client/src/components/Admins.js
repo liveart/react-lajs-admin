@@ -55,7 +55,7 @@ export default class extends Component {
         <table className='table no-margin table-hover table-bordered'>
           <thead>
           <tr key='trhead'>
-            <th>email</th>
+            <th>Email</th>
           </tr>
           </thead>
           <tbody>

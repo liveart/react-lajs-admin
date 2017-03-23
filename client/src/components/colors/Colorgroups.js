@@ -35,6 +35,11 @@ export default class ColorgroupsComponent extends Component {
   constructor() {
     super();
     this.state = {deleting: false, selectedValue: DELETE_COLORS, newGroup: ''};
+    if (!String.prototype.capitalizeFirstLetter) {
+      String.prototype.capitalizeFirstLetter = function () {
+        return this.charAt(0).toUpperCase() + this.slice(1);
+      };
+    }
   }
 
   componentWillMount() {
@@ -48,7 +53,7 @@ export default class ColorgroupsComponent extends Component {
       if (prop === ID_PROP) {
         return null;
       } else {
-        return <th key={i}>{prop}</th>;
+        return <th key={i}>{prop.capitalizeFirstLetter()}</th>;
       }
     })
   );
@@ -352,7 +357,7 @@ export default class ColorgroupsComponent extends Component {
       return (
         <div key={key} className='form-group'>
           <div className='col-md-2'>
-            {prop}
+            {prop.capitalizeFirstLetter()}
           </div>
           <div className='col-md-10'>
             <input type='text' className='form-control'
