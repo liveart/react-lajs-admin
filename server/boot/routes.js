@@ -131,7 +131,9 @@ module.exports = function (app) {
     const VECTOR_ROOT = 'http://hive.liveartdesigner.com:3000/files/vectors/';
     const Font = loopback.getModel('Font');
     const fonts = [];
-    Font.find((err, fnts) => {
+    Font.find({
+      order: 'name ASC'
+    }, (err, fnts) => {
       if (err) {
         res.status(500).send('Error occurred');
       }
@@ -152,7 +154,9 @@ module.exports = function (app) {
     const BOLD = 'bold';
     const ITALIC = 'italic';
 
-    Font.find((err, fnts) => {
+    Font.find({
+      order: 'name ASC'
+    }, (err, fnts) => {
       if (err) {
         res.status(500).send('Error occurred');
       }
