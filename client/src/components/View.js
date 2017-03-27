@@ -268,9 +268,9 @@ export default class ViewAbstract extends Component {
                 <h3 className='box-title'>{`${this.props.title} information`}</h3>
               </div>
               <form className='form-horizontal'>
-                <div className='box-body'>
-                  {this.renderImportJsonInputs()}
-                </div>
+
+                {this.renderImportJsonInputs()}
+
                 <div className='box-footer'>
                   {this.renderCreatingButtons()}
                 </div>
@@ -403,12 +403,34 @@ export default class ViewAbstract extends Component {
     );
   });
 
-  renderImportJsonInputs = () =>
-    <textarea className='form-control'
-              value={this.state.json}
-              onChange={this.handleJsonChange}/>;
+  renderImportJsonInputs = () => (
+    <div className='box-body'>
+      <div className='form-group'>
+        <div className='col-md-2'>
+          <p>Input JSON</p>
+        </div>
+        <div className='col-md-10'>
+          <input type='file' className='form-control' accept='.json' style={{marginBottom: 6}}
+                 onChange={e => this.handleFileChoose(e)}/>
+        </div>
+      </div>
+      <textarea className='form-control' style={{marginBottom: 6}}
+                value={this.state.json}
+                onChange={this.handleJsonChange}/>
+    </div>
+  );
 
   handleJsonChange = e => this.setState({...this.state, json: e.target.value});
+  handleFileChoose = e => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      this.setState({
+        ...this.state,
+        json: reader.result
+      });
+    };
+    reader.readAsText(e.target.files[0]);
+  };
 
   renderCustomInputs = () => {
     if (!this.props.customInputs) {
