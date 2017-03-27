@@ -4,7 +4,7 @@ import {
   uploadGraphicImage, uploadGraphicThumb
 } from '../actions/graphics';
 import {
-  fetchGraphicsCategories
+  fetchGraphicsCategories, createGraphicsCategory
 } from '../actions/graphicsCategories';
 import {
   selectRow, setObjectHolderProperty, enableImportJson,
@@ -74,6 +74,9 @@ const mapDispatchToProps = dispatch => {
     },
     enableImportJson() {
       dispatch(enableImportJson());
+    },
+    createGraphicsCategory() {
+      dispatch(createGraphicsCategory());
     }
   };
 };

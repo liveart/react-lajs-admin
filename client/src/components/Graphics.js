@@ -1,11 +1,16 @@
 import React, {Component, PropTypes} from 'react';
 import View from './View';
 import * as GraphicModel from '../../../common/models/graphic.json';
-import {STATUS_EDITING, STATUS_CREATING} from '../definitions';
+import {
+  STATUS_EDITING,
+  STATUS_CREATING,
+  RELATIVE_URL,
+  GRAPHIC_IMG_FOLDER,
+  GRAPHIC_THUMB_FOLDER
+} from '../definitions';
 import {parseJson} from '../GraphicJsonParser';
+import * as _ from 'lodash';
 const Graphic = GraphicModel.properties;
-const location = 'files/graphicThumbs/';
-const locationImage = 'files/graphicImages/';
 
 export default class GraphicsComponent extends Component {
   static propTypes = {
@@ -21,6 +26,7 @@ export default class GraphicsComponent extends Component {
     enableImportJson: PropTypes.func.isRequired,
     enableCreating: PropTypes.func.isRequired,
     enableDefaultStatus: PropTypes.func.isRequired,
+    createGraphicsCategory: PropTypes.func.isRequired,
     createEntity: PropTypes.func.isRequired,
     editEntity: PropTypes.func.isRequired,
     deleteEntity: PropTypes.func.isRequired,
@@ -136,15 +142,15 @@ export default class GraphicsComponent extends Component {
     }
   };
 
-  handleImageUpload = file => {
-    this.props.uploadGraphicImage(file);
+  handleImageUpload = img => {
+    this.props.uploadGraphicImage(img);
   };
 
   handleThumbUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       const image = this.props.objectHolder['thumb'];
-      const uploadThumbnail = (file) => {
-        this.props.uploadGraphicThumb(file);
+      const uploadThumbnail = thumb => {
+        this.props.uploadGraphicThumb(thumb);
       };
       if (image.type !== 'image/svg+xml') {
         const c = this.refs.canvas;
@@ -246,12 +252,19 @@ export default class GraphicsComponent extends Component {
     this.handleSelectedObjectArrayArrayDeleteElement('colorizables', '_colors', colorizableId, key)
   );
 
-  handleImportJson = json => {
-    const parsed = parseJson(json);
+  handleImportJson = (json, baseUrl) => {
+    const parsed = parseJson(json, baseUrl);
     const categories = parsed.categories;
+    if (categories && categories.length) {
+      this.props.createGraphicsCategory(categories, this.props.token);
+    }
     const graphics = parsed.graphics;
-    console.log(parsed);
+    if (graphics && graphics.length) {
+      this.props.createEntity(graphics);
+    }
   };
+
+  getFileUrl = url => _.includes(url, RELATIVE_URL) ? url.substring(RELATIVE_URL.length) : url;
 
   render() {
     return (
@@ -265,15 +278,19 @@ export default class GraphicsComponent extends Component {
             representations={{
               thumb: {
                 getElem: val =>
-                  val ? <a href={`/files/graphicThumbs/${val}`} className='thumbnail' style={{width: 100}}><img
-                    src={`/files/graphicThumbs/${val}`} alt='thumb' style={{width: 100}}/></a> :
+                  val ? <a href={this.getFileUrl(val)} className='thumbnail'
+                           style={{width: 100}}><img
+                    src={this.getFileUrl(val)} alt='thumb'
+                    style={{width: 100}}/></a> :
                     null,
                 sortable: false
               },
               image: {
                 getElem: val => val ?
-                  <a href={`/files/graphicImages/${val}`} className='thumbnail' style={{width: 100}}><img
-                    src={`/files/graphicImages/${val}`} alt='image' style={{width: 100}}/></a> : null,
+                  <a href={this.getFileUrl(val)} className='thumbnail'
+                     style={{width: 100}}><img
+                    src={this.getFileUrl(val)} alt='image'
+                    style={{width: 100}}/></a> : null,
                 sortable: false
               },
               categoryId: {
@@ -300,10 +317,12 @@ export default class GraphicsComponent extends Component {
               image: {
                 elem: <input type='file' className='form-control'
                              onChange={e => this.handleFileChoose('image', e)}/>,
-                saveF: this.handleImageUpload
+                saveF: this.handleImageUpload,
+                getName: name => RELATIVE_URL + '/' + GRAPHIC_IMG_FOLDER + name
               },
               thumb: {
-                saveF: this.handleThumbUpload
+                saveF: this.handleThumbUpload,
+                getName: name => RELATIVE_URL + '/' + GRAPHIC_THUMB_FOLDER + name
               },
               description: {
                 elem: <textarea className='form-control' rows='3'
@@ -340,18 +359,19 @@ export default class GraphicsComponent extends Component {
                          onChange={e => this.handleFileChoose('image', e)}/>
 
                   {typeof (this.props.objectHolder['image']) === 'string' && this.props.status === STATUS_EDITING ?
-                    <a href={locationImage + this.props.objectHolder['image']}
+                    <a href={this.getFileUrl(this.props.objectHolder['image'])}
                        className='thumbnail'
                        style={{marginTop: 8, width: 100}}><img
-                      style={{width: 100}} src={locationImage + this.props.objectHolder['image']}/>
+                      style={{width: 100}} src={this.getFileUrl(this.props.objectHolder['image'])}/>
                     </a>
                     : typeof (this.props.objectHolder['image']) === 'object' ?
-                      <div><a href={this.state.imgUrl}
-                              className='thumbnail'
-                              style={{
-                                marginTop: 8,
-                                width: 100
-                              }}>
+                      <div><a
+                        href={this.state.imgUrl}
+                        className='thumbnail'
+                        style={{
+                          marginTop: 8,
+                          width: 100
+                        }}>
                         <img src={this.state.imgUrl}/>
                       </a>
                         <a className='btn btn-primary btn-xs' href='#' onClick={this.handleImgAsThumb}>
@@ -366,10 +386,10 @@ export default class GraphicsComponent extends Component {
                          onChange={e => this.handleFileChoose('thumb', e)}/>
 
                   {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
-                    <div style={{float: 'left'}}><a href={location + this.props.objectHolder['thumb']}
+                    <div style={{float: 'left'}}><a href={this.getFileUrl(this.props.objectHolder['thumb'])}
                                                     className='thumbnail'
                                                     style={{marginTop: 8, width: 100}}><img
-                      style={{width: 100}} src={location + this.props.objectHolder['thumb']}/>
+                      style={{width: 100}} src={this.getFileUrl(this.props.objectHolder['thumb'])}/>
                     </a>
                     </div>
                     : null}

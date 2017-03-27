@@ -1,17 +1,21 @@
 'use strict';
 const LIVE_ART = 'liveart';
+const RELATIVE_URL = '@@RELATIVE';
 const _ = require('lodash');
 const url = require('url');
 
-function getFullUrl(req) {
-  return url.format({
-    protocol: req.protocol,
-    host: req.get('host')
-  });
+function getFullUrl(req, url) {
+  if (url.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
+    return url.format({
+        protocol: req.protocol,
+        host: req.get('host')
+      }) + url.substring(RELATIVE_URL.length - 1);
+  }
+
+  return '';
 }
 
 function getFontFaceRule(family, file, weight, style, url) {
-  const location = url + '/files/fonts/';
   return {
     type: 'font-face',
     declarations: [
@@ -22,7 +26,7 @@ function getFontFaceRule(family, file, weight, style, url) {
       }, {
         type: 'declaration',
         property: 'src',
-        value: 'url("' + location + file + '")',
+        value: 'url("' + url + file + '")',
       }, {
         type: 'declaration',
         property: 'font-weight',
@@ -44,7 +48,7 @@ function fixColorizables(colorizables) {
   }));
 }
 
-function getGraphics(category, graphics, grImg, grThumb) {
+function getGraphics(category, graphics, req) {
   const grs = [];
   _.forEach(graphics, gr => {
     if (String(gr.categoryId) === String(category.id)) {
@@ -56,8 +60,8 @@ function getGraphics(category, graphics, grImg, grThumb) {
         colors: gr.colors ? JSON.parse(gr.colors) : undefined,
         colorize: gr.colorize,
         multicolor: gr.multicolor,
-        thumb: grThumb + gr.thumb,
-        image: grImg + gr.image,
+        thumb: getFullUrl(req, gr.thumb),
+        image: getFullUrl(req, gr.image),
         colorizableElements: fixColorizables(gr.colorizables)
       });
     }
@@ -65,16 +69,16 @@ function getGraphics(category, graphics, grImg, grThumb) {
   return grs.length ? grs : undefined;
 }
 
-function getCategories(category, categories, graphics, catThumb) {
+function getCategories(category, categories, graphics, req) {
   const cats = [];
   _.forEach(categories, cat => {
     if (String(cat.graphicsCategoryId) === String(category.id)) {
       cats.push({
         id: cat.id,
         name: cat.name,
-        thumb: catThumb + cat.thumb,
-        categories: getCategories(cat, categories, graphics),
-        graphicsList: getGraphics(cat, graphics)
+        thumb: getFullUrl(req, cat.thumb),
+        categories: getCategories(cat, categories, graphics, req),
+        graphicsList: getGraphics(cat, graphics, req)
       });
     }
   });
@@ -85,11 +89,6 @@ module.exports = function (app) {
   const loopback = require('loopback');
   const css = require('css');
   app.get('/api/' + LIVE_ART + '/graphics', function (req, res) {
-    const baseUrl = getFullUrl(req);
-    console.log(baseUrl);
-    const GR_IMG = baseUrl + '/files/graphicImages/';
-    const GR_THUMB = baseUrl + '/files/graphicThumbs/';
-    const CAT_THUMB = baseUrl + '/files/thumb/';
     const result = {};
     const Graphic = loopback.getModel('graphic');
     Graphic.find((err, graphics) => {
@@ -110,9 +109,9 @@ module.exports = function (app) {
               result.graphicsCategoriesList.push({
                 id: cat.id,
                 name: cat.name,
-                thumb: CAT_THUMB + cat.thumb,
-                categories: getCategories(cat, cats, graphics, CAT_THUMB),
-                graphicsList: getGraphics(cat, graphics, GR_IMG, GR_THUMB)
+                thumb: cat.thumb,
+                categories: getCategories(cat, cats, graphics, req),
+                graphicsList: getGraphics(cat, graphics, req)
               });
             }
           });
@@ -136,8 +135,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/' + LIVE_ART + '/fonts', function (req, res) {
-    const baseUrl = getFullUrl(req);
-    const VECTOR_ROOT = baseUrl + '/files/vectors/';
+    const VECTOR_ROOT = '/files/vectors/';
     const Font = loopback.getModel('Font');
     const fonts = [];
     Font.find({
@@ -148,7 +146,7 @@ module.exports = function (app) {
       }
       fnts.map(f => fonts.push({
         name: f.name, fontFamily: f.fontFamily, boldAllowed: f.boldAllowed,
-        italicAllowed: f.italicAllowed, vector: f.vector ? VECTOR_ROOT + f.vector : undefined
+        italicAllowed: f.italicAllowed, vector: f.vector ? getFullUrl(req, f.vector) : undefined
       }));
 
       res.send(JSON.stringify({fonts: fonts}));
@@ -156,10 +154,8 @@ module.exports = function (app) {
   });
 
   app.get('/api/' + LIVE_ART + '/fontsCSS', function (req, res) {
-    const baseUrl = getFullUrl(req);
       const Font = loopback.getModel('Font');
-      const fonts = [];
-
+      const location = url + '/files/fonts/';
       const NORMAL = 'normal';
       const BOLD = 'bold';
       const ITALIC = 'italic';
@@ -179,24 +175,24 @@ module.exports = function (app) {
         fnts.map(font => {
           if (font.fileNormal) {
             cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileNormal, NORMAL, NORMAL, baseUrl)
+              getFontFaceRule(font.fontFamily, font.fileNormal, NORMAL, NORMAL, getFullUrl(req, font.fileNormal))
             );
           }
           if (font.fileBold) {
             cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileBold, BOLD, NORMAL, baseUrl)
+              getFontFaceRule(font.fontFamily, font.fileBold, BOLD, NORMAL, getFullUrl(req, font.fileBold))
             );
           }
 
           if (font.fileItalic) {
             cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileItalic, NORMAL, ITALIC, baseUrl)
+              getFontFaceRule(font.fontFamily, font.fileItalic, NORMAL, ITALIC, getFullUrl(req, font.fileItalic))
             );
           }
 
           if (font.fileBoldItalic) {
             cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileBoldItalic, BOLD, ITALIC, baseUrl)
+              getFontFaceRule(font.fontFamily, font.fileBoldItalic, BOLD, ITALIC, getFullUrl(req, font.fileBoldItalic))
             );
           }
         });

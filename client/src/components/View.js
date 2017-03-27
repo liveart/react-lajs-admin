@@ -6,7 +6,8 @@ import {
   STATUS_CREATING,
   STATUS_DEFAULT,
   STATUS_CONFIRM_DELETE,
-  STATUS_IMPORT_JSON
+  STATUS_IMPORT_JSON,
+  RELATIVE_URL
 } from '../definitions';
 import {checkNotEmpty} from '../FormValidation';
 import * as _ from 'lodash';
@@ -57,7 +58,7 @@ export default class ViewAbstract extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {empty: [], json: ''};
+    this.state = {empty: [], json: '', baseUrl: ''};
     if (!String.prototype.capitalizeFirstLetter) {
       String.prototype.capitalizeFirstLetter = function () {
         return this.charAt(0).toUpperCase() + this.slice(1);
@@ -67,7 +68,7 @@ export default class ViewAbstract extends Component {
 
   componentWillUpdate() {
     if (this.state.empty.length) {
-      this.setState({empty: [], json: ''});
+      this.setState({...this.state, empty: []});
     }
   }
 
@@ -321,9 +322,10 @@ export default class ViewAbstract extends Component {
 
   handleSaveBtnClick = redirect => {
     if (this.props.status === STATUS_IMPORT_JSON) {
-      this.props.handleImportJson(this.state.json);
+      this.props.handleImportJson(this.state.json, this.state.baseUrl);
       this.props.enableDefaultStatus();
       this.props.restoreTableState(this.props.objectSample);
+      this.setState({...this.state, json: '', baseUrl: ''});
     } else {
       const properties = Object.getOwnPropertyNames(this.props.objectSample);
       const empty = properties.filter(p => p !== ID_PROP &&
@@ -343,7 +345,11 @@ export default class ViewAbstract extends Component {
             && typeof this.props.changedInputs[prop].saveF === 'function') {
             if (this.props.objectHolder[prop]) {
               this.props.changedInputs[prop].saveF(this.props.objectHolder[prop]);
-              entity[prop] = this.props.objectHolder[prop].name;
+              if (typeof this.props.changedInputs[prop].getName === 'function') {
+                entity[prop] = this.props.changedInputs[prop].getName(this.props.objectHolder[prop].name);
+              } else {
+                entity[prop] = this.props.objectHolder[prop].name;
+              }
             }
           } else {
             entity[prop] = this.props.objectHolder[prop];
@@ -369,6 +375,7 @@ export default class ViewAbstract extends Component {
     if (this.props.status !== STATUS_DEFAULT) {
       this.props.enableDefaultStatus();
       this.props.restoreTableState(this.props.objectSample);
+      this.setState({...this.state, json: '', baseUrl: ''});
     }
   };
 
@@ -404,16 +411,25 @@ export default class ViewAbstract extends Component {
     );
   });
 
-    <textarea className='form-control' rows={15}
   renderImportJsonInputs = () => (
     <div className='box-body'>
       <div className='form-group'>
         <div className='col-md-2'>
-          <p>Input JSON</p>
+          <p>Import from file</p>
         </div>
         <div className='col-md-10'>
-          <input type='file' className='form-control' accept='.json' style={{marginBottom: 6}}
+          <input type='file' className='form-control' accept='.json'
                  onChange={e => this.handleFileChoose(e)}/>
+        </div>
+      </div>
+      <div className='form-group'>
+        <div className='col-md-2'>
+          <p>Base Url for files</p>
+        </div>
+        <div className='col-md-10'>
+          <input type='text' className='form-control'
+                 value={this.state.baseUrl}
+                 onChange={this.handleBaseUrlChange}/>
         </div>
       </div>
       <textarea className='form-control' style={{marginBottom: 6}} rows={15}
@@ -423,6 +439,9 @@ export default class ViewAbstract extends Component {
   );
 
   handleJsonChange = e => this.setState({...this.state, json: e.target.value});
+
+  handleBaseUrlChange = e => this.setState({...this.state, baseUrl: e.target.value});
+
   handleFileChoose = e => {
     const reader = new FileReader();
     reader.onloadend = () => {

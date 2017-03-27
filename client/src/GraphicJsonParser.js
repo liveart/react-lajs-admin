@@ -29,23 +29,28 @@ function parseNested(category) {
       const categoriesList = [];
       res.graphics.push(...parseGraphics(cat));
       delete cat.graphicsList;
-      res.categories.push({...cat, graphicsCategoryId: category.id});
       if (cat.categories && cat.categories.length) {
         categoriesList.push(...cat.categories);
       }
       delete cat.categories;
+      res.categories.push({...cat, graphicsCategoryId: category.id});
       categoriesList.forEach(cat2 => {
         const parsed = parseNested(cat2);
-        res.categories.push(parsed.categories);
-        res.graphics.push(parsed.graphics);
+        delete cat2.categories;
+        delete cat2.graphicsList;
+        res.categories.push({...cat2, graphicsCategoryId: cat.id});
+        res.categories.push(...parsed.categories);
+        res.graphics.push(...parsed.graphics);
       });
     });
   }
-  console.log(res);
   return res;
 }
 
-export function parseJson(json) {
+export function parseJson(json, baseUrl) {
+  if (baseUrl.length && baseUrl.charAt(baseUrl.length - 1) !== '/') {
+    baseUrl += '/';
+  }
   const obj = JSON.parse(json);
   const graphics = [];
   const categories = [];
@@ -56,6 +61,22 @@ export function parseJson(json) {
     delete cat.categories;
     graphics.push(...res.graphics);
     categories.push(cat, ...res.categories);
+  });
+
+  categories.forEach(cat => {
+    if (cat.thumb) {
+      cat.thumb = baseUrl + cat.thumb;
+    }
+  });
+
+  graphics.forEach(gr => {
+    if (gr.thumb) {
+      gr.thumb = baseUrl + gr.thumb;
+    }
+
+    if (gr.image) {
+      gr.image = baseUrl + gr.image;
+    }
   });
 
   return {categories, graphics};
