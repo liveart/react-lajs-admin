@@ -27,6 +27,12 @@ export const enableConfirmDelete = () => {
   };
 };
 
+export const enableImportJson = () => {
+  return {
+    type: actionTypes.ENABLE_IMPORT_JSON_STATUS
+  };
+};
+
 export const enableDefaultStatus = () => {
   return {
     type: actionTypes.ENABLE_DEFAULT_STATUS

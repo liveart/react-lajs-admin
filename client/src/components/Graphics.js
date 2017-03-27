@@ -1,7 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import View from './View';
 import * as GraphicModel from '../../../common/models/graphic.json';
-import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import {STATUS_EDITING, STATUS_CREATING} from '../definitions';
+import {parseJson} from '../GraphicJsonParser';
 const Graphic = GraphicModel.properties;
 const location = 'files/graphicThumbs/';
 const locationImage = 'files/graphicImages/';
@@ -17,6 +18,7 @@ export default class GraphicsComponent extends Component {
     status: PropTypes.string.isRequired,
     selectRow: PropTypes.func.isRequired,
     enableEditing: PropTypes.func.isRequired,
+    enableImportJson: PropTypes.func.isRequired,
     enableCreating: PropTypes.func.isRequired,
     enableDefaultStatus: PropTypes.func.isRequired,
     createEntity: PropTypes.func.isRequired,
@@ -244,9 +246,16 @@ export default class GraphicsComponent extends Component {
     this.handleSelectedObjectArrayArrayDeleteElement('colorizables', '_colors', colorizableId, key)
   );
 
+  handleImportJson = json => {
+    console.log(parseJson(json));
+  };
+
   render() {
     return (
-      <View {...this.props} objectSample={{...Graphic, colorizables: []}} sortingSupport={true}
+      <View {...this.props} objectSample={{...Graphic, colorizables: []}}
+            sortingSupport={true}
+            enableImportJson={this.props.enableImportJson}
+            handleImportJson={this.handleImportJson}
             hiddenProperties={['id', 'colors', 'colorize',
               'colorizableElements', 'multicolor', 'description', 'image', 'colorizables']}
             hiddenInputs={['id', 'categoryId', 'thumb', 'image']}

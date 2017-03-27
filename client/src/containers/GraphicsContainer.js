@@ -7,7 +7,7 @@ import {
   fetchGraphicsCategories
 } from '../actions/graphicsCategories';
 import {
-  selectRow, setObjectHolderProperty,
+  selectRow, setObjectHolderProperty, enableImportJson,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../actions/table';
 import Graphics from '../components/Graphics';
@@ -71,6 +71,9 @@ const mapDispatchToProps = dispatch => {
     },
     fetchGraphicsCategories() {
       dispatch(fetchGraphicsCategories());
+    },
+    enableImportJson() {
+      dispatch(enableImportJson());
     }
   };
 };

@@ -1,6 +1,13 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, STATUS_CONFIRM_DELETE} from '../definitions';
+import {
+  ID_PROP,
+  STATUS_EDITING,
+  STATUS_CREATING,
+  STATUS_DEFAULT,
+  STATUS_CONFIRM_DELETE,
+  STATUS_IMPORT_JSON
+} from '../definitions';
 import {checkNotEmpty} from '../FormValidation';
 import * as _ from 'lodash';
 
@@ -18,6 +25,11 @@ export default class ViewAbstract extends Component {
     enableEditing: PropTypes.func.isRequired,
     enableCreating: PropTypes.func.isRequired,
     enableDefaultStatus: PropTypes.func.isRequired,
+    /**
+     * Function that handles Json import if it's supported.
+     * @param text json raw text to import
+     */
+    handleImportJson: PropTypes.func,
     createEntity: PropTypes.func.isRequired,
     editEntity: PropTypes.func.isRequired,
     deleteEntity: PropTypes.func.isRequired,
@@ -30,6 +42,11 @@ export default class ViewAbstract extends Component {
     enableConfirmDelete: PropTypes.func,
     renderDeleteConfirmationDialog: PropTypes.func,
     renderDeleteConfirmationButtons: PropTypes.func,
+    /**
+     * Function to enable related state.
+     * Defines if Json import is supported.
+     */
+    enableImportJson: PropTypes.func,
     sortingSupport: PropTypes.bool,
     hiddenProperties: PropTypes.array,
     hiddenInputs: PropTypes.array,
@@ -40,7 +57,7 @@ export default class ViewAbstract extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {empty: []};
+    this.state = {empty: [], json: ''};
     if (!String.prototype.capitalizeFirstLetter) {
       String.prototype.capitalizeFirstLetter = function () {
         return this.charAt(0).toUpperCase() + this.slice(1);
@@ -50,7 +67,7 @@ export default class ViewAbstract extends Component {
 
   componentWillUpdate() {
     if (this.state.empty.length) {
-      this.setState({empty: []});
+      this.setState({empty: [], json: ''});
     }
   }
 
@@ -196,6 +213,9 @@ export default class ViewAbstract extends Component {
               onClick={this.handleAddNew}>Add new {this.props.title}
       </button>
       <button type='button' className='btn btn-default' style={{marginBottom: 6}}
+              onClick={this.handleImportFromJson}>Import from JSON
+      </button>
+      <button type='button' className='btn btn-default' style={{marginBottom: 6}}
               onClick={() => this.props.restoreTableState(this.props.objectSample)}>Reset filter
       </button>
     </div>
@@ -238,6 +258,31 @@ export default class ViewAbstract extends Component {
     </div>
   );
 
+  renderImportJsonView = () =>
+    <section>
+      <div className='row'>
+        <div className='col-md-12'>
+          <section className='content'>
+            <div className='box box-info'>
+              <div className='box-header with-border'>
+                <h3 className='box-title'>{`${this.props.title} information`}</h3>
+              </div>
+              <form className='form-horizontal'>
+                <div className='box-body'>
+                  {this.renderImportJsonInputs()}
+                </div>
+                <div className='box-footer'>
+                  {this.renderCreatingButtons()}
+                </div>
+                {this.state.empty.length ?
+                  <div className='text-red pull-right'>Please fill all the required fields.</div> : null}
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>;
+
   handleEdit = object => {
     if (this.props.status === STATUS_DEFAULT) {
       this.props.enableEditing(this.props.objectSample);
@@ -248,6 +293,12 @@ export default class ViewAbstract extends Component {
   handleAddNew = () => {
     if (this.props.status === STATUS_DEFAULT) {
       this.props.enableCreating(this.props.objectSample);
+    }
+  };
+
+  handleImportFromJson = () => {
+    if (this.props.status === STATUS_DEFAULT) {
+      this.props.enableImportJson();
     }
   };
 
@@ -268,42 +319,48 @@ export default class ViewAbstract extends Component {
   };
 
   handleSaveBtnClick = redirect => {
-    const properties = Object.getOwnPropertyNames(this.props.objectSample);
-    const empty = properties.filter(p => p !== ID_PROP &&
-    (!checkNotEmpty(this.props.objectHolder[p]) && this.props.objectSample[p].required));
-    if (empty.length) {
-      this.setState({...this.state, empty: [...empty]});
-      return;
-    }
-    const entity = {};
-    properties.forEach(prop => {
-      if (prop !== ID_PROP) {
-        if (this.props.status === STATUS_CREATING && this.props.objectHolder[prop] === '') {
-          return;
-        }
-
-        if (this.props.changedInputs && this.props.changedInputs[prop]
-          && typeof this.props.changedInputs[prop].saveF === 'function') {
-          if (this.props.objectHolder[prop]) {
-            this.props.changedInputs[prop].saveF(this.props.objectHolder[prop]);
-            entity[prop] = this.props.objectHolder[prop].name;
-          }
-        } else {
-          entity[prop] = this.props.objectHolder[prop];
-        }
+    if (this.props.status === STATUS_IMPORT_JSON) {
+      this.props.handleImportJson(this.state.json);
+      this.props.enableDefaultStatus();
+      this.props.restoreTableState(this.props.objectSample);
+    } else {
+      const properties = Object.getOwnPropertyNames(this.props.objectSample);
+      const empty = properties.filter(p => p !== ID_PROP &&
+      (!checkNotEmpty(this.props.objectHolder[p]) && this.props.objectSample[p].required));
+      if (empty.length) {
+        this.setState({...this.state, empty: [...empty]});
+        return;
       }
-    });
-    if (this.props.status === STATUS_EDITING) {
-      this.props.editEntity(this.props.objectHolder.id, entity, this.props.token);
-      if (redirect) {
+      const entity = {};
+      properties.forEach(prop => {
+        if (prop !== ID_PROP) {
+          if (this.props.status === STATUS_CREATING && this.props.objectHolder[prop] === '') {
+            return;
+          }
+
+          if (this.props.changedInputs && this.props.changedInputs[prop]
+            && typeof this.props.changedInputs[prop].saveF === 'function') {
+            if (this.props.objectHolder[prop]) {
+              this.props.changedInputs[prop].saveF(this.props.objectHolder[prop]);
+              entity[prop] = this.props.objectHolder[prop].name;
+            }
+          } else {
+            entity[prop] = this.props.objectHolder[prop];
+          }
+        }
+      });
+      if (this.props.status === STATUS_EDITING) {
+        this.props.editEntity(this.props.objectHolder.id, entity, this.props.token);
+        if (redirect) {
+          this.props.enableDefaultStatus();
+          this.props.restoreTableState(this.props.objectSample);
+        }
+      } else if (this.props.status === STATUS_CREATING) {
+
+        this.props.createEntity(entity, this.props.token);
         this.props.enableDefaultStatus();
         this.props.restoreTableState(this.props.objectSample);
       }
-    } else if (this.props.status === STATUS_CREATING) {
-
-      this.props.createEntity(entity, this.props.token);
-      this.props.enableDefaultStatus();
-      this.props.restoreTableState(this.props.objectSample);
     }
   };
 
@@ -346,6 +403,13 @@ export default class ViewAbstract extends Component {
     );
   });
 
+  renderImportJsonInputs = () =>
+    <textarea className='form-control'
+              value={this.state.json}
+              onChange={this.handleJsonChange}/>;
+
+  handleJsonChange = e => this.setState({...this.state, json: e.target.value});
+
   renderCustomInputs = () => {
     if (!this.props.customInputs) {
       return null;
@@ -377,6 +441,8 @@ export default class ViewAbstract extends Component {
       return this.renderChanging();
     } else if (this.props.status === STATUS_CONFIRM_DELETE) {
       return this.renderDeleteConfirmation();
+    } else if (this.props.status === STATUS_IMPORT_JSON) {
+      return this.renderImportJsonView();
     }
   };
 
