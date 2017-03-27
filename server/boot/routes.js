@@ -1,13 +1,17 @@
 'use strict';
 const LIVE_ART = 'liveart';
 const _ = require('lodash');
+const url = require('url');
 
-const GR_IMG = 'http://hive.liveartdesigner.com:3000/files/graphicImages/';
-const GR_THUMB = 'http://hive.liveartdesigner.com:3000/files/graphicThumbs/';
-const CAT_THUMB = 'http://hive.liveartdesigner.com:3000/files/thumb/';
+function getFullUrl(req) {
+  return url.format({
+    protocol: req.protocol,
+    host: req.get('host')
+  });
+}
 
-function getFontFaceRule(family, file, weight, style) {
-  const location = 'http://hive.liveartdesigner.com:3000/files/fonts/';
+function getFontFaceRule(family, file, weight, style, url) {
+  const location = url + '/files/fonts/';
   return {
     type: 'font-face',
     declarations: [
@@ -40,7 +44,7 @@ function fixColorizables(colorizables) {
   }));
 }
 
-function getGraphics(category, graphics) {
+function getGraphics(category, graphics, grImg, grThumb) {
   const grs = [];
   _.forEach(graphics, gr => {
     if (String(gr.categoryId) === String(category.id)) {
@@ -52,8 +56,8 @@ function getGraphics(category, graphics) {
         colors: gr.colors ? JSON.parse(gr.colors) : undefined,
         colorize: gr.colorize,
         multicolor: gr.multicolor,
-        thumb: GR_THUMB + gr.thumb,
-        image: GR_IMG + gr.image,
+        thumb: grThumb + gr.thumb,
+        image: grImg + gr.image,
         colorizableElements: fixColorizables(gr.colorizables)
       });
     }
@@ -61,16 +65,16 @@ function getGraphics(category, graphics) {
   return grs.length ? grs : undefined;
 }
 
-function getCategories(category, categories, graphics) {
+function getCategories(category, categories, graphics, catThumb) {
   const cats = [];
   _.forEach(categories, cat => {
     if (String(cat.graphicsCategoryId) === String(category.id)) {
       cats.push({
         id: cat.id,
         name: cat.name,
-        thumb: CAT_THUMB + cat.thumb,
+        thumb: catThumb + cat.thumb,
         categories: getCategories(cat, categories, graphics),
-        graphics: getGraphics(cat, graphics)
+        graphicsList: getGraphics(cat, graphics)
       });
     }
   });
@@ -78,10 +82,14 @@ function getCategories(category, categories, graphics) {
 }
 
 module.exports = function (app) {
-
   const loopback = require('loopback');
   const css = require('css');
   app.get('/api/' + LIVE_ART + '/graphics', function (req, res) {
+    const baseUrl = getFullUrl(req);
+    console.log(baseUrl);
+    const GR_IMG = baseUrl + '/files/graphicImages/';
+    const GR_THUMB = baseUrl + '/files/graphicThumbs/';
+    const CAT_THUMB = baseUrl + '/files/thumb/';
     const result = {};
     const Graphic = loopback.getModel('graphic');
     Graphic.find((err, graphics) => {
@@ -103,8 +111,8 @@ module.exports = function (app) {
                 id: cat.id,
                 name: cat.name,
                 thumb: CAT_THUMB + cat.thumb,
-                categories: getCategories(cat, cats, graphics),
-                graphics: getGraphics(cat, graphics)
+                categories: getCategories(cat, cats, graphics, CAT_THUMB),
+                graphicsList: getGraphics(cat, graphics, GR_IMG, GR_THUMB)
               });
             }
           });
@@ -128,7 +136,8 @@ module.exports = function (app) {
   });
 
   app.get('/api/' + LIVE_ART + '/fonts', function (req, res) {
-    const VECTOR_ROOT = 'http://hive.liveartdesigner.com:3000/files/vectors/';
+    const baseUrl = getFullUrl(req);
+    const VECTOR_ROOT = baseUrl + '/files/vectors/';
     const Font = loopback.getModel('Font');
     const fonts = [];
     Font.find({
@@ -147,54 +156,55 @@ module.exports = function (app) {
   });
 
   app.get('/api/' + LIVE_ART + '/fontsCSS', function (req, res) {
-    const Font = loopback.getModel('Font');
-    const fonts = [];
+    const baseUrl = getFullUrl(req);
+      const Font = loopback.getModel('Font');
+      const fonts = [];
 
-    const NORMAL = 'normal';
-    const BOLD = 'bold';
-    const ITALIC = 'italic';
+      const NORMAL = 'normal';
+      const BOLD = 'bold';
+      const ITALIC = 'italic';
 
-    Font.find({
-      order: 'name ASC'
-    }, (err, fnts) => {
-      if (err) {
-        res.status(500).send('Error occurred');
-      }
-      let cssJS = {
-        type: 'stylesheet',
-        stylesheet: {
-          rules: []
+      Font.find({
+        order: 'name ASC'
+      }, (err, fnts) => {
+        if (err) {
+          res.status(500).send('Error occurred');
         }
-      };
-      fnts.map(font => {
-        if (font.fileNormal) {
-          cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileNormal, NORMAL, NORMAL)
+        let cssJS = {
+          type: 'stylesheet',
+          stylesheet: {
+            rules: []
+          }
+        };
+        fnts.map(font => {
+          if (font.fileNormal) {
+            cssJS.stylesheet.rules.push(
+              getFontFaceRule(font.fontFamily, font.fileNormal, NORMAL, NORMAL, baseUrl)
             );
-        }
-        if (font.fileBold) {
-          cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileBold, BOLD, NORMAL)
+          }
+          if (font.fileBold) {
+            cssJS.stylesheet.rules.push(
+              getFontFaceRule(font.fontFamily, font.fileBold, BOLD, NORMAL, baseUrl)
             );
-        }
+          }
 
-        if (font.fileItalic) {
-          cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileItalic, NORMAL, ITALIC)
+          if (font.fileItalic) {
+            cssJS.stylesheet.rules.push(
+              getFontFaceRule(font.fontFamily, font.fileItalic, NORMAL, ITALIC, baseUrl)
             );
-        }
+          }
 
-        if (font.fileBoldItalic) {
-          cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileBoldItalic, BOLD, ITALIC)
+          if (font.fileBoldItalic) {
+            cssJS.stylesheet.rules.push(
+              getFontFaceRule(font.fontFamily, font.fileBoldItalic, BOLD, ITALIC, baseUrl)
             );
-        }
+          }
+        });
+        res.set('Content-Type', 'text/css');
+        res.set('X-Content-Type-Options', 'nosniff');
+        res.send(css.stringify(cssJS));
       });
-      res.set('Content-Type', 'text/css');
-      res.set('X-Content-Type-Options', 'nosniff');
-      res.send(css.stringify(cssJS));
-    });
-  }
+    }
   )
   ;
 }

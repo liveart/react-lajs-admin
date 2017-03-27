@@ -212,9 +212,10 @@ export default class ViewAbstract extends Component {
       <button type='button' className='btn btn-primary' style={{marginBottom: 6}}
               onClick={this.handleAddNew}>Add new {this.props.title}
       </button>
-      <button type='button' className='btn btn-default' style={{marginBottom: 6}}
-              onClick={this.handleImportFromJson}>Import from JSON
-      </button>
+      {typeof this.props.enableImportJson === 'function' ?
+        <button type='button' className='btn btn-default' style={{marginBottom: 6}}
+                onClick={this.handleImportFromJson}>Import from JSON
+        </button> : null}
       <button type='button' className='btn btn-default' style={{marginBottom: 6}}
               onClick={() => this.props.restoreTableState(this.props.objectSample)}>Reset filter
       </button>
@@ -403,6 +404,7 @@ export default class ViewAbstract extends Component {
     );
   });
 
+    <textarea className='form-control' rows={15}
   renderImportJsonInputs = () => (
     <div className='box-body'>
       <div className='form-group'>
@@ -414,7 +416,7 @@ export default class ViewAbstract extends Component {
                  onChange={e => this.handleFileChoose(e)}/>
         </div>
       </div>
-      <textarea className='form-control' style={{marginBottom: 6}}
+      <textarea className='form-control' style={{marginBottom: 6}} rows={15}
                 value={this.state.json}
                 onChange={this.handleJsonChange}/>
     </div>

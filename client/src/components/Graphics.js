@@ -247,7 +247,10 @@ export default class GraphicsComponent extends Component {
   );
 
   handleImportJson = json => {
-    console.log(parseJson(json));
+    const parsed = parseJson(json);
+    const categories = parsed.categories;
+    const graphics = parsed.graphics;
+    console.log(parsed);
   };
 
   render() {
