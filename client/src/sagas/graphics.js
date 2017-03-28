@@ -1,7 +1,9 @@
 import * as actionTypes from '../actionTypes/graphics';
 import {dispatch} from './sagaFuncs';
 import * as api from './api';
+import {MESSAGE_ENTITY_CREATED, MESSAGE_ENTITY_UPDATED, MESSAGE_ENTITY_DELETED} from '../definitions';
 
+const entityName = 'Graphic';
 const endpoint = 'graphics';
 const imagesEndpoint = 'containers/graphicImages';
 const thumbsEndpoint = 'containers/graphicThumbs';
@@ -27,7 +29,7 @@ export function* fetchGraphicsNumber() {
 export function* createGraphic(action) {
   try {
     yield* api.create(endpoint, action.graphic, action.token);
-    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS, message: entityName + ' ' + MESSAGE_ENTITY_CREATED});
     yield dispatch({type: actionTypes.FETCH_GRAPHICS});
   } catch (e) {
     yield dispatch({type: actionTypes.GRAPHIC_OPERATION_FAILURE, message: e.message});
@@ -37,7 +39,7 @@ export function* createGraphic(action) {
 export function* editGraphic(action) {
   try {
     yield* api.update(endpoint, action.newGraphic, action.id, action.token);
-    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS, message: entityName + ' ' + MESSAGE_ENTITY_UPDATED});
     yield dispatch({type: actionTypes.FETCH_GRAPHICS});
   } catch (e) {
     yield dispatch({type: actionTypes.GRAPHIC_OPERATION_FAILURE, message: e.message});
@@ -47,7 +49,7 @@ export function* editGraphic(action) {
 export function* deleteGraphic(action) {
   try {
     yield* api.remove(endpoint, action.id, action.token);
-    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS, message: entityName + ' ' + MESSAGE_ENTITY_DELETED});
     yield dispatch({type: actionTypes.FETCH_GRAPHICS});
   } catch (e) {
     yield dispatch({type: actionTypes.GRAPHIC_OPERATION_FAILURE, message: e.message});
@@ -71,7 +73,7 @@ export function* uploadGraphicThumb(action) {
     const data = new FormData();
     data.append('blob', action.thumbFile, action.thumbFile.name);
     yield* api.upload(thumbsEndpoint, data);
-    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS, message: ''});
     yield dispatch({type: actionTypes.FETCH_GRAPHICS});
   } catch (e) {
     yield dispatch({type: actionTypes.GRAPHIC_OPERATION_FAILURE, message: e});

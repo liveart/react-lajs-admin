@@ -16,10 +16,12 @@ const KEEP_URL_OPTION = 'Keep';
 
 export default class ViewAbstract extends Component {
   static propTypes = {
+    addNotification: PropTypes.func.isRequired,
+    message: PropTypes.string,
     title: PropTypes.string.isRequired,
     pluralTitle: PropTypes.string,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    errors: PropTypes.arrayOf(PropTypes.object),
+    errors: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     objectHolder: PropTypes.object,
@@ -77,6 +79,16 @@ export default class ViewAbstract extends Component {
   componentWillMount() {
     this.props.restoreTableState(this.props.objectSample);
     this.props.fetchData();
+  }
+
+  componentDidUpdate() {
+    if (this.props.errors && this.props.errors.length) {
+      this.props.errors.forEach(prop => this.props.addNotification('error', prop));
+    }
+
+    if (this.props.message) {
+      this.props.addNotification('success', this.props.message);
+    }
   }
 
   renderTableHeadings = () => {
@@ -351,9 +363,9 @@ export default class ViewAbstract extends Component {
             if (this.props.objectHolder[prop]) {
               this.props.changedInputs[prop].saveF(this.props.objectHolder[prop]);
               if (typeof this.props.changedInputs[prop].getName === 'function') {
-                entity[prop] = this.props.changedInputs[prop].getName(this.props.objectHolder[prop].name);
+                entity[prop] = this.props.changedInputs[prop].getName(this.props.objectHolder[prop]);
               } else {
-                entity[prop] = this.props.objectHolder[prop].name;
+                entity[prop] = this.props.objectHolder[prop];
               }
             }
           } else {
@@ -368,7 +380,6 @@ export default class ViewAbstract extends Component {
           this.props.restoreTableState(this.props.objectSample);
         }
       } else if (this.props.status === STATUS_CREATING) {
-
         this.props.createEntity(entity, this.props.token);
         this.props.enableDefaultStatus();
         this.props.restoreTableState(this.props.objectSample);
@@ -589,7 +600,7 @@ export default class ViewAbstract extends Component {
   };
 
   render() {
-    const {loading, errors} = this.props;
+    const {loading} = this.props;
 
     return (
       <div>
@@ -597,11 +608,6 @@ export default class ViewAbstract extends Component {
         <div className='content-header'>
           <h1>{this.props.pluralTitle || `${ this.props.title}s`}</h1>
         </div>
-        {
-          errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>
-            Error:
-            {' ' + err.message}</div>)
-        }
         {this.renderPage()}
       </div>
     );

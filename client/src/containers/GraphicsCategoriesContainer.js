@@ -26,7 +26,8 @@ import GraphicsCategories from '../components/GraphicsCategories';
 const mapStateToProps = state => {
   const {graphics} = state.graphics;
   const {token} = state.user;
-  const {graphicsCategories, graphicsCategoriesError, graphicsCategoriesLoading} = state.graphicsCategories;
+  const {graphicsCategories, graphicsCategoriesError, graphicsCategoriesLoading, graphicsCategoriesMessage} =
+    state.graphicsCategories;
   const {status, objectHolder} = state.table;
   const errors = graphicsCategoriesError ? [graphicsCategoriesError] : [];
   return {
@@ -34,6 +35,7 @@ const mapStateToProps = state => {
     pluralTitle: 'Graphic Categories',
     data: graphicsCategories,
     secondaryData: graphics,
+    message: graphicsCategoriesMessage,
     errors,
     loading: graphicsCategoriesLoading,
     objectHolder,

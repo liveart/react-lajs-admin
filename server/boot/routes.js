@@ -154,53 +154,53 @@ module.exports = function (app) {
   });
 
   app.get('/api/' + LIVE_ART + '/fontsCSS', function (req, res) {
-      const Font = loopback.getModel('Font');
-      const location = url + '/files/fonts/';
-      const NORMAL = 'normal';
-      const BOLD = 'bold';
-      const ITALIC = 'italic';
+    const Font = loopback.getModel('Font');
+    const location = url + '/files/fonts/';
+    const NORMAL = 'normal';
+    const BOLD = 'bold';
+    const ITALIC = 'italic';
 
-      Font.find({
-        order: 'name ASC'
-      }, (err, fnts) => {
-        if (err) {
-          res.status(500).send('Error occurred');
+    Font.find({
+      order: 'name ASC'
+    }, (err, fnts) => {
+      if (err) {
+        res.status(500).send('Error occurred');
+      }
+      let cssJS = {
+        type: 'stylesheet',
+        stylesheet: {
+          rules: []
         }
-        let cssJS = {
-          type: 'stylesheet',
-          stylesheet: {
-            rules: []
-          }
-        };
-        fnts.map(font => {
-          if (font.fileNormal) {
-            cssJS.stylesheet.rules.push(
+      };
+      fnts.map(font => {
+        if (font.fileNormal) {
+          cssJS.stylesheet.rules.push(
               getFontFaceRule(font.fontFamily, font.fileNormal, NORMAL, NORMAL, getFullUrl(req, font.fileNormal))
             );
-          }
-          if (font.fileBold) {
-            cssJS.stylesheet.rules.push(
+        }
+        if (font.fileBold) {
+          cssJS.stylesheet.rules.push(
               getFontFaceRule(font.fontFamily, font.fileBold, BOLD, NORMAL, getFullUrl(req, font.fileBold))
             );
-          }
+        }
 
-          if (font.fileItalic) {
-            cssJS.stylesheet.rules.push(
+        if (font.fileItalic) {
+          cssJS.stylesheet.rules.push(
               getFontFaceRule(font.fontFamily, font.fileItalic, NORMAL, ITALIC, getFullUrl(req, font.fileItalic))
             );
-          }
+        }
 
-          if (font.fileBoldItalic) {
-            cssJS.stylesheet.rules.push(
+        if (font.fileBoldItalic) {
+          cssJS.stylesheet.rules.push(
               getFontFaceRule(font.fontFamily, font.fileBoldItalic, BOLD, ITALIC, getFullUrl(req, font.fileBoldItalic))
             );
-          }
-        });
-        res.set('Content-Type', 'text/css');
-        res.set('X-Content-Type-Options', 'nosniff');
-        res.send(css.stringify(cssJS));
+        }
       });
-    }
+      res.set('Content-Type', 'text/css');
+      res.set('X-Content-Type-Options', 'nosniff');
+      res.send(css.stringify(cssJS));
+    });
+  }
   )
   ;
 }

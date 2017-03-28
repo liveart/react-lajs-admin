@@ -14,16 +14,16 @@ import Graphics from '../components/Graphics';
 
 const mapStateToProps = state => {
   const {token} = state.user;
-  const {graphics, graphicsError, graphicsLoading} = state.graphics;
+  const {graphics, graphicsError, graphicsLoading, graphicsMessage} = state.graphics;
   const {graphicsCategories, graphicsCategoriesLoading} = state.graphicsCategories;
   const {objectHolder, status} = state.table;
   const errors = graphicsError ? [graphicsError] : [];
-
   return {
     title: 'Graphic',
     data: graphics,
     errors,
     loading: graphicsLoading || graphicsCategoriesLoading,
+    message: graphicsMessage,
     objectHolder,
     status,
     graphicsCategories,

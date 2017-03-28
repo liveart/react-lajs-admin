@@ -9,14 +9,15 @@ import {
   GRAPHIC_THUMB_FOLDER
 } from '../definitions';
 import {parseJson} from '../GraphicJsonParser';
-import * as _ from 'lodash';
 const Graphic = GraphicModel.properties;
 
 export default class GraphicsComponent extends Component {
   static propTypes = {
+    addNotification: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     errors: PropTypes.arrayOf(PropTypes.string),
+    message: PropTypes.string,
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     objectHolder: PropTypes.object,
@@ -253,14 +254,18 @@ export default class GraphicsComponent extends Component {
   );
 
   handleImportJson = (json, baseUrl) => {
-    const parsed = parseJson(json, baseUrl);
-    const categories = parsed.categories;
-    if (categories && categories.length) {
-      this.props.createGraphicsCategory(categories, this.props.token);
-    }
-    const graphics = parsed.graphics;
-    if (graphics && graphics.length) {
-      this.props.createEntity(graphics, this.props.token);
+    try {
+      const parsed = parseJson(json, baseUrl);
+      const categories = parsed.categories;
+      if (categories && categories.length) {
+        this.props.createGraphicsCategory(categories, this.props.token);
+      }
+      const graphics = parsed.graphics;
+      if (graphics && graphics.length) {
+        this.props.createEntity(graphics, this.props.token);
+      }
+    } catch (e) {
+      this.props.addNotification('error', 'Json structure is invalid.');
     }
   };
 
@@ -269,6 +274,14 @@ export default class GraphicsComponent extends Component {
       return url.substring(RELATIVE_URL.length);
     }
     return url;
+  };
+
+  getName = (obj, url) => {
+    if (typeof obj === 'object') {
+      return RELATIVE_URL + '/' + url + obj.name;
+    }
+
+    return undefined;
   };
 
   render() {
@@ -323,11 +336,11 @@ export default class GraphicsComponent extends Component {
                 elem: <input type='file' className='form-control'
                              onChange={e => this.handleFileChoose('image', e)}/>,
                 saveF: this.handleImageUpload,
-                getName: name => RELATIVE_URL + '/' + GRAPHIC_IMG_FOLDER + name
+                getName: obj => this.getName(obj, GRAPHIC_IMG_FOLDER)
               },
               thumb: {
                 saveF: this.handleThumbUpload,
-                getName: name => RELATIVE_URL + '/' + GRAPHIC_THUMB_FOLDER + name
+                getName: obj => this.getName(obj, GRAPHIC_THUMB_FOLDER)
               },
               description: {
                 elem: <textarea className='form-control' rows='3'

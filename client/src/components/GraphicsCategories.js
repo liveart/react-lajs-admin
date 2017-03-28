@@ -24,6 +24,7 @@ export default class extends Component {
     pluralTitle: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     errors: PropTypes.arrayOf(PropTypes.object),
+    message: PropTypes.string,
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     objectHolder: PropTypes.object,
@@ -249,6 +250,14 @@ export default class extends Component {
 
   getFileUrl = url => _.includes(url, RELATIVE_URL) ? url.substring(RELATIVE_URL.length) : url;
 
+  getName = (obj, url) => {
+    if (typeof obj === 'object') {
+      return RELATIVE_URL + '/' + url + obj.name;
+    }
+
+    return undefined;
+  };
+
   render() {
     return (
       <View {...this.props} objectSample={GraphicsCategory} sortingSupport={true}
@@ -264,7 +273,7 @@ export default class extends Component {
             changedInputs={{
               thumb: {
                 saveF: this.handleFileUpload,
-                getName: name => RELATIVE_URL + '/' + GRAPHIC_CATEGORY_FOLDER + name
+                getName: obj => this.getName(obj, GRAPHIC_CATEGORY_FOLDER)
               }
             }
             }

@@ -5,7 +5,8 @@ const INITIAL_STATE = {
   graphicsCategories: [],
   graphicsCategoriesNumber: 0,
   graphicsCategoriesError: null,
-  graphicsCategoriesLoading: false
+  graphicsCategoriesLoading: false,
+  graphicsCategoriesMessage: null
 };
 
 export default function (state = INITIAL_STATE, action) {
@@ -15,6 +16,7 @@ export default function (state = INITIAL_STATE, action) {
       return {
         ...state,
         graphicsCategory: action.graphicsCategory || state.graphicsCategory,
+        graphicsCategoriesMessage: action.message || null,
         graphicsCategories: action.graphicsCategories || state.graphicsCategories,
         graphicsCategoriesNumber: action.graphicsCategoriesNumber || state.graphicsCategoriesNumber,
         graphicsCategoriesError: null,
@@ -22,23 +24,35 @@ export default function (state = INITIAL_STATE, action) {
       };
     case actionType.GRAPHICS_CATEGORY_FAILURE:
       graphicsCategoriesError = action.message;
-      return {...state, graphicsCategoriesError, graphicsCategoriesLoading: false};
+      return {...state, graphicsCategoryMessage: null, graphicsCategoriesError, graphicsCategoriesLoading: false};
     case actionType.FETCH_GRAPHICS_CATEGORIES_BY_ID:
-      return {...state, graphicsCategory: null, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
+      return {
+        ...state,
+        graphicsCategoriesMessage: null,
+        graphicsCategory: null,
+        graphicsCategoriesError: null,
+        graphicsCategoriesLoading: true
+      };
     case actionType.FETCH_GRAPHICS_CATEGORIES:
-      return {...state, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
+      return {...state, graphicsCategoriesMessage: null, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     case actionType.FETCH_GRAPHICS_CATEGORIES_NUMBER:
-      return {...state, graphicsCategoriesNumber: 0, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
+      return {
+        ...state,
+        graphicsCategoriesMessage: null,
+        graphicsCategoriesNumber: 0,
+        graphicsCategoriesError: null,
+        graphicsCategoriesLoading: true
+      };
     case actionType.CREATE_GRAPHICS_CATEGORIES:
-      return {...state, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
+      return {...state, graphicsCategoriesMessage: null, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     case actionType.UPLOAD_THUMBNAIL:
-      return {...state, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
+      return {...state, graphicsCategoriesMessage: null, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     case actionType.DELETE_THUMBNAIL:
-      return {...state, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
+      return {...state, graphicsCategoriesMessage: null, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     case actionType.EDIT_GRAPHICS_CATEGORY:
-      return {...state, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
+      return {...state, graphicsCategoriesMessage: null, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     case actionType.DELETE_GRAPHICS_CATEGORY:
-      return {...state, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
+      return {...state, graphicsCategoriesMessage: null, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     default:
       return state;
   }
