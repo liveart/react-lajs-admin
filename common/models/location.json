@@ -1,0 +1,62 @@
+{
+  "name": "location",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "image": {
+      "type": "string",
+      "required": true
+    },
+    "mask": {
+      "type": "string",
+      "required": false
+    },
+    "overlayInfo": {
+      "type": "string",
+      "required": false
+    },
+    "editableArea": {
+      "type":  ["number"],
+      "required": false
+    },
+    "editableAreaUnits": {
+      "type": ["number"],
+      "required": false
+    },
+    "editableAreaUnitsRange": {
+      "type": [["number"]],
+      "required": false
+    },
+    "editableAreaUnitsRestrictRotation": {
+      "type": "boolean",
+      "required": false
+    },
+    "clipRect": {
+      "type": ["number"],
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}

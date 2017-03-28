@@ -75,5 +75,13 @@
   "productsCategory": {
     "dataSource": "remote-dev-mongo",
     "public": true
+  },
+  "product": {
+    "dataSource": "remote-dev-mongo",
+    "public": true
+  },
+  "location": {
+    "dataSource": "remote-dev-mongo",
+    "public": true
   }
 }

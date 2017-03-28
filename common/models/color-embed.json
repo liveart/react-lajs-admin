@@ -16,7 +16,17 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "location": {
+      "type": "embedsMany",
+      "model": "location",
+      "property": "location",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

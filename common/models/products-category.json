@@ -6,23 +6,23 @@
     "validateUpsert": true
   },
   "properties": {
-  "id": {
-    "type": "string",
-    "required": true
+    "id": {
+      "type": "string",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "thumbUrl": {
+      "type": "string",
+      "required": true
+    },
+    "productsCategoryId": {
+      "type": "string",
+      "required": false
+    }
   },
-  "name": {
-    "type": "string",
-    "required": true
-  },
-  "thumbUrl": {
-    "type": "string",
-    "required": true
-  },
-  "productsCategoryId": {
-    "type": "string",
-    "required": false
-  }
-},
   "validations": [],
   "relations": {
     "category": {

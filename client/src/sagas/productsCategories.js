@@ -3,7 +3,7 @@ import {dispatch} from './sagaFuncs';
 import * as api from './api';
 
 const endpoint = 'productsCategories';
-const endpointUpload = 'containers/productsCategoriesThumb';
+const endpointUpload = 'containers/productCategoriesThumbs';
 
 export function* fetchProductsCategories() {
   try {

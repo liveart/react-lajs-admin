@@ -3,7 +3,7 @@ import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_CONFIRM_DELETE} from '.
 import * as ProductsCategoryModel from '../../../common/models/products-category.json';
 import {RadioGroup, Radio} from 'react-radio-group';
 const ProductsCategory = ProductsCategoryModel.properties;
-const location = '/files/productsCategoriesThumb/';
+const location = '/files/productCategoriesThumbs/';
 import View from './View';
 import * as _ from 'lodash';
 const DELETE_CATEGORY = 'DELETE_CATEGORY';

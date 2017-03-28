@@ -1,0 +1,122 @@
+{
+  "name": "product",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    },
+    "data": {
+      "type": {
+        "price": "number",
+        "material": "string"
+      },
+      "required": false
+    },
+    "categoryId": {
+      "type": "string",
+      "required": true
+    },
+    "minDPU": {
+      "type": "number",
+      "required": false
+    },
+    "minQuantity": {
+      "type": "number",
+      "required": false
+    },
+    "colorize": {
+      "type": "boolean",
+      "default": false
+    },
+    "multicolor": {
+      "type": "boolean",
+      "default": false
+    },
+    "hideEditableAreaBorder": {
+      "type": "boolean",
+      "default": false
+    },
+    "namesNumbersEnabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "pantones": {
+      "type": {
+        "useForDecoration": "boolean",
+        "useForProduct": "boolean"
+      },
+      "required": false
+    },
+    "resizable": {
+      "type": "boolean",
+      "default": false
+    },
+    "editableAreaSizes": {
+      "type": {
+        "label": "string",
+        "width": "number",
+        "height": "number"
+      },
+      "required": false
+    },
+    "showRuler": {
+      "type": "boolean",
+      "default": false
+    },
+    "sizes": {
+      "type": [
+        "string"
+      ],
+      "required": false
+    },
+    "template": {
+      "type": "string",
+      "required": false
+    },
+    "thumbUrl": {
+      "type": "string",
+      "required": true
+    }
+
+  },
+  "validations": [],
+  "relations": {
+    "colorizableElements": {
+      "type": "embedsMany",
+      "model": "colorizableElement",
+      "property": "colorizables",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
+    },
+    "colors": {
+      "type": "embedsMany",
+      "model": "color-embed",
+      "property": "_colors",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
+    },
+    "location": {
+      "type": "embedsMany",
+      "model": "location",
+      "property": "locations",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
