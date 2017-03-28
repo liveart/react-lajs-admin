@@ -58,7 +58,7 @@ export default class ViewAbstract extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {empty: [], json: '', baseUrl: ''};
+    this.state = {empty: [], json: '', baseUrl: '', urlSelect: ''};
     if (!String.prototype.capitalizeFirstLetter) {
       String.prototype.capitalizeFirstLetter = function () {
         return this.charAt(0).toUpperCase() + this.slice(1);
@@ -94,6 +94,9 @@ export default class ViewAbstract extends Component {
 
   handleSelectedObjectChange = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
+  };
+  handleSelectedStateChange = event => {
+    this.setState({...this.state, urlSelect: event.target.value, baseUrl: ''});
   };
 
   renderTableSortRow = () => {
@@ -424,12 +427,20 @@ export default class ViewAbstract extends Component {
       </div>
       <div className='form-group'>
         <div className='col-md-2'>
-          <p>Base Url for files</p>
+          <select className='form-control'
+                  onChange={e => this.handleSelectedStateChange(e)}
+                  value={this.state.urlSelect}>
+            <option key='1' value='Keep'>Keep original URLs of the imported JSON</option>
+            <option key='2' value='Import'>Import the files and generate new URLs</option>
+          </select>
         </div>
         <div className='col-md-10'>
-          <input type='text' className='form-control'
-                 value={this.state.baseUrl}
-                 onChange={this.handleBaseUrlChange}/>
+          {this.state.urlSelect === 'Import' ?
+            <input disabled type='text' className='form-control'
+                   value=''/> :
+            <input type='text' className='form-control'
+                   value={this.state.baseUrl}
+                   onChange={this.handleBaseUrlChange}/>}
         </div>
       </div>
       <textarea className='form-control' style={{marginBottom: 6}} rows={15}
@@ -441,6 +452,7 @@ export default class ViewAbstract extends Component {
   handleJsonChange = e => this.setState({...this.state, json: e.target.value});
 
   handleBaseUrlChange = e => this.setState({...this.state, baseUrl: e.target.value});
+
 
   handleFileChoose = e => {
     const reader = new FileReader();
