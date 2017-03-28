@@ -4,15 +4,15 @@ const RELATIVE_URL = '@@RELATIVE';
 const _ = require('lodash');
 const url = require('url');
 
-function getFullUrl(req, url) {
-  if (url.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
-    return url.format({
-        protocol: req.protocol,
-        host: req.get('host')
-      }) + url.substring(RELATIVE_URL.length - 1);
+function getFullUrl(req, urlStr) {
+  if (urlStr.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
+    const addr = url.format({
+      protocol: req.protocol,
+      host: req.get('host')
+    });
+    return addr + urlStr.substring(RELATIVE_URL.length);
   }
-
-  return '';
+  return urlStr;
 }
 
 function getFontFaceRule(family, file, weight, style, url) {
@@ -109,7 +109,7 @@ module.exports = function (app) {
               result.graphicsCategoriesList.push({
                 id: cat.id,
                 name: cat.name,
-                thumb: cat.thumb,
+                thumb: getFullUrl(req, cat.thumb),
                 categories: getCategories(cat, cats, graphics, req),
                 graphicsList: getGraphics(cat, graphics, req)
               });
