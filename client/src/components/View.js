@@ -11,6 +11,8 @@ import {
 } from '../definitions';
 import {checkNotEmpty} from '../FormValidation';
 import * as _ from 'lodash';
+const IMPORT_URL_OPTION = 'Import';
+const KEEP_URL_OPTION = 'Keep';
 
 export default class ViewAbstract extends Component {
   static propTypes = {
@@ -58,7 +60,7 @@ export default class ViewAbstract extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {empty: [], json: '', baseUrl: '', urlSelect: ''};
+    this.state = {empty: [], json: '', baseUrl: '', urlSelect: IMPORT_URL_OPTION};
     if (!String.prototype.capitalizeFirstLetter) {
       String.prototype.capitalizeFirstLetter = function () {
         return this.charAt(0).toUpperCase() + this.slice(1);
@@ -417,28 +419,29 @@ export default class ViewAbstract extends Component {
   renderImportJsonInputs = () => (
     <div className='box-body'>
       <div className='form-group'>
-        <div className='col-md-2'>
+        <div className='col-md-3'>
           <p>Import from file</p>
         </div>
-        <div className='col-md-10'>
+        <div className='col-md-9'>
           <input type='file' className='form-control' accept='.json'
-                 onChange={e => this.handleFileChoose(e)}/>
+                 onChange={this.handleFileChoose}/>
         </div>
       </div>
       <div className='form-group'>
-        <div className='col-md-2'>
+        <div className='col-md-3'>
           <select className='form-control'
-                  onChange={e => this.handleSelectedStateChange(e)}
+                  onChange={this.handleSelectedStateChange}
                   value={this.state.urlSelect}>
-            <option key='1' value='Keep'>Keep original URLs of the imported JSON</option>
-            <option key='2' value='Import'>Import the files and generate new URLs</option>
+            <option value={IMPORT_URL_OPTION}>Upload files to server</option>
+            <option value={KEEP_URL_OPTION}>Keep original URL's</option>
           </select>
         </div>
-        <div className='col-md-10'>
-          {this.state.urlSelect === 'Import' ?
+        <div className='col-md-9'>
+          {this.state.urlSelect === IMPORT_URL_OPTION ?
             <input disabled type='text' className='form-control'
                    value=''/> :
             <input type='text' className='form-control'
+                   placeholder='Base url for links. Requires protocol (example http://site.com/)'
                    value={this.state.baseUrl}
                    onChange={this.handleBaseUrlChange}/>}
         </div>

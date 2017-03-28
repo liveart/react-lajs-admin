@@ -19,7 +19,7 @@
       "required": true
     },
     "colors": {
-      "type": "string"
+      "type": "array"
     },
     "colorize": {
       "type": "boolean",

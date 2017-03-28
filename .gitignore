@@ -2,3 +2,9 @@
 /node_modules/
 /npm-debug.log
 /coverage/
+/client/public/files/
+!/client/public/files/fonts/README.md
+!/client/public/files/graphicImages/README.md
+!/client/public/files/graphicThumbs/README.md
+!/client/public/files/thumb/README.md
+!/client/public/files/vectors/README.md

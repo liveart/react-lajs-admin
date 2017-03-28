@@ -75,8 +75,8 @@ const mapDispatchToProps = dispatch => {
     enableImportJson() {
       dispatch(enableImportJson());
     },
-    createGraphicsCategory() {
-      dispatch(createGraphicsCategory());
+    createGraphicsCategory(category, token) {
+      dispatch(createGraphicsCategory(category, token));
     }
   };
 };

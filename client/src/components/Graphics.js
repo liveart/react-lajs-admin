@@ -260,11 +260,16 @@ export default class GraphicsComponent extends Component {
     }
     const graphics = parsed.graphics;
     if (graphics && graphics.length) {
-      this.props.createEntity(graphics);
+      this.props.createEntity(graphics, this.props.token);
     }
   };
 
-  getFileUrl = url => _.includes(url, RELATIVE_URL) ? url.substring(RELATIVE_URL.length) : url;
+  getFileUrl = url => {
+    if (url.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
+      return url.substring(RELATIVE_URL.length);
+    }
+    return url;
+  };
 
   render() {
     return (

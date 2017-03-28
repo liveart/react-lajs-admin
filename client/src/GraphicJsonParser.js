@@ -6,14 +6,23 @@ function parseGraphics(cat) {
   }
   if (graphicsList) {
     graphicsList.forEach(gr => {
+      if (gr.colors) {
+        if (typeof gr.colors !== 'object') {
+          delete gr.colors;
+        }
+      }
       if (gr.colorizableElements) {
+        gr.colorizables = [];
         for (let i = 0; i < gr.colorizableElements.length; ++i) {
           if (!gr.colorizableElements[i].colors) {
+            gr.colorizables[i] = {...gr.colorizableElements[i]};
             continue;
           }
-          gr.colorizableElements[i]._colors = [...gr.colorizableElements[i].colors];
+          const cols = gr.colorizableElements[i].colors;
           delete gr.colorizableElements[i].colors;
+          gr.colorizables[i] = {...gr.colorizableElements[i], _colors: cols};
         }
+        delete gr.colorizableElements;
       }
       graphics.push(gr);
     });
