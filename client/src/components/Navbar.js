@@ -45,7 +45,12 @@ export default class NavBar extends Component {
             </li>
             <li>
               <Link to='/graphicsCategories' activeClassName='active'>
-                <i className='fa fa-th-list '/> <span>Graphics Categories</span>
+                <i className='fa fa-th-list'/> <span>Graphics Categories</span>
+              </Link>
+            </li>
+            <li>
+              <Link to='/productsCategories' activeClassName='active'>
+                <i className='fa fa-clone'/> <span>Products Categories</span>
               </Link>
             </li>
             <li className='header'>ADDITIONAL</li>

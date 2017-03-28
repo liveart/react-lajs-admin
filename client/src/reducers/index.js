@@ -6,6 +6,7 @@ import colors from './colors';
 import colorgroups from './colorgroups';
 import graphicsCategories from './graphicsCategories';
 import graphics from './graphics';
+import productsCategories from './productsCategories';
 import {routerReducer} from 'react-router-redux';
 
 const rootReducer = combineReducers({
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   colors,
   colorgroups,
   graphicsCategories,
+  productsCategories,
   routing: routerReducer
 });
 

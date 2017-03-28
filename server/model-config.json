@@ -71,5 +71,9 @@
   "ColorEmbed": {
     "dataSource": "remote-dev-mongo",
     "public": true
+  },
+  "productsCategory": {
+    "dataSource": "remote-dev-mongo",
+    "public": true
   }
 }

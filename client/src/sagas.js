@@ -5,8 +5,8 @@ import * as colorgroupsWatchers from './sagas/watchers/colorgroups';
 import * as fontsWatchers from './sagas/watchers/fonts';
 import * as usersWatchers from './sagas/watchers/users';
 import * as graphicsWatchers from './sagas/watchers/graphics';
-
 import * as graphicsCategoriesWatchers from './sagas/watchers/graphicsCategories';
+import * as productsCategoriesWatchers from './sagas/watchers/productsCategories';
 
 export default function* root() {
   yield [
@@ -52,5 +52,13 @@ export default function* root() {
     fork(graphicsCategoriesWatchers.watchDeleteThumbnail),
     fork(graphicsCategoriesWatchers.watchEditGraphicsCategory),
     fork(graphicsCategoriesWatchers.watchDeleteGraphicsCategory),
+    fork(productsCategoriesWatchers.watchFetchProductsCategories),
+    fork(productsCategoriesWatchers.watchFetchProductsCategoryById),
+    fork(productsCategoriesWatchers.watchFetchProductsCategoriesNumber),
+    fork(productsCategoriesWatchers.watchCreateProductsCategory),
+    fork(productsCategoriesWatchers.watchUploadThumbnail),
+    fork(productsCategoriesWatchers.watchDeleteThumbnail),
+    fork(productsCategoriesWatchers.watchEditProductsCategory),
+    fork(productsCategoriesWatchers.watchDeleteProductsCategory),
   ];
 }
