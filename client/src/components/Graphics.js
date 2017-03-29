@@ -293,6 +293,7 @@ export default class GraphicsComponent extends Component {
             hiddenProperties={['id', 'colors', 'colorize',
               'colorizableElements', 'multicolor', 'description', 'image', 'colorizables']}
             hiddenInputs={['id', 'categoryId', 'thumb', 'image']}
+            sortComparators={{categoryId: (data, id) => id === '' ? true : data === id}}
             representations={{
               thumb: {
                 getElem: val =>

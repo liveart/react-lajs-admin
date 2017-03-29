@@ -57,7 +57,11 @@ export default class ViewAbstract extends Component {
     hiddenInputs: PropTypes.array,
     changedInputs: PropTypes.object,
     customInputs: PropTypes.object,
-    representations: PropTypes.object
+    representations: PropTypes.object,
+    /**
+     * Custom comparator for sorting.
+     */
+    sortComparators: PropTypes.object
   };
 
   constructor(props) {
@@ -88,6 +92,12 @@ export default class ViewAbstract extends Component {
 
     if (this.props.message) {
       this.props.addNotification('success', this.props.message);
+    }
+
+    if (this.state.empty.length) {
+      this.props.addNotification('error', 'Please, fill all the required fields',
+        'Check ' + this.state.empty.join(', ') + '.');
+      this.setState({...this.state, empty: []});
     }
   }
 
@@ -161,6 +171,9 @@ export default class ViewAbstract extends Component {
             add = this.props.objectHolder[prop] === '';
           } else if (typeof (this.props.data[i])[prop] === 'boolean') {
             add = true;
+          } else if (this.props.sortComparators && this.props.sortComparators.hasOwnProperty(prop)) {
+            add = this.props.sortComparators[prop](String((this.props.data[i])[prop]),
+              String(this.props.objectHolder[prop]));
           } else if (!_.includes((this.props.data[i])[prop], this.props.objectHolder[prop])) {
             add = false;
           }
@@ -172,7 +185,8 @@ export default class ViewAbstract extends Component {
       }
     }
     return rows;
-  };
+  }
+  ;
 
   renderTableData = () => {
     if (!this.props.data.length) {
@@ -293,8 +307,6 @@ export default class ViewAbstract extends Component {
                 <div className='box-footer'>
                   {this.renderCreatingButtons()}
                 </div>
-                {this.state.empty.length ?
-                  <div className='text-red pull-right'>Please fill all the required fields.</div> : null}
               </form>
             </div>
           </section>
@@ -551,8 +563,6 @@ export default class ViewAbstract extends Component {
                   {this.props.status === STATUS_CREATING ? this.renderCreatingButtons() : null}
                   {this.props.status === STATUS_EDITING ? this.renderEditingButtons() : null}
                 </div>
-                {this.state.empty.length ?
-                  <div className='text-red pull-right'>Please fill all the required fields.</div> : null}
               </form>
             </div>
           </section>
@@ -577,8 +587,6 @@ export default class ViewAbstract extends Component {
                 <div className='box-footer'>
                   {this.renderDeleteConfirmationButtons()}
                 </div>
-                {this.state.empty.length ?
-                  <div className='text-red pull-right'>Please fill all the required fields.</div> : null}
               </form>
             </div>
           </section>

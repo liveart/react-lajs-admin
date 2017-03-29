@@ -21,11 +21,12 @@ export default class App extends Component {
     }
   }
 
-  addNotification = (level, message) => {
+  addNotification = (level, title, message) => {
     if (this._notificationSystem) {
       this._notificationSystem.addNotification({
-        message,
-        level
+        title,
+        level,
+        message
       });
     }
   };
@@ -73,9 +74,7 @@ export default class App extends Component {
         <main style={{height: '95vh', 'overflowY': 'scroll', 'overflowX': 'hidden'}} className='content-wrapper'>
           <section className='ct'>{React.Children.map(children, child => React.cloneElement(child, {
             addNotification: this.addNotification
-          })
-          )}
-
+          }))}
             <NotificationSystem ref={elem => this._notificationSystem = elem}/>
           </section>
         </main>
