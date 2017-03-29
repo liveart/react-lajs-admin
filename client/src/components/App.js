@@ -21,16 +21,32 @@ export default class App extends Component {
     }
   }
 
-  addNotification = (level, title, message) => {
+  addNotification = (level, title, message, autoDismiss, actionF) => {
+    if (!autoDismiss) {
+      autoDismiss = 3;
+    }
     if (this._notificationSystem) {
-      this._notificationSystem.addNotification({
-        title,
-        level,
-        message
-      });
+      if (actionF) {
+        this._notificationSystem.addNotification({
+          title,
+          level,
+          message,
+          autoDismiss,
+          action: {
+            label: 'It is intended behaviour',
+            callback: actionF
+          }
+        });
+      } else {
+        this._notificationSystem.addNotification({
+          title,
+          level,
+          message,
+          autoDismiss
+        });
+      }
     }
   };
-
 
   componentWillReceiveProps(props) {
     if (props.token) {

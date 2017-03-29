@@ -291,6 +291,21 @@ export default class ViewAbstract extends Component {
     </div>
   );
 
+  renderImportJsonButtons = () => (
+    <div>
+      <div className='pull-left'>
+        <button type='button' className='btn btn-default'
+                onClick={this.handleCancelBtnClick}>Cancel
+        </button>
+      </div>
+      <div className='pull-right'>
+        <button type='button' className='btn btn-primary'
+                onClick={this.handleSaveImportBtnClick}>Import
+        </button>
+      </div>
+    </div>
+  );
+
   renderImportJsonView = () =>
     <section>
       <div className='row'>
@@ -301,11 +316,9 @@ export default class ViewAbstract extends Component {
                 <h3 className='box-title'>{`${this.props.title} information`}</h3>
               </div>
               <form className='form-horizontal'>
-
                 {this.renderImportJsonInputs()}
-
                 <div className='box-footer'>
-                  {this.renderCreatingButtons()}
+                  {this.renderImportJsonButtons()}
                 </div>
               </form>
             </div>
@@ -350,53 +363,50 @@ export default class ViewAbstract extends Component {
   };
 
   handleSaveBtnClick = redirect => {
-    if (this.props.status === STATUS_IMPORT_JSON) {
-      this.props.handleImportJson(this.state.json, this.state.baseUrl);
-      this.props.enableDefaultStatus();
-      this.props.restoreTableState(this.props.objectSample);
-      this.setState({...this.state, json: '', baseUrl: ''});
-    } else {
-      const properties = Object.getOwnPropertyNames(this.props.objectSample);
-      const empty = properties.filter(p => p !== ID_PROP &&
-      (!checkNotEmpty(this.props.objectHolder[p]) && this.props.objectSample[p].required));
-      if (empty.length) {
-        this.setState({...this.state, empty: [...empty]});
-        return;
-      }
-      const entity = {};
-      properties.forEach(prop => {
-        if (prop !== ID_PROP) {
-          if (this.props.status === STATUS_CREATING && this.props.objectHolder[prop] === '') {
-            return;
-          }
+    const properties = Object.getOwnPropertyNames(this.props.objectSample);
+    const empty = properties.filter(p => p !== ID_PROP &&
+    (!checkNotEmpty(this.props.objectHolder[p]) && this.props.objectSample[p].required));
+    if (empty.length) {
+      this.setState({...this.state, empty: [...empty]});
+      return;
+    }
+    const entity = {};
+    properties.forEach(prop => {
+      if (prop !== ID_PROP) {
+        if (this.props.status === STATUS_CREATING && this.props.objectHolder[prop] === '') {
+          return;
+        }
 
-          if (this.props.changedInputs && this.props.changedInputs[prop]
-            && typeof this.props.changedInputs[prop].saveF === 'function') {
-            if (this.props.objectHolder[prop]) {
-              this.props.changedInputs[prop].saveF(this.props.objectHolder[prop]);
-              if (typeof this.props.changedInputs[prop].getName === 'function') {
-                entity[prop] = this.props.changedInputs[prop].getName(this.props.objectHolder[prop]);
-              } else {
-                entity[prop] = this.props.objectHolder[prop];
-              }
+        if (this.props.changedInputs && this.props.changedInputs[prop]
+          && typeof this.props.changedInputs[prop].saveF === 'function') {
+          if (this.props.objectHolder[prop]) {
+            this.props.changedInputs[prop].saveF(this.props.objectHolder[prop]);
+            if (typeof this.props.changedInputs[prop].getName === 'function') {
+              entity[prop] = this.props.changedInputs[prop].getName(this.props.objectHolder[prop]);
+            } else {
+              entity[prop] = this.props.objectHolder[prop];
             }
-          } else {
-            entity[prop] = this.props.objectHolder[prop];
           }
+        } else {
+          entity[prop] = this.props.objectHolder[prop];
         }
-      });
-      if (this.props.status === STATUS_EDITING) {
-        this.props.editEntity(this.props.objectHolder.id, entity, this.props.token);
-        if (redirect) {
-          this.props.enableDefaultStatus();
-          this.props.restoreTableState(this.props.objectSample);
-        }
-      } else if (this.props.status === STATUS_CREATING) {
-        this.props.createEntity(entity, this.props.token);
+      }
+    });
+    if (this.props.status === STATUS_EDITING) {
+      this.props.editEntity(this.props.objectHolder.id, entity, this.props.token);
+      if (redirect) {
         this.props.enableDefaultStatus();
         this.props.restoreTableState(this.props.objectSample);
       }
+    } else if (this.props.status === STATUS_CREATING) {
+      this.props.createEntity(entity, this.props.token);
+      this.props.enableDefaultStatus();
+      this.props.restoreTableState(this.props.objectSample);
     }
+  };
+
+  handleSaveImportBtnClick = () => {
+    this.props.handleImportJson(this.state.json, this.state.baseUrl);
   };
 
   handleCancelBtnClick = () => {
@@ -460,13 +470,10 @@ export default class ViewAbstract extends Component {
           </select>
         </div>
         <div className='col-md-9'>
-          {this.state.urlSelect === IMPORT_URL_OPTION ?
-            <input disabled type='text' className='form-control'
-                   value=''/> :
-            <input type='text' className='form-control'
-                   placeholder='Base url for links. Requires protocol (example http://site.com/)'
-                   value={this.state.baseUrl}
-                   onChange={this.handleBaseUrlChange}/>}
+          <input type='text' className='form-control'
+                 placeholder='Base url for links. Requires protocol (example http://site.com/)'
+                 value={this.state.baseUrl}
+                 onChange={this.handleBaseUrlChange}/>
         </div>
       </div>
       <textarea className='form-control' style={{marginBottom: 6}} rows={15}
