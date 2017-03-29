@@ -10,6 +10,8 @@ import {
 } from '../definitions';
 import {parseJson} from '../GraphicJsonParser';
 const Graphic = GraphicModel.properties;
+const LEAVE_URL_OPTION = 'Import';
+const KEEP_URL_OPTION = 'Keep';
 
 export default class GraphicsComponent extends Component {
   static propTypes = {
@@ -32,6 +34,7 @@ export default class GraphicsComponent extends Component {
     editEntity: PropTypes.func.isRequired,
     deleteEntity: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
+    uploadThumbnail: PropTypes.func.isRequired,
     restoreTableState: PropTypes.func.isRequired,
     graphicsCategories: PropTypes.array.isRequired,
     uploadGraphicImage: PropTypes.func.isRequired,
@@ -253,23 +256,23 @@ export default class GraphicsComponent extends Component {
     this.handleSelectedObjectArrayArrayDeleteElement('colorizables', '_colors', colorizableId, key)
   );
 
-  handleImportJson = (json, baseUrl, forceNoBase) => {
-    if (!baseUrl.length && !forceNoBase) {
+  handleImportJson = (json, baseUrl, urlOption, forceNoBase) => {
+    if (!baseUrl.length && !forceNoBase && urlOption !== LEAVE_URL_OPTION) {
       this.props.addNotification('warning', 'Base url is not set', 'Not setting correct base url might result in broken links.',
-        15, (f) => this.handleImportJson(json, baseUrl, true));
+        15, (f) => this.handleImportJson(json, baseUrl, urlOption, true));
       return;
     }
-    if (!forceNoBase) {
+    if (!forceNoBase && urlOption !== LEAVE_URL_OPTION) {
       const r = new RegExp('^(?:[a-z]+:)?//', 'i');
       if (!r.test(baseUrl)) {
-        this.props.addNotification('warning', 'The specified base url seems to not have a protocol',
+        this.props.addNotification('warning', 'The specified base url seems not to have a protocol',
           'Not setting correct base url might result in broken links.',
-          15, (f) => this.handleImportJson(json, baseUrl, true));
+          15, (f) => this.handleImportJson(json, baseUrl, urlOption, true));
         return;
       }
     }
     try {
-      const parsed = parseJson(json, baseUrl);
+      let parsed = parseJson(json, baseUrl);
       const categories = parsed.categories;
       if (categories && categories.length) {
         this.props.createGraphicsCategory(categories, this.props.token);

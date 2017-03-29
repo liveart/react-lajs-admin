@@ -11,7 +11,7 @@ import {
 } from '../definitions';
 import {checkNotEmpty} from '../FormValidation';
 import * as _ from 'lodash';
-const IMPORT_URL_OPTION = 'Import';
+const LEAVE_URL_OPTION = 'Import';
 const KEEP_URL_OPTION = 'Keep';
 
 export default class ViewAbstract extends Component {
@@ -66,7 +66,7 @@ export default class ViewAbstract extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {empty: [], json: '', baseUrl: '', urlSelect: IMPORT_URL_OPTION};
+    this.state = {empty: [], json: '', baseUrl: '', urlSelect: LEAVE_URL_OPTION};
     if (!String.prototype.capitalizeFirstLetter) {
       String.prototype.capitalizeFirstLetter = function () {
         return this.charAt(0).toUpperCase() + this.slice(1);
@@ -406,7 +406,7 @@ export default class ViewAbstract extends Component {
   };
 
   handleSaveImportBtnClick = () => {
-    this.props.handleImportJson(this.state.json, this.state.baseUrl);
+    this.props.handleImportJson(this.state.json, this.state.baseUrl, this.state.urlSelect);
   };
 
   handleCancelBtnClick = () => {
@@ -465,15 +465,18 @@ export default class ViewAbstract extends Component {
           <select className='form-control'
                   onChange={this.handleSelectedStateChange}
                   value={this.state.urlSelect}>
-            <option value={IMPORT_URL_OPTION}>Upload files to server</option>
+            <option value={LEAVE_URL_OPTION}>Leave URL's as is</option>
             <option value={KEEP_URL_OPTION}>Keep original URL's</option>
           </select>
         </div>
         <div className='col-md-9'>
-          <input type='text' className='form-control'
-                 placeholder='Base url for links. Requires protocol (example http://site.com/)'
-                 value={this.state.baseUrl}
-                 onChange={this.handleBaseUrlChange}/>
+          {this.state.urlSelect === LEAVE_URL_OPTION ?
+            <input disabled type='text' className='form-control'
+                   value=''/> :
+            <input type='text' className='form-control'
+                   placeholder='Base url for links. Requires protocol (example http://site.com/)'
+                   value={this.state.baseUrl}
+                   onChange={this.handleBaseUrlChange}/>}
         </div>
       </div>
       <textarea className='form-control' style={{marginBottom: 6}} rows={15}
