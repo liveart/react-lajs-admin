@@ -199,7 +199,7 @@ export default class GraphicsComponent extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {c._colors.map((col, k) => (
+                    {!c._colors ? null : c._colors.map((col, k) => (
                       <tr key={k}>
                         <td><input type='text' className='form-control'
                                    value={col.name}
