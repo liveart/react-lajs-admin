@@ -14,6 +14,7 @@ import GraphicsContainer from './containers/GraphicsContainer';
 import AdminsContainer from './containers/AdminsContainer';
 import GraphicsCategoriesTableContainer from './containers/GraphicsCategoriesTableContainer';
 import ProductsCategoriesContainer from './containers/ProductsCategoriesContainer';
+import ProductsContainer from './containers/ProductsContainer';
 
 let env = 'prod';
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
@@ -45,6 +46,7 @@ ReactDOM.render((
         <Route path='/admins' component={AdminsContainer}/>
         <Route path='/graphicsCategories' component={GraphicsCategoriesTableContainer}/>
         <Route path='/productsCategories' component={ProductsCategoriesContainer}/>
+        <Route path='/products' component={ProductsContainer}/>
       </Route>
     </Router>
   </Provider>

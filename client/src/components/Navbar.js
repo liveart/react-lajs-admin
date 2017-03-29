@@ -49,6 +49,11 @@ export default class NavBar extends Component {
               </Link>
             </li>
             <li>
+              <Link to='/products' activeClassName='active'>
+                <i className='fa fa-shopping-cart'/> <span>Products</span>
+              </Link>
+            </li>
+            <li>
               <Link to='/productsCategories' activeClassName='active'>
                 <i className='fa fa-clone'/> <span>Products Categories</span>
               </Link>

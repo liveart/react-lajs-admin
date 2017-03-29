@@ -7,6 +7,7 @@ import * as usersWatchers from './sagas/watchers/users';
 import * as graphicsWatchers from './sagas/watchers/graphics';
 import * as graphicsCategoriesWatchers from './sagas/watchers/graphicsCategories';
 import * as productsCategoriesWatchers from './sagas/watchers/productsCategories';
+import * as productsWatchers from './sagas/watchers/products';
 
 export default function* root() {
   yield [
@@ -60,5 +61,12 @@ export default function* root() {
     fork(productsCategoriesWatchers.watchDeleteThumbnail),
     fork(productsCategoriesWatchers.watchEditProductsCategory),
     fork(productsCategoriesWatchers.watchDeleteProductsCategory),
+    fork(productsWatchers.watchFetchProducts),
+    fork(productsWatchers.watchFetchProductsNumber),
+    fork(productsWatchers.watchCreateProduct),
+    fork(productsWatchers.watchDeleteProduct),
+    fork(productsWatchers.watchEditProduct),
+    fork(productsWatchers.watchUploadProductImage),
+    fork(productsWatchers.watchUploadProductThumb),
   ];
 }

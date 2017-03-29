@@ -50,8 +50,14 @@
     },
     "pantones": {
       "type": {
-        "useForDecoration": "boolean",
-        "useForProduct": "boolean"
+        "useForDecoration": {
+          "type": "boolean",
+          "default": false
+        },
+        "useForProduct": {
+          "type": "boolean",
+          "default": false
+        }
       },
       "required": false
     },
@@ -85,7 +91,6 @@
       "type": "string",
       "required": true
     }
-
   },
   "validations": [],
   "relations": {

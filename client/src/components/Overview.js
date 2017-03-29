@@ -8,17 +8,20 @@ export default class Overview extends Component {
     fontsNumber: PropTypes.number.isRequired,
     colorsNumber: PropTypes.number.isRequired,
     graphicsNumber: PropTypes.number.isRequired,
+    productsNumber: PropTypes.number.isRequired,
     loading: PropTypes.bool.isRequired,
     error: PropTypes.object,
     fetchFontsNumber: PropTypes.func.isRequired,
     fetchColorsNumber: PropTypes.func.isRequired,
-    fetchGraphicsNumber: PropTypes.func.isRequired
+    fetchGraphicsNumber: PropTypes.func.isRequired,
+    fetchProductsNumber: PropTypes.func.isRequired
   };
 
   componentWillMount() {
     this.props.fetchFontsNumber();
     this.props.fetchColorsNumber();
     this.props.fetchGraphicsNumber();
+    this.props.fetchProductsNumber();
   }
 
   renderDataNumber = (title, iconName, redirect, number) => {
@@ -30,7 +33,7 @@ export default class Overview extends Component {
   };
 
   render() {
-    const {fontsNumber, colorsNumber, graphicsNumber, loading} = this.props;
+    const {fontsNumber, colorsNumber, graphicsNumber, productsNumber, loading} = this.props;
 
     return (
       <main>
@@ -44,6 +47,9 @@ export default class Overview extends Component {
               <Col md={3}>{this.renderDataNumber('Fonts', 'fa-font', 'fonts', fontsNumber)}</Col>
               <Col md={3}>{this.renderDataNumber('Colors', 'fa-paint-brush', 'colors', colorsNumber)}</Col>
               <Col md={3}>{this.renderDataNumber('Graphics', 'fa-picture-o', 'graphics', graphicsNumber)}</Col>
+            </Row>
+            <Row>
+              <Col md={3}>{this.renderDataNumber('Products', ' fa-shopping-cart', 'products', productsNumber)}</Col>
             </Row>
           </Grid>
         </section>

@@ -43,6 +43,9 @@ app.get('/admins', function (req, res) {
 app.get('/productsCategories', function (req, res) {
   res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
 });
+app.get('/products', function (req, res) {
+  res.sendFile(path.resolve(__dirname, '../client/public/', 'index.html'));
+});
 
 app.start = function () {
   // start the web server
