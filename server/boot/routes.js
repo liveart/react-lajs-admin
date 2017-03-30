@@ -1,13 +1,21 @@
 'use strict';
 const LIVE_ART = 'liveart';
+const RELATIVE_URL = '@@RELATIVE';
 const _ = require('lodash');
+const url = require('url');
 
-const GR_IMG = 'http://hive.liveartdesigner.com:3000/files/graphicImages/';
-const GR_THUMB = 'http://hive.liveartdesigner.com:3000/files/graphicThumbs/';
-const CAT_THUMB = 'http://hive.liveartdesigner.com:3000/files/thumb/';
+function getFullUrl(req, urlStr) {
+  if (urlStr.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
+    const addr = url.format({
+      protocol: req.protocol,
+      host: req.get('host')
+    });
+    return addr + urlStr.substring(RELATIVE_URL.length);
+  }
+  return urlStr;
+}
 
-function getFontFaceRule(family, file, weight, style) {
-  const location = 'http://hive.liveartdesigner.com:3000/files/fonts/';
+function getFontFaceRule(family, file, weight, style, url) {
   return {
     type: 'font-face',
     declarations: [
@@ -18,7 +26,7 @@ function getFontFaceRule(family, file, weight, style) {
       }, {
         type: 'declaration',
         property: 'src',
-        value: 'url("' + location + file + '")',
+        value: 'url("' + url + file + '")',
       }, {
         type: 'declaration',
         property: 'font-weight',
@@ -40,7 +48,19 @@ function fixColorizables(colorizables) {
   }));
 }
 
-function getGraphics(category, graphics) {
+function getColors(colors) {
+  if (!colors || !colors.length) {
+    return undefined;
+  }
+
+  if (typeof colors[0] === 'string') {
+    return colors;
+  }
+
+  return _.map(colors, col => col.value);
+}
+
+function getGraphics(category, graphics, req) {
   const grs = [];
   _.forEach(graphics, gr => {
     if (String(gr.categoryId) === String(category.id)) {
@@ -49,11 +69,11 @@ function getGraphics(category, graphics) {
         categoryId: gr.categoryId,
         name: gr.name,
         description: gr.description,
-        colors: gr.colors ? JSON.parse(gr.colors) : undefined,
+        colors: getColors(gr.colors),
         colorize: gr.colorize,
         multicolor: gr.multicolor,
-        thumb: GR_THUMB + gr.thumb,
-        image: GR_IMG + gr.image,
+        thumb: getFullUrl(req, gr.thumb),
+        image: getFullUrl(req, gr.image),
         colorizableElements: fixColorizables(gr.colorizables)
       });
     }
@@ -61,16 +81,16 @@ function getGraphics(category, graphics) {
   return grs.length ? grs : undefined;
 }
 
-function getCategories(category, categories, graphics) {
+function getCategories(category, categories, graphics, req) {
   const cats = [];
   _.forEach(categories, cat => {
     if (String(cat.graphicsCategoryId) === String(category.id)) {
       cats.push({
         id: cat.id,
         name: cat.name,
-        thumb: CAT_THUMB + cat.thumb,
-        categories: getCategories(cat, categories, graphics),
-        graphics: getGraphics(cat, graphics)
+        thumb: getFullUrl(req, cat.thumb),
+        categories: getCategories(cat, categories, graphics, req),
+        graphicsList: getGraphics(cat, graphics, req)
       });
     }
   });
@@ -78,7 +98,6 @@ function getCategories(category, categories, graphics) {
 }
 
 module.exports = function (app) {
-
   const loopback = require('loopback');
   const css = require('css');
   app.get('/api/' + LIVE_ART + '/graphics', function (req, res) {
@@ -102,9 +121,9 @@ module.exports = function (app) {
               result.graphicsCategoriesList.push({
                 id: cat.id,
                 name: cat.name,
-                thumb: CAT_THUMB + cat.thumb,
-                categories: getCategories(cat, cats, graphics),
-                graphics: getGraphics(cat, graphics)
+                thumb: getFullUrl(req, cat.thumb),
+                categories: getCategories(cat, cats, graphics, req),
+                graphicsList: getGraphics(cat, graphics, req)
               });
             }
           });
@@ -128,7 +147,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/' + LIVE_ART + '/fonts', function (req, res) {
-    const VECTOR_ROOT = 'http://hive.liveartdesigner.com:3000/files/vectors/';
+    const VECTOR_ROOT = '/files/vectors/';
     const Font = loopback.getModel('Font');
     const fonts = [];
     Font.find({
@@ -139,7 +158,7 @@ module.exports = function (app) {
       }
       fnts.map(f => fonts.push({
         name: f.name, fontFamily: f.fontFamily, boldAllowed: f.boldAllowed,
-        italicAllowed: f.italicAllowed, vector: f.vector ? VECTOR_ROOT + f.vector : undefined
+        italicAllowed: f.italicAllowed, vector: f.vector ? getFullUrl(req, f.vector) : undefined
       }));
 
       res.send(JSON.stringify({fonts: fonts}));
@@ -148,8 +167,7 @@ module.exports = function (app) {
 
   app.get('/api/' + LIVE_ART + '/fontsCSS', function (req, res) {
     const Font = loopback.getModel('Font');
-    const fonts = [];
-
+    const location = url + '/files/fonts/';
     const NORMAL = 'normal';
     const BOLD = 'bold';
     const ITALIC = 'italic';
@@ -169,24 +187,24 @@ module.exports = function (app) {
       fnts.map(font => {
         if (font.fileNormal) {
           cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileNormal, NORMAL, NORMAL)
+              getFontFaceRule(font.fontFamily, font.fileNormal, NORMAL, NORMAL, getFullUrl(req, font.fileNormal))
             );
         }
         if (font.fileBold) {
           cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileBold, BOLD, NORMAL)
+              getFontFaceRule(font.fontFamily, font.fileBold, BOLD, NORMAL, getFullUrl(req, font.fileBold))
             );
         }
 
         if (font.fileItalic) {
           cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileItalic, NORMAL, ITALIC)
+              getFontFaceRule(font.fontFamily, font.fileItalic, NORMAL, ITALIC, getFullUrl(req, font.fileItalic))
             );
         }
 
         if (font.fileBoldItalic) {
           cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileBoldItalic, BOLD, ITALIC)
+              getFontFaceRule(font.fontFamily, font.fileBoldItalic, BOLD, ITALIC, getFullUrl(req, font.fileBoldItalic))
             );
         }
       });

@@ -12,9 +12,9 @@ import ColorsContainer from './containers/colors/ColorsTableContainer';
 import ColorgroupsContainer from './containers/colors/ColorgroupsTableContainer';
 import GraphicsContainer from './containers/GraphicsContainer';
 import AdminsContainer from './containers/AdminsContainer';
-import GraphicsCategoriesTableContainer from './containers/GraphicsCategoriesTableContainer';
 import ProductsCategoriesContainer from './containers/ProductsCategoriesContainer';
 import ProductsContainer from './containers/ProductsContainer';
+import GraphicsCategoriesTableContainer from './containers/GraphicsCategoriesContainer';
 
 let env = 'prod';
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'development') {

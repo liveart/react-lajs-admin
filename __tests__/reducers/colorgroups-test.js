@@ -1,6 +1,5 @@
 'use strict';
 
-import * as actions from '../../client/src/actions/colorgroups';
 import * as actionTypes from '../../client/src/actionTypes/colorgroups';
 import reducer from '../../client/src/reducers/colorgroups';
 

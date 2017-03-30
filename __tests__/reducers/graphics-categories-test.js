@@ -8,7 +8,8 @@ const INITIAL_STATE = {
   graphicsCategories: [],
   graphicsCategoriesNumber: 0,
   graphicsCategoriesError: null,
-  graphicsCategoriesLoading: false
+  graphicsCategoriesLoading: false,
+  graphicsCategoriesMessage: null
 };
 
 describe('graphicsCategories reducer', () => {

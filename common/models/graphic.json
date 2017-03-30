@@ -2,10 +2,15 @@
   "name": "graphic",
   "base": "PersistedModel",
   "idInjection": true,
+  "forceId": false,
   "options": {
     "validateUpsert": true
   },
   "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    },
     "name": {
       "type": "string",
       "required": true
@@ -18,7 +23,7 @@
       "required": true
     },
     "colors": {
-      "type": "string"
+      "type": "array"
     },
     "colorize": {
       "type": "boolean",
@@ -48,6 +53,19 @@
       }
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
   "methods": {}
 }

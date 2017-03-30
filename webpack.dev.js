@@ -31,6 +31,10 @@ module.exports = env => ({
           presets: ['es2015'],
           plugins: ['transform-runtime', 'transform-class-properties']
         }
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
       }
     ]
   },

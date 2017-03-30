@@ -1,33 +1,50 @@
 import React, {Component, PropTypes} from 'react';
 import View from './View';
 import * as GraphicModel from '../../../common/models/graphic.json';
-import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import {
+  STATUS_EDITING,
+  STATUS_CREATING,
+  STATUS_DEFAULT,
+  RELATIVE_URL,
+  GRAPHIC_IMG_FOLDER,
+  GRAPHIC_THUMB_FOLDER
+} from '../definitions';
+import {parseJson} from '../GraphicJsonParser';
 const Graphic = GraphicModel.properties;
-const location = 'files/graphicThumbs/';
-const locationImage = 'files/graphicImages/';
+const LEAVE_URL_OPTION = 'Import';
+import {Creatable} from 'react-select';
+import * as _ from 'lodash';
 
 export default class GraphicsComponent extends Component {
   static propTypes = {
+    addNotification: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     errors: PropTypes.arrayOf(PropTypes.string),
+    message: PropTypes.string,
     loading: PropTypes.bool.isRequired,
+    colorsLoading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     objectHolder: PropTypes.object,
     status: PropTypes.string.isRequired,
     selectRow: PropTypes.func.isRequired,
     enableEditing: PropTypes.func.isRequired,
+    enableImportJson: PropTypes.func.isRequired,
     enableCreating: PropTypes.func.isRequired,
     enableDefaultStatus: PropTypes.func.isRequired,
+    createGraphicsCategory: PropTypes.func.isRequired,
     createEntity: PropTypes.func.isRequired,
     editEntity: PropTypes.func.isRequired,
     deleteEntity: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
+    uploadThumbnail: PropTypes.func.isRequired,
     restoreTableState: PropTypes.func.isRequired,
     graphicsCategories: PropTypes.array.isRequired,
     uploadGraphicImage: PropTypes.func.isRequired,
     uploadGraphicThumb: PropTypes.func.isRequired,
     fetchGraphicsCategories: PropTypes.func.isRequired,
+    fetchColors: PropTypes.func.isRequired,
+    colors: PropTypes.arrayOf(PropTypes.object),
     token: PropTypes.string
   };
 
@@ -45,6 +62,12 @@ export default class GraphicsComponent extends Component {
 
   componentWillMount() {
     this.props.fetchGraphicsCategories();
+  }
+
+  componentWillReceiveProps(props) {
+    if (this.props.status === STATUS_DEFAULT && (props.status === STATUS_CREATING || props.status === STATUS_EDITING)) {
+      this.props.fetchColors();
+    }
   }
 
   handleSelectedObjectArrayChange = (arrName, ind, propName, event) => {
@@ -134,15 +157,15 @@ export default class GraphicsComponent extends Component {
     }
   };
 
-  handleImageUpload = file => {
-    this.props.uploadGraphicImage(file);
+  handleImageUpload = img => {
+    this.props.uploadGraphicImage(img);
   };
 
   handleThumbUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       const image = this.props.objectHolder['thumb'];
-      const uploadThumbnail = (file) => {
-        this.props.uploadGraphicThumb(file);
+      const uploadThumbnail = thumb => {
+        this.props.uploadGraphicThumb(thumb);
       };
       if (image.type !== 'image/svg+xml') {
         const c = this.refs.canvas;
@@ -190,7 +213,7 @@ export default class GraphicsComponent extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {c._colors.map((col, k) => (
+                    {!c._colors ? null : c._colors.map((col, k) => (
                       <tr key={k}>
                         <td><input type='text' className='form-control'
                                    value={col.name}
@@ -244,24 +267,109 @@ export default class GraphicsComponent extends Component {
     this.handleSelectedObjectArrayArrayDeleteElement('colorizables', '_colors', colorizableId, key)
   );
 
+  handleImportJson = (json, baseUrl, urlOption, forceNoBase) => {
+    if (!baseUrl.length && !forceNoBase && urlOption !== LEAVE_URL_OPTION) {
+      this.props.addNotification('warning', 'Base url is not set', 'Not setting correct base url might result in broken links.',
+        15, (f) => this.handleImportJson(json, baseUrl, urlOption, true));
+      return;
+    }
+    if (!forceNoBase && urlOption !== LEAVE_URL_OPTION) {
+      const r = new RegExp('^(?:[a-z]+:)?//', 'i');
+      if (!r.test(baseUrl)) {
+        this.props.addNotification('warning', 'The specified base url seems not to have a protocol',
+          'Not setting correct base url might result in broken links.',
+          15, (f) => this.handleImportJson(json, baseUrl, urlOption, true));
+        return;
+      }
+    }
+    try {
+      let parsed = parseJson(json, baseUrl);
+      const categories = parsed.categories;
+      if (categories && categories.length) {
+        this.props.createGraphicsCategory(categories, this.props.token);
+      }
+      const graphics = parsed.graphics;
+      if (graphics && graphics.length) {
+        this.props.createEntity(graphics, this.props.token);
+      }
+      this.props.enableDefaultStatus();
+      this.props.restoreTableState(this.props.objectSample);
+      this.setState({...this.state, json: '', baseUrl: ''});
+    } catch (e) {
+      this.props.addNotification('error', 'Json structure is invalid.');
+    }
+  };
+
+  getFileUrl = url => {
+    if (url.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
+      return url.substring(RELATIVE_URL.length);
+    }
+    return url;
+  };
+
+  getName = (obj, url) => {
+    if (typeof obj === 'object') {
+      return RELATIVE_URL + '/' + url + obj.name;
+    }
+
+    return undefined;
+  };
+
+  getOptions = () => {
+    if (!this.props.colors || !this.props.colors.length) {
+      return [];
+    }
+
+    return this.props.colors;
+  };
+
+  getSelectedOptions = () => {
+    if (!this.props.objectHolder['colors'] || !this.props.objectHolder['colors'].length) {
+      return [];
+    }
+
+    if (typeof (this.props.objectHolder['colors'])[0] === 'string') {
+      return _.map(this.props.objectHolder['colors'], col => ({value: col, name: col}));
+    }
+
+    return this.props.objectHolder['colors'];
+  };
+
+
+  onColorsSelectChange = val => {
+    const arr = [];
+    if (val) {
+      _.forEach(val, v => arr.push({name: v.name, value: v.value}));
+      this.props.setEditingObjectProperty('colors', arr);
+    }
+  };
+
   render() {
     return (
-      <View {...this.props} objectSample={{...Graphic, colorizables: []}} sortingSupport={true}
+      <View {...this.props} objectSample={{...Graphic, colorizables: []}}
+            sortingSupport={true}
+            enableImportJson={this.props.enableImportJson}
+            handleImportJson={this.handleImportJson}
             hiddenProperties={['id', 'colors', 'colorize',
               'colorizableElements', 'multicolor', 'description', 'image', 'colorizables']}
             hiddenInputs={['id', 'categoryId', 'thumb', 'image']}
+            sortComparators={{categoryId: (data, id) => id === '' ? true : data === id}}
             representations={{
               thumb: {
                 getElem: val =>
-                  val ? <a href={`/files/graphicThumbs/${val}`} className='thumbnail' style={{width: 100}}><img
-                    src={`/files/graphicThumbs/${val}`} alt='thumb' style={{width: 100}}/></a> :
+                  val ? <a href={this.getFileUrl(val)} className='thumbnail'
+                           style={{width: 100}}><img
+                    src={this.getFileUrl(val)} alt='thumb'
+                    style={{width: 100}}/></a> :
                     null,
                 sortable: false
               },
               image: {
                 getElem: val => val ?
-                  <a href={`/files/graphicImages/${val}`} className='thumbnail' style={{width: 100}}><img
-                    src={`/files/graphicImages/${val}`} alt='image' style={{width: 100}}/></a> : null,
+                  <a href={this.getFileUrl(val)} className='thumbnail'
+                     style={{width: 100}}><img
+                    src={this.getFileUrl(val)} alt='image'
+                    style={{width: 100}}/></a> : null,
                 sortable: false
               },
               categoryId: {
@@ -288,10 +396,23 @@ export default class GraphicsComponent extends Component {
               image: {
                 elem: <input type='file' className='form-control'
                              onChange={e => this.handleFileChoose('image', e)}/>,
-                saveF: this.handleImageUpload
+                saveF: this.handleImageUpload,
+                getName: obj => this.getName(obj, GRAPHIC_IMG_FOLDER)
               },
               thumb: {
-                saveF: this.handleThumbUpload
+                saveF: this.handleThumbUpload,
+                getName: obj => this.getName(obj, GRAPHIC_THUMB_FOLDER)
+              },
+              colors: {
+                elem: <Creatable
+                  name='colors'
+                  value={this.getSelectedOptions()}
+                  multi={true}
+                  labelKey='name'
+                  options={this.getOptions()}
+                  onChange={this.onColorsSelectChange}
+                  isLoading={this.props.colorsLoading}
+                />
               },
               description: {
                 elem: <textarea className='form-control' rows='3'
@@ -328,18 +449,19 @@ export default class GraphicsComponent extends Component {
                          onChange={e => this.handleFileChoose('image', e)}/>
 
                   {typeof (this.props.objectHolder['image']) === 'string' && this.props.status === STATUS_EDITING ?
-                    <a href={locationImage + this.props.objectHolder['image']}
+                    <a href={this.getFileUrl(this.props.objectHolder['image'])}
                        className='thumbnail'
                        style={{marginTop: 8, width: 100}}><img
-                      style={{width: 100}} src={locationImage + this.props.objectHolder['image']}/>
+                      style={{width: 100}} src={this.getFileUrl(this.props.objectHolder['image'])}/>
                     </a>
                     : typeof (this.props.objectHolder['image']) === 'object' ?
-                      <div><a href={this.state.imgUrl}
-                              className='thumbnail'
-                              style={{
-                                marginTop: 8,
-                                width: 100
-                              }}>
+                      <div><a
+                        href={this.state.imgUrl}
+                        className='thumbnail'
+                        style={{
+                          marginTop: 8,
+                          width: 100
+                        }}>
                         <img src={this.state.imgUrl}/>
                       </a>
                         <a className='btn btn-primary btn-xs' href='#' onClick={this.handleImgAsThumb}>
@@ -354,10 +476,10 @@ export default class GraphicsComponent extends Component {
                          onChange={e => this.handleFileChoose('thumb', e)}/>
 
                   {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
-                    <div style={{float: 'left'}}><a href={location + this.props.objectHolder['thumb']}
+                    <div style={{float: 'left'}}><a href={this.getFileUrl(this.props.objectHolder['thumb'])}
                                                     className='thumbnail'
                                                     style={{marginTop: 8, width: 100}}><img
-                      style={{width: 100}} src={location + this.props.objectHolder['thumb']}/>
+                      style={{width: 100}} src={this.getFileUrl(this.props.objectHolder['thumb'])}/>
                     </a>
                     </div>
                     : null}

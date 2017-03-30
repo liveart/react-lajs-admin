@@ -1,7 +1,7 @@
 import * as actionTypes from '../actionTypes/graphics';
 
 const INITIAL_STATE = {
-  graphics: [], graphicsNumber: 0, graphicsError: null, graphicsLoading: false
+  graphics: [], graphicsNumber: 0, graphicsError: null, graphicsLoading: false, graphicsMessage: null
 };
 
 export default function (state = INITIAL_STATE, action) {
@@ -12,26 +12,27 @@ export default function (state = INITIAL_STATE, action) {
         ...state,
         graphics: action.graphics || state.graphics,
         graphicsNumber: action.graphicsNumber || state.graphicsNumber,
+        graphicsMessage: action.message || null,
         graphicsError: null,
         graphicsLoading: false
       };
     case actionTypes.GRAPHIC_OPERATION_FAILURE:
       graphicsError = action.message;
-      return {...state, graphicsError, graphicsLoading: false};
+      return {...state, graphicsMessage: null, graphicsError, graphicsLoading: false};
     case actionTypes.FETCH_GRAPHICS:
-      return {...state, graphicsError: null, graphicsLoading: true};
+      return {...state, graphicsMessage: null, graphicsError: null, graphicsLoading: true};
     case actionTypes.FETCH_GRAPHICS_NUMBER:
-      return {...state, graphicsNumber: 0, graphicsError: null, graphicsLoading: true};
+      return {...state, graphicsMessage: null, graphicsNumber: 0, graphicsError: null, graphicsLoading: true};
     case actionTypes.CREATE_GRAPHIC:
-      return {...state, graphicsError: null, graphicsLoading: true};
+      return {...state, graphicsMessage: null, graphicsError: null, graphicsLoading: true};
     case actionTypes.UPLOAD_GRAPHIC_IMAGE:
-      return {...state, graphicsError: null, graphicsLoading: true};
+      return {...state, graphicsMessage: null, graphicsError: null, graphicsLoading: true};
     case actionTypes.UPLOAD_GRAPHIC_THUMB:
-      return {...state, graphicsError: null, graphicsLoading: true};
+      return {...state, graphicsMessage: null, graphicsError: null, graphicsLoading: true};
     case actionTypes.EDIT_GRAPHIC:
-      return {...state, graphicsError: null, graphicsLoading: true};
+      return {...state, graphicsMessage: null, graphicsError: null, graphicsLoading: true};
     case actionTypes.DELETE_GRAPHIC:
-      return {...state, graphicsError: null, graphicsLoading: true};
+      return {...state, graphicsMessage: null, graphicsError: null, graphicsLoading: true};
     default:
       return state;
   }
