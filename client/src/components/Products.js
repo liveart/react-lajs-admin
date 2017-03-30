@@ -1,9 +1,17 @@
 import React, {Component, PropTypes} from 'react';
 import View from './View';
 import * as ProductModel from '../../../common/models/product.json';
-import {STATUS_EDITING, STATUS_CREATING, RELATIVE_URL, PRODUCT_THUMB_FOLDER} from '../definitions';
+import {
+  STATUS_EDITING,
+  STATUS_CREATING,
+  STATUS_DEFAULT,
+  RELATIVE_URL,
+  PRODUCT_THUMB_FOLDER,
+  SIZES
+} from '../definitions';
 const Product = ProductModel.properties;
-const locationImage = 'files/productImages/';
+import * as _ from 'lodash';
+import {Creatable} from 'react-select';
 
 export default class ProductsComponent extends Component {
   static propTypes = {
@@ -161,13 +169,13 @@ export default class ProductsComponent extends Component {
     }
   };
 
+
   renderColorsTable = () => (
     <div className='panel panel-default'>
       <table className='table table-bordered'>
         <thead>
         <tr>
-          <th>name</th>
-          <th>value</th>
+          <th>color</th>
           <th>location</th>
           <th/>
         </tr>
@@ -179,10 +187,6 @@ export default class ProductsComponent extends Component {
               <td><input type='text' className='form-control'
                          value={c.name}
                          onChange={e => this.handleSelectedObjectArrayChange('colors', key, 'name', e)}/>
-              </td>
-              <td><input type='text' className='form-control'
-                         value={c.value}
-                         onChange={e => this.handleSelectedObjectArrayChange('colors', key, 'value', e)}/>
               </td>
               <td>
                 <div className='panel panel-default'>
@@ -350,6 +354,36 @@ export default class ProductsComponent extends Component {
     return undefined;
   };
 
+  getSizeOptions = () => {
+    if (!SIZES || !SIZES.length) {
+      return [];
+    }
+
+    return _.map(SIZES, col => ({value: col, name: col}));
+  };
+
+  getSelectedSizeOptions = () => {
+    if (!this.props.objectHolder['sizes'] || !this.props.objectHolder['sizes'].length) {
+      return [];
+    }
+
+    if (typeof (this.props.objectHolder['sizes'])[0] === 'string') {
+      return _.map(this.props.objectHolder['sizes'], col => ({value: col, name: col}));
+    }
+
+    return this.props.objectHolder['sizes'];
+
+  };
+
+
+  onSizeSelectChange = val => {
+    const arr = [];
+    if (val) {
+      _.forEach(val, v => arr.push(v.name));
+      this.props.setEditingObjectProperty('sizes', arr);
+    }
+  };
+
   render() {
     return (
       <View {...this.props} objectSample={{...Product, colorizables: [], colors: []}} sortingSupport={true}
@@ -399,6 +433,16 @@ export default class ProductsComponent extends Component {
                                 value={this.props.objectHolder['description']}
                                 onChange={e => this.handleSelectedObjectChange('description', e)}>
                 </textarea>
+              },
+              sizes: {
+                elem: <Creatable
+                  name='sizes'
+                  value={this.getSelectedSizeOptions()}
+                  multi={true}
+                  labelKey='name'
+                  options={this.getSizeOptions()}
+                  onChange={this.onSizeSelectChange}
+                />
               },
               colorize: {
                 elem: <select className='form-control'

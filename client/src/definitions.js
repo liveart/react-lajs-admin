@@ -7,6 +7,8 @@ export const PRODUCT_THUMB_FOLDER = 'files/productThumbs/';
 export const GRAPHIC_CATEGORY_FOLDER = 'files/thumb/';
 export const PRODUCT_CATEGORIES_THUMB_FOLDER = 'files/productCategoriesThumbs/';
 
+export const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
 export const STATUS_EDITING = 'STATUS_EDITING';
 export const STATUS_CONFIRM_DELETE = 'STATUS_CONFIRM_DELETE';
 export const STATUS_CREATING = 'STATUS_CREATING';
