@@ -5,6 +5,7 @@ export const GRAPHIC_IMG_FOLDER = 'files/graphicImages/';
 export const GRAPHIC_THUMB_FOLDER = 'files/graphicThumbs/';
 export const PRODUCT_THUMB_FOLDER = 'files/productThumbs/';
 export const GRAPHIC_CATEGORY_FOLDER = 'files/thumb/';
+export const PRODUCT_CATEGORIES_THUMB_FOLDER = 'files/productCategoriesThumbs/';
 
 export const STATUS_EDITING = 'STATUS_EDITING';
 export const STATUS_CONFIRM_DELETE = 'STATUS_CONFIRM_DELETE';

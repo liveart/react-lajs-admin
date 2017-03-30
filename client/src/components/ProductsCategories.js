@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_CONFIRM_DELETE} from '../definitions';
+import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_CONFIRM_DELETE, RELATIVE_URL, PRODUCT_CATEGORIES_THUMB_FOLDER} from '../definitions';
 import * as ProductsCategoryModel from '../../../common/models/products-category.json';
 import {RadioGroup, Radio} from 'react-radio-group';
 const ProductsCategory = ProductsCategoryModel.properties;
-const location = '/files/productCategoriesThumbs/';
 import View from './View';
 import * as _ from 'lodash';
 const DELETE_CATEGORY = 'DELETE_CATEGORY';
@@ -229,6 +228,16 @@ export default class extends Component {
     </div>
   );
 
+  getFileUrl = url => _.includes(url, RELATIVE_URL) ? url.substring(RELATIVE_URL.length) : url;
+
+  getName = (obj, url) => {
+    if (typeof obj === 'object') {
+      return RELATIVE_URL + '/' + url + obj.name;
+    }
+
+    return undefined;
+  };
+
   constructor() {
     super();
     this.state = {
@@ -248,15 +257,20 @@ export default class extends Component {
             hiddenInputs={['id', 'productsCategoryId', 'thumbUrl']}
             representations={{
               thumbUrl: {
-                getElem: val => <a href={location + val} className='thumbnail' style={{width: 100}}>
-                  <img src={location + val} alt='thumb' style={{width: 100}}/></a>,
+                getElem:  val =>
+                  val ? <a href={this.getFileUrl(val)} className='thumbnail'
+                           style={{width: 100}}><img
+                    src={this.getFileUrl(val)} alt='thumb'
+                    style={{width: 100}}/></a> :
+                    null,
                 sortable: false,
                 header: 'Thumb'
               },
             }}
             changedInputs={{
               thumbUrl: {
-                saveF: this.handleFileUpload
+                saveF: this.handleFileUpload,
+                getName: obj => this.getName(obj, PRODUCT_CATEGORIES_THUMB_FOLDER)
               }
             }
             }
@@ -267,10 +281,11 @@ export default class extends Component {
                          onChange={e => this.handleFileChoose('thumbUrl', e)}/>
 
                   {typeof (this.props.objectHolder['thumbUrl']) === 'string' && this.props.status === STATUS_EDITING ?
-                    <div style={{float: 'left'}}><a href={location + this.props.objectHolder['thumbUrl']}
+                    <div style={{float: 'left'}}><a href={this.getFileUrl(this.props.objectHolder['thumbUrl'])}
                                                     className='thumbnail'
-                                                    style={{marginTop: 8, width: 100}}><img style={{width: 100}}
-                                                                                            src={location + this.props.objectHolder['thumbUrl']}/></a>
+                                                    style={{marginTop: 8, width: 100}}><img
+                      style={{width: 100}} src={this.getFileUrl(this.props.objectHolder['thumbUrl'])}/>
+                    </a>
                     </div>
                     : null}
                   <div style={{float: 'left'}}>

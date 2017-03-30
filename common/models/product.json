@@ -15,7 +15,7 @@
     },
     "data": {
       "type": {
-        "price": "number",
+        "price": "string",
         "material": "string"
       },
       "default": {
@@ -54,14 +54,12 @@
     },
     "pantones": {
       "type": {
-        "useForDecoration": {
-          "type": "boolean",
-          "default": false
-        },
-        "useForProduct": {
-          "type": "boolean",
-          "default": false
-        }
+        "useForDecoration": "boolean",
+        "useForProduct": "boolean"
+      },
+      "default": {
+        "useForDecoration": false,
+        "useForProduct": false
       },
       "required": false
     },
