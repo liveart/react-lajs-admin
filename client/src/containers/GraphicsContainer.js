@@ -4,26 +4,32 @@ import {
   uploadGraphicImage, uploadGraphicThumb
 } from '../actions/graphics';
 import {
-  fetchGraphicsCategories
+  fetchGraphicsCategories, createGraphicsCategory, uploadThumbnail
 } from '../actions/graphicsCategories';
 import {
-  selectRow, setObjectHolderProperty,
+  fetchColors
+} from '../actions/colors';
+import {
+  selectRow, setObjectHolderProperty, enableImportJson,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../actions/table';
 import Graphics from '../components/Graphics';
 
 const mapStateToProps = state => {
   const {token} = state.user;
-  const {graphics, graphicsError, graphicsLoading} = state.graphics;
+  const {graphics, graphicsError, graphicsLoading, graphicsMessage} = state.graphics;
+  const {colors, colorsLoading} = state.colors;
   const {graphicsCategories, graphicsCategoriesLoading} = state.graphicsCategories;
   const {objectHolder, status} = state.table;
   const errors = graphicsError ? [graphicsError] : [];
-
   return {
     title: 'Graphic',
     data: graphics,
+    colors,
     errors,
-    loading: graphicsLoading || graphicsCategoriesLoading,
+    loading: graphicsLoading || graphicsCategoriesLoading || colorsLoading,
+    colorsLoading,
+    message: graphicsMessage,
     objectHolder,
     status,
     graphicsCategories,
@@ -71,6 +77,18 @@ const mapDispatchToProps = dispatch => {
     },
     fetchGraphicsCategories() {
       dispatch(fetchGraphicsCategories());
+    },
+    enableImportJson() {
+      dispatch(enableImportJson());
+    },
+    createGraphicsCategory(category, token) {
+      dispatch(createGraphicsCategory(category, token));
+    },
+    uploadThumbnail(thumbnail) {
+      dispatch(uploadThumbnail(thumbnail));
+    },
+    fetchColors() {
+      dispatch(fetchColors());
     }
   };
 };

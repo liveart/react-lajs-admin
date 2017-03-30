@@ -1,15 +1,26 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, STATUS_CONFIRM_DELETE} from '../definitions';
+import {
+  ID_PROP,
+  STATUS_EDITING,
+  STATUS_CREATING,
+  STATUS_DEFAULT,
+  STATUS_CONFIRM_DELETE,
+  STATUS_IMPORT_JSON
+} from '../definitions';
 import {checkNotEmpty} from '../FormValidation';
 import * as _ from 'lodash';
+const LEAVE_URL_OPTION = 'Import';
+const KEEP_URL_OPTION = 'Keep';
 
 export default class ViewAbstract extends Component {
   static propTypes = {
+    addNotification: PropTypes.func.isRequired,
+    message: PropTypes.string,
     title: PropTypes.string.isRequired,
     pluralTitle: PropTypes.string,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    errors: PropTypes.arrayOf(PropTypes.object),
+    errors: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     objectHolder: PropTypes.object,
@@ -18,6 +29,11 @@ export default class ViewAbstract extends Component {
     enableEditing: PropTypes.func.isRequired,
     enableCreating: PropTypes.func.isRequired,
     enableDefaultStatus: PropTypes.func.isRequired,
+    /**
+     * Function that handles Json import if it's supported.
+     * @param text json raw text to import
+     */
+    handleImportJson: PropTypes.func,
     createEntity: PropTypes.func.isRequired,
     editEntity: PropTypes.func.isRequired,
     deleteEntity: PropTypes.func.isRequired,
@@ -30,17 +46,26 @@ export default class ViewAbstract extends Component {
     enableConfirmDelete: PropTypes.func,
     renderDeleteConfirmationDialog: PropTypes.func,
     renderDeleteConfirmationButtons: PropTypes.func,
+    /**
+     * Function to enable related state.
+     * Defines if Json import is supported.
+     */
+    enableImportJson: PropTypes.func,
     sortingSupport: PropTypes.bool,
     hiddenProperties: PropTypes.array,
     hiddenInputs: PropTypes.array,
     changedInputs: PropTypes.object,
     customInputs: PropTypes.object,
-    representations: PropTypes.object
+    representations: PropTypes.object,
+    /**
+     * Custom comparator for sorting.
+     */
+    sortComparators: PropTypes.object
   };
 
   constructor(props) {
     super(props);
-    this.state = {empty: []};
+    this.state = {empty: [], json: '', baseUrl: '', urlSelect: LEAVE_URL_OPTION};
     if (!String.prototype.capitalizeFirstLetter) {
       String.prototype.capitalizeFirstLetter = function () {
         return this.charAt(0).toUpperCase() + this.slice(1);
@@ -50,13 +75,29 @@ export default class ViewAbstract extends Component {
 
   componentWillUpdate() {
     if (this.state.empty.length) {
-      this.setState({empty: []});
+      this.setState({...this.state, empty: []});
     }
   }
 
   componentWillMount() {
     this.props.restoreTableState(this.props.objectSample);
     this.props.fetchData();
+  }
+
+  componentDidUpdate() {
+    if (this.props.errors && this.props.errors.length) {
+      this.props.errors.forEach(prop => this.props.addNotification('error', prop));
+    }
+
+    if (this.props.message) {
+      this.props.addNotification('success', this.props.message);
+    }
+
+    if (this.state.empty.length) {
+      this.props.addNotification('error', 'Please, fill all the required fields',
+        'Check ' + this.state.empty.join(', ') + '.');
+      this.setState({...this.state, empty: []});
+    }
   }
 
   renderTableHeadings = () => {
@@ -76,6 +117,9 @@ export default class ViewAbstract extends Component {
 
   handleSelectedObjectChange = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
+  };
+  handleSelectedStateChange = event => {
+    this.setState({...this.state, urlSelect: event.target.value, baseUrl: ''});
   };
 
   renderTableSortRow = () => {
@@ -126,6 +170,9 @@ export default class ViewAbstract extends Component {
             add = this.props.objectHolder[prop] === '';
           } else if (typeof (this.props.data[i])[prop] === 'boolean') {
             add = true;
+          } else if (this.props.sortComparators && this.props.sortComparators.hasOwnProperty(prop)) {
+            add = this.props.sortComparators[prop](String((this.props.data[i])[prop]),
+              String(this.props.objectHolder[prop]));
           } else if (!_.includes((this.props.data[i])[prop], this.props.objectHolder[prop])) {
             add = false;
           }
@@ -137,7 +184,8 @@ export default class ViewAbstract extends Component {
       }
     }
     return rows;
-  };
+  }
+  ;
 
   renderTableData = () => {
     if (!this.props.data.length) {
@@ -195,6 +243,10 @@ export default class ViewAbstract extends Component {
       <button type='button' className='btn btn-primary' style={{marginBottom: 6}}
               onClick={this.handleAddNew}>Add new {this.props.title}
       </button>
+      {typeof this.props.enableImportJson === 'function' ?
+        <button type='button' className='btn btn-default' style={{marginBottom: 6}}
+                onClick={this.handleImportFromJson}>Import from JSON
+        </button> : null}
       <button type='button' className='btn btn-default' style={{marginBottom: 6}}
               onClick={() => this.props.restoreTableState(this.props.objectSample)}>Reset filter
       </button>
@@ -238,6 +290,42 @@ export default class ViewAbstract extends Component {
     </div>
   );
 
+  renderImportJsonButtons = () => (
+    <div>
+      <div className='pull-left'>
+        <button type='button' className='btn btn-default'
+                onClick={this.handleCancelBtnClick}>Cancel
+        </button>
+      </div>
+      <div className='pull-right'>
+        <button type='button' className='btn btn-primary'
+                onClick={this.handleSaveImportBtnClick}>Import
+        </button>
+      </div>
+    </div>
+  );
+
+  renderImportJsonView = () =>
+    <section>
+      <div className='row'>
+        <div className='col-md-12'>
+          <section className='content'>
+            <div className='box box-info'>
+              <div className='box-header with-border'>
+                <h3 className='box-title'>{`${this.props.title} information`}</h3>
+              </div>
+              <form className='form-horizontal'>
+                {this.renderImportJsonInputs()}
+                <div className='box-footer'>
+                  {this.renderImportJsonButtons()}
+                </div>
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>;
+
   handleEdit = object => {
     if (this.props.status === STATUS_DEFAULT) {
       this.props.enableEditing(this.props.objectSample);
@@ -248,6 +336,12 @@ export default class ViewAbstract extends Component {
   handleAddNew = () => {
     if (this.props.status === STATUS_DEFAULT) {
       this.props.enableCreating(this.props.objectSample);
+    }
+  };
+
+  handleImportFromJson = () => {
+    if (this.props.status === STATUS_DEFAULT) {
+      this.props.enableImportJson();
     }
   };
 
@@ -286,7 +380,11 @@ export default class ViewAbstract extends Component {
           && typeof this.props.changedInputs[prop].saveF === 'function') {
           if (this.props.objectHolder[prop]) {
             this.props.changedInputs[prop].saveF(this.props.objectHolder[prop]);
-            entity[prop] = this.props.objectHolder[prop].name;
+            if (typeof this.props.changedInputs[prop].getName === 'function') {
+              entity[prop] = this.props.changedInputs[prop].getName(this.props.objectHolder[prop]);
+            } else {
+              entity[prop] = this.props.objectHolder[prop];
+            }
           }
         } else {
           entity[prop] = this.props.objectHolder[prop];
@@ -300,17 +398,21 @@ export default class ViewAbstract extends Component {
         this.props.restoreTableState(this.props.objectSample);
       }
     } else if (this.props.status === STATUS_CREATING) {
-
       this.props.createEntity(entity, this.props.token);
       this.props.enableDefaultStatus();
       this.props.restoreTableState(this.props.objectSample);
     }
   };
 
+  handleSaveImportBtnClick = () => {
+    this.props.handleImportJson(this.state.json, this.state.baseUrl, this.state.urlSelect);
+  };
+
   handleCancelBtnClick = () => {
     if (this.props.status !== STATUS_DEFAULT) {
       this.props.enableDefaultStatus();
       this.props.restoreTableState(this.props.objectSample);
+      this.setState({...this.state, json: '', baseUrl: ''});
     }
   };
 
@@ -346,6 +448,58 @@ export default class ViewAbstract extends Component {
     );
   });
 
+  renderImportJsonInputs = () => (
+    <div className='box-body'>
+      <div className='form-group'>
+        <div className='col-md-3'>
+          <p>Import from file</p>
+        </div>
+        <div className='col-md-9'>
+          <input type='file' className='form-control' accept='.json'
+                 onChange={this.handleFileChoose}/>
+        </div>
+      </div>
+      <div className='form-group'>
+        <div className='col-md-3'>
+          <select className='form-control'
+                  onChange={this.handleSelectedStateChange}
+                  value={this.state.urlSelect}>
+            <option value={LEAVE_URL_OPTION}>Leave URL's as is</option>
+            <option value={KEEP_URL_OPTION}>Keep original URL's</option>
+          </select>
+        </div>
+        <div className='col-md-9'>
+          {this.state.urlSelect === LEAVE_URL_OPTION ?
+            <input disabled type='text' className='form-control'
+                   value=''/> :
+            <input type='text' className='form-control'
+                   placeholder='Base url for links. Requires protocol (example http://site.com/)'
+                   value={this.state.baseUrl}
+                   onChange={this.handleBaseUrlChange}/>}
+        </div>
+      </div>
+      <textarea className='form-control' style={{marginBottom: 6}} rows={15}
+                value={this.state.json}
+                onChange={this.handleJsonChange}/>
+    </div>
+  );
+
+  handleJsonChange = e => this.setState({...this.state, json: e.target.value});
+
+  handleBaseUrlChange = e => this.setState({...this.state, baseUrl: e.target.value});
+
+
+  handleFileChoose = e => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      this.setState({
+        ...this.state,
+        json: reader.result
+      });
+    };
+    reader.readAsText(e.target.files[0]);
+  };
+
   renderCustomInputs = () => {
     if (!this.props.customInputs) {
       return null;
@@ -377,6 +531,8 @@ export default class ViewAbstract extends Component {
       return this.renderChanging();
     } else if (this.props.status === STATUS_CONFIRM_DELETE) {
       return this.renderDeleteConfirmation();
+    } else if (this.props.status === STATUS_IMPORT_JSON) {
+      return this.renderImportJsonView();
     }
   };
 
@@ -416,8 +572,6 @@ export default class ViewAbstract extends Component {
                   {this.props.status === STATUS_CREATING ? this.renderCreatingButtons() : null}
                   {this.props.status === STATUS_EDITING ? this.renderEditingButtons() : null}
                 </div>
-                {this.state.empty.length ?
-                  <div className='text-red pull-right'>Please fill all the required fields.</div> : null}
               </form>
             </div>
           </section>
@@ -442,8 +596,6 @@ export default class ViewAbstract extends Component {
                 <div className='box-footer'>
                   {this.renderDeleteConfirmationButtons()}
                 </div>
-                {this.state.empty.length ?
-                  <div className='text-red pull-right'>Please fill all the required fields.</div> : null}
               </form>
             </div>
           </section>
@@ -465,7 +617,7 @@ export default class ViewAbstract extends Component {
   };
 
   render() {
-    const {loading, errors} = this.props;
+    const {loading} = this.props;
 
     return (
       <div>
@@ -473,11 +625,6 @@ export default class ViewAbstract extends Component {
         <div className='content-header'>
           <h1>{this.props.pluralTitle || `${ this.props.title}s`}</h1>
         </div>
-        {
-          errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>
-            Error:
-            {' ' + err.message}</div>)
-        }
         {this.renderPage()}
       </div>
     );
