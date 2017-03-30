@@ -2,6 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import Header from './Header';
 import NavbarContainer from '../containers/NavbarContainer';
 import LoginForm from '../containers/LoginContainer';
+import 'react-select/dist/react-select.css';
+
 const NotificationSystem = require('react-notification-system');
 
 export default class App extends Component {

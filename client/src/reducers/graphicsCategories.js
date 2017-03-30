@@ -24,7 +24,7 @@ export default function (state = INITIAL_STATE, action) {
       };
     case actionType.GRAPHICS_CATEGORY_FAILURE:
       graphicsCategoriesError = action.message;
-      return {...state, graphicsCategoryMessage: null, graphicsCategoriesError, graphicsCategoriesLoading: false};
+      return {...state, graphicsCategoriesMessage: null, graphicsCategoriesError, graphicsCategoriesLoading: false};
     case actionType.FETCH_GRAPHICS_CATEGORIES_BY_ID:
       return {
         ...state,

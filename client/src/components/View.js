@@ -6,8 +6,7 @@ import {
   STATUS_CREATING,
   STATUS_DEFAULT,
   STATUS_CONFIRM_DELETE,
-  STATUS_IMPORT_JSON,
-  RELATIVE_URL
+  STATUS_IMPORT_JSON
 } from '../definitions';
 import {checkNotEmpty} from '../FormValidation';
 import * as _ from 'lodash';

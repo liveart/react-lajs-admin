@@ -4,6 +4,7 @@ import * as GraphicModel from '../../../common/models/graphic.json';
 import {
   STATUS_EDITING,
   STATUS_CREATING,
+  STATUS_DEFAULT,
   RELATIVE_URL,
   GRAPHIC_IMG_FOLDER,
   GRAPHIC_THUMB_FOLDER
@@ -11,7 +12,8 @@ import {
 import {parseJson} from '../GraphicJsonParser';
 const Graphic = GraphicModel.properties;
 const LEAVE_URL_OPTION = 'Import';
-const KEEP_URL_OPTION = 'Keep';
+import {Creatable} from 'react-select';
+import * as _ from 'lodash';
 
 export default class GraphicsComponent extends Component {
   static propTypes = {
@@ -21,6 +23,7 @@ export default class GraphicsComponent extends Component {
     errors: PropTypes.arrayOf(PropTypes.string),
     message: PropTypes.string,
     loading: PropTypes.bool.isRequired,
+    colorsLoading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     objectHolder: PropTypes.object,
     status: PropTypes.string.isRequired,
@@ -40,6 +43,8 @@ export default class GraphicsComponent extends Component {
     uploadGraphicImage: PropTypes.func.isRequired,
     uploadGraphicThumb: PropTypes.func.isRequired,
     fetchGraphicsCategories: PropTypes.func.isRequired,
+    fetchColors: PropTypes.func.isRequired,
+    colors: PropTypes.arrayOf(PropTypes.object),
     token: PropTypes.string
   };
 
@@ -57,6 +62,12 @@ export default class GraphicsComponent extends Component {
 
   componentWillMount() {
     this.props.fetchGraphicsCategories();
+  }
+
+  componentWillReceiveProps(props) {
+    if (this.props.status === STATUS_DEFAULT && (props.status === STATUS_CREATING || props.status === STATUS_EDITING)) {
+      this.props.fetchColors();
+    }
   }
 
   handleSelectedObjectArrayChange = (arrName, ind, propName, event) => {
@@ -304,6 +315,35 @@ export default class GraphicsComponent extends Component {
     return undefined;
   };
 
+  getOptions = () => {
+    if (!this.props.colors || !this.props.colors.length) {
+      return [];
+    }
+
+    return this.props.colors;
+  };
+
+  getSelectedOptions = () => {
+    if (!this.props.objectHolder['colors'] || !this.props.objectHolder['colors'].length) {
+      return [];
+    }
+
+    if (typeof (this.props.objectHolder['colors'])[0] === 'string') {
+      return _.map(this.props.objectHolder['colors'], col => ({value: col, name: col}));
+    }
+
+    return this.props.objectHolder['colors'];
+  };
+
+
+  onColorsSelectChange = val => {
+    const arr = [];
+    if (val) {
+      _.forEach(val, v => arr.push({name: v.name, value: v.value}));
+      this.props.setEditingObjectProperty('colors', arr);
+    }
+  };
+
   render() {
     return (
       <View {...this.props} objectSample={{...Graphic, colorizables: []}}
@@ -362,6 +402,17 @@ export default class GraphicsComponent extends Component {
               thumb: {
                 saveF: this.handleThumbUpload,
                 getName: obj => this.getName(obj, GRAPHIC_THUMB_FOLDER)
+              },
+              colors: {
+                elem: <Creatable
+                  name='colors'
+                  value={this.getSelectedOptions()}
+                  multi={true}
+                  labelKey='name'
+                  options={this.getOptions()}
+                  onChange={this.onColorsSelectChange}
+                  isLoading={this.props.colorsLoading}
+                />
               },
               description: {
                 elem: <textarea className='form-control' rows='3'

@@ -48,6 +48,18 @@ function fixColorizables(colorizables) {
   }));
 }
 
+function getColors(colors) {
+  if (!colors || !colors.length) {
+    return undefined;
+  }
+
+  if (typeof colors[0] === 'string') {
+    return colors;
+  }
+
+  return _.map(colors, col => col.value);
+}
+
 function getGraphics(category, graphics, req) {
   const grs = [];
   _.forEach(graphics, gr => {
@@ -57,7 +69,7 @@ function getGraphics(category, graphics, req) {
         categoryId: gr.categoryId,
         name: gr.name,
         description: gr.description,
-        colors: gr.colors,
+        colors: getColors(gr.colors),
         colorize: gr.colorize,
         multicolor: gr.multicolor,
         thumb: getFullUrl(req, gr.thumb),

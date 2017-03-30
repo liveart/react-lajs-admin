@@ -7,6 +7,9 @@ import {
   fetchGraphicsCategories, createGraphicsCategory, uploadThumbnail
 } from '../actions/graphicsCategories';
 import {
+  fetchColors
+} from '../actions/colors';
+import {
   selectRow, setObjectHolderProperty, enableImportJson,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../actions/table';
@@ -15,14 +18,17 @@ import Graphics from '../components/Graphics';
 const mapStateToProps = state => {
   const {token} = state.user;
   const {graphics, graphicsError, graphicsLoading, graphicsMessage} = state.graphics;
+  const {colors, colorsLoading} = state.colors;
   const {graphicsCategories, graphicsCategoriesLoading} = state.graphicsCategories;
   const {objectHolder, status} = state.table;
   const errors = graphicsError ? [graphicsError] : [];
   return {
     title: 'Graphic',
     data: graphics,
+    colors,
     errors,
-    loading: graphicsLoading || graphicsCategoriesLoading,
+    loading: graphicsLoading || graphicsCategoriesLoading || colorsLoading,
+    colorsLoading,
     message: graphicsMessage,
     objectHolder,
     status,
@@ -81,6 +87,9 @@ const mapDispatchToProps = dispatch => {
     uploadThumbnail(thumbnail) {
       dispatch(uploadThumbnail(thumbnail));
     },
+    fetchColors() {
+      dispatch(fetchColors());
+    }
   };
 };
 
