@@ -15,7 +15,7 @@
     },
     "data": {
       "type": {
-        "price": "number",
+        "price": "string",
         "material": "string"
       },
       "default": {
