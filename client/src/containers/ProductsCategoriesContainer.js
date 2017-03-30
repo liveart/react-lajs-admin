@@ -16,15 +16,15 @@ import {
   setInitialState,
   enableConfirmDelete
 } from '../actions/table';
-//import {
-//  fetchProducts,
-//  deleteProduct,
-//  editProduct
-//} from '../actions/products';
+import {
+  fetchProducts,
+  deleteProduct,
+  editProduct
+} from '../actions/products';
 import ProductsCategories from '../components/ProductsCategories';
 
 const mapStateToProps = state => {
-  //const {products} = state.products;
+  const {products} = state.products;
   const {token} = state.user;
   const {productsCategories, productsCategoriesError, productsCategoriesLoading} = state.productsCategories;
   const {status, objectHolder} = state.table;
@@ -33,7 +33,7 @@ const mapStateToProps = state => {
     title: 'Product Category',
     pluralTitle: 'Product Categories',
     data: productsCategories,
-    secondaryData: [],
+    secondaryData: products,
     errors,
     loading: productsCategoriesLoading,
     objectHolder,
@@ -46,6 +46,9 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchData() {
       dispatch(fetchProductsCategories());
+    },
+    fetchSecondaryData() {
+      dispatch(fetchProducts());
     },
     selectRow(object) {
       dispatch(selectRow(object));
@@ -82,6 +85,12 @@ const mapDispatchToProps = dispatch => {
     },
     enableConfirmDelete() {
       dispatch(enableConfirmDelete());
+    },
+    deleteSecondaryEntity(id, token) {
+      dispatch(deleteProduct(id, token));
+    },
+    editSecondaryEntity(id, newProduct, token) {
+      dispatch(editProduct(id, newProduct, token));
     }
 
   };
