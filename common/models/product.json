@@ -18,6 +18,10 @@
         "price": "number",
         "material": "string"
       },
+      "default": {
+        "price": "",
+        "material": ""
+      },
       "required": false
     },
     "categoryId": {
@@ -105,8 +109,8 @@
     },
     "colors": {
       "type": "embedsMany",
-      "model": "color-embed",
-      "property": "_colors",
+      "model": "ColorEmbed",
+      "property": "colors",
       "options": {
         "validate": true,
         "forceId": false

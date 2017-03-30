@@ -34,7 +34,7 @@ export default class ProductsComponent extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {newColorizables: [], imgUrl: ''};
+    this.state = {newColorizables: [], newColors: [], imgUrl: ''};
     if (!Array.prototype.remove) {
       Array.prototype.remove = function (from, to) {
         const rest = this.slice((to || from) + 1 || this.length);
@@ -86,7 +86,11 @@ export default class ProductsComponent extends Component {
 
   handleSelectedObjectArrayArrayChange = (fArrName, sArrName, fInd, sInd, propName, event) => {
     const colorizables = this.props.objectHolder[fArrName];
-    ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.value;
+    if (propName === 'image') {
+      ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.files[0].name;
+    } else {
+      ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.value;
+    }
     this.props.setEditingObjectProperty(fArrName, [...colorizables]);
   };
 
@@ -95,13 +99,9 @@ export default class ProductsComponent extends Component {
   };
 
   handleSelectedObjectDataChange = (prop, propertyName, event) => {
-    this.props.objectHolder[prop][propertyName] = event.target.value;
-    this.props.setEditingObjectProperty(prop, this.props.objectHolder[prop]);
-  };
-
-  handleImgAsThumb = () => {
-    this.props.setEditingObjectProperty('thumbUrl', this.props.objectHolder['image']);
-    this.toCanvas('thumbUrl');
+    const object = this.props.objectHolder[prop];
+    object[propertyName] = event.target.value;
+    this.props.setEditingObjectProperty(prop, object);
   };
 
   toCanvas = prop => {
@@ -162,6 +162,75 @@ export default class ProductsComponent extends Component {
     }
   };
 
+  renderColorsTable = () => (
+    <div className='panel panel-default'>
+      <table className='table table-bordered'>
+        <thead>
+        <tr>
+          <th>name</th>
+          <th>value</th>
+          <th>location</th>
+          <th/>
+        </tr>
+        </thead>
+        <tbody>
+        {this.props.objectHolder.colors ?
+          this.props.objectHolder.colors.map((c, key) =>
+            <tr key={key}>
+              <td><input type='text' className='form-control'
+                         value={c.name}
+                         onChange={e => this.handleSelectedObjectArrayChange('colors', key, 'name', e)}/>
+              </td>
+              <td><input type='text' className='form-control'
+                         value={c.value}
+                         onChange={e => this.handleSelectedObjectArrayChange('colors', key, 'value', e)}/>
+              </td>
+              <td>
+                <div className='panel panel-default'>
+                  <table className='table'>
+                    <thead>
+                    <tr>
+                      <th>name</th>
+                      <th>image</th>
+                      <th/>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {c._locations.map((col, k) => (
+                      <tr key={k}>
+                        <td><input type='text' className='form-control'
+                                   value={col.name}
+                                   onChange={e =>
+                                     this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'name', e)}/>
+                        </td>
+                        <td><input type='file' className='form-control' accept='image/*'
+                                   onChange={e =>
+                                     this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'image', e)}/>
+
+                        </td>
+                        <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteColorsRow(key, k)}>
+                          <i className='fa fa-ban'/></a></td>
+                      </tr>
+                    ))}
+                    </tbody>
+                  </table>
+                  <div className='panel-footer'>
+                    <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addLocationRow(key)}>
+                      <i className='fa fa-plus'/> Add location</a>
+                  </div>
+                </div>
+              </td>
+              <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteLocationRow(c.id, key)}>
+                <i className='fa fa-ban'/></a></td>
+            </tr>) : null}
+        </tbody>
+      </table>
+      <div className='panel-footer'>
+        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addColorsRow()}>
+          <i className='fa fa-plus'/> Add color</a>
+      </div>
+    </div>
+  );
 
   renderColorizableTable = () => (
     <div className='panel panel-default'>
@@ -235,6 +304,22 @@ export default class ProductsComponent extends Component {
     </div>
   );
 
+  addColorsRow = () => (
+    this.handleSelectedObjectArrayAddNew('colors', {name: '', value: '', _locations: []})
+  );
+
+  deleteColorsRow = key => (
+    this.handleSelectedObjectArrayDeleteElement('colors', key)
+  );
+
+  addLocationRow = colorId => (
+    this.handleSelectedObjectArrayArrayAddNew('colors', '_locations', colorId, {name: '', image: ''})
+  );
+
+  deleteLocationRow = (colorId, key) => (
+    this.handleSelectedObjectArrayArrayDeleteElement('colors', '_locations', colorId, key)
+  );
+
   addColorizableRow = () => (
     this.handleSelectedObjectArrayAddNew('colorizables', {name: '', id: '', _colors: []})
   );
@@ -253,7 +338,7 @@ export default class ProductsComponent extends Component {
 
   render() {
     return (
-      <View {...this.props} objectSample={{...Product, colorizables: []}} sortingSupport={true}
+      <View {...this.props} objectSample={{...Product, colorizables: [], colors: []}} sortingSupport={true}
             hiddenProperties={['id', 'colors', 'colorize',
               'colorizableElements', 'multicolor', 'description', 'colorizables', 'minDPU', 'minQuantity',
               'namesNumbersEnabled', 'hideEditableAreaBorder', 'namesNumbersEnabled', 'pantones', 'resizable',
@@ -318,7 +403,7 @@ export default class ProductsComponent extends Component {
                 elem: this.renderColorizableTable()
               },
               colors: {
-                elem: <div></div>
+                elem: this.renderColorsTable()
               },
               hideEditableAreaBorder: {
                 elem: <select className='form-control'
@@ -384,10 +469,10 @@ export default class ProductsComponent extends Component {
               thumb: {
                 elem: <div>
                   <input type='file' className='form-control' accept='image/*'
-                         onChange={e => this.handleFileChoose('thumb', e)}/>
+                         onChange={e => this.handleFileChoose('thumbUrl', e)}/>
 
                   {typeof (this.props.objectHolder['thumbUrl']) === 'string' && this.props.status === STATUS_EDITING ?
-                    <div style={{float: 'left'}}><a href={location + this.props.objectHolder['thumb']}
+                    <div style={{float: 'left'}}><a href={location + this.props.objectHolder['thumbUrl']}
                                                     className='thumbnail'
                                                     style={{marginTop: 8, width: 100}}><img
                       style={{width: 100}} src={location + this.props.objectHolder['thumbUrl']}/>
@@ -397,9 +482,8 @@ export default class ProductsComponent extends Component {
                   <div style={{float: 'left'}}>
                     {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumbUrl'] ?
                       <canvas style={{marginTop: 8}} ref='canvas' width='100'
-                              height='100' hidden/> :
-                      <canvas style={{marginTop: 8}} ref='canvas' width='100'
-                              height='100'/>}
+                              height='100' hidden/> : <canvas style={{marginTop: 8}} ref='canvas' width='100'
+                                                              height='100'/>}
                   </div>
                 </div>,
                 required: true

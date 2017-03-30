@@ -20,7 +20,7 @@
     "location": {
       "type": "embedsMany",
       "model": "location",
-      "property": "location",
+      "property": "_locations",
       "options": {
         "validate": true,
         "forceId": false
