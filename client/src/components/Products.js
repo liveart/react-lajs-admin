@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import View from './View';
 import * as ProductModel from '../../../common/models/product.json';
-import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import {STATUS_EDITING, STATUS_CREATING, RELATIVE_URL, PRODUCT_THUMB_FOLDER} from '../definitions';
 const Product = ProductModel.properties;
-const location = 'files/productThumbs/';
 const locationImage = 'files/productImages/';
 
 export default class ProductsComponent extends Component {
@@ -336,6 +335,21 @@ export default class ProductsComponent extends Component {
     this.handleSelectedObjectArrayArrayDeleteElement('colorizables', '_colors', colorizableId, key)
   );
 
+  getFileUrl = url => {
+    if (url.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
+      return url.substring(RELATIVE_URL.length);
+    }
+    return url;
+  };
+
+  getName = (obj, url) => {
+    if (typeof obj === 'object') {
+      return RELATIVE_URL + '/' + url + obj.name;
+    }
+
+    return undefined;
+  };
+
   render() {
     return (
       <View {...this.props} objectSample={{...Product, colorizables: [], colors: []}} sortingSupport={true}
@@ -347,8 +361,10 @@ export default class ProductsComponent extends Component {
             representations={{
               thumbUrl: {
                 getElem: val =>
-                  val ? <a href={`/files/productThumbs/${val}`} className='thumbnail' style={{width: 100}}><img
-                    src={`/files/productThumbs/${val}`} alt='thumb' style={{width: 100}}/></a> :
+                  val ? <a href={this.getFileUrl(val)} className='thumbnail'
+                           style={{width: 100}}><img
+                    src={this.getFileUrl(val)} alt='thumb'
+                    style={{width: 100}}/></a> :
                     null,
                 sortable: false,
                 header: 'Thumb'
@@ -375,7 +391,8 @@ export default class ProductsComponent extends Component {
             }}
             changedInputs={{
               thumbUrl: {
-                saveF: this.handleThumbUpload
+                saveF: this.handleThumbUpload,
+                getName: obj => this.getName(obj, PRODUCT_THUMB_FOLDER)
               },
               description: {
                 elem: <textarea className='form-control' rows='3'
@@ -472,18 +489,19 @@ export default class ProductsComponent extends Component {
                          onChange={e => this.handleFileChoose('thumbUrl', e)}/>
 
                   {typeof (this.props.objectHolder['thumbUrl']) === 'string' && this.props.status === STATUS_EDITING ?
-                    <div style={{float: 'left'}}><a href={location + this.props.objectHolder['thumbUrl']}
+                    <div style={{float: 'left'}}><a href={this.getFileUrl(this.props.objectHolder['thumbUrl'])}
                                                     className='thumbnail'
                                                     style={{marginTop: 8, width: 100}}><img
-                      style={{width: 100}} src={location + this.props.objectHolder['thumbUrl']}/>
+                      style={{width: 100}} src={this.getFileUrl(this.props.objectHolder['thumbUrl'])}/>
                     </a>
                     </div>
                     : null}
                   <div style={{float: 'left'}}>
                     {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumbUrl'] ?
                       <canvas style={{marginTop: 8}} ref='canvas' width='100'
-                              height='100' hidden/> : <canvas style={{marginTop: 8}} ref='canvas' width='100'
-                                                              height='100'/>}
+                              height='100' hidden/> :
+                      <canvas style={{marginTop: 8}} ref='canvas' width='100'
+                              height='100'/>}
                   </div>
                 </div>,
                 required: true
