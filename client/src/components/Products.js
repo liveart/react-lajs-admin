@@ -12,6 +12,9 @@ import {
 const Product = ProductModel.properties;
 import * as _ from 'lodash';
 import {Creatable} from 'react-select';
+import Cropper from 'react-cropper';
+import 'cropperjs/dist/cropper.css';
+const locationImage = 'files/productImages/';
 
 export default class ProductsComponent extends Component {
   static propTypes = {
@@ -37,7 +40,6 @@ export default class ProductsComponent extends Component {
     fetchProductsCategories: PropTypes.func.isRequired,
     token: PropTypes.string
   };
-
 
   constructor(props) {
     super(props);
@@ -386,7 +388,8 @@ export default class ProductsComponent extends Component {
 
   render() {
     return (
-      <View {...this.props} objectSample={{...Product, colorizables: [], colors: []}} sortingSupport={true}
+      <View {...this.props} objectSample={{...Product, colorizables: [], colors: [], location: []}}
+            sortingSupport={true}
             hiddenProperties={['id', 'colors', 'colorize',
               'colorizableElements', 'multicolor', 'description', 'colorizables', 'minDPU', 'minQuantity',
               'namesNumbersEnabled', 'hideEditableAreaBorder', 'namesNumbersEnabled', 'pantones', 'resizable',
@@ -428,11 +431,118 @@ export default class ProductsComponent extends Component {
                 saveF: this.handleThumbUpload,
                 getName: obj => this.getName(obj, PRODUCT_THUMB_FOLDER)
               },
+              location: {
+                elem: <div>
+                  <div className='panel panel-default'>
+                    <div className='panel-body'>
+                      <div className='row'>
+                        <div className='col-lg-4'>
+
+                          <div className='row' style={{marginBottom: 6}}>
+                            <div className='col-lg-12'>
+                              <div className='input-group input-group-sm'>
+                                <span className='input-group-addon'>Name</span>
+                                <input type='text' className='form-control'/>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className='row' style={{marginBottom: 6}}>
+                            <div className='col-lg-12'>
+                              <div className='input-group input-group-sm'>
+                                <span className='input-group-addon'>Mask</span>
+                                <input type='file' className='form-control'/>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className='row' style={{marginBottom: 6}}>
+                            <div className='col-lg-12'>
+                              <div className='input-group input-group-sm'>
+                                <span className='input-group-addon'>Overlay</span>
+                                <input type='file' className='form-control'/>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className='row' style={{marginBottom: 6}}>
+                            <div className='col-lg-6'>
+                              <div className='input-group input-group-sm'>
+                                <span className='input-group-addon'>Width</span>
+                                <input type='text' className='form-control'/>
+                              </div>
+                            </div>
+                            <div className='col-lg-6'>
+                              <div className='input-group input-group-sm'>
+                                <span className='input-group-addon'>Height</span>
+                                <input type='text' className='form-control'/>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className='row' style={{marginBottom: 6}}>
+                            <div className='col-lg-12'>
+                              <div className='panel panel-default'>
+                                <div className='panel panel-heading'>
+                                  Units Range
+                                </div>
+                                <div className='panel panel-body'>
+                                  <div className='input-group input-group-sm'>
+                                    <input type='text' className='form-control'/>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className='row' style={{marginBottom: 6}}>
+                            <div className='col-lg-6'>
+                              <div className='input-group input-group-sm'>
+                                <span className='input-group-addon'>x0</span>
+                                <input type='text' className='form-control'/>
+                              </div>
+                            </div>
+                            <div className='col-lg-6'>
+                              <div className='input-group input-group-sm'>
+                                <span className='input-group-addon'>x1</span>
+                                <input type='text' className='form-control'/>
+                              </div>
+                            </div>
+                          </div>
+                          <div className='row'>
+                            <div className='col-lg-6'>
+                              <div className='input-group input-group-sm'>
+                                <span className='input-group-addon'>y0</span>
+                                <input type='text' className='form-control'/>
+                              </div>
+                            </div>
+                            <div className='col-lg-6'>
+                              <div className='input-group input-group-sm'>
+                                <span className='input-group-addon'>y1</span>
+                                <input type='text' className='form-control'/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className='col-lg-8'>
+                          <Cropper
+                            ref='cropper'
+                            src='https://pp.userapi.com/c636816/v636816840/3496e/5f548Gc89_0.jpg'
+                            style={{height: 400, width: '100%'}}
+                            guides={false}
+                            zoomable={false}
+                            crop={e => console.log(e.detail)}/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              },
               description: {
                 elem: <textarea className='form-control' rows='3'
                                 value={this.props.objectHolder['description']}
                                 onChange={e => this.handleSelectedObjectChange('description', e)}>
-                </textarea>
+                  </textarea>
               },
               sizes: {
                 elem: <Creatable

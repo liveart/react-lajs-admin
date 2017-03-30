@@ -431,9 +431,9 @@ export default class ViewAbstract extends Component {
           {
             this.props.changedInputs && this.props.changedInputs.hasOwnProperty(prop) ?
               this.props.changedInputs[prop].elem :
-              <input type='text' className='form-control'
-                     value={this.props.objectHolder[prop]}
-                     onChange={e => this.handleSelectedObjectChange(prop, e)}/>
+                <input type='text' className='form-control'
+                       value={this.props.objectHolder[prop]}
+                       onChange={e => this.handleSelectedObjectChange(prop, e)}/>
           }
 
           {
