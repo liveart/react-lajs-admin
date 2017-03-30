@@ -1,5 +1,12 @@
 import React, {Component, PropTypes} from 'react';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_CONFIRM_DELETE} from '../definitions';
+import {
+  ID_PROP,
+  STATUS_EDITING,
+  STATUS_CREATING,
+  STATUS_CONFIRM_DELETE,
+  GRAPHIC_CATEGORY_FOLDER,
+  RELATIVE_URL
+} from '../definitions';
 import * as GraphicsCategoryModel from '../../../common/models/graphics-category.json';
 import {RadioGroup, Radio} from 'react-radio-group';
 const GraphicsCategory = GraphicsCategoryModel.properties;
@@ -17,6 +24,7 @@ export default class extends Component {
     pluralTitle: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     errors: PropTypes.arrayOf(PropTypes.object),
+    message: PropTypes.string,
     loading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     objectHolder: PropTypes.object,
@@ -117,7 +125,8 @@ export default class extends Component {
                 <Radio value={DELETE_GRAPHICS}/>&nbsp; Delete all the linked graphics
               </div>
               <div>
-                <Radio value={MOVE_GRAPHICS_TO_OTHER_CATEGORY}/>&nbsp; Move graphics of this category to other category &nbsp;
+                <Radio value={MOVE_GRAPHICS_TO_OTHER_CATEGORY}/>&nbsp; Move graphics of this category to other
+                category &nbsp;
                 <select
                   value={this.state.newGraphic}
                   onChange={this.handleMoveGraphicToCategory}>
@@ -239,6 +248,16 @@ export default class extends Component {
     };
   }
 
+  getFileUrl = url => _.includes(url, RELATIVE_URL) ? url.substring(RELATIVE_URL.length) : url;
+
+  getName = (obj, url) => {
+    if (typeof obj === 'object') {
+      return RELATIVE_URL + '/' + url + obj.name;
+    }
+
+    return undefined;
+  };
+
   render() {
     return (
       <View {...this.props} objectSample={GraphicsCategory} sortingSupport={true}
@@ -246,14 +265,15 @@ export default class extends Component {
             hiddenInputs={['id', 'graphicsCategoryId', 'thumb']}
             representations={{
               thumb: {
-                getElem: val => <a href={location + val} className='thumbnail' style={{width: 100}}>
-                  <img src={location + val} alt='thumb' style={{width: 100}}/></a>,
+                getElem: val => <a href={this.getFileUrl(val)} className='thumbnail' style={{width: 100}}>
+                  <img src={this.getFileUrl(val)} alt='thumb' style={{width: 100}}/></a>,
                 sortable: false
               },
             }}
             changedInputs={{
               thumb: {
-                saveF: this.handleFileUpload
+                saveF: this.handleFileUpload,
+                getName: obj => this.getName(obj, GRAPHIC_CATEGORY_FOLDER)
               }
             }
             }
@@ -264,10 +284,10 @@ export default class extends Component {
                          onChange={e => this.handleFileChoose('thumb', e)}/>
 
                   {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
-                    <div style={{float: 'left'}}><a href={location + this.props.objectHolder['thumb']}
+                    <div style={{float: 'left'}}><a href={this.getFileUrl(this.props.objectHolder['thumb'])}
                                                     className='thumbnail'
                                                     style={{marginTop: 8, width: 100}}><img style={{width: 100}}
-                                                                                            src={location + this.props.objectHolder['thumb']}/></a>
+                                                                                            src={this.getFileUrl(this.props.objectHolder['thumb'])}/></a>
                     </div>
                     : null}
                   <div style={{float: 'left'}}>
@@ -287,7 +307,7 @@ export default class extends Component {
                   <option key='rootCategory' value={''}>Root category</option>
                   {this.props.data.map(cg => (
                     this.props.objectHolder[ID_PROP] !== cg.id ?
-                      (this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId)  || (cg.graphicsCategoryId === '') ?
+                      (this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId) || (cg.graphicsCategoryId === '') ?
                         <option key={cg.id} value={cg.id}>{cg.name}</option> :
                         <option disabled='disabled' key={cg.id} value={cg.id}>{cg.name} </option> : null
                   ))}
