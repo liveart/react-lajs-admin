@@ -21,36 +21,29 @@
       "default": {
         "price": "",
         "material": ""
-      },
-      "required": false
+      }
     },
     "categoryId": {
       "type": "string",
       "required": true
     },
     "minDPU": {
-      "type": "number",
-      "required": false
+      "type": "number"
     },
     "minQuantity": {
-      "type": "number",
-      "required": false
+      "type": "number"
     },
     "colorize": {
-      "type": "boolean",
-      "default": false
+      "type": "boolean"
     },
     "multicolor": {
-      "type": "boolean",
-      "default": false
+      "type": "boolean"
     },
     "hideEditableAreaBorder": {
-      "type": "boolean",
-      "default": false
+      "type": "boolean"
     },
     "namesNumbersEnabled": {
-      "type": "boolean",
-      "default": false
+      "type": "boolean"
     },
     "pantones": {
       "type": {
@@ -87,6 +80,42 @@
       ],
       "required": false
     },
+    "locations": {
+      "type": [
+        {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "image": {
+            "type": "string",
+            "required": false
+          },
+          "mask": {
+            "type": "string"
+          },
+          "overlayInfo": {
+            "type": "string"
+          },
+          "editableArea": {
+            "type": "array"
+          },
+          "editableAreaUnits": {
+            "type": "array"
+          },
+          "editableAreaUnitsRange": {
+            "type": "array"
+          },
+          "editableAreaUnitsRestrictRotation": {
+            "type": "boolean",
+            "default": false
+          },
+          "clipRect": {
+            "type": "number"
+          }
+        }
+      ]
+    },
     "template": {
       "type": "string",
       "required": false
@@ -111,15 +140,6 @@
       "type": "embedsMany",
       "model": "color-embed",
       "property": "_colors",
-      "options": {
-        "validate": true,
-        "forceId": false
-      }
-    },
-    "location": {
-      "type": "embedsMany",
-      "model": "location",
-      "property": "locations",
       "options": {
         "validate": true,
         "forceId": false

@@ -17,7 +17,7 @@
   },
   "validations": [],
   "relations": {
-    "location": {
+    "_location": {
       "type": "embedsMany",
       "model": "location",
       "property": "_locations",

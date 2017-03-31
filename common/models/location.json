@@ -12,35 +12,29 @@
     },
     "image": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "mask": {
-      "type": "string",
-      "required": false
+      "type": "string"
     },
     "overlayInfo": {
-      "type": "string",
-      "required": false
+      "type": "string"
     },
     "editableArea": {
-      "type":  "array",
-      "required": false
+      "type":  "array"
     },
     "editableAreaUnits": {
-      "type": "array",
-      "required": false
+      "type": "array"
     },
     "editableAreaUnitsRange": {
-      "type": "array",
-      "required": false
+      "type": "array"
     },
     "editableAreaUnitsRestrictRotation": {
       "type": "boolean",
-      "required": false
+      "default": false
     },
     "clipRect": {
-      "type": "number",
-      "required": false
+      "type": "number"
     }
   },
   "validations": [],

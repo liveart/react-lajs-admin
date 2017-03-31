@@ -584,21 +584,21 @@ export default class ProductsComponent extends Component {
                         value={this.state.location > -1 && this.props.objectHolder['locations'] &&
                         this.props.objectHolder['locations'].length ?
                           (this.props.objectHolder['locations'])[this.state.location] : null}
-                        this.props.objectHolder['locations'].length ? (() => {
-                          console.log('OKKK');
-                          return (this.props.objectHolder['locations'])[this.state.location]
-                        })() : null}
                         options={this.props.objectHolder['locations'] && this.props.objectHolder['locations'].length ?
                           this.props.objectHolder['locations'] : []}
                         onNewOptionClick={val => {
                           let obj = {};
-                          for (let p in Location) {
+                          _.forEach(Object.getOwnPropertyNames(Location), p => {
                             if (Location[p].type === 'array') {
                               obj[p] = [];
                             } else {
-                              obj[p] = '';
+                              if (typeof Location[p].default === 'boolean') {
+                                obj[p] = Location[p].default;
+                              } else {
+                                obj[p] = '';
+                              }
                             }
-                          }
+                          });
                           this.props.setEditingObjectProperty('locations', [...this.props.objectHolder['locations'],
                             {...obj, name: val.name}]);
                           this.setState({
@@ -616,7 +616,7 @@ export default class ProductsComponent extends Component {
                           this.setState({
                             ...this.state, location: _.findIndex(this.props.objectHolder['locations'],
                               loc => loc.name === val.name)
-                          })
+                          });
                         }}
                       />
                     </div>
@@ -635,6 +635,16 @@ export default class ProductsComponent extends Component {
                                   <input type='text' className='form-control'
                                          onChange={e => this.changeLocationsNestedHolderValue('name', e.target.value)}
                                          value={this.getLocationsInputValue('name')}/>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className='row' style={{marginBottom: 6}}>
+                              <div className='col-lg-12'>
+                                <div className='input-group input-group-sm'>
+                                  <span className='input-group-addon'>Image</span>
+                                  <input type='file' className='form-control'
+                                         onChange={e => this.handleLocationsNestedFileChoose('Image', e)}/>
                                 </div>
                               </div>
                             </div>
@@ -703,10 +713,10 @@ export default class ProductsComponent extends Component {
                                          onChange={e => {
                                            if (this.cropper) {
                                              this.cropper.setData({
-                                               x: Number(event.target.value)
+                                               x: Number(e.target.value)
                                              });
                                            }
-                                           this.changeLocationsNestedArrValue('editableArea', 0, e.target.value)
+                                           this.changeLocationsNestedArrValue('editableArea', 0, e.target.value);
                                          }}
                                          value={this.getLocationsInputValue('editableArea')[0]}/>
                                 </div>
@@ -715,8 +725,14 @@ export default class ProductsComponent extends Component {
                                 <div className='input-group input-group-sm'>
                                   <span className='input-group-addon'>x1</span>
                                   <input type='text' className='form-control'
-                                         onChange={e =>
-                                           this.changeLocationsNestedArrValue('editableArea', 2, e.target.value)}
+                                         onChange={e => {
+                                           if (this.cropper) {
+                                             this.cropper.setData({
+                                               width: Number(e.target.value) - this.cropper.getData().x
+                                             });
+                                           }
+                                           this.changeLocationsNestedArrValue('editableArea', 2, e.target.value);
+                                         }}
                                          value={this.getLocationsInputValue('editableArea')[2]}/>
                                 </div>
                               </div>
@@ -726,8 +742,14 @@ export default class ProductsComponent extends Component {
                                 <div className='input-group input-group-sm'>
                                   <span className='input-group-addon'>y0</span>
                                   <input type='text' className='form-control'
-                                         onChange={e =>
-                                           this.changeLocationsNestedArrValue('editableArea', 1, e.target.value)}
+                                         onChange={e => {
+                                           if (this.cropper) {
+                                             this.cropper.setData({
+                                               y: Number(e.target.value)
+                                             });
+                                           }
+                                           this.changeLocationsNestedArrValue('editableArea', 1, e.target.value);
+                                         }}
                                          value={this.getLocationsInputValue('editableArea')[1]}/>
                                 </div>
                               </div>
@@ -735,8 +757,14 @@ export default class ProductsComponent extends Component {
                                 <div className='input-group input-group-sm'>
                                   <span className='input-group-addon'>y1</span>
                                   <input type='text' className='form-control'
-                                         onChange={e =>
-                                           this.changeLocationsNestedArrValue('editableArea', 3, e.target.value)}
+                                         onChange={e => {
+                                           if (this.cropper) {
+                                             this.cropper.setData({
+                                               height: Number(e.target.value) - this.cropper.getData().y
+                                             });
+                                           }
+                                           this.changeLocationsNestedArrValue('editableArea', 3, e.target.value);
+                                         }}
                                          value={this.getLocationsInputValue('editableArea')[3]}/>
                                 </div>
                               </div>
@@ -749,6 +777,14 @@ export default class ProductsComponent extends Component {
                                   searchable={false}
                                   options={[{value: false, label: 'Rotation restricted'},
                                     {value: true, label: 'Rotation allowed'}]}
+                                  value={
+                                    this.props.objectHolder.locations[this.state.location]
+                                      .editableAreaUnitsRestrictRotation
+                                  }
+                                  onChange={op =>
+                                    this.changeLocationsNestedHolderValue('editableAreaUnitsRestrictRotation',
+                                      op ? op.value : false)
+                                  }
                                 />
                               </div>
                             </div>
@@ -763,9 +799,9 @@ export default class ProductsComponent extends Component {
                                 zoomable={false}
                                 crop={this.crop}
                                 viewMode={3}
+                                autoCropArea={1}
                               />
                             </div>
-
                           </div>
                         </div>
                       </div>

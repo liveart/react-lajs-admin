@@ -81,7 +81,7 @@
     "public": true
   },
   "location": {
-    "dataSource": "remote-dev-mongo",
-    "public": true
+    "dataSource": "transient",
+    "public": false
   }
 }
