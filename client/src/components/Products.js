@@ -81,6 +81,7 @@ export default class ProductsComponent extends Component {
     }
     arr[arr.length] = {...obj};
     this.props.setEditingObjectProperty(arrName, [...arr]);
+    console.log(this.props.objectHolder['arrName']);
   };
 
   handleSelectedObjectArrayDeleteElement = (arrName, key) => {
@@ -365,6 +366,14 @@ export default class ProductsComponent extends Component {
     this.handleSelectedObjectArrayDeleteElement('_colors', key)
   );
 
+  addEditableAreaSizeRow = () => (
+    this.handleSelectedObjectArrayAddNew('editableAreaSizes', {label: '', width: 0, height: 0})
+  );
+
+  deleteEditableAreaSizeRow = key => (
+    this.handleSelectedObjectArrayDeleteElement('editableAreaSizes', key)
+  );
+
   addLocationRow = colorId => (
     this.handleSelectedObjectArrayArrayAddNew('_colors', '_locations', colorId, {name: '', image: ''})
   );
@@ -433,6 +442,48 @@ export default class ProductsComponent extends Component {
       this.props.setEditingObjectProperty('sizes', arr);
     }
   };
+
+  renderEditableAreaSizesTable = () => (
+    <div className='panel panel-default'>
+      <table className='table table-bordered'>
+        <thead>
+        <tr>
+          <th>Label</th>
+          <th>Width</th>
+          <th>Height</th>
+          <th/>
+        </tr>
+        </thead>
+        <tbody>
+        {this.props.objectHolder['editableAreaSizes'] ?
+          this.props.objectHolder['editableAreaSizes'].map((c, key) =>
+            <tr key={key}>
+              <td><input type='text' className='form-control'
+                         value={c.label}
+                         onChange={e =>
+                           this.handleSelectedObjectArrayChange('editableAreaSizes', key, 'label', e)}/>
+              </td>
+              <td><input type='text' className='form-control'
+                         value={c.width}
+                         onChange={e =>
+                           this.handleSelectedObjectArrayChange('editableAreaSizes', key, 'width', e)}/>
+              </td>
+              <td><input type='text' className='form-control'
+                         value={c.height}
+                         onChange={e =>
+                           this.handleSelectedObjectArrayChange('editableAreaSizes', key, 'height', e)}/>
+              </td>
+              <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteEditableAreaSizeRow(key)}>
+                <i className='fa fa-ban'/></a></td>
+            </tr>) : null}
+        </tbody>
+      </table>
+      <div className='panel-footer'>
+        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addEditableAreaSizeRow()}>
+          <i className='fa fa-plus'/> Add size</a>
+      </div>
+    </div>
+  );
 
   render() {
     return (
@@ -672,6 +723,9 @@ export default class ProductsComponent extends Component {
                     });
                   }
                 })
+              },
+              editableAreaSizes: {
+                elem: this.renderEditableAreaSizesTable()
               },
               hideEditableAreaBorder: {
                 elem: <select className='form-control'

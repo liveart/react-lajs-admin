@@ -68,11 +68,13 @@
       "default": false
     },
     "editableAreaSizes": {
-      "type": {
-        "label": "string",
-        "width": "number",
-        "height": "number"
-      },
+      "type": [
+        {
+          "label": "string",
+          "width": "number",
+          "height": "number"
+        }
+      ],
       "required": false
     },
     "showRuler": {
