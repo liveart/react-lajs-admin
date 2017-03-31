@@ -17,7 +17,6 @@ import * as _ from 'lodash';
 import Select, {Creatable} from 'react-select';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
-const locationImage = 'files/productImages/';
 
 export default class ProductsComponent extends Component {
   static propTypes = {
@@ -127,7 +126,7 @@ export default class ProductsComponent extends Component {
   handleSelectedObjectArrayArrayChange = (fArrName, sArrName, fInd, sInd, propName, event) => {
     const colorizables = this.props.objectHolder[fArrName];
     if (propName === 'image') {
-      ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.files[0].name;
+      ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.files[0];
     } else {
       ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.value;
     }
@@ -156,7 +155,7 @@ export default class ProductsComponent extends Component {
     const c = this.refs.canvas;
     const ctx = c.getContext('2d');
     img.onload = function () {
-      imageOut = ctx.drawImage(img, 0, 0, 100, 100);
+      imageOut = ctx.drawImage(img, 0, 0, 110, 110);
     };
   };
 
@@ -391,6 +390,14 @@ export default class ProductsComponent extends Component {
     this.handleSelectedObjectArrayDeleteElement('_colors', key)
   );
 
+  addEditableAreaSizeRow = () => (
+    this.handleSelectedObjectArrayAddNew('editableAreaSizes', {label: '', width: 0, height: 0})
+  );
+
+  deleteEditableAreaSizeRow = key => (
+    this.handleSelectedObjectArrayDeleteElement('editableAreaSizes', key)
+  );
+
   addLocationRow = colorId => (
     this.handleSelectedObjectArrayArrayAddNew('_colors', '_locations', colorId, {name: '', image: ''})
   );
@@ -474,6 +481,48 @@ export default class ProductsComponent extends Component {
     return ((this.props.objectHolder['locations'])[this.state.location])[propertyName];
   };
 
+  renderEditableAreaSizesTable = () => (
+    <div className='panel panel-default'>
+      <table className='table table-bordered'>
+        <thead>
+        <tr>
+          <th>Label</th>
+          <th>Width</th>
+          <th>Height</th>
+          <th/>
+        </tr>
+        </thead>
+        <tbody>
+        {this.props.objectHolder['editableAreaSizes'] ?
+          this.props.objectHolder['editableAreaSizes'].map((c, key) =>
+            <tr key={key}>
+              <td><input type='text' className='form-control'
+                         value={c.label}
+                         onChange={e =>
+                           this.handleSelectedObjectArrayChange('editableAreaSizes', key, 'label', e)}/>
+              </td>
+              <td><input type='text' className='form-control'
+                         value={c.width}
+                         onChange={e =>
+                           this.handleSelectedObjectArrayChange('editableAreaSizes', key, 'width', e)}/>
+              </td>
+              <td><input type='text' className='form-control'
+                         value={c.height}
+                         onChange={e =>
+                           this.handleSelectedObjectArrayChange('editableAreaSizes', key, 'height', e)}/>
+              </td>
+              <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteEditableAreaSizeRow(key)}>
+                <i className='fa fa-ban'/></a></td>
+            </tr>) : null}
+        </tbody>
+      </table>
+      <div className='panel-footer'>
+        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addEditableAreaSizeRow()}>
+          <i className='fa fa-plus'/> Add size</a>
+      </div>
+    </div>
+  );
+
   render() {
     return (
       <View {...this.props} objectSample={{...Product, colorizables: [], _colors: [], locations: []}}
@@ -487,9 +536,9 @@ export default class ProductsComponent extends Component {
               thumbUrl: {
                 getElem: val =>
                   val ? <a href={this.getFileUrl(val)} className='thumbnail'
-                           style={{width: 100}}><img
+                           style={{width: 110}}><img
                     src={this.getFileUrl(val)} alt='thumb'
-                    style={{width: 100}}/></a> :
+                    style={{width: 110}}/></a> :
                     null,
                 sortable: false,
                 header: 'Thumb'
@@ -535,6 +584,10 @@ export default class ProductsComponent extends Component {
                         value={this.state.location > -1 && this.props.objectHolder['locations'] &&
                         this.props.objectHolder['locations'].length ?
                           (this.props.objectHolder['locations'])[this.state.location] : null}
+                        this.props.objectHolder['locations'].length ? (() => {
+                          console.log('OKKK');
+                          return (this.props.objectHolder['locations'])[this.state.location]
+                        })() : null}
                         options={this.props.objectHolder['locations'] && this.props.objectHolder['locations'].length ?
                           this.props.objectHolder['locations'] : []}
                         onNewOptionClick={val => {
@@ -756,7 +809,19 @@ export default class ProductsComponent extends Component {
               },
               _colors: {
                 elem: this.renderColorsTable(),
-                saveF: this.handleImageUpload
+                saveF: () => {
+                },
+                getName: color => _.forEach(color, clr => {
+                  if (clr._locations.length) {
+                    _.forEach(clr._locations, lc => {
+                      this.handleImageUpload(lc.image);
+                      lc.image = this.getName(lc.image, PRODUCT_IMG_FOLDER);
+                    });
+                  }
+                })
+              },
+              editableAreaSizes: {
+                elem: this.renderEditableAreaSizesTable()
               },
               hideEditableAreaBorder: {
                 elem: <select className='form-control'
@@ -827,17 +892,17 @@ export default class ProductsComponent extends Component {
                   {typeof (this.props.objectHolder['thumbUrl']) === 'string' && this.props.status === STATUS_EDITING ?
                     <div style={{float: 'left'}}><a href={this.getFileUrl(this.props.objectHolder['thumbUrl'])}
                                                     className='thumbnail'
-                                                    style={{marginTop: 8, width: 100}}><img
-                      style={{width: 100}} src={this.getFileUrl(this.props.objectHolder['thumbUrl'])}/>
+                                                    style={{marginTop: 8, width: 110}}><img
+                      style={{width: 110}} src={this.getFileUrl(this.props.objectHolder['thumbUrl'])}/>
                     </a>
                     </div>
                     : null}
                   <div style={{float: 'left'}}>
                     {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumbUrl'] ?
-                      <canvas style={{marginTop: 8}} ref='canvas' width='100'
-                              height='100' hidden/> :
-                      <canvas style={{marginTop: 8}} ref='canvas' width='100'
-                              height='100'/>}
+                      <canvas style={{marginTop: 8}} ref='canvas' width='110'
+                              height='110' hidden/> :
+                      <canvas style={{marginTop: 8}} ref='canvas' width='110'
+                              height='110'/>}
                   </div>
                 </div>,
                 required: true
