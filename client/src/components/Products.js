@@ -22,6 +22,7 @@ const locationImage = 'files/productImages/';
 export default class ProductsComponent extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
+    addNotification: PropTypes.func.isRequired,
     fetchColors: PropTypes.func.isRequired,
     colors: PropTypes.arrayOf(PropTypes.object),
     colorsLoading: PropTypes.bool.isRequired,
@@ -83,6 +84,24 @@ export default class ProductsComponent extends Component {
     arr[arr.length] = {...obj};
     this.props.setEditingObjectProperty(arrName, [...arr]);
   };
+
+  changeNestedHolderArrValue = (topArrPropName, topInd, changingArrPropName, changingArrInd, value) => {
+    const topArr = this.props.objectHolder[topArrPropName];
+    ((topArr[topInd])[changingArrPropName])[changingArrInd] = value;
+    this.props.setEditingObjectProperty(topArrPropName, [...topArr]);
+  };
+
+  changeLocationsNestedArrValue = (changingArrPropName, changingArrInd, value) =>
+    this.changeNestedHolderArrValue('locations', this.state.location, changingArrPropName, changingArrInd, value);
+
+  changeNestedHolderValue = (topArrPropName, topInd, changingPropName, value) => {
+    const topArr = this.props.objectHolder[topArrPropName];
+    ((topArr[topInd])[changingPropName]) = value;
+    this.props.setEditingObjectProperty(topArrPropName, [...topArr]);
+  };
+
+  changeLocationsNestedHolderValue = (changingPropName, value) =>
+    this.changeNestedHolderValue('locations', this.state.location, changingPropName, value);
 
   handleSelectedObjectArrayDeleteElement = (arrName, key) => {
     const arr = this.props.objectHolder[arrName];
@@ -159,6 +178,12 @@ export default class ProductsComponent extends Component {
         this.toCanvas(prop);
       }
     }
+  };
+
+  handleLocationsNestedFileChoose = (prop, e) => {
+    const locs = [...this.props.objectHolder['locations']];
+    (locs[this.state.location])[prop] = e.target.files[0];
+    this.props.setEditingObjectProperty('locations', locs);
   };
 
   handleImageUpload = file => {
@@ -426,6 +451,12 @@ export default class ProductsComponent extends Component {
 
   };
 
+  crop = e => {
+    this.changeLocationsNestedArrValue('editableArea', 0, (e.detail.x).toFixed(2));
+    this.changeLocationsNestedArrValue('editableArea', 1, (e.detail.y).toFixed(2));
+    this.changeLocationsNestedArrValue('editableArea', 2, (e.detail.x + e.detail.width).toFixed(2));
+    this.changeLocationsNestedArrValue('editableArea', 3, (e.detail.y + e.detail.height).toFixed(2));
+  }
 
   onSizeSelectChange = val => {
     const arr = [];
@@ -435,9 +466,17 @@ export default class ProductsComponent extends Component {
     }
   };
 
+  getLocationsInputValue = propertyName => {
+    if (this.state.location < 0 || !this.props.objectHolder['locations'] ||
+      !this.props.objectHolder['locations'].length) {
+      return '';
+    }
+    return ((this.props.objectHolder['locations'])[this.state.location])[propertyName];
+  };
+
   render() {
     return (
-      <View {...this.props} objectSample={{...Product, colorizables: [], _colors: [], location: []}}
+      <View {...this.props} objectSample={{...Product, colorizables: [], _colors: [], locations: []}}
             sortingSupport={true}
             hiddenProperties={['id', '_colors', 'colorize', 'locations',
               'colorizableElements', 'multicolor', 'description', 'colorizables', 'minDPU', 'minQuantity',
@@ -494,134 +533,190 @@ export default class ProductsComponent extends Component {
                         labelKey='name'
                         valueKey='name'
                         value={this.state.location > -1 && this.props.objectHolder['locations'] &&
-                        this.props.objectHolder['locations'].length ? (() => {console.log('OKKK');
-                          return (this.props.objectHolder['locations'])[this.state.location] })(): null}
+                        this.props.objectHolder['locations'].length ?
+                          (this.props.objectHolder['locations'])[this.state.location] : null}
                         options={this.props.objectHolder['locations'] && this.props.objectHolder['locations'].length ?
                           this.props.objectHolder['locations'] : []}
-                        onNewOptionClick={val =>
+                        onNewOptionClick={val => {
+                          let obj = {};
+                          for (let p in Location) {
+                            if (Location[p].type === 'array') {
+                              obj[p] = [];
+                            } else {
+                              obj[p] = '';
+                            }
+                          }
                           this.props.setEditingObjectProperty('locations', [...this.props.objectHolder['locations'],
-                            {...Location, name: val.name}])}
-                        onChange={val =>
+                            {...obj, name: val.name}]);
                           this.setState({
-                            ...this.state, location: _.findIndex(this.props.objectHolder['location'],
+                            ...this.state, location: _.findIndex(this.props.objectHolder['locations'],
                               loc => loc.name === val.name)
-                          })}
+                          });
+                        }}
+                        onChange={val => {
+                          if (!val) {
+                            this.setState({
+                              ...this.state, location: -1
+                            });
+                            return;
+                          }
+                          this.setState({
+                            ...this.state, location: _.findIndex(this.props.objectHolder['locations'],
+                              loc => loc.name === val.name)
+                          })
+                        }}
                       />
                     </div>
                   </div>
-                  <div className='panel panel-default'>
-                    <div className='panel-body'>
-                      <div className='row'>
-                        <div className='col-lg-4'>
+                  {this.state.location < 0 ||
+                  !this.props.objectHolder['locations'] || !this.props.objectHolder['locations'].length ? null :
+                    <div className='panel panel-default'>
+                      <div className='panel-body'>
+                        <div className='row'>
+                          <div className='col-lg-4'>
 
-                          <div className='row' style={{marginBottom: 6}}>
-                            <div className='col-lg-12'>
-                              <div className='input-group input-group-sm'>
-                                <span className='input-group-addon'>Name</span>
-                                <input type='text' className='form-control'/>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className='row' style={{marginBottom: 6}}>
-                            <div className='col-lg-12'>
-                              <div className='input-group input-group-sm'>
-                                <span className='input-group-addon'>Mask</span>
-                                <input type='file' className='form-control'/>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className='row' style={{marginBottom: 6}}>
-                            <div className='col-lg-12'>
-                              <div className='input-group input-group-sm'>
-                                <span className='input-group-addon'>Overlay</span>
-                                <input type='file' className='form-control'/>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className='row' style={{marginBottom: 6}}>
-                            <div className='col-lg-6'>
-                              <div className='input-group input-group-sm'>
-                                <span className='input-group-addon'>Width</span>
-                                <input type='text' className='form-control'/>
-                              </div>
-                            </div>
-                            <div className='col-lg-6'>
-                              <div className='input-group input-group-sm'>
-                                <span className='input-group-addon'>Height</span>
-                                <input type='text' className='form-control'/>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className='row' style={{marginBottom: 6}}>
-                            <div className='col-lg-12'>
-                              <div className='panel panel-default'>
-                                <div className='panel panel-heading'>
-                                  Units Range
+                            <div className='row' style={{marginBottom: 6}}>
+                              <div className='col-lg-12'>
+                                <div className='input-group input-group-sm'>
+                                  <span className='input-group-addon'>Name</span>
+                                  <input type='text' className='form-control'
+                                         onChange={e => this.changeLocationsNestedHolderValue('name', e.target.value)}
+                                         value={this.getLocationsInputValue('name')}/>
                                 </div>
-                                <div className='panel panel-body'>
-                                  <div className='input-group input-group-sm'>
-                                    <input type='text' className='form-control'/>
+                              </div>
+                            </div>
+
+                            <div className='row' style={{marginBottom: 6}}>
+                              <div className='col-lg-12'>
+                                <div className='input-group input-group-sm'>
+                                  <span className='input-group-addon'>Mask</span>
+                                  <input type='file' className='form-control'
+                                         onChange={e => this.handleLocationsNestedFileChoose('mask', e)}/>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className='row' style={{marginBottom: 6}}>
+                              <div className='col-lg-12'>
+                                <div className='input-group input-group-sm'>
+                                  <span className='input-group-addon'>Overlay</span>
+                                  <input type='file' className='form-control'
+                                         onChange={e => this.handleLocationsNestedFileChoose('overlayInfo', e)}/>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className='row' style={{marginBottom: 6}}>
+                              <div className='col-lg-6'>
+                                <div className='input-group input-group-sm'>
+                                  <span className='input-group-addon'>Width</span>
+                                  <input type='text' className='form-control'
+                                         onChange={e =>
+                                           this.changeLocationsNestedArrValue('editableAreaUnits', 0, e.target.value)}
+                                         value={this.getLocationsInputValue('editableAreaUnits')[0]}/>
+                                </div>
+                              </div>
+                              <div className='col-lg-6'>
+                                <div className='input-group input-group-sm'>
+                                  <span className='input-group-addon'>Height</span>
+                                  <input type='text' className='form-control'
+                                         onChange={e =>
+                                           this.changeLocationsNestedArrValue('editableAreaUnits', 1, e.target.value)}
+                                         value={this.getLocationsInputValue('editableAreaUnits')[1]}/>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className='row' style={{marginBottom: 6}}>
+                              <div className='col-lg-12'>
+                                <div className='panel panel-default'>
+                                  <div className='panel panel-heading'>
+                                    Units Range
+                                  </div>
+                                  <div className='panel panel-body'>
+                                    <div className='input-group input-group-sm'>
+                                      <input type='text' className='form-control'/>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
 
-                          <div className='row' style={{marginBottom: 6}}>
-                            <div className='col-lg-6'>
-                              <div className='input-group input-group-sm'>
-                                <span className='input-group-addon'>x0</span>
-                                <input type='text' className='form-control'/>
+                            <div className='row' style={{marginBottom: 6}}>
+                              <div className='col-lg-6'>
+                                <div className='input-group input-group-sm'>
+                                  <span className='input-group-addon'>x0</span>
+                                  <input type='text' className='form-control'
+                                         onChange={e => {
+                                           if (this.cropper) {
+                                             this.cropper.setData({
+                                               x: Number(event.target.value)
+                                             });
+                                           }
+                                           this.changeLocationsNestedArrValue('editableArea', 0, e.target.value)
+                                         }}
+                                         value={this.getLocationsInputValue('editableArea')[0]}/>
+                                </div>
+                              </div>
+                              <div className='col-lg-6'>
+                                <div className='input-group input-group-sm'>
+                                  <span className='input-group-addon'>x1</span>
+                                  <input type='text' className='form-control'
+                                         onChange={e =>
+                                           this.changeLocationsNestedArrValue('editableArea', 2, e.target.value)}
+                                         value={this.getLocationsInputValue('editableArea')[2]}/>
+                                </div>
                               </div>
                             </div>
-                            <div className='col-lg-6'>
-                              <div className='input-group input-group-sm'>
-                                <span className='input-group-addon'>x1</span>
-                                <input type='text' className='form-control'/>
+                            <div className='row' style={{marginBottom: 6}}>
+                              <div className='col-lg-6'>
+                                <div className='input-group input-group-sm'>
+                                  <span className='input-group-addon'>y0</span>
+                                  <input type='text' className='form-control'
+                                         onChange={e =>
+                                           this.changeLocationsNestedArrValue('editableArea', 1, e.target.value)}
+                                         value={this.getLocationsInputValue('editableArea')[1]}/>
+                                </div>
+                              </div>
+                              <div className='col-lg-6'>
+                                <div className='input-group input-group-sm'>
+                                  <span className='input-group-addon'>y1</span>
+                                  <input type='text' className='form-control'
+                                         onChange={e =>
+                                           this.changeLocationsNestedArrValue('editableArea', 3, e.target.value)}
+                                         value={this.getLocationsInputValue('editableArea')[3]}/>
+                                </div>
+                              </div>
+                            </div>
+                            <div className='row' style={{marginBottom: 6}}>
+                              <div className='col-lg-12'>
+                                <Select
+                                  name='rotation'
+                                  placeholder='Restrict rotation...'
+                                  searchable={false}
+                                  options={[{value: false, label: 'Rotation restricted'},
+                                    {value: true, label: 'Rotation allowed'}]}
+                                />
                               </div>
                             </div>
                           </div>
-                          <div className='row' style={{marginBottom: 6}}>
-                            <div className='col-lg-6'>
-                              <div className='input-group input-group-sm'>
-                                <span className='input-group-addon'>y0</span>
-                                <input type='text' className='form-control'/>
-                              </div>
-                            </div>
-                            <div className='col-lg-6'>
-                              <div className='input-group input-group-sm'>
-                                <span className='input-group-addon'>y1</span>
-                                <input type='text' className='form-control'/>
-                              </div>
-                            </div>
-                          </div>
-                          <div className='row' style={{marginBottom: 6}}>
-                            <div className='col-lg-12'>
-                              <Select
-                                name='rotation'
-                                placeholder='Restrict rotation...'
-                                searchable={false}
-                                options={[{value: false, label: 'Rotation restricted'},
-                                  {value: true, label: 'Rotation allowed'}]}
+                          <div className='col-lg-8'>
+                            <div className="panel panel-default">
+                              <Cropper
+                                ref={cr => this.cropper = cr}
+                                src='https://pp.userapi.com/c636816/v636816840/3496e/5f548Gc89_0.jpg'
+                                style={{height: 400, width: '100%'}}
+                                guides={false}
+                                zoomable={false}
+                                crop={this.crop}
+                                viewMode={3}
                               />
                             </div>
+
                           </div>
                         </div>
-                        <div className='col-lg-8'>
-                          <Cropper
-                            ref='cropper'
-                            src='https://pp.userapi.com/c636816/v636816840/3496e/5f548Gc89_0.jpg'
-                            style={{height: 400, width: '100%'}}
-                            guides={false}
-                            zoomable={false}/>
-                        </div>
                       </div>
-                    </div>
-                  </div>
+                    </div>}
                 </div>
               },
               description: {

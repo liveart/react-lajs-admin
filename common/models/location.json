@@ -23,15 +23,15 @@
       "required": false
     },
     "editableArea": {
-      "type":  ["number"],
+      "type":  "array",
       "required": false
     },
     "editableAreaUnits": {
-      "type": ["number"],
+      "type": "array",
       "required": false
     },
     "editableAreaUnitsRange": {
-      "type": [["number"]],
+      "type": "array",
       "required": false
     },
     "editableAreaUnitsRestrictRotation": {
@@ -39,7 +39,7 @@
       "required": false
     },
     "clipRect": {
-      "type": ["number"],
+      "type": "number",
       "required": false
     }
   },
