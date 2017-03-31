@@ -1,6 +1,14 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import {
+  ID_PROP,
+  STATUS_EDITING,
+  STATUS_CREATING,
+  STATUS_DEFAULT,
+  RELATIVE_URL,
+  FONTS_FOLDER,
+  VECTORS_FOLDER
+} from '../definitions';
 import * as FontModel from '../../../common/models/font.json';
 const Font = FontModel.properties;
 const location = '/files/fonts/';
@@ -64,6 +72,28 @@ export default class extends Component {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
 
+  getSaveUrl = (obj, url) => {
+    if (typeof obj === 'object') {
+      return RELATIVE_URL + '/' + url + obj.name;
+    }
+
+    return undefined;
+  };
+
+  getFileUrl = url => {
+    if (typeof (url) === 'string') {
+      if (url.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
+        return url.substring(RELATIVE_URL.length);
+      }
+      return url;
+    }
+  };
+  getName = (name) => {
+    if (typeof (name) === 'string') {
+      return name.substring(name.lastIndexOf('/') + 1);
+    }
+  };
+
   render() {
     return (
       <View {...this.props} objectSample={Font} sortingSupport={true}
@@ -71,28 +101,38 @@ export default class extends Component {
             hiddenInputs={['id']}
             representations={{
               fileNormal: {
-                getElem: item =>
-                  <a href={location + item}>{item}</a>,
+                getElem: val =>
+                  val ? <a href={this.getFileUrl(val)}
+                           style={{width: 100}}>{this.getName(val)}</a> :
+                    null,
                 header: 'File Normal'
               },
               fileBold: {
-                getElem: item =>
-                  <a href={location + item}>{item}</a>,
+                getElem: val =>
+                  val ? <a href={this.getFileUrl(val)}
+                           style={{width: 100}}>{this.getName(val)}</a> :
+                    null,
                 header: 'File Bold'
               },
               fileItalic: {
-                getElem: item =>
-                  <a href={location + item}>{item}</a>,
+                getElem: val =>
+                  val ? <a href={this.getFileUrl(val)}
+                           style={{width: 100}}>{this.getName(val)}</a> :
+                    null,
                 header: 'File Italic'
               },
               fileBoldItalic: {
-                getElem: item =>
-                  <a href={location + item}>{item}</a>,
+                getElem: val =>
+                  val ? <a href={this.getFileUrl(val)}
+                           style={{width: 100}}>{this.getName(val)}</a> :
+                    null,
                 header: 'File Bold&Italic'
               },
               vector: {
-                getElem: item =>
-                  <a href={vectorsLocation + item}>{item}</a>,
+                getElem: val =>
+                  val ? <a href={this.getFileUrl(val)}
+                           style={{width: 100}}>{this.getName(val)}</a> :
+                    null,
                 header: 'Vector'
               },
 
@@ -101,27 +141,32 @@ export default class extends Component {
               fileNormal: {
                 elem: <input type='file' className='form-control' accept='.woff'
                              onChange={e => this.handleFileChoose('fileNormal', e)}/>,
-                saveF: this.handleFileNormalUpload
+                saveF: this.handleFileNormalUpload,
+                getName: obj => this.getSaveUrl(obj, FONTS_FOLDER)
               },
               fileBold: {
                 elem: <input type='file' className='form-control' accept='.woff'
                              onChange={e => this.handleFileChoose('fileBold', e)}/>,
-                saveF: this.handleFileBoldUpload
+                saveF: this.handleFileBoldUpload,
+                getName: obj => this.getSaveUrl(obj, FONTS_FOLDER)
               },
               fileItalic: {
                 elem: <input type='file' className='form-control' accept='.woff'
                              onChange={e => this.handleFileChoose('fileItalic', e)}/>,
-                saveF: this.handleFileItalicUpload
+                saveF: this.handleFileItalicUpload,
+                getName: obj => this.getSaveUrl(obj, FONTS_FOLDER)
               },
               fileBoldItalic: {
                 elem: <input type='file' className='form-control' accept='.woff'
                              onChange={e => this.handleFileChoose('fileBoldItalic', e)}/>,
-                saveF: this.handleFileBoldItalicUpload
+                saveF: this.handleFileBoldItalicUpload,
+                getName: obj => this.getSaveUrl(obj, FONTS_FOLDER)
               },
               vector: {
                 elem: <input type='file' className='form-control' accept='.js'
                              onChange={e => this.handleFileChoose('vector', e)}/>,
-                saveF: this.handleVectorUpload
+                saveF: this.handleVectorUpload,
+                getName: obj => this.getSaveUrl(obj, VECTORS_FOLDER)
               },
               boldAllowed: {
                 elem: <select type='text' className='form-control'

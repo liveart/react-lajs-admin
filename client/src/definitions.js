@@ -4,6 +4,8 @@ export const RELATIVE_URL = '@@RELATIVE';
 export const GRAPHIC_IMG_FOLDER = 'files/graphicImages/';
 export const GRAPHIC_THUMB_FOLDER = 'files/graphicThumbs/';
 export const GRAPHIC_CATEGORY_FOLDER = 'files/thumb/';
+export const FONTS_FOLDER = 'files/fonts/';
+export const VECTORS_FOLDER = 'files/vectors/';
 
 export const STATUS_EDITING = 'STATUS_EDITING';
 export const STATUS_CONFIRM_DELETE = 'STATUS_CONFIRM_DELETE';
