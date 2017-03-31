@@ -17,7 +17,6 @@ import * as _ from 'lodash';
 import Select, {Creatable} from 'react-select';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
-const locationImage = 'files/productImages/';
 
 export default class ProductsComponent extends Component {
   static propTypes = {
@@ -108,7 +107,7 @@ export default class ProductsComponent extends Component {
   handleSelectedObjectArrayArrayChange = (fArrName, sArrName, fInd, sInd, propName, event) => {
     const colorizables = this.props.objectHolder[fArrName];
     if (propName === 'image') {
-      ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.files[0].name;
+      ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.files[0];
     } else {
       ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.value;
     }
@@ -437,7 +436,7 @@ export default class ProductsComponent extends Component {
 
   render() {
     return (
-      <View {...this.props} objectSample={{...Product, colorizables: [], _colors: [], location: []}}
+      <View {...this.props} objectSample={{...Product, colorizables: [], _colors: [], locations: []}}
             sortingSupport={true}
             hiddenProperties={['id', '_colors', 'colorize', 'locations',
               'colorizableElements', 'multicolor', 'description', 'colorizables', 'minDPU', 'minQuantity',
@@ -494,8 +493,10 @@ export default class ProductsComponent extends Component {
                         labelKey='name'
                         valueKey='name'
                         value={this.state.location > -1 && this.props.objectHolder['locations'] &&
-                        this.props.objectHolder['locations'].length ? (() => {console.log('OKKK');
-                          return (this.props.objectHolder['locations'])[this.state.location] })(): null}
+                        this.props.objectHolder['locations'].length ? (() => {
+                          console.log('OKKK');
+                          return (this.props.objectHolder['locations'])[this.state.location]
+                        })() : null}
                         options={this.props.objectHolder['locations'] && this.props.objectHolder['locations'].length ?
                           this.props.objectHolder['locations'] : []}
                         onNewOptionClick={val =>
@@ -661,7 +662,16 @@ export default class ProductsComponent extends Component {
               },
               _colors: {
                 elem: this.renderColorsTable(),
-                saveF: this.handleImageUpload
+                saveF: () => {
+                },
+                getName: color => _.forEach(color, clr => {
+                  if (clr._locations.length) {
+                    _.forEach(clr._locations, lc => {
+                      this.handleImageUpload(lc.image);
+                      lc.image = this.getName(lc.image, PRODUCT_IMG_FOLDER);
+                    });
+                  }
+                })
               },
               hideEditableAreaBorder: {
                 elem: <select className='form-control'
