@@ -7,11 +7,12 @@ import {
   STATUS_DEFAULT,
   RELATIVE_URL,
   PRODUCT_THUMB_FOLDER,
+  PRODUCT_IMG_FOLDER,
   SIZES
 } from '../definitions';
 const Product = ProductModel.properties;
 import * as _ from 'lodash';
-import {Creatable} from 'react-select';
+import Select, {Creatable} from 'react-select';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 const locationImage = 'files/productImages/';
@@ -19,6 +20,9 @@ const locationImage = 'files/productImages/';
 export default class ProductsComponent extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
+    fetchColors: PropTypes.func.isRequired,
+    colors: PropTypes.arrayOf(PropTypes.object),
+    colorsLoading: PropTypes.bool.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     errors: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool.isRequired,
@@ -55,6 +59,12 @@ export default class ProductsComponent extends Component {
 
   componentWillMount() {
     this.props.fetchProductsCategories();
+  }
+
+  componentWillReceiveProps(props) {
+    if (this.props.status === STATUS_DEFAULT && (props.status === STATUS_CREATING || props.status === STATUS_EDITING)) {
+      this.props.fetchColors();
+    }
   }
 
   handleSelectedObjectArrayChange = (arrName, ind, propName, event) => {
@@ -171,32 +181,68 @@ export default class ProductsComponent extends Component {
     }
   };
 
+  getOptions = () => {
+    if (!this.props.colorsList || !this.props.colorsList.length) {
+      return [];
+    }
+
+    return this.props.colorsList;
+  };
+
+  getSelectedOptions = key => {
+    if (!this.props.objectHolder['_colors'] || !this.props.objectHolder['_colors'].length) {
+      return [];
+    }
+
+    if (this.props.objectHolder['_colors'][key]) {
+      return this.props.objectHolder['_colors'][key];
+    }
+
+  };
+
+
+  onColorsSelectChange = (val, key) => {
+    const arr = this.props.objectHolder['_colors'];
+    if (val) {
+      (arr[key])['name'] = val.name;
+      (arr[key])['value'] = val.value;
+      this.props.setEditingObjectProperty('_colors', [...arr]);
+    }
+  };
+
 
   renderColorsTable = () => (
     <div className='panel panel-default'>
       <table className='table table-bordered'>
         <thead>
         <tr>
-          <th>color</th>
-          <th>location</th>
+          <th>Color</th>
+          <th>Locations</th>
           <th/>
         </tr>
         </thead>
         <tbody>
-        {this.props.objectHolder.colors ?
-          this.props.objectHolder.colors.map((c, key) =>
+        {this.props.objectHolder._colors ?
+          this.props.objectHolder._colors.map((c, key) =>
             <tr key={key}>
-              <td><input type='text' className='form-control'
-                         value={c.name}
-                         onChange={e => this.handleSelectedObjectArrayChange('colors', key, 'name', e)}/>
+              <td className='col-md-4'>
+                <Select
+                  name='colors'
+                  value={this.getSelectedOptions(key)}
+                  multi={false}
+                  labelKey='name'
+                  options={this.getOptions()}
+                  onChange={os => this.onColorsSelectChange(os, key)}
+                  isLoading={this.props.colorsLoading}
+                />
               </td>
-              <td>
+              <td className='col-md-8'>
                 <div className='panel panel-default'>
                   <table className='table'>
                     <thead>
                     <tr>
-                      <th>name</th>
-                      <th>image</th>
+                      <th>Name</th>
+                      <th>Image</th>
                       <th/>
                     </tr>
                     </thead>
@@ -206,14 +252,15 @@ export default class ProductsComponent extends Component {
                         <td><input type='text' className='form-control'
                                    value={col.name}
                                    onChange={e =>
-                                     this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'name', e)}/>
+                                     this.handleSelectedObjectArrayArrayChange('_colors', '_locations', key, k, 'name', e)}/>
                         </td>
                         <td><input type='file' className='form-control' accept='image/*'
                                    onChange={e =>
-                                     this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'image', e)}/>
+                                     this.handleSelectedObjectArrayArrayChange('_colors', '_locations', key, k, 'image', e)}/>
 
                         </td>
-                        <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteColorsRow(key, k)}>
+                        <td><a className='btn btn-danger btn-xs' href='#'
+                               onClick={() => this.deleteLocationRow(key, k)}>
                           <i className='fa fa-ban'/></a></td>
                       </tr>
                     ))}
@@ -225,7 +272,7 @@ export default class ProductsComponent extends Component {
                   </div>
                 </div>
               </td>
-              <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteLocationRow(c.id, key)}>
+              <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteColorsRow(key)}>
                 <i className='fa fa-ban'/></a></td>
             </tr>) : null}
         </tbody>
@@ -242,9 +289,9 @@ export default class ProductsComponent extends Component {
       <table className='table table-bordered'>
         <thead>
         <tr>
-          <th>name</th>
-          <th>id</th>
-          <th>colors</th>
+          <th>Name</th>
+          <th>Id</th>
+          <th>Colors</th>
           <th/>
         </tr>
         </thead>
@@ -265,8 +312,8 @@ export default class ProductsComponent extends Component {
                   <table className='table'>
                     <thead>
                     <tr>
-                      <th>name</th>
-                      <th>value</th>
+                      <th>Name</th>
+                      <th>Value</th>
                       <th/>
                     </tr>
                     </thead>
@@ -310,19 +357,19 @@ export default class ProductsComponent extends Component {
   );
 
   addColorsRow = () => (
-    this.handleSelectedObjectArrayAddNew('colors', {name: '', value: '', _locations: []})
+    this.handleSelectedObjectArrayAddNew('_colors', {name: '', value: '', _locations: []})
   );
 
   deleteColorsRow = key => (
-    this.handleSelectedObjectArrayDeleteElement('colors', key)
+    this.handleSelectedObjectArrayDeleteElement('_colors', key)
   );
 
   addLocationRow = colorId => (
-    this.handleSelectedObjectArrayArrayAddNew('colors', '_locations', colorId, {name: '', image: ''})
+    this.handleSelectedObjectArrayArrayAddNew('_colors', '_locations', colorId, {name: '', image: ''})
   );
 
   deleteLocationRow = (colorId, key) => (
-    this.handleSelectedObjectArrayArrayDeleteElement('colors', '_locations', colorId, key)
+    this.handleSelectedObjectArrayArrayDeleteElement('_colors', '_locations', colorId, key)
   );
 
   addColorizableRow = () => (
@@ -388,9 +435,9 @@ export default class ProductsComponent extends Component {
 
   render() {
     return (
-      <View {...this.props} objectSample={{...Product, colorizables: [], colors: [], location: []}}
+      <View {...this.props} objectSample={{...Product, colorizables: [], _colors: [], location: []}}
             sortingSupport={true}
-            hiddenProperties={['id', 'colors', 'colorize',
+            hiddenProperties={['id', '_colors', 'colorize',
               'colorizableElements', 'multicolor', 'description', 'colorizables', 'minDPU', 'minQuantity',
               'namesNumbersEnabled', 'hideEditableAreaBorder', 'namesNumbersEnabled', 'pantones', 'resizable',
               'editableAreaSizes', 'showRuler', 'template', 'data', 'sizes']}
@@ -573,8 +620,9 @@ export default class ProductsComponent extends Component {
               colorizables: {
                 elem: this.renderColorizableTable()
               },
-              colors: {
-                elem: this.renderColorsTable()
+              _colors: {
+                elem: this.renderColorsTable(),
+                saveF: this.handleImageUpload
               },
               hideEditableAreaBorder: {
                 elem: <select className='form-control'

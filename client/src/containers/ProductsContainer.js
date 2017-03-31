@@ -11,9 +11,13 @@ import {
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../actions/table';
 import Products from '../components/Products';
+import {
+  fetchColors
+} from '../actions/colors';
 
 const mapStateToProps = state => {
   const {token} = state.user;
+  const {colors, colorsLoading} = state.colors;
   const {products, productsError, productsLoading} = state.products;
   const {productsCategories, productsCategoriesLoading} = state.productsCategories;
   const {objectHolder, status} = state.table;
@@ -22,6 +26,8 @@ const mapStateToProps = state => {
   return {
     title: 'Product',
     data: products,
+    colorsList: colors,
+    colorsLoading,
     errors,
     loading: productsLoading || productsCategoriesLoading,
     objectHolder,
@@ -71,6 +77,9 @@ const mapDispatchToProps = dispatch => {
     },
     fetchProductsCategories() {
       dispatch(fetchProductsCategories());
+    },
+    fetchColors() {
+      dispatch(fetchColors());
     }
   };
 };

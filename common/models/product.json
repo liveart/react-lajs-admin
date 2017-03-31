@@ -107,8 +107,8 @@
     },
     "colors": {
       "type": "embedsMany",
-      "model": "ColorEmbed",
-      "property": "colors",
+      "model": "color-embed",
+      "property": "_colors",
       "options": {
         "validate": true,
         "forceId": false
