@@ -4,6 +4,10 @@
   }
 }
 
+.onTop {
+  z-index: 10;
+}
+
 body {
   background: #d2d6de !important;
 }

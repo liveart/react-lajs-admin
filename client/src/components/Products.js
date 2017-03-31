@@ -11,6 +11,8 @@ import {
   SIZES
 } from '../definitions';
 const Product = ProductModel.properties;
+import * as LocationModel from '../../../common/models/location.json';
+const Location = LocationModel.properties;
 import * as _ from 'lodash';
 import Select, {Creatable} from 'react-select';
 import Cropper from 'react-cropper';
@@ -47,7 +49,7 @@ export default class ProductsComponent extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {newColorizables: [], newColors: [], imgUrl: ''};
+    this.state = {newColorizables: [], newColors: [], imgUrl: '', location: -1};
     if (!Array.prototype.remove) {
       Array.prototype.remove = function (from, to) {
         const rest = this.slice((to || from) + 1 || this.length);
@@ -437,7 +439,7 @@ export default class ProductsComponent extends Component {
     return (
       <View {...this.props} objectSample={{...Product, colorizables: [], _colors: [], location: []}}
             sortingSupport={true}
-            hiddenProperties={['id', '_colors', 'colorize',
+            hiddenProperties={['id', '_colors', 'colorize', 'locations',
               'colorizableElements', 'multicolor', 'description', 'colorizables', 'minDPU', 'minQuantity',
               'namesNumbersEnabled', 'hideEditableAreaBorder', 'namesNumbersEnabled', 'pantones', 'resizable',
               'editableAreaSizes', 'showRuler', 'template', 'data', 'sizes']}
@@ -467,8 +469,8 @@ export default class ProductsComponent extends Component {
                                   value={this.props.objectHolder['categoryId']}
                                   onChange={e => this.handleSelectedObjectChange('categoryId', e)}>
                   <option key='any' value=''>...</option>
-                  {this.props.productsCategories.map((cat, key) => <option key={key}
-                                                                           value={cat.id}>{cat.name}</option>)}
+                  {this.props.productsCategories.map(cat => <option key={cat.id}
+                                                                    value={cat.id}>{cat.name}</option>)}
                 </select>,
                 header: 'Category'
               }
@@ -478,8 +480,35 @@ export default class ProductsComponent extends Component {
                 saveF: this.handleThumbUpload,
                 getName: obj => this.getName(obj, PRODUCT_THUMB_FOLDER)
               },
-              location: {
+              locations: {
                 elem: <div>
+                  <div className='row' style={{marginBottom: 6}}>
+                    <div className='col-lg-12'>
+                      <Creatable
+                        name='location'
+                        className='onTop'
+                        placeholder={this.props.objectHolder['locations'] && this.props.objectHolder['locations'].length ?
+                          _.map(this.props.objectHolder['locations'], 'name').join(', ') :
+                          'No locations linked. Type a name to add location...'}
+                        noResultsText='No locations currently linked...'
+                        labelKey='name'
+                        valueKey='name'
+                        value={this.state.location > -1 && this.props.objectHolder['locations'] &&
+                        this.props.objectHolder['locations'].length ? (() => {console.log('OKKK');
+                          return (this.props.objectHolder['locations'])[this.state.location] })(): null}
+                        options={this.props.objectHolder['locations'] && this.props.objectHolder['locations'].length ?
+                          this.props.objectHolder['locations'] : []}
+                        onNewOptionClick={val =>
+                          this.props.setEditingObjectProperty('locations', [...this.props.objectHolder['locations'],
+                            {...Location, name: val.name}])}
+                        onChange={val =>
+                          this.setState({
+                            ...this.state, location: _.findIndex(this.props.objectHolder['location'],
+                              loc => loc.name === val.name)
+                          })}
+                      />
+                    </div>
+                  </div>
                   <div className='panel panel-default'>
                     <div className='panel-body'>
                       <div className='row'>
@@ -556,7 +585,7 @@ export default class ProductsComponent extends Component {
                               </div>
                             </div>
                           </div>
-                          <div className='row'>
+                          <div className='row' style={{marginBottom: 6}}>
                             <div className='col-lg-6'>
                               <div className='input-group input-group-sm'>
                                 <span className='input-group-addon'>y0</span>
@@ -570,6 +599,17 @@ export default class ProductsComponent extends Component {
                               </div>
                             </div>
                           </div>
+                          <div className='row' style={{marginBottom: 6}}>
+                            <div className='col-lg-12'>
+                              <Select
+                                name='rotation'
+                                placeholder='Restrict rotation...'
+                                searchable={false}
+                                options={[{value: false, label: 'Rotation restricted'},
+                                  {value: true, label: 'Rotation allowed'}]}
+                              />
+                            </div>
+                          </div>
                         </div>
                         <div className='col-lg-8'>
                           <Cropper
@@ -577,8 +617,7 @@ export default class ProductsComponent extends Component {
                             src='https://pp.userapi.com/c636816/v636816840/3496e/5f548Gc89_0.jpg'
                             style={{height: 400, width: '100%'}}
                             guides={false}
-                            zoomable={false}
-                            crop={e => console.log(e.detail)}/>
+                            zoomable={false}/>
                         </div>
                       </div>
                     </div>
@@ -589,7 +628,7 @@ export default class ProductsComponent extends Component {
                 elem: <textarea className='form-control' rows='3'
                                 value={this.props.objectHolder['description']}
                                 onChange={e => this.handleSelectedObjectChange('description', e)}>
-                  </textarea>
+              </textarea>
               },
               sizes: {
                 elem: <Creatable
@@ -721,7 +760,8 @@ export default class ProductsComponent extends Component {
               }
             }}
       />
-    );
+    )
+      ;
   }
 
 }
