@@ -81,7 +81,6 @@ export default class ProductsComponent extends Component {
     }
     arr[arr.length] = {...obj};
     this.props.setEditingObjectProperty(arrName, [...arr]);
-    console.log(this.props.objectHolder['arrName']);
   };
 
   handleSelectedObjectArrayDeleteElement = (arrName, key) => {
@@ -137,7 +136,7 @@ export default class ProductsComponent extends Component {
     const c = this.refs.canvas;
     const ctx = c.getContext('2d');
     img.onload = function () {
-      imageOut = ctx.drawImage(img, 0, 0, 100, 100);
+      imageOut = ctx.drawImage(img, 0, 0, 110, 110);
     };
   };
 
@@ -498,9 +497,9 @@ export default class ProductsComponent extends Component {
               thumbUrl: {
                 getElem: val =>
                   val ? <a href={this.getFileUrl(val)} className='thumbnail'
-                           style={{width: 100}}><img
+                           style={{width: 110}}><img
                     src={this.getFileUrl(val)} alt='thumb'
-                    style={{width: 100}}/></a> :
+                    style={{width: 110}}/></a> :
                     null,
                 sortable: false,
                 header: 'Thumb'
@@ -796,17 +795,17 @@ export default class ProductsComponent extends Component {
                   {typeof (this.props.objectHolder['thumbUrl']) === 'string' && this.props.status === STATUS_EDITING ?
                     <div style={{float: 'left'}}><a href={this.getFileUrl(this.props.objectHolder['thumbUrl'])}
                                                     className='thumbnail'
-                                                    style={{marginTop: 8, width: 100}}><img
-                      style={{width: 100}} src={this.getFileUrl(this.props.objectHolder['thumbUrl'])}/>
+                                                    style={{marginTop: 8, width: 110}}><img
+                      style={{width: 110}} src={this.getFileUrl(this.props.objectHolder['thumbUrl'])}/>
                     </a>
                     </div>
                     : null}
                   <div style={{float: 'left'}}>
                     {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumbUrl'] ?
-                      <canvas style={{marginTop: 8}} ref='canvas' width='100'
-                              height='100' hidden/> :
-                      <canvas style={{marginTop: 8}} ref='canvas' width='100'
-                              height='100'/>}
+                      <canvas style={{marginTop: 8}} ref='canvas' width='110'
+                              height='110' hidden/> :
+                      <canvas style={{marginTop: 8}} ref='canvas' width='110'
+                              height='110'/>}
                   </div>
                 </div>,
                 required: true
