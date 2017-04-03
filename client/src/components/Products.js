@@ -93,6 +93,15 @@ export default class ProductsComponent extends Component {
   changeLocationsNestedArrValue = (changingArrPropName, changingArrInd, value) =>
     this.changeNestedHolderArrValue('locations', this.state.location, changingArrPropName, changingArrInd, value);
 
+  deleteCurrentLocation = () => {
+    const locs = this.props.objectHolder.locations;
+    locs.remove(this.state.location);
+    this.props.setEditingObjectProperty('locations', [...locs]);
+    this.setState({
+      ...this.state, location: -1
+    });
+  };
+
   changeNestedHolderValue = (topArrPropName, topInd, changingPropName, value) => {
     const topArr = this.props.objectHolder[topArrPropName];
     ((topArr[topInd])[changingPropName]) = value;
@@ -223,7 +232,6 @@ export default class ProductsComponent extends Component {
     if (this.props.objectHolder['_colors'][key]) {
       return this.props.objectHolder['_colors'][key];
     }
-
   };
 
 
@@ -557,13 +565,18 @@ export default class ProductsComponent extends Component {
                   return null;
                 },
                 sortable: true,
-                sortElem: <select className='form-control'
-                                  value={this.props.objectHolder['categoryId']}
-                                  onChange={e => this.handleSelectedObjectChange('categoryId', e)}>
-                  <option key='any' value=''>...</option>
-                  {this.props.productsCategories.map(cat => <option key={cat.id}
-                                                                    value={cat.id}>{cat.name}</option>)}
-                </select>,
+                sortElem: <Select value={this.props.objectHolder['categoryId']}
+                                  options={this.props.productsCategories}
+                                  valueKey='id'
+                                  labelKey='name'
+                                  onChange={el => {
+                                    if (el) {
+                                      this.props.setEditingObjectProperty('categoryId', el.id);
+                                    } else {
+                                      this.props.setEditingObjectProperty('categoryId', '');
+                                    }
+                                  }}
+                />,
                 header: 'Category'
               }
             }}
@@ -808,6 +821,13 @@ export default class ProductsComponent extends Component {
                                       op ? op.value : false)
                                   }
                                 />
+                              </div>
+                            </div>
+                            <div className='row' style={{marginBottom: 6}}>
+                              <div className='col-lg-12'>
+                                <button type='button' className='btn btn-block btn-danger'
+                                        onClick={this.deleteCurrentLocation}>Delete this location
+                                </button>
                               </div>
                             </div>
                           </div>
