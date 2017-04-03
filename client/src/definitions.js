@@ -6,6 +6,8 @@ export const GRAPHIC_THUMB_FOLDER = 'files/graphicThumbs/';
 export const PRODUCT_THUMB_FOLDER = 'files/productThumbs/';
 export const PRODUCT_IMG_FOLDER = 'files/productImages/';
 export const GRAPHIC_CATEGORY_FOLDER = 'files/thumb/';
+export const FONTS_FOLDER = 'files/fonts/';
+export const VECTORS_FOLDER = 'files/vectors/';
 export const PRODUCT_CATEGORIES_THUMB_FOLDER = 'files/productCategoriesThumbs/';
 
 export const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
