@@ -69,6 +69,14 @@ export default class ProductsComponent extends Component {
     }
   }
 
+  componentWillUpdate() {
+    if (this.state.location > -1) {
+      this.setState({
+        ...this.state, location: -1
+      });
+    }
+  }
+
   handleSelectedObjectArrayChange = (arrName, ind, propName, event) => {
     const arr = this.props.objectHolder[arrName];
     (arr[ind])[propName] = event.target.value;

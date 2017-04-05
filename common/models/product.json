@@ -114,7 +114,8 @@
             "type": "number"
           }
         }
-      ]
+      ],
+      "required": true
     },
     "template": {
       "type": "string",
