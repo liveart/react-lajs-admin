@@ -8,6 +8,10 @@
   z-index: 10;
 }
 
+.onTop1 {
+  z-index: 11;
+}
+
 body {
   background: #d2d6de !important;
 }

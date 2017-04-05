@@ -1,6 +1,7 @@
 import {connect} from 'react-redux';
 import {
-  fetchProducts, createProduct, editProduct, deleteProduct,
+  fetchProducts, createProduct, editProduct, deleteProduct, uploadProductLocationImage,
+  uploadProductLocationMask, uploadProductLocationOverlay,
   uploadProductImage, uploadProductThumb, uploadTemplateFile
 } from '../actions/products';
 import {
@@ -14,11 +15,14 @@ import Products from '../components/Products';
 import {
   fetchColors
 } from '../actions/colors';
+import {
+  enableImportJson
+} from '../actions/table';
 
 const mapStateToProps = state => {
   const {token} = state.user;
   const {colors, colorsLoading} = state.colors;
-  const {products, productsError, productsLoading} = state.products;
+  const {products, productsError, productsLoading, productsMessage} = state.products;
   const {productsCategories, productsCategoriesLoading} = state.productsCategories;
   const {objectHolder, status} = state.table;
   const errors = productsError ? [productsError] : [];
@@ -28,6 +32,7 @@ const mapStateToProps = state => {
     data: products,
     colorsList: colors,
     colorsLoading,
+    message: productsMessage,
     errors,
     loading: productsLoading || productsCategoriesLoading,
     objectHolder,
@@ -81,9 +86,21 @@ const mapDispatchToProps = dispatch => {
     fetchColors() {
       dispatch(fetchColors());
     },
+    enableImportJson() {
+      dispatch(enableImportJson());
+    },
     uploadProductTemplate(file) {
       dispatch(uploadTemplateFile(file));
     },
+    uploadProductLocationImage(file) {
+      dispatch(uploadProductLocationImage(file));
+    },
+    uploadProductLocationMask(file) {
+      dispatch(uploadProductLocationMask(file));
+    },
+    uploadProductLocationOverlay(file) {
+      dispatch(uploadProductLocationOverlay(file));
+    }
   };
 };
 

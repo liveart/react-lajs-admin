@@ -69,5 +69,8 @@ export default function* root() {
     fork(productsWatchers.watchUploadProductImage),
     fork(productsWatchers.watchUploadProductThumb),
     fork(productsWatchers.watchUploadProductTemplate),
+    fork(productsWatchers.watchUploadProductLocationImage),
+    fork(productsWatchers.watchUploadProductLocationMask),
+    fork(productsWatchers.watchUploadProductLocationOverlay)
   ];
 }
