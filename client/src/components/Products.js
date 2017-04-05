@@ -71,14 +71,6 @@ export default class ProductsComponent extends Component {
     }
   }
 
-  componentWillUpdate() {
-    if (this.state.location > -1) {
-      this.setState({
-        ...this.state, location: -1
-      });
-    }
-  }
-
   handleSelectedObjectArrayChange = (arrName, ind, propName, event) => {
     const arr = this.props.objectHolder[arrName];
     (arr[ind])[propName] = event.target.value;
@@ -211,7 +203,7 @@ export default class ProductsComponent extends Component {
   handleThumbUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       const image = this.props.objectHolder['thumbUrl'];
-      const uploadThumbnail = (file) => {
+      const uploadThumbnail = file => {
         this.props.uploadProductThumb(file);
       };
       if (image.type !== 'image/svg+xml') {
@@ -551,6 +543,57 @@ export default class ProductsComponent extends Component {
     </div>
   );
 
+  addUnitsRangeRow = () => (
+    this.handleSelectedObjectArrayAddNew('locations', {editableAreaUnitsRange: [[0, 0, 1]]})
+  );
+
+  deleteUnitsRangeRow = (locationId, key) => (
+    this.handleSelectedObjectArrayArrayDeleteElement('locations', 'editableAreaSizes', locationId, key)
+  );
+
+  renderUnitsRangeTable = () => (
+    <div className='panel panel-default'>
+      <table className='table table-bordered'>
+        <thead>
+        <tr>
+          <th>Min</th>
+          <th>Max</th>
+          <th>Step</th>
+          <th/>
+        </tr>
+        </thead>
+        <tbody>
+        {this.props.objectHolder['locations'] ?
+          this.props.objectHolder['locations'].map((c, key) =>
+            c.editableAreaUnitsRange.map((col, k) =>
+              <tr key={k}>
+                <td><input type='text' className='form-control'
+                           value={col[0]}
+                           onChange={e =>
+                             this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', key, k, 0, e)}/>
+                </td>
+                <td><input type='text' className='form-control'
+                           value={col[1]}
+                           onChange={e =>
+                             this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', key, k, 1, e)}/>
+                </td>
+                <td><input type='text' className='form-control'
+                           value={col[2]}
+                           onChange={e =>
+                             this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', key, k, 2, e)}/>
+                </td>
+                <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteUnitsRangeRow(key, k)}>
+                  <i className='fa fa-ban'/></a></td>
+              </tr>)) : null}
+        </tbody>
+      </table>
+      <div className='panel-footer'>
+        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addUnitsRangeRow()}>
+          <i className='fa fa-plus'/> Add size</a>
+      </div>
+    </div>
+  );
+
   handleFileUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       this.props.uploadProductTemplate(this.props.objectHolder['template']);
@@ -755,7 +798,7 @@ export default class ProductsComponent extends Component {
                                   </div>
                                   <div className='panel panel-body'>
                                     <div className='input-group input-group-sm'>
-                                      <input type='text' className='form-control'/>
+                                      {this.renderUnitsRangeTable()}
                                     </div>
                                   </div>
                                 </div>
@@ -1039,6 +1082,6 @@ export default class ProductsComponent extends Component {
       />
     )
       ;
-  };
+  }
 
 }
