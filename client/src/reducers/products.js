@@ -28,6 +28,8 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, productsError: null, productsLoading: true};
     case actionTypes.UPLOAD_PRODUCT_THUMB:
       return {...state, productsError: null, productsLoading: true};
+    case actionTypes.UPLOAD_PRODUCT_TEMPLATE:
+      return {...state, productsError: null, productsLoading: true};
     case actionTypes.EDIT_PRODUCT:
       return {...state, productsError: null, productsLoading: true};
     case actionTypes.DELETE_PRODUCT:

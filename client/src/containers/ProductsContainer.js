@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 import {
   fetchProducts, createProduct, editProduct, deleteProduct,
-  uploadProductImage, uploadProductThumb
+  uploadProductImage, uploadProductThumb, uploadTemplateFile
 } from '../actions/products';
 import {
   fetchProductsCategories
@@ -80,7 +80,10 @@ const mapDispatchToProps = dispatch => {
     },
     fetchColors() {
       dispatch(fetchColors());
-    }
+    },
+    uploadProductTemplate(file) {
+      dispatch(uploadTemplateFile(file));
+    },
   };
 };
 

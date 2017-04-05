@@ -34,6 +34,13 @@ export const uploadProductThumb = thumbFile => {
   };
 };
 
+export const uploadTemplateFile = templateFile => {
+  return {
+    type: actionTypes.UPLOAD_PRODUCT_TEMPLATE,
+    templateFile
+  };
+};
+
 export const editProduct = (id, product, token) => {
   return {
     type: actionTypes.EDIT_PRODUCT,

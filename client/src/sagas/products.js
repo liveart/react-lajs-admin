@@ -5,6 +5,7 @@ import * as api from './api';
 const endpoint = 'products';
 const imagesEndpoint = 'containers/productImages';
 const thumbsEndpoint = 'containers/productThumbs';
+const templateEndpoint = 'containers/productTemplates';
 
 export function* fetchProducts() {
   try {
@@ -71,6 +72,18 @@ export function* uploadProductThumb(action) {
     const data = new FormData();
     data.append('blob', action.thumbFile, action.thumbFile.name);
     yield* api.upload(thumbsEndpoint, data);
+    yield dispatch({type: actionTypes.PRODUCT_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.FETCH_PRODUCTS});
+  } catch (e) {
+    yield dispatch({type: actionTypes.PRODUCT_OPERATION_FAILURE, message: e});
+  }
+}
+
+export function* uploadProductTemplate(action) {
+  try {
+    const data = new FormData();
+    data.append('file', action.templateFile);
+    yield* api.upload(templateEndpoint, data);
     yield dispatch({type: actionTypes.PRODUCT_OPERATION_SUCCESS});
     yield dispatch({type: actionTypes.FETCH_PRODUCTS});
   } catch (e) {

@@ -9,6 +9,7 @@ export const GRAPHIC_CATEGORY_FOLDER = 'files/thumb/';
 export const FONTS_FOLDER = 'files/fonts/';
 export const VECTORS_FOLDER = 'files/vectors/';
 export const PRODUCT_CATEGORIES_THUMB_FOLDER = 'files/productCategoriesThumbs/';
+export const PRODUCT_TEMPLATES_FOLDER = 'files/productTemplates/';
 
 export const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 

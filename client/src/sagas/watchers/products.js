@@ -29,3 +29,7 @@ export function* watchUploadProductImage() {
 export function* watchUploadProductThumb() {
   yield takeLatest(actionTypes.UPLOAD_PRODUCT_THUMB, productsSagas.uploadProductThumb);
 }
+
+export function* watchUploadProductTemplate() {
+  yield takeLatest(actionTypes.UPLOAD_PRODUCT_TEMPLATE, productsSagas.uploadProductTemplate);
+}
