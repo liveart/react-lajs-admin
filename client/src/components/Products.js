@@ -87,13 +87,22 @@ export default class ProductsComponent extends Component {
   };
 
   changeNestedHolderArrValue = (topArrPropName, topInd, changingArrPropName, changingArrInd, value) => {
-    const topArr = this.props.objectHolder[topArrPropName];
+    const topArr = [...this.props.objectHolder[topArrPropName]];
     ((topArr[topInd])[changingArrPropName])[changingArrInd] = value;
     this.props.setEditingObjectProperty(topArrPropName, [...topArr]);
   };
 
   changeLocationsNestedArrValue = (changingArrPropName, changingArrInd, value) =>
     this.changeNestedHolderArrValue('locations', this.state.location, changingArrPropName, changingArrInd, value);
+
+  deleteCurrentLocation = () => {
+    const locs = this.props.objectHolder.locations;
+    locs.remove(this.state.location);
+    this.props.setEditingObjectProperty('locations', [...locs]);
+    this.setState({
+      ...this.state, location: -1
+    });
+  };
 
   changeNestedHolderValue = (topArrPropName, topInd, changingPropName, value) => {
     const topArr = this.props.objectHolder[topArrPropName];
@@ -225,7 +234,6 @@ export default class ProductsComponent extends Component {
     if (this.props.objectHolder['colors'][key]) {
       return this.props.objectHolder['colors'][key];
     }
-
   };
 
 
@@ -466,12 +474,16 @@ export default class ProductsComponent extends Component {
 
   };
 
-  crop = e => {
-    this.changeLocationsNestedArrValue('editableArea', 0, (e.detail.x).toFixed(2));
-    this.changeLocationsNestedArrValue('editableArea', 1, (e.detail.y).toFixed(2));
-    this.changeLocationsNestedArrValue('editableArea', 2, (e.detail.x + e.detail.width).toFixed(2));
-    this.changeLocationsNestedArrValue('editableArea', 3, (e.detail.y + e.detail.height).toFixed(2));
-  }
+  crop = () => {
+    if (!this.cropper) {
+      return;
+    }
+    const data = this.cropper.getData();
+    this.changeLocationsNestedArrValue('editableArea', 0, data.x.toFixed(2));
+    this.changeLocationsNestedArrValue('editableArea', 1, data.y.toFixed(2));
+    this.changeLocationsNestedArrValue('editableArea', 2, (data.width + data.x).toFixed(2));
+    this.changeLocationsNestedArrValue('editableArea', 3, (data.height + data.y).toFixed(2));
+  };
 
   onSizeSelectChange = val => {
     const arr = [];
@@ -574,13 +586,18 @@ export default class ProductsComponent extends Component {
                   return null;
                 },
                 sortable: true,
-                sortElem: <select className='form-control'
-                                  value={this.props.objectHolder['categoryId']}
-                                  onChange={e => this.handleSelectedObjectChange('categoryId', e)}>
-                  <option key='any' value=''>...</option>
-                  {this.props.productsCategories.map(cat => <option key={cat.id}
-                                                                    value={cat.id}>{cat.name}</option>)}
-                </select>,
+                sortElem: <Select value={this.props.objectHolder['categoryId']}
+                                  options={this.props.productsCategories}
+                                  valueKey='id'
+                                  labelKey='name'
+                                  onChange={el => {
+                                    if (el) {
+                                      this.props.setEditingObjectProperty('categoryId', el.id);
+                                    } else {
+                                      this.props.setEditingObjectProperty('categoryId', '');
+                                    }
+                                  }}
+                />,
                 header: 'Category'
               }
             }}
@@ -744,11 +761,16 @@ export default class ProductsComponent extends Component {
                                   <input type='text' className='form-control'
                                          onChange={e => {
                                            if (this.cropper) {
-                                             this.cropper.setData({
-                                               x: Number(e.target.value)
-                                             });
+                                             const {x, width} = this.cropper.getData();
+                                             const xNew = Number(e.target.value);
+                                             const newData = {};
+
+                                             newData.x = xNew;
+                                             newData.width = width - (xNew - x);
+
+                                             this.changeLocationsNestedArrValue('editableArea', 0, xNew);
+                                             this.cropper.setData(newData);
                                            }
-                                           this.changeLocationsNestedArrValue('editableArea', 0, e.target.value);
                                          }}
                                          value={this.getLocationsInputValue('editableArea')[0]}/>
                                 </div>
@@ -759,11 +781,16 @@ export default class ProductsComponent extends Component {
                                   <input type='text' className='form-control'
                                          onChange={e => {
                                            if (this.cropper) {
-                                             this.cropper.setData({
-                                               width: Number(e.target.value) - this.cropper.getData().x
-                                             });
+                                             const {x} = this.cropper.getData();
+                                             const x1New = Number(e.target.value);
+                                             const newData = {};
+
+                                             newData.width = x1New - x;
+
+                                             this.changeLocationsNestedArrValue('editableArea', 2, x1New);
+
+                                             this.cropper.setData(newData);
                                            }
-                                           this.changeLocationsNestedArrValue('editableArea', 2, e.target.value);
                                          }}
                                          value={this.getLocationsInputValue('editableArea')[2]}/>
                                 </div>
@@ -776,11 +803,15 @@ export default class ProductsComponent extends Component {
                                   <input type='text' className='form-control'
                                          onChange={e => {
                                            if (this.cropper) {
-                                             this.cropper.setData({
-                                               y: Number(e.target.value)
-                                             });
+                                             const {y, height} = this.cropper.getData();
+                                             const yNew = Number(e.target.value);
+                                             const newData = {};
+
+                                             newData.y = yNew;
+                                             newData.height = height - (yNew - y);
+                                             this.changeLocationsNestedArrValue('editableArea', 1, yNew);
+                                             this.cropper.setData(newData);
                                            }
-                                           this.changeLocationsNestedArrValue('editableArea', 1, e.target.value);
                                          }}
                                          value={this.getLocationsInputValue('editableArea')[1]}/>
                                 </div>
@@ -791,11 +822,15 @@ export default class ProductsComponent extends Component {
                                   <input type='text' className='form-control'
                                          onChange={e => {
                                            if (this.cropper) {
-                                             this.cropper.setData({
-                                               height: Number(e.target.value) - this.cropper.getData().y
-                                             });
+                                             const {y} = this.cropper.getData();
+                                             const y1New = Number(e.target.value);
+                                             const newData = {};
+
+                                             newData.height = y1New - y;
+                                             this.changeLocationsNestedArrValue('editableArea', 3, y1New);
+
+                                             this.cropper.setData(newData);
                                            }
-                                           this.changeLocationsNestedArrValue('editableArea', 3, e.target.value);
                                          }}
                                          value={this.getLocationsInputValue('editableArea')[3]}/>
                                 </div>
@@ -820,6 +855,13 @@ export default class ProductsComponent extends Component {
                                 />
                               </div>
                             </div>
+                            <div className='row' style={{marginBottom: 6}}>
+                              <div className='col-lg-12'>
+                                <button type='button' className='btn btn-block btn-danger'
+                                        onClick={this.deleteCurrentLocation}>Delete this location
+                                </button>
+                              </div>
+                            </div>
                           </div>
                           <div className='col-lg-8'>
                             <div className="panel panel-default">
@@ -829,10 +871,12 @@ export default class ProductsComponent extends Component {
                                 style={{height: 400, width: '100%'}}
                                 guides={false}
                                 zoomable={false}
-                                crop={this.crop}
-                                viewMode={3}
+                                viewMode={1}
                                 autoCropArea={1}
                               />
+                              <button type='button' className='btn btn-block btn-primary'
+                                      onClick={this.crop}>Crop
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -987,6 +1031,6 @@ export default class ProductsComponent extends Component {
       />
     )
       ;
-  }
+  };
 
 }
