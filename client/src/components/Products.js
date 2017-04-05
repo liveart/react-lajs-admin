@@ -128,6 +128,15 @@ export default class ProductsComponent extends Component {
     this.props.setEditingObjectProperty(fArr, [...arr]);
   };
 
+  handleSelectedObjectAddNewArray = (fArr, sArr, key, obj) => {
+    let arr = (this.props.objectHolder[fArr]);
+    if (typeof (arr[key])[sArr] !== 'object') {
+      (arr[key])[sArr] = [];
+    }
+    ((arr[key])[sArr])[(arr[key])[sArr].length] = [...obj];
+    this.props.setEditingObjectProperty(fArr, [...arr]);
+  };
+
   handleSelectedObjectArrayArrayDeleteElement = (fArr, sArr, colorizableKey, key) => {
     const arr = (this.props.objectHolder[fArr]);
     ((arr[colorizableKey])[sArr]).remove(key);
@@ -138,10 +147,13 @@ export default class ProductsComponent extends Component {
     const colorizables = this.props.objectHolder[fArrName];
     if (propName === 'image') {
       ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.files[0];
+    } else if (sArrName === 'editableAreaUnitsRange') {
+      ((((colorizables[fInd])[sArrName])[sInd])[propName]) = Number(event.target.value);
     } else {
       ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.value;
     }
     this.props.setEditingObjectProperty(fArrName, [...colorizables]);
+    console.log(colorizables);
   };
 
   handleSelectedObjectChange = (propertyName, event) => {
@@ -543,15 +555,19 @@ export default class ProductsComponent extends Component {
     </div>
   );
 
-  addUnitsRangeRow = () => (
-    this.handleSelectedObjectArrayAddNew('locations', {editableAreaUnitsRange: [[0, 0, 1]]})
+//  addUnitsRangeRow = () => (
+  //  this.handleSelectedObjectArrayAddNew('locations', {editableAreaUnitsRange: [[0, 0, 1]]})
+  //);
+
+  addUnitsRangeRow = key => (
+    this.handleSelectedObjectAddNewArray('locations', 'editableAreaUnitsRange', key, [])
   );
 
   deleteUnitsRangeRow = (locationId, key) => (
-    this.handleSelectedObjectArrayArrayDeleteElement('locations', 'editableAreaSizes', locationId, key)
+    this.handleSelectedObjectArrayArrayDeleteElement('locations', 'editableAreaUnitsRange', locationId, key)
   );
 
-  renderUnitsRangeTable = () => (
+  renderUnitsRangeTable = (key) => (
     <div className='panel panel-default'>
       <table className='table table-bordered'>
         <thead>
@@ -563,33 +579,34 @@ export default class ProductsComponent extends Component {
         </tr>
         </thead>
         <tbody>
-        {this.props.objectHolder['locations'] ?
-          this.props.objectHolder['locations'].map((c, key) =>
-            c.editableAreaUnitsRange.map((col, k) =>
-              <tr key={k}>
-                <td><input type='text' className='form-control'
-                           value={col[0]}
-                           onChange={e =>
-                             this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', key, k, 0, e)}/>
-                </td>
-                <td><input type='text' className='form-control'
-                           value={col[1]}
-                           onChange={e =>
-                             this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', key, k, 1, e)}/>
-                </td>
-                <td><input type='text' className='form-control'
-                           value={col[2]}
-                           onChange={e =>
-                             this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', key, k, 2, e)}/>
-                </td>
-                <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteUnitsRangeRow(key, k)}>
-                  <i className='fa fa-ban'/></a></td>
-              </tr>)) : null}
+        { this.props.objectHolder['locations'][key] ?
+          this.props.objectHolder['locations'][key].editableAreaUnitsRange.map((col, k) =>
+            <tr key={k}>
+              <td><input type='text' className='form-control'
+                         value={col[0]}
+                         onChange={e =>
+                           this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', key, k, 0, e)}/>
+              </td>
+              <td><input type='text' className='form-control'
+                         value={col[1]}
+                         onChange={e =>
+                           this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', key, k, 1, e)}/>
+              </td>
+              <td><input type='text' className='form-control'
+                         value={col[2]}
+                         onChange={e =>
+                           this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', key, k, 2, e)}/>
+              </td>
+              <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteUnitsRangeRow(key, k)}>
+                <i className='fa fa-ban'/></a></td>
+            </tr>
+          ) : null}
         </tbody>
       </table>
+
       <div className='panel-footer'>
-        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addUnitsRangeRow()}>
-          <i className='fa fa-plus'/> Add size</a>
+        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addUnitsRangeRow(key)}>
+          <i className='fa fa-plus'/> Add units range</a>
       </div>
     </div>
   );
@@ -798,16 +815,7 @@ export default class ProductsComponent extends Component {
 
                             <div className='row' style={{marginBottom: 6}}>
                               <div className='col-lg-12'>
-                                <div className='panel panel-default'>
-                                  <div className='panel panel-heading'>
-                                    Units Range
-                                  </div>
-                                  <div className='panel panel-body'>
-                                    <div className='input-group input-group-sm'>
-                                      {this.renderUnitsRangeTable()}
-                                    </div>
-                                  </div>
-                                </div>
+                                {this.renderUnitsRangeTable(this.state.location)}
                               </div>
                             </div>
 

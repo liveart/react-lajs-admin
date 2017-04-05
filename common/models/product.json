@@ -132,7 +132,16 @@
             "type": "array"
           },
           "editableAreaUnitsRange": {
-            "type": "array"
+            "type": [
+              "array"
+            ],
+            "default": [
+              [
+                0,
+                0,
+                1
+              ]
+            ]
           },
           "editableAreaUnitsRestrictRotation": {
             "type": "boolean",
