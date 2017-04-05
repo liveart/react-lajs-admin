@@ -666,12 +666,12 @@ export default class ProductsComponent extends Component {
 
                     if (loc.mask && typeof loc.mask === 'object') {
                       this.props.uploadProductLocationMask(loc.mask);
-                      loc.mask = this.getName(loc.image, PRODUCT_LOCATION_MASK_FOLDER);
+                      loc.mask = this.getName(loc.mask, PRODUCT_LOCATION_MASK_FOLDER);
                     }
 
-                    if (loc.overlay && typeof loc.overlay === 'object') {
-                      this.props.uploadProductLocationOverlay(loc.overlay);
-                      loc.overlay = this.getName(loc.image, PRODUCT_LOCATION_OVERLAY_FOLDER);
+                    if (loc.overlayInfo && typeof loc.overlayInfo === 'object') {
+                      this.props.uploadProductLocationOverlay(loc.overlayInfo);
+                      loc.overlayInfo = this.getName(loc.overlayInfo, PRODUCT_LOCATION_OVERLAY_FOLDER);
                     }
                   });
 
@@ -751,9 +751,20 @@ export default class ProductsComponent extends Component {
                                 <div className='input-group input-group-sm'>
                                   <span className='input-group-addon'>Image</span>
                                   <input type='file' className='form-control'
-                                         onChange={e =>
-                                           this.handleLocationsNestedFileChoose('image', e)
-                                         }/>
+                                         onChange={e => this.handleLocationsNestedFileChoose('image', e)}/>
+                                  {typeof this.getLocationsInputValue('image') === 'string' ?
+                                    <div className='input-group-btn'>
+                                      <a href={this.getFileUrl(this.getLocationsInputValue('image'))}
+                                         className='btn btn-default btn-sm'>{(() => {
+                                        let url = this.getFileUrl(this.getLocationsInputValue('image'));
+                                        if (url.length > 8) {
+                                          url = '...' + url.substr(url.length - 8);
+                                        }
+                                        return url;
+                                      })()
+                                      }</a>
+                                    </div> : null
+                                  }
                                 </div>
                               </div>
                             </div>
@@ -764,6 +775,19 @@ export default class ProductsComponent extends Component {
                                   <span className='input-group-addon'>Mask</span>
                                   <input type='file' className='form-control'
                                          onChange={e => this.handleLocationsNestedFileChoose('mask', e)}/>
+                                  {typeof this.getLocationsInputValue('mask') === 'string' ?
+                                    <div className='input-group-btn'>
+                                      <a href={this.getFileUrl(this.getLocationsInputValue('mask'))}
+                                         className='btn btn-default btn-sm'>{(() => {
+                                        let url = this.getFileUrl(this.getLocationsInputValue('mask'));
+                                        if (url.length > 8) {
+                                          url = '...' + url.substr(url.length - 8);
+                                        }
+                                        return url;
+                                      })()
+                                      }</a>
+                                    </div> : null
+                                  }
                                 </div>
                               </div>
                             </div>
@@ -774,6 +798,19 @@ export default class ProductsComponent extends Component {
                                   <span className='input-group-addon'>Overlay</span>
                                   <input type='file' className='form-control'
                                          onChange={e => this.handleLocationsNestedFileChoose('overlayInfo', e)}/>
+                                  {typeof this.getLocationsInputValue('overlayInfo') === 'string' ?
+                                    <div className='input-group-btn'>
+                                      <a href={this.getFileUrl(this.getLocationsInputValue('overlayInfo'))}
+                                         className='btn btn-default btn-sm'>{(() => {
+                                        let url = this.getFileUrl(this.getLocationsInputValue('overlayInfo'));
+                                        if (url.length > 8) {
+                                          url = '...' + url.substr(url.length - 8);
+                                        }
+                                        return url;
+                                      })()
+                                      }</a>
+                                    </div> : null
+                                  }
                                 </div>
                               </div>
                             </div>
@@ -948,7 +985,7 @@ export default class ProductsComponent extends Component {
                 elem: <textarea className='form-control' rows='3'
                                 value={this.props.objectHolder['description']}
                                 onChange={e => this.handleSelectedObjectChange('description', e)}>
-              </textarea>
+                  </textarea>
               },
               sizes: {
                 elem: <Creatable
