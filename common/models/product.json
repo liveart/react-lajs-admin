@@ -33,17 +33,45 @@
     "minQuantity": {
       "type": "number"
     },
-    "colorize": {
-      "type": "boolean"
-    },
     "multicolor": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
+    },
+    "colorizables": {
+      "type": [
+        {
+          "name": "string",
+          "id": "string",
+          "_colors": [
+            {
+              "name": "string",
+              "value": "string"
+            }
+          ]
+        }
+      ]
+    },
+    "colors": {
+      "type": [
+        {
+          "name": "string",
+          "value": "string",
+          "_locations": [
+            {
+              "name": "string",
+              "image": "string"
+            }
+          ]
+        }
+      ]
     },
     "hideEditableAreaBorder": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "namesNumbersEnabled": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "pantones": {
       "type": {
@@ -127,26 +155,7 @@
     }
   },
   "validations": [],
-  "relations": {
-    "colorizableElements": {
-      "type": "embedsMany",
-      "model": "colorizableElement",
-      "property": "colorizables",
-      "options": {
-        "validate": true,
-        "forceId": false
-      }
-    },
-    "colors": {
-      "type": "embedsMany",
-      "model": "color-embed",
-      "property": "_colors",
-      "options": {
-        "validate": true,
-        "forceId": false
-      }
-    }
-  },
+  "relations": [],
   "acls": [],
   "methods": {}
 }

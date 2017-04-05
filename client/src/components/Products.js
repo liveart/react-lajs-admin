@@ -8,7 +8,8 @@ import {
   RELATIVE_URL,
   PRODUCT_THUMB_FOLDER,
   PRODUCT_IMG_FOLDER,
-  SIZES
+  SIZES,
+  PRODUCT_TEMPLATES_FOLDER
 } from '../definitions';
 const Product = ProductModel.properties;
 import * as LocationModel from '../../../common/models/location.json';
@@ -44,7 +45,8 @@ export default class ProductsComponent extends Component {
     uploadProductImage: PropTypes.func.isRequired,
     uploadProductThumb: PropTypes.func.isRequired,
     fetchProductsCategories: PropTypes.func.isRequired,
-    token: PropTypes.string
+    token: PropTypes.string,
+    uploadProductTemplate: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -233,25 +235,30 @@ export default class ProductsComponent extends Component {
   };
 
   getSelectedOptions = key => {
-    if (!this.props.objectHolder['_colors'] || !this.props.objectHolder['_colors'].length) {
+    if (!this.props.objectHolder['colors'] || !this.props.objectHolder['colors'].length) {
       return [];
     }
 
-    if (this.props.objectHolder['_colors'][key]) {
-      return this.props.objectHolder['_colors'][key];
+    if (this.props.objectHolder['colors'][key]) {
+      return this.props.objectHolder['colors'][key];
     }
   };
 
 
   onColorsSelectChange = (val, key) => {
-    const arr = this.props.objectHolder['_colors'];
+    const arr = this.props.objectHolder['colors'];
     if (val) {
       (arr[key])['name'] = val.name;
       (arr[key])['value'] = val.value;
-      this.props.setEditingObjectProperty('_colors', [...arr]);
+      this.props.setEditingObjectProperty('colors', [...arr]);
     }
   };
 
+  getNameFromUrl = (name) => {
+    if (typeof (name) === 'string') {
+      return name.substring(name.lastIndexOf('/') + 1);
+    }
+  };
 
   renderColorsTable = () => (
     <div className='panel panel-default'>
@@ -264,8 +271,8 @@ export default class ProductsComponent extends Component {
         </tr>
         </thead>
         <tbody>
-        {this.props.objectHolder._colors ?
-          this.props.objectHolder._colors.map((c, key) =>
+        {this.props.objectHolder['colors'] ?
+          this.props.objectHolder['colors'].map((c, key) =>
             <tr key={key}>
               <td className='col-md-4'>
                 <Select
@@ -294,13 +301,14 @@ export default class ProductsComponent extends Component {
                         <td><input type='text' className='form-control'
                                    value={col.name}
                                    onChange={e =>
-                                     this.handleSelectedObjectArrayArrayChange('_colors', '_locations', key, k, 'name', e)}/>
+                                     this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'name', e)}/>
                         </td>
                         <td><input type='file' className='form-control' accept='image/*'
                                    onChange={e =>
-                                     this.handleSelectedObjectArrayArrayChange('_colors', '_locations', key, k, 'image', e)}/>
-
-                        </td>
+                                     this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'image', e)}/>
+                          {typeof (col.image) === 'string' ?
+                            <a href={this.getFileUrl(col.image)}>{this.getNameFromUrl(col.image)}</a> : null
+                          }  </td>
                         <td><a className='btn btn-danger btn-xs' href='#'
                                onClick={() => this.deleteLocationRow(key, k)}>
                           <i className='fa fa-ban'/></a></td>
@@ -338,8 +346,8 @@ export default class ProductsComponent extends Component {
         </tr>
         </thead>
         <tbody>
-        {this.props.objectHolder.colorizables ?
-          this.props.objectHolder.colorizables.map((c, key) =>
+        {this.props.objectHolder['colorizables'] ?
+          this.props.objectHolder['colorizables'].map((c, key) =>
             <tr key={key}>
               <td><input type='text' className='form-control'
                          value={c.name}
@@ -399,11 +407,11 @@ export default class ProductsComponent extends Component {
   );
 
   addColorsRow = () => (
-    this.handleSelectedObjectArrayAddNew('_colors', {name: '', value: '', _locations: []})
+    this.handleSelectedObjectArrayAddNew('colors', {name: '', value: '', _locations: []})
   );
 
   deleteColorsRow = key => (
-    this.handleSelectedObjectArrayDeleteElement('_colors', key)
+    this.handleSelectedObjectArrayDeleteElement('colors', key)
   );
 
   addEditableAreaSizeRow = () => (
@@ -415,11 +423,11 @@ export default class ProductsComponent extends Component {
   );
 
   addLocationRow = colorId => (
-    this.handleSelectedObjectArrayArrayAddNew('_colors', '_locations', colorId, {name: '', image: ''})
+    this.handleSelectedObjectArrayArrayAddNew('colors', '_locations', colorId, {name: '', image: ''})
   );
 
   deleteLocationRow = (colorId, key) => (
-    this.handleSelectedObjectArrayArrayDeleteElement('_colors', '_locations', colorId, key)
+    this.handleSelectedObjectArrayArrayDeleteElement('colors', '_locations', colorId, key)
   );
 
   addColorizableRow = () => (
@@ -543,15 +551,28 @@ export default class ProductsComponent extends Component {
     </div>
   );
 
+  handleFileUpload = () => {
+    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
+      this.props.uploadProductTemplate(this.props.objectHolder['template']);
+    }
+  };
+
+  saveMulticolor = () => {
+    if (this.props.objectHolder['multicolor'] === true) {
+      this.props.setEditingObjectProperty('colors', []);
+    } else if (this.props.objectHolder['multicolor'] === false) {
+      this.props.setEditingObjectProperty('colorizables', []);
+    }
+  };
+
   render() {
     return (
-      <View {...this.props} objectSample={{...Product, colorizables: [], _colors: []}}
+      <View {...this.props} objectSample={{...Product}}
             sortingSupport={true}
-            hiddenProperties={['id', '_colors', 'colorize', 'locations',
-              'colorizableElements', 'multicolor', 'description', 'colorizables', 'minDPU', 'minQuantity',
+            hiddenProperties={['id', 'colors', 'locations', 'multicolor', 'description', 'colorizables', 'minDPU', 'minQuantity',
               'namesNumbersEnabled', 'hideEditableAreaBorder', 'namesNumbersEnabled', 'pantones', 'resizable',
               'editableAreaSizes', 'showRuler', 'template', 'data', 'sizes']}
-            hiddenInputs={['id', 'categoryId', 'thumbUrl', 'data', 'pantones']}
+            hiddenInputs={['id', 'categoryId', 'thumbUrl', 'data', 'pantones', this.props.objectHolder['multicolor'] === true ? 'colors' : 'colorizables']}
             representations={{
               thumbUrl: {
                 getElem: val =>
@@ -589,6 +610,17 @@ export default class ProductsComponent extends Component {
               }
             }}
             changedInputs={{
+              template: {
+                elem: <div><input type='file' className='form-control'
+                                  onChange={e => this.handleFileChoose('template', e)}/>
+                  {typeof (this.props.objectHolder['template']) === 'string' ?
+                    <a
+                      href={this.getFileUrl(this.props.objectHolder['template'])}>{this.getNameFromUrl(this.props.objectHolder['template'])}</a> : null
+                  }
+                </div>,
+                saveF: this.handleFileUpload,
+                getName: obj => this.getName(obj, PRODUCT_TEMPLATES_FOLDER)
+              },
               thumbUrl: {
                 saveF: this.handleThumbUpload,
                 getName: obj => this.getName(obj, PRODUCT_THUMB_FOLDER)
@@ -869,6 +901,7 @@ export default class ProductsComponent extends Component {
               sizes: {
                 elem: <Creatable
                   name='sizes'
+                  className='onTop'
                   value={this.getSelectedSizeOptions()}
                   multi={true}
                   labelKey='name'
@@ -876,35 +909,31 @@ export default class ProductsComponent extends Component {
                   onChange={this.onSizeSelectChange}
                 />
               },
-              colorize: {
-                elem: <select className='form-control'
-                              value={this.props.objectHolder['colorize']}
-                              onChange={e => this.handleSelectedObjectChange('colorize', e)}>
-                  <option value={false}>No</option>
-                  <option value={true}>Yes</option>
-                </select>
-              },
               multicolor: {
                 elem: <select className='form-control'
                               value={this.props.objectHolder['multicolor']}
-                              onChange={e => this.handleSelectedObjectChange('multicolor', e)}>
+                              onChange={e => this.props.setEditingObjectProperty('multicolor', e.target.value === 'true')}>
                   <option value={false}>No</option>
                   <option value={true}>Yes</option>
                 </select>
               },
               colorizables: {
-                elem: this.renderColorizableTable()
+                elem: this.renderColorizableTable(),
+                saveF: this.saveMulticolor
               },
-              _colors: {
+              colors: {
                 elem: this.renderColorsTable(),
-                saveF: () => {
-                },
+                saveF: this.saveMulticolor,
                 getName: color => _.forEach(color, clr => {
-                  if (clr._locations.length) {
-                    _.forEach(clr._locations, lc => {
-                      this.handleImageUpload(lc.image);
-                      lc.image = this.getName(lc.image, PRODUCT_IMG_FOLDER);
-                    });
+                  if (clr !== null) {
+                    if (clr._locations.length) {
+                      _.forEach(clr._locations, lc => {
+                        if (typeof (lc.image) === 'object') {
+                          this.handleImageUpload(lc.image);
+                          lc.image = this.getName(lc.image, PRODUCT_IMG_FOLDER);
+                        }
+                      });
+                    }
                   }
                 })
               },
