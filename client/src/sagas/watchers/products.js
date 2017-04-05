@@ -26,6 +26,18 @@ export function* watchUploadProductImage() {
   yield takeLatest(actionTypes.UPLOAD_PRODUCT_IMAGE, productsSagas.uploadProductImage);
 }
 
+export function* watchUploadProductLocationImage() {
+  yield takeLatest(actionTypes.UPLOAD_PRODUCT_LOCATION_IMAGE, productsSagas.uploadProductLocationImage);
+}
+
+export function* watchUploadProductLocationMask() {
+  yield takeLatest(actionTypes.UPLOAD_PRODUCT_LOCATION_MASK, productsSagas.uploadProductLocationMask);
+}
+
+export function* watchUploadProductLocationOverlay() {
+  yield takeLatest(actionTypes.UPLOAD_PRODUCT_LOCATION_OVERLAY, productsSagas.uploadProductLocationOverlay);
+}
+
 export function* watchUploadProductThumb() {
   yield takeLatest(actionTypes.UPLOAD_PRODUCT_THUMB, productsSagas.uploadProductThumb);
 }

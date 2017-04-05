@@ -8,10 +8,15 @@ import {
   RELATIVE_URL,
   PRODUCT_THUMB_FOLDER,
   PRODUCT_IMG_FOLDER,
+  PRODUCT_LOCATION_IMAGE_FOLDER,
+  PRODUCT_LOCATION_MASK_FOLDER,
+  PRODUCT_LOCATION_OVERLAY_FOLDER,
   SIZES,
   PRODUCT_TEMPLATES_FOLDER
 } from '../definitions';
 const Product = ProductModel.properties;
+
+import {parseJson} from '../ProductJsonParser';
 import * as LocationModel from '../../../common/models/location.json';
 const Location = LocationModel.properties;
 import * as _ from 'lodash';
@@ -44,6 +49,9 @@ export default class ProductsComponent extends Component {
     productsCategories: PropTypes.array.isRequired,
     uploadProductImage: PropTypes.func.isRequired,
     uploadProductThumb: PropTypes.func.isRequired,
+    uploadProductLocationMask: PropTypes.func.isRequired,
+    uploadProductLocationOverlay: PropTypes.func.isRequired,
+    uploadProductLocatonImage: PropTypes.func.isRequired,
     fetchProductsCategories: PropTypes.func.isRequired,
     token: PropTypes.string,
     uploadProductTemplate: PropTypes.func.isRequired
@@ -51,7 +59,7 @@ export default class ProductsComponent extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {newColorizables: [], newColors: [], imgUrl: '', location: -1};
+    this.state = {newColorizables: [], newColors: [], imgUrl: '', mainImgUrl: '', location: -1};
     if (!Array.prototype.remove) {
       Array.prototype.remove = function (from, to) {
         const rest = this.slice((to || from) + 1 || this.length);
@@ -68,14 +76,11 @@ export default class ProductsComponent extends Component {
   componentWillReceiveProps(props) {
     if (this.props.status === STATUS_DEFAULT && (props.status === STATUS_CREATING || props.status === STATUS_EDITING)) {
       this.props.fetchColors();
-    }
-  }
-
-  componentWillUpdate() {
-    if (this.state.location > -1) {
-      this.setState({
-        ...this.state, location: -1
-      });
+      if (this.state.location > -1) {
+        this.setState({
+          ...this.state, location: -1
+        });
+      }
     }
   }
 
@@ -557,6 +562,25 @@ export default class ProductsComponent extends Component {
     }
   };
 
+  getImageUrl = image => {
+    if (!image) {
+      return;
+    }
+    if (typeof image === 'string') {
+      return this.getFileUrl(image);
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      this.setState({
+        ...this.state,
+        mainImgUrl: reader.result
+      });
+    };
+    reader.readAsDataURL(image);
+    return this.state.mainImgUrl;
+  };
+
   saveMulticolor = () => {
     if (this.props.objectHolder['multicolor'] === true) {
       this.props.setEditingObjectProperty('colors', []);
@@ -575,10 +599,11 @@ export default class ProductsComponent extends Component {
             changedLabels={{
               hideEditableAreaBorder: 'Editable area border', namesNumbersEnabled: 'Name numbers',
               editableAreaSizes: 'Editable Area Sizes', minDPU: 'Min DPU', minQuantity: 'Min quantity',
-              useForDecoration: 'Use for decoration', useForProduct: 'Use for product', showRuler: 'Ruler'
+              useForDecoration: 'Use for decoration', useForProduct: 'Use for productLocationImage', showRuler: 'Ruler'
             }}
             hiddenInputs={['id', 'categoryId', 'thumbUrl', 'data', 'pantones', this.props.objectHolder['multicolor'] === true ?
               'colors' : 'colorizables']}
+            enableImportJson={this.props.enableImportJson}
             representations={{
               thumbUrl: {
                 getElem: val =>
@@ -632,6 +657,25 @@ export default class ProductsComponent extends Component {
                 getName: obj => this.getName(obj, PRODUCT_THUMB_FOLDER)
               },
               locations: {
+                saveF: locs => {
+                  _.forEach(locs, loc => {
+                    if (loc.image && typeof loc.image === 'object') {
+                      this.props.uploadProductLocationImage(loc.image);
+                      loc.image = this.getName(loc.image, PRODUCT_LOCATION_IMAGE_FOLDER);
+                    }
+
+                    if (loc.mask && typeof loc.mask === 'object') {
+                      this.props.uploadProductLocationMask(loc.mask);
+                      loc.mask = this.getName(loc.image, PRODUCT_LOCATION_MASK_FOLDER);
+                    }
+
+                    if (loc.overlay && typeof loc.overlay === 'object') {
+                      this.props.uploadProductLocationOverlay(loc.overlay);
+                      loc.overlay = this.getName(loc.image, PRODUCT_LOCATION_OVERLAY_FOLDER);
+                    }
+                  });
+
+                },
                 elem: <div>
                   <div className='row' style={{marginBottom: 6}}>
                     <div className='col-lg-12'>
@@ -707,7 +751,9 @@ export default class ProductsComponent extends Component {
                                 <div className='input-group input-group-sm'>
                                   <span className='input-group-addon'>Image</span>
                                   <input type='file' className='form-control'
-                                         onChange={e => this.handleLocationsNestedFileChoose('Image', e)}/>
+                                         onChange={e =>
+                                           this.handleLocationsNestedFileChoose('image', e)
+                                         }/>
                                 </div>
                               </div>
                             </div>
@@ -881,7 +927,7 @@ export default class ProductsComponent extends Component {
                             <div className="panel panel-default">
                               <Cropper
                                 ref={cr => this.cropper = cr}
-                                src='https://pp.userapi.com/c636816/v636816840/3496e/5f548Gc89_0.jpg'
+                                src={this.getImageUrl(this.props.objectHolder.locations[this.state.location].image)}
                                 style={{height: 400, width: '100%'}}
                                 guides={false}
                                 zoomable={false}
@@ -907,7 +953,7 @@ export default class ProductsComponent extends Component {
               sizes: {
                 elem: <Creatable
                   name='sizes'
-                  className='onTop'
+                  className='onTop1'
                   value={this.getSelectedSizeOptions()}
                   multi={true}
                   labelKey='name'
