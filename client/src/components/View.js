@@ -375,7 +375,7 @@ export default class ViewAbstract extends Component {
       this.setState({...this.state, empty: [...empty]});
       return;
     }
-    const entity = {};
+    let entity = {};
     properties.forEach(prop => {
       if (prop !== ID_PROP) {
         if (this.props.status === STATUS_CREATING && this.props.objectHolder[prop] === '') {
@@ -397,6 +397,7 @@ export default class ViewAbstract extends Component {
         }
       }
     });
+
     if (this.props.status === STATUS_EDITING) {
       this.props.editEntity(this.props.objectHolder.id, entity, this.props.token);
       if (redirect) {
@@ -494,7 +495,6 @@ export default class ViewAbstract extends Component {
   handleJsonChange = e => this.setState({...this.state, json: e.target.value});
 
   handleBaseUrlChange = e => this.setState({...this.state, baseUrl: e.target.value});
-
 
   handleFileChoose = e => {
     const reader = new FileReader();

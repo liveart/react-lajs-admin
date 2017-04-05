@@ -37,4 +37,6 @@ fonts CSS: */api/liveart/fontsCSS*
 
 graphics: */api/liveart/graphics*
 
+products: */api/liveart/products*
+
 
