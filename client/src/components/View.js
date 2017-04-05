@@ -56,6 +56,10 @@ export default class ViewAbstract extends Component {
     hiddenInputs: PropTypes.array,
     changedInputs: PropTypes.object,
     customInputs: PropTypes.object,
+    /**
+     * Label will be replaced with property's value if it exists
+     */
+    changedLabels: PropTypes.object,
     representations: PropTypes.object,
     /**
      * Custom comparator for sorting.
@@ -111,7 +115,9 @@ export default class ViewAbstract extends Component {
         return <th key={i}>{this.props.representations[prop].header}</th>;
       }
 
-      return <th key={i}>{prop.capitalizeFirstLetter()}</th>;
+      return <th
+        key={i}>{this.props.changedLabels && this.props.changedLabels[prop] ?
+        this.props.changedLabels[prop] : prop.capitalizeFirstLetter()}</th>;
     });
   };
 
@@ -424,16 +430,17 @@ export default class ViewAbstract extends Component {
       <div key={key} className='form-group'>
         <div className='col-md-2'>
           <p className={'' + (this.props.objectSample[prop].required ? 'req' : '')}>
-            {prop.capitalizeFirstLetter()}
+            {this.props.changedLabels && this.props.changedLabels[prop] ?
+              this.props.changedLabels[prop] : prop.capitalizeFirstLetter()}
           </p>
         </div>
         <div className='col-md-10'>
           {
             this.props.changedInputs && this.props.changedInputs.hasOwnProperty(prop) ?
               this.props.changedInputs[prop].elem :
-                <input type='text' className='form-control'
-                       value={this.props.objectHolder[prop]}
-                       onChange={e => this.handleSelectedObjectChange(prop, e)}/>
+              <input type='text' className='form-control'
+                     value={this.props.objectHolder[prop]}
+                     onChange={e => this.handleSelectedObjectChange(prop, e)}/>
           }
 
           {
@@ -509,7 +516,8 @@ export default class ViewAbstract extends Component {
         <div key={key} className='form-group'>
           <div className='col-md-2'>
             <p className={'' + (this.props.customInputs[prop].required ? 'req' : '')}>
-              {prop.capitalizeFirstLetter()}
+              {this.props.changedLabels && this.props.changedLabels[prop] ?
+                this.props.changedLabels[prop] : prop.capitalizeFirstLetter()}
             </p>
           </div>
           <div className='col-md-10'>

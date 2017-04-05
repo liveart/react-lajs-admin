@@ -615,7 +615,13 @@ export default class ProductsComponent extends Component {
             hiddenProperties={['id', 'colors', 'locations', 'multicolor', 'description', 'colorizables', 'minDPU', 'minQuantity',
               'namesNumbersEnabled', 'hideEditableAreaBorder', 'namesNumbersEnabled', 'pantones', 'resizable',
               'editableAreaSizes', 'showRuler', 'template', 'data', 'sizes']}
-            hiddenInputs={['id', 'categoryId', 'thumbUrl', 'data', 'pantones', this.props.objectHolder['multicolor'] === true ? 'colors' : 'colorizables']}
+            changedLabels={{
+              hideEditableAreaBorder: 'Editable area border', namesNumbersEnabled: 'Name numbers',
+              editableAreaSizes: 'Editable Area Sizes', minDPU: 'Min DPU', minQuantity: 'Min quantity',
+              useForDecoration: 'Use for decoration', useForProduct: 'Use for product', showRuler: 'Ruler'
+            }}
+            hiddenInputs={['id', 'categoryId', 'thumbUrl', 'data', 'pantones', this.props.objectHolder['multicolor'] === true ?
+              'colors' : 'colorizables']}
             representations={{
               thumbUrl: {
                 getElem: val =>
@@ -987,16 +993,16 @@ export default class ProductsComponent extends Component {
                 elem: <select className='form-control'
                               value={this.props.objectHolder['hideEditableAreaBorder']}
                               onChange={e => this.handleSelectedObjectChange('hideEditableAreaBorder', e)}>
-                  <option value={false}>No</option>
-                  <option value={true}>Yes</option>
+                  <option value={false}>Hidden</option>
+                  <option value={true}>Visible</option>
                 </select>
               },
               namesNumbersEnabled: {
                 elem: <select className='form-control'
                               value={this.props.objectHolder['namesNumbersEnabled']}
                               onChange={e => this.handleSelectedObjectChange('namesNumbersEnabled', e)}>
-                  <option value={false}>No</option>
-                  <option value={true}>Yes</option>
+                  <option value={false}>Disabled</option>
+                  <option value={true}>Enabled</option>
                 </select>
               },
               resizable: {
@@ -1011,8 +1017,8 @@ export default class ProductsComponent extends Component {
                 elem: <select className='form-control'
                               value={this.props.objectHolder['showRuler']}
                               onChange={e => this.handleSelectedObjectChange('showRuler', e)}>
-                  <option value={false}>No</option>
-                  <option value={true}>Yes</option>
+                  <option value={false}>Hidden</option>
+                  <option value={true}>Visible</option>
                 </select>
               },
             }
