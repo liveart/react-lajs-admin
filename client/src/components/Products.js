@@ -865,7 +865,7 @@ export default class ProductsComponent extends Component {
                                              newData.x = xNew;
                                              newData.width = width - (xNew - x);
 
-                                             this.changeLocationsNestedArrValue('editableArea', 0, xNew);
+                                             this.changeLocationsNestedArrValue('editableArea', 0, Number(xNew));
                                              this.cropper.setData(newData);
                                            }
                                          }}
@@ -884,7 +884,7 @@ export default class ProductsComponent extends Component {
 
                                              newData.width = x1New - x;
 
-                                             this.changeLocationsNestedArrValue('editableArea', 2, x1New);
+                                             this.changeLocationsNestedArrValue('editableArea', 2, Number(x1New));
 
                                              this.cropper.setData(newData);
                                            }
@@ -906,7 +906,7 @@ export default class ProductsComponent extends Component {
 
                                              newData.y = yNew;
                                              newData.height = height - (yNew - y);
-                                             this.changeLocationsNestedArrValue('editableArea', 1, yNew);
+                                             this.changeLocationsNestedArrValue('editableArea', 1, Number(yNew));
                                              this.cropper.setData(newData);
                                            }
                                          }}
@@ -924,7 +924,7 @@ export default class ProductsComponent extends Component {
                                              const newData = {};
 
                                              newData.height = y1New - y;
-                                             this.changeLocationsNestedArrValue('editableArea', 3, y1New);
+                                             this.changeLocationsNestedArrValue('editableArea', 3, Number(y1New));
 
                                              this.cropper.setData(newData);
                                            }
