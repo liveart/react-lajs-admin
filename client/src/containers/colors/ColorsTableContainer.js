@@ -10,7 +10,7 @@ import Table from '../../components/colors/Colors';
 
 const mapStateToProps = state => {
   const {token} = state.user;
-  const {colors, colorsError, colorsLoading} = state.colors;
+  const {colors, colorsError, colorsLoading, colorsMessage} = state.colors;
   const {colorgroups, colorgroupsError, colorgroupsLoading} = state.colorgroups;
   const {objectHolder, status} = state.table;
   const errors = colorgroupsError || colorsError ? [colorsError, colorgroupsError] : [];
@@ -20,6 +20,7 @@ const mapStateToProps = state => {
     title: 'Colors',
     data: colors,
     secondaryData: colorgroups,
+    message: colorsMessage,
     errors,
     loading,
     objectHolder,

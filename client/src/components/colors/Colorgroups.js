@@ -13,6 +13,8 @@ const LEAVE_COLORS_WITHOUT_GROUP = 'LEAVE_COLORS_WITHOUT_GROUP';
 export default class ColorgroupsComponent extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
+    message: PropTypes.string,
+    addNotification: PropTypes.func.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     errors: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool.isRequired,
@@ -46,6 +48,16 @@ export default class ColorgroupsComponent extends Component {
     this.props.restoreTableState(Colorgroup);
     this.props.fetchData();
     this.props.fetchSecondaryData();
+  }
+
+  componentDidUpdate() {
+    if (this.props.errors && this.props.errors.length) {
+      this.props.errors.forEach(prop => this.props.addNotification('error', prop));
+    }
+
+    if (this.props.message) {
+      this.props.addNotification('success', this.props.message);
+    }
   }
 
   renderTableHeadings = object => (

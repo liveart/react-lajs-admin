@@ -17,6 +17,7 @@ import View from './View';
 
 export default class extends Component {
   static propTypes = {
+    message: PropTypes.string,
     title: PropTypes.string.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     errors: PropTypes.arrayOf(PropTypes.string),

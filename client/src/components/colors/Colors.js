@@ -9,6 +9,8 @@ const Color = ColorModel.properties;
 export default class ColorsComponent extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
+    addNotification: PropTypes.func.isRequired,
+    message: PropTypes.string,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     secondaryData: PropTypes.arrayOf(PropTypes.any).isRequired,
     errors: PropTypes.arrayOf(PropTypes.string),
@@ -42,6 +44,16 @@ export default class ColorsComponent extends Component {
     this.props.restoreTableState(Color);
     this.props.fetchData();
     this.props.fetchSecondaryData();
+  }
+
+  componentDidUpdate() {
+    if (this.props.errors && this.props.errors.length) {
+      this.props.errors.forEach(prop => this.props.addNotification('error', prop));
+    }
+
+    if (this.props.message) {
+      this.props.addNotification('success', this.props.message);
+    }
   }
 
   renderTableHeadings = object => (
