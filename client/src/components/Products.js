@@ -53,7 +53,7 @@ export default class ProductsComponent extends Component {
     uploadProductThumb: PropTypes.func.isRequired,
     uploadProductLocationMask: PropTypes.func.isRequired,
     uploadProductLocationOverlay: PropTypes.func.isRequired,
-    uploadProductLocatonImage: PropTypes.func.isRequired,
+    uploadProductLocationImage: PropTypes.func.isRequired,
     fetchProductsCategories: PropTypes.func.isRequired,
     token: PropTypes.string,
     uploadProductTemplate: PropTypes.func.isRequired
@@ -1115,6 +1115,13 @@ export default class ProductsComponent extends Component {
                                 style={{height: 400, width: '100%'}}
                                 guides={false}
                                 zoomable={false}
+                                data={(() => {
+                                  const vals = this.getLocationsInputValue('editableArea');
+                                  if (vals && vals.length) {
+                                    return {x: vals[0], y: vals[1], width: vals[2] - vals[0], height: vals[3] - vals[1]}
+                                  }
+                                  return {};
+                                })()}
                                 viewMode={1}
                                 autoCropArea={1}
                               />
