@@ -269,7 +269,8 @@ export default class GraphicsComponent extends Component {
 
   handleImportJson = (json, baseUrl, urlOption, forceNoBase) => {
     if (!baseUrl.length && !forceNoBase && urlOption !== LEAVE_URL_OPTION) {
-      this.props.addNotification('warning', 'Base url is not set', 'Not setting correct base url might result in broken links.',
+      this.props.addNotification('warning', 'Base url is not set',
+        'Not setting correct base url will result in broken links.',
         15, (f) => this.handleImportJson(json, baseUrl, urlOption, true));
       return;
     }
@@ -277,7 +278,7 @@ export default class GraphicsComponent extends Component {
       const r = new RegExp('^(?:[a-z]+:)?//', 'i');
       if (!r.test(baseUrl)) {
         this.props.addNotification('warning', 'The specified base url seems not to have a protocol',
-          'Not setting correct base url might result in broken links.',
+          'Not setting correct base url will result in broken links.',
           15, (f) => this.handleImportJson(json, baseUrl, urlOption, true));
         return;
       }
@@ -293,7 +294,7 @@ export default class GraphicsComponent extends Component {
         this.props.createEntity(graphics, this.props.token);
       }
       this.props.enableDefaultStatus();
-      this.props.restoreTableState(this.props.objectSample);
+      this.props.restoreTableState({...Graphic, colorizables: []});
       this.setState({...this.state, json: '', baseUrl: ''});
     } catch (e) {
       this.props.addNotification('error', 'Json structure is invalid.');

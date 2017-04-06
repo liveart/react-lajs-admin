@@ -5,7 +5,7 @@ import {
   uploadProductImage, uploadProductThumb, uploadTemplateFile
 } from '../actions/products';
 import {
-  fetchProductsCategories
+  fetchProductsCategories, createProductsCategory
 } from '../actions/productsCategories';
 import {
   selectRow, setObjectHolderProperty,
@@ -100,6 +100,9 @@ const mapDispatchToProps = dispatch => {
     },
     uploadProductLocationOverlay(file) {
       dispatch(uploadProductLocationOverlay(file));
+    },
+    createProductsCategory(cat, token) {
+      dispatch(createProductsCategory(cat, token));
     }
   };
 };

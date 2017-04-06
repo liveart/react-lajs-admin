@@ -2,6 +2,7 @@
   "name": "product",
   "base": "PersistedModel",
   "idInjection": true,
+  "forceId": false,
   "options": {
     "validateUpsert": true
   },
