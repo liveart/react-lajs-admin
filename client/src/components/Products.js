@@ -14,6 +14,7 @@ import {
   SIZES,
   PRODUCT_TEMPLATES_FOLDER
 } from '../definitions';
+const LEAVE_URL_OPTION = 'Import';
 const Product = ProductModel.properties;
 
 import {parseJson} from '../ProductJsonParser';
@@ -44,6 +45,7 @@ export default class ProductsComponent extends Component {
     createEntity: PropTypes.func.isRequired,
     editEntity: PropTypes.func.isRequired,
     deleteEntity: PropTypes.func.isRequired,
+    createProductsCategory: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
     restoreTableState: PropTypes.func.isRequired,
     productsCategories: PropTypes.array.isRequired,
@@ -511,6 +513,40 @@ export default class ProductsComponent extends Component {
     }
   };
 
+  handleImportJson = (json, baseUrl, urlOption, forceNoBase) => {
+    if (!baseUrl.length && !forceNoBase && urlOption !== LEAVE_URL_OPTION) {
+      this.props.addNotification('warning', 'Base url is not set',
+        'Not setting correct base url will result in broken links.',
+        15, f => this.handleImportJson(json, baseUrl, urlOption, true));
+      return;
+    }
+    if (!forceNoBase && urlOption !== LEAVE_URL_OPTION) {
+      const r = new RegExp('^(?:[a-z]+:)?//', 'i');
+      if (!r.test(baseUrl)) {
+        this.props.addNotification('warning', 'The specified base url seems not to have a protocol',
+          'Not setting correct base url will result in broken links.',
+          15, f => this.handleImportJson(json, baseUrl, urlOption, true));
+        return;
+      }
+    }
+    let parsed = parseJson(json, baseUrl);
+    try {
+      const categories = [...parsed.categories];
+      if (categories && categories.length) {
+        this.props.createProductsCategory(categories, this.props.token);
+      }
+      const products = [...parsed.products];
+      if (products && products.length) {
+        this.props.createEntity(products, this.props.token);
+      }
+      this.props.enableDefaultStatus();
+      this.props.restoreTableState({...Product});
+      this.setState({...this.state, json: '', baseUrl: ''});
+    } catch (e) {
+      this.props.addNotification('error', 'Json structure is invalid.');
+    }
+  };
+
   getLocationsInputValue = propertyName => {
     if (this.state.location < 0 || !this.props.objectHolder['locations'] ||
       !this.props.objectHolder['locations'].length) {
@@ -606,6 +642,7 @@ export default class ProductsComponent extends Component {
               editableAreaSizes: 'Editable Area Sizes', minDPU: 'Min DPU', minQuantity: 'Min quantity',
               useForDecoration: 'Use for decoration', useForProduct: 'Use for productLocationImage', showRuler: 'Ruler'
             }}
+            handleImportJson={this.handleImportJson}
             hiddenInputs={['id', 'categoryId', 'thumbUrl', 'data', 'pantones', this.props.objectHolder['multicolor'] === true ?
               'colors' : 'colorizables']}
             enableImportJson={this.props.enableImportJson}
