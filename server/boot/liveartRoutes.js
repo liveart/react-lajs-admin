@@ -167,7 +167,7 @@ function getProducts(category, products, req) {
         colors: pr.colors ? _.map(pr.colors, cr => ({
           name: cr.name,
           value: cr.value,
-          locations: cr._locations
+          locations: cr.locations
         })) : undefined,
         hideEditableAreaBorder: pr.hideEditableAreaBorder,
         namesNumbersEnabled: pr.namesNumbersEnabled,
@@ -179,11 +179,17 @@ function getProducts(category, products, req) {
         editableAreaSizes: pr.editableAreaSizes,
         showRuler: pr.showRuler,
         sizes: pr.sizes,
-        locations: pr.locations ? _.map(pr.locations, loc => Object.assign({}, loc,
+        locations: pr.locations ? _.map(pr.locations, loc => (
           {
+            name: loc.name,
             image: loc.image ? getFullUrl(req, loc.image) : undefined,
             mask: pr.mask ? getFullUrl(req, loc.mask) : undefined,
-            overlayInfo: pr.overlayInfo ? getFullUrl(req, loc.overlayInfo) : undefined
+            overlayInfo: pr.overlayInfo ? getFullUrl(req, loc.overlayInfo) : undefined,
+            editableArea: loc.editableArea,
+            editableAreaUnits: loc.editableAreaUnits,
+            editableAreaUnitsRange: loc.editableAreaUnitsRange,
+            editableAreaUnitsRestrictRotation: loc.editableAreaUnitsRestrictRotation,
+            clipRect: loc.clipRect
           })) : undefined
       });
     }

@@ -492,10 +492,15 @@ export default class ProductsComponent extends Component {
       return;
     }
     const data = this.cropper.getData();
-    this.changeLocationsNestedArrValue('editableArea', 0, data.x.toFixed(2));
-    this.changeLocationsNestedArrValue('editableArea', 1, data.y.toFixed(2));
-    this.changeLocationsNestedArrValue('editableArea', 2, (data.width + data.x).toFixed(2));
-    this.changeLocationsNestedArrValue('editableArea', 3, (data.height + data.y).toFixed(2));
+    _.forOwn(data, (value, key) => {
+      if (value === '-0.00') {
+        data[key] = '0.00';
+      }
+    });
+    this.changeLocationsNestedArrValue('editableArea', 0, Number(data.x.toFixed(2)));
+    this.changeLocationsNestedArrValue('editableArea', 1, Number(data.y.toFixed(2)));
+    this.changeLocationsNestedArrValue('editableArea', 2, Number((data.width + data.x).toFixed(2)));
+    this.changeLocationsNestedArrValue('editableArea', 3, Number((data.height + data.y).toFixed(2)));
   };
 
   onSizeSelectChange = val => {
