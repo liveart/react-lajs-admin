@@ -4,7 +4,7 @@ import * as actionTypes from '../../client/src/actionTypes/colors';
 import reducer from '../../client/src/reducers/colors';
 
 const INITIAL_STATE = {
-  color: null, colors: [], colorsNumber: 0, colorsError: null, colorsLoading: false
+  color: null, colors: [], colorsNumber: 0, colorsError: null, colorsMessage: null, colorsLoading: false
 };
 
 describe('colors reducer', () => {

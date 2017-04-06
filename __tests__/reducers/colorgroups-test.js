@@ -4,7 +4,7 @@ import * as actionTypes from '../../client/src/actionTypes/colorgroups';
 import reducer from '../../client/src/reducers/colorgroups';
 
 const INITIAL_STATE = {
-  colorgroup: null, colorgroups: [], colorgroupsNumber: 0, colorgroupsError: null, colorgroupsLoading: false
+  colorgroup: null, colorgroups: [], colorgroupsNumber: 0, colorgroupsError: null,  colorgroupsMessage: null, colorgroupsLoading: false
 };
 
 describe('colorgroups reducer', () => {
