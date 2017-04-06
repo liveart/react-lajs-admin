@@ -12,13 +12,14 @@ import Fonts from '../components/Fonts';
 
 const mapStateToProps = state => {
   const {token} = state.user;
-  const {fonts, fontsError, fontsLoading} = state.fonts;
+  const {fonts, fontsError, fontsLoading, fontsMessage} = state.fonts;
   const {status, objectHolder} = state.table;
   const errors = fontsError ? [fontsError] : [];
   return {
     title: 'Font',
     data: fonts,
     errors,
+    message: fontsMessage,
     loading: fontsLoading,
     objectHolder,
     status,

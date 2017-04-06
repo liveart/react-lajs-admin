@@ -1,7 +1,9 @@
 import * as actionTypes from '../actionTypes/colorgroups';
 import {dispatch} from './sagaFuncs';
 import * as api from './api';
+import {MESSAGE_ENTITY_CREATED, MESSAGE_ENTITY_UPDATED, MESSAGE_ENTITY_DELETED} from '../definitions';
 
+const entityName = 'Color group';
 const endpoint = 'colorgroups';
 
 export function* fetchColorgroups() {
@@ -33,29 +35,38 @@ export function* fetchColorgroupsNumber() {
 export function* createColorgroup(action) {
   try {
     yield* api.create(endpoint, action.colorgroup, action.token);
-    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS,  message: entityName + ' ' + MESSAGE_ENTITY_CREATED});
     yield dispatch({type: actionTypes.FETCH_COLORGROUPS});
   } catch (e) {
-    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e.message});
+    yield dispatch({
+      type: actionTypes.COLORGROUP_OPERATION_FAILURE,
+      message: e.message
+    });
   }
 }
 
 export function* editColorgroup(action) {
   try {
     yield* api.update(endpoint, action.newColorgroup, action.id, action.token);
-    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS,  message: entityName + ' ' + MESSAGE_ENTITY_UPDATED});
     yield dispatch({type: actionTypes.FETCH_COLORGROUPS});
   } catch (e) {
-    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e.message});
+    yield dispatch({
+      type: actionTypes.COLORGROUP_OPERATION_FAILURE,
+      message: e.message
+    });
   }
 }
 
 export function* deleteColorgroup(action) {
   try {
     yield* api.remove(endpoint, action.id, action.token);
-    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS});
+    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_SUCCESS, message: entityName + ' ' + MESSAGE_ENTITY_DELETED});
     yield dispatch({type: actionTypes.FETCH_COLORGROUPS});
   } catch (e) {
-    yield dispatch({type: actionTypes.COLORGROUP_OPERATION_FAILURE, message: e.message});
+    yield dispatch({
+      type: actionTypes.COLORGROUP_OPERATION_FAILURE,
+      message: e.message
+    });
   }
 }
