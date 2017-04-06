@@ -228,7 +228,7 @@ module.exports = function (app) {
             }
           });
 
-          res.send(JSON.stringify(result));
+          res.json(result);
         }
       });
     });
@@ -261,7 +261,7 @@ module.exports = function (app) {
               });
             }
           });
-          res.send(JSON.stringify(result));
+          res.json(result);
         }
       });
     });
@@ -275,7 +275,8 @@ module.exports = function (app) {
         res.status(500).send('Error occurred');
       }
       cs.map(col => colors.push({name: col.name, value: col.value}));
-      res.send(JSON.stringify({colors: colors}));
+
+      res.json({colors: colors});
     });
   });
 
@@ -294,7 +295,7 @@ module.exports = function (app) {
         italicAllowed: f.italicAllowed, vector: f.vector ? getFullUrl(req, f.vector) : undefined
       }));
 
-      res.send(JSON.stringify({fonts: fonts}));
+      res.json({fonts: fonts});
     });
   });
 
