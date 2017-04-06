@@ -43,8 +43,18 @@ function getFullUrl(req, urlStr) {
   return urlStr;
 }
 
-function getFontFaceRule(family, file, weight, style) {
-  const location = 'http://hive.liveartdesigner.com:3000/files/fonts/';
+function getFullUrlFont(req, urlStr, loc) {
+  if (urlStr.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
+    const addr = url.format({
+      protocol: req.protocol,
+      host: req.get('host')
+    });
+    return addr + loc + urlStr.substring(RELATIVE_URL.length);
+  }
+  return urlStr;
+}
+
+function getFontFaceRule(family, file, weight, style, req) {
   return {
     type: 'font-face',
     declarations: [
@@ -55,7 +65,7 @@ function getFontFaceRule(family, file, weight, style) {
       }, {
         type: 'declaration',
         property: 'src',
-        value: 'url("' + location + file + '")',
+        value: 'url("' + getFullUrl(req, file) + '")',
       }, {
         type: 'declaration',
         property: 'font-weight',
@@ -321,24 +331,24 @@ module.exports = function (app) {
         fnts.map(font => {
           if (font.fileNormal) {
             cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileNormal, NORMAL, NORMAL)
+              getFontFaceRule(font.fontFamily, font.fileNormal, NORMAL, NORMAL,req)
             );
           }
           if (font.fileBold) {
             cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileBold, BOLD, NORMAL)
+              getFontFaceRule(font.fontFamily, font.fileBold, BOLD, NORMAL,req)
             );
           }
 
           if (font.fileItalic) {
             cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileItalic, NORMAL, ITALIC)
+              getFontFaceRule(font.fontFamily, font.fileItalic, NORMAL, ITALIC,req)
             );
           }
 
           if (font.fileBoldItalic) {
             cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileBoldItalic, BOLD, ITALIC)
+              getFontFaceRule(font.fontFamily, font.fileBoldItalic, BOLD, ITALIC,req)
             );
           }
         });
