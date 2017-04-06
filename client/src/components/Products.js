@@ -1070,7 +1070,6 @@ export default class ProductsComponent extends Component {
                                          }}
                                          value={(() => {
                                            const vals = this.getLocationsInputValue('editableArea');
-                                           console.log(vals)
                                            if (vals && vals.length > 3) {
                                              return vals[3];
                                            }
@@ -1115,13 +1114,6 @@ export default class ProductsComponent extends Component {
                                 style={{height: 400, width: '100%'}}
                                 guides={false}
                                 zoomable={false}
-                                data={(() => {
-                                  const vals = this.getLocationsInputValue('editableArea');
-                                  if (vals && vals.length) {
-                                    return {x: vals[0], y: vals[1], width: vals[2] - vals[0], height: vals[3] - vals[1]}
-                                  }
-                                  return {};
-                                })()}
                                 viewMode={1}
                                 autoCropArea={1}
                               />
