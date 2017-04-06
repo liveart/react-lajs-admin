@@ -1,0 +1,37 @@
+{
+  "name": "productsCategory",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "forceId": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "thumbUrl": {
+      "type": "string",
+      "required": true
+    },
+    "productsCategoryId": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "category": {
+      "type": "hasMany",
+      "model": "productsCategory",
+      "foreignKey": "productsCategoryId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

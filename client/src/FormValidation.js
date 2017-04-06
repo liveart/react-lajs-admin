@@ -1,1 +1,3 @@
-export const checkNotEmpty = value => typeof value !== 'string' || (typeof value === 'string' && value.length > 0);
+export const checkNotEmpty = value => (Array.isArray(value) && value.length) ||
+(typeof value === 'string' && value.length > 0) ||
+(typeof value === 'object');

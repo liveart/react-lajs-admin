@@ -4,6 +4,34 @@ const RELATIVE_URL = '@@RELATIVE';
 const _ = require('lodash');
 const url = require('url');
 
+function deleteEmpty(entity) {
+  Object.keys(entity).forEach(key => {
+    if (key === 'id') {
+      return;
+    }
+    if (typeof entity[key] === 'string') {
+      if (entity[key] === '') {
+        delete entity[key];
+      }
+    } else if (typeof entity[key] === 'object') {
+      if (Array.isArray(entity[key])) {
+        if (!entity[key].length) {
+          delete entity[key];
+        } else {
+          entity[key].forEach((v, i) => {
+            if (typeof v === 'object') {
+              (entity[key])[i] = deleteEmpty((entity[key])[i]);
+            }
+          });
+        }
+      } else {
+        entity[key] = Object.assign({}, deleteEmpty(entity[key]));
+      }
+    }
+  });
+  return entity;
+}
+
 function getFullUrl(req, urlStr) {
   if (urlStr.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
     const addr = url.format({
@@ -61,6 +89,22 @@ function getColors(colors) {
   return _.map(colors, col => col.value);
 }
 
+function getCategories(category, categories, graphics, req) {
+  const cats = [];
+  _.forEach(categories, cat => {
+    if (String(cat.graphicsCategoryId) === String(category.id)) {
+      cats.push({
+        id: cat.id,
+        name: cat.name,
+        thumb: getFullUrl(req, cat.thumb),
+        categories: getCategories(cat, categories, graphics, req),
+        graphicsList: getGraphics(cat, graphics, req)
+      });
+    }
+  });
+  return cats.length ? cats : undefined;
+}
+
 function getGraphics(category, graphics, req) {
   const grs = [];
   _.forEach(graphics, gr => {
@@ -82,20 +126,75 @@ function getGraphics(category, graphics, req) {
   return grs.length ? grs : undefined;
 }
 
-function getCategories(category, categories, graphics, req) {
+function getProductCategories(category, categories, products, req) {
   const cats = [];
   _.forEach(categories, cat => {
     if (String(cat.graphicsCategoryId) === String(category.id)) {
       cats.push({
         id: cat.id,
         name: cat.name,
-        thumb: getFullUrl(req, cat.thumb),
-        categories: getCategories(cat, categories, graphics, req),
-        graphicsList: getGraphics(cat, graphics, req)
+        thumbUrl: getFullUrl(req, cat.thumbUrl),
+        categories: getProductCategories(cat, categories, products, req),
+        products: getProducts(cat, products, req)
       });
     }
   });
   return cats.length ? cats : undefined;
+}
+
+function getProducts(category, products, req) {
+  const prs = [];
+  _.forEach(products, pr => {
+    if (String(pr.categoryId) === String(category.id)) {
+      prs.push({
+        id: pr.id,
+        name: pr.name,
+        thumbUrl: getFullUrl(req, pr.thumbUrl),
+        description: pr.description,
+        data: {
+          price: pr.data && pr.data.price && pr.data.price !== '' ? pr.data.price : undefined,
+          material: pr.data && pr.data.material && pr.data.material !== '' ? pr.data.material : undefined
+        },
+        categoryId: pr.categoryId,
+        minDPU: pr.minDPU,
+        minQuantity: pr.minQuantity,
+        multicolor: pr.multicolor,
+        colorizableElements: pr.colorizables ? _.map(pr.colorizables, cr => ({
+          name: cr.name,
+          id: cr.id,
+          colors: cr._colors
+        })) : undefined,
+        colors: pr.colors ? _.map(pr.colors, cr => ({
+          name: cr.name,
+          value: cr.value,
+          locations: cr.locations
+        })) : undefined,
+        hideEditableAreaBorder: pr.hideEditableAreaBorder,
+        namesNumbersEnabled: pr.namesNumbersEnabled,
+        pantones: {
+          useForDecoration: pr.pantones ? pr.pantones.useForDecoration : undefined,
+          useForProduct: pr.pantones ? pr.pantones.useForProduct : undefined
+        },
+        resizable: pr.resizable,
+        editableAreaSizes: pr.editableAreaSizes,
+        showRuler: pr.showRuler,
+        sizes: pr.sizes,
+        locations: pr.locations ? _.map(pr.locations, loc => (
+          {
+            name: loc.name,
+            image: loc.image ? getFullUrl(req, loc.image) : undefined,
+            mask: pr.mask ? getFullUrl(req, loc.mask) : undefined,
+            overlayInfo: pr.overlayInfo ? getFullUrl(req, loc.overlayInfo) : undefined,
+            editableArea: loc.editableArea,
+            editableAreaUnits: loc.editableAreaUnits,
+            editableAreaUnitsRange: loc.editableAreaUnitsRange,
+            editableAreaUnitsRestrictRotation: loc.editableAreaUnitsRestrictRotation,
+            clipRect: loc.clipRect
+          })) : undefined
+      });
+    }
+  });
+  return prs.length ? deleteEmpty(prs) : undefined;
 }
 
 module.exports = function (app) {
@@ -129,7 +228,40 @@ module.exports = function (app) {
             }
           });
 
-          res.send(JSON.stringify(result));
+          res.json(result);
+        }
+      });
+    });
+  });
+
+  app.get('/api/' + LIVE_ART + '/products', function (req, res) {
+    const result = {};
+    const Product = loopback.getModel('product');
+    Product.find((err, products) => {
+      if (err) {
+        res.status(500).send('Error occurred');
+      }
+
+      const ProductCategories = loopback.getModel('productsCategory');
+      ProductCategories.find((err, cats) => {
+        if (err) {
+          res.status(500).send('Error occurred');
+        }
+
+        if (cats && cats.length) {
+          result.productCategoriesList = [];
+          _.forEach(cats, cat => {
+            if (!cat.productsCategoryId || cat.productsCategoryId === '') {
+              result.productCategoriesList.push({
+                id: cat.id,
+                name: cat.name,
+                thumbUrl: getFullUrl(req, cat.thumbUrl),
+                categories: getProductCategories(cat, cats, products, req),
+                products: getProducts(cat, products, req)
+              });
+            }
+          });
+          res.json(result);
         }
       });
     });
@@ -143,7 +275,8 @@ module.exports = function (app) {
         res.status(500).send('Error occurred');
       }
       cs.map(col => colors.push({name: col.name, value: col.value}));
-      res.send(JSON.stringify({colors: colors}));
+
+      res.json({colors: colors});
     });
   });
 
@@ -162,7 +295,7 @@ module.exports = function (app) {
         italicAllowed: f.italicAllowed, vector: f.vector ? getFullUrl(req, f.vector) : undefined
       }));
 
-      res.send(JSON.stringify({fonts: fonts}));
+      res.json({fonts: fonts});
     });
   });
 

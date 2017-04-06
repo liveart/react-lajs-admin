@@ -1,0 +1,171 @@
+{
+  "name": "product",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "forceId": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    },
+    "data": {
+      "type": {
+        "price": "string",
+        "material": "string"
+      },
+      "default": {
+        "price": "",
+        "material": ""
+      }
+    },
+    "categoryId": {
+      "type": "string",
+      "required": true
+    },
+    "minDPU": {
+      "type": "number"
+    },
+    "minQuantity": {
+      "type": "number"
+    },
+    "multicolor": {
+      "type": "boolean",
+      "default": false
+    },
+    "colorizables": {
+      "type": [
+        {
+          "name": "string",
+          "id": "string",
+          "_colors": [
+            {
+              "name": "string",
+              "value": "string"
+            }
+          ]
+        }
+      ]
+    },
+    "colors": {
+      "type": [
+        {
+          "name": "string",
+          "value": "string",
+          "_locations": [
+            {
+              "name": "string",
+              "image": "string"
+            }
+          ]
+        }
+      ]
+    },
+    "hideEditableAreaBorder": {
+      "type": "boolean",
+      "default": false
+    },
+    "namesNumbersEnabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "pantones": {
+      "type": {
+        "useForDecoration": "boolean",
+        "useForProduct": "boolean"
+      },
+      "default": {
+        "useForDecoration": false,
+        "useForProduct": false
+      },
+      "required": false
+    },
+    "resizable": {
+      "type": "boolean",
+      "default": false
+    },
+    "editableAreaSizes": {
+      "type": [
+        {
+          "label": "string",
+          "width": "number",
+          "height": "number"
+        }
+      ],
+      "required": false
+    },
+    "showRuler": {
+      "type": "boolean",
+      "default": false
+    },
+    "sizes": {
+      "type": [
+        "string"
+      ],
+      "required": false
+    },
+    "locations": {
+      "type": [
+        {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "image": {
+            "type": "string",
+            "required": false
+          },
+          "mask": {
+            "type": "string"
+          },
+          "overlayInfo": {
+            "type": "string"
+          },
+          "editableArea": {
+            "type": "array"
+          },
+          "editableAreaUnits": {
+            "type": "array"
+          },
+          "editableAreaUnitsRange": {
+            "type": [
+              "array"
+            ],
+            "default": [
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          },
+          "editableAreaUnitsRestrictRotation": {
+            "type": "boolean",
+            "default": false
+          },
+          "clipRect": {
+            "type": "number"
+          }
+        }
+      ],
+      "required": true
+    },
+    "template": {
+      "type": "string",
+      "required": false
+    },
+    "thumbUrl": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": [],
+  "acls": [],
+  "methods": {}
+}
