@@ -70,7 +70,7 @@ export function parseJson(json, baseUrl) {
   products.forEach(p => {
 
     if (p.locations) {
-      p.locations.forEach(loc => ({
+      p.locations = p.locations.map(loc => ({
         ...loc,
         image: loc.image ? baseUrl + loc.image : undefined,
         mask: loc.mask ? baseUrl + loc.mask : undefined,

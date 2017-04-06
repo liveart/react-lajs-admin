@@ -621,7 +621,7 @@ export default class ProductsComponent extends Component {
     this.handleSelectedObjectArrayArrayDeleteElement('locations', 'editableAreaUnitsRange', locationId, key)
   );
 
-  renderUnitsRangeTable = (key) => (
+  renderUnitsRangeTable = () => (
     <div className='panel panel-default'>
       <table className='table table-bordered'>
         <thead>
@@ -633,25 +633,27 @@ export default class ProductsComponent extends Component {
         </tr>
         </thead>
         <tbody>
-        { this.props.objectHolder['locations'][key] ?
-          this.props.objectHolder['locations'][key].editableAreaUnitsRange.map((col, k) =>
+        { this.getLocationsInputValue('editableAreaUnitsRange') ?
+          this.getLocationsInputValue('editableAreaUnitsRange').map((col, k) =>
             <tr key={k}>
               <td><input type='text' className='form-control'
                          value={col[0]}
                          onChange={e =>
-                           this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', key, k, 0, e)}/>
+                           this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange',
+                             this.state.location, k, 0, e)}/>
               </td>
               <td><input type='text' className='form-control'
                          value={col[1]}
                          onChange={e =>
-                           this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', key, k, 1, e)}/>
+                           this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', this.state.location, k, 1, e)}/>
               </td>
               <td><input type='text' className='form-control'
                          value={col[2]}
                          onChange={e =>
-                           this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', key, k, 2, e)}/>
+                           this.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', this.state.location, k, 2, e)}/>
               </td>
-              <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteUnitsRangeRow(key, k)}>
+              <td><a className='btn btn-danger btn-xs' href='#'
+                     onClick={() => this.deleteUnitsRangeRow(this.state.location, k)}>
                 <i className='fa fa-ban'/></a></td>
             </tr>
           ) : null}
@@ -659,7 +661,7 @@ export default class ProductsComponent extends Component {
       </table>
 
       <div className='panel-footer'>
-        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addUnitsRangeRow(key)}>
+        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addUnitsRangeRow(this.state.location)}>
           <i className='fa fa-plus'/> Add units range</a>
       </div>
     </div>
@@ -708,11 +710,12 @@ export default class ProductsComponent extends Component {
             changedLabels={{
               hideEditableAreaBorder: 'Editable area border', namesNumbersEnabled: 'Name numbers',
               editableAreaSizes: 'Editable Area Sizes', minDPU: 'Min DPU', minQuantity: 'Min quantity',
-              useForDecoration: 'Use for decoration', useForProduct: 'Use for productLocationImage', showRuler: 'Ruler'
+              useForDecoration: 'Use for decoration', useForProduct: 'Use for product', showRuler: 'Ruler'
             }}
             handleImportJson={this.handleImportJson}
-            hiddenInputs={['id', 'categoryId', 'thumbUrl', 'data', 'pantones', this.props.objectHolder['multicolor'] === true ?
-              'colors' : 'colorizables']}
+            hiddenInputs={['id', 'categoryId', 'thumbUrl', 'data', 'pantones',
+              this.props.objectHolder['multicolor'] === true ?
+                'colors' : 'colorizables']}
             enableImportJson={this.props.enableImportJson}
             representations={{
               thumbUrl: {
@@ -932,7 +935,14 @@ export default class ProductsComponent extends Component {
                                   <input type='text' className='form-control'
                                          onChange={e =>
                                            this.changeLocationsNestedArrValue('editableAreaUnits', 0, e.target.value)}
-                                         value={this.getLocationsInputValue('editableAreaUnits')[0]}/>
+                                         value={(() => {
+                                           const vals = this.getLocationsInputValue('editableAreaUnits') || [];
+                                           if (vals && vals.length) {
+                                             return vals[0];
+                                           }
+
+                                           return '';
+                                         })()}/>
                                 </div>
                               </div>
                               <div className='col-lg-6'>
@@ -941,14 +951,21 @@ export default class ProductsComponent extends Component {
                                   <input type='text' className='form-control'
                                          onChange={e =>
                                            this.changeLocationsNestedArrValue('editableAreaUnits', 1, e.target.value)}
-                                         value={this.getLocationsInputValue('editableAreaUnits')[1]}/>
+                                         value={(() => {
+                                           const vals = this.getLocationsInputValue('editableAreaUnits') || [];
+                                           if (vals && vals.length > 1) {
+                                             return vals[1];
+                                           }
+
+                                           return '';
+                                         })()}/>
                                 </div>
                               </div>
                             </div>
 
                             <div className='row' style={{marginBottom: 6}}>
                               <div className='col-lg-12'>
-                                {this.renderUnitsRangeTable(this.state.location)}
+                                {this.renderUnitsRangeTable()}
                               </div>
                             </div>
 
@@ -970,7 +987,14 @@ export default class ProductsComponent extends Component {
                                              this.cropper.setData(newData);
                                            }
                                          }}
-                                         value={this.getLocationsInputValue('editableArea')[0]}/>
+                                         value={(() => {
+                                           const vals = this.getLocationsInputValue('editableArea');
+                                           if (vals && vals.length) {
+                                             return vals[0];
+                                           }
+
+                                           return '';
+                                         })()}/>
                                 </div>
                               </div>
                               <div className='col-lg-6'>
@@ -990,7 +1014,14 @@ export default class ProductsComponent extends Component {
                                              this.cropper.setData(newData);
                                            }
                                          }}
-                                         value={this.getLocationsInputValue('editableArea')[2]}/>
+                                         value={(() => {
+                                           const vals = this.getLocationsInputValue('editableArea');
+                                           if (vals && vals.length > 2) {
+                                             return vals[2];
+                                           }
+
+                                           return '';
+                                         })()}/>
                                 </div>
                               </div>
                             </div>
@@ -1011,7 +1042,14 @@ export default class ProductsComponent extends Component {
                                              this.cropper.setData(newData);
                                            }
                                          }}
-                                         value={this.getLocationsInputValue('editableArea')[1]}/>
+                                         value={(() => {
+                                           const vals = this.getLocationsInputValue('editableArea');
+                                           if (vals && vals.length > 1) {
+                                             return vals[1];
+                                           }
+
+                                           return '';
+                                         })()}/>
                                 </div>
                               </div>
                               <div className='col-lg-6'>
@@ -1030,7 +1068,15 @@ export default class ProductsComponent extends Component {
                                              this.cropper.setData(newData);
                                            }
                                          }}
-                                         value={this.getLocationsInputValue('editableArea')[3]}/>
+                                         value={(() => {
+                                           const vals = this.getLocationsInputValue('editableArea');
+                                           console.log(vals)
+                                           if (vals && vals.length > 3) {
+                                             return vals[3];
+                                           }
+
+                                           return '';
+                                         })()}/>
                                 </div>
                               </div>
                             </div>
@@ -1086,7 +1132,7 @@ export default class ProductsComponent extends Component {
                 elem: <textarea className='form-control' rows='3'
                                 value={this.props.objectHolder['description']}
                                 onChange={e => this.handleSelectedObjectChange('description', e)}>
-                  </textarea>
+              </textarea>
               },
               sizes: {
                 elem: <Creatable
