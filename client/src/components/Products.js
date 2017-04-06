@@ -315,7 +315,7 @@ export default class ProductsComponent extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {c._locations.map((col, k) => (
+                    {c._locations ? c._locations.map((col, k) => (
                       <tr key={k}>
                         <td><input type='text' className='form-control'
                                    value={col.name}
@@ -332,7 +332,7 @@ export default class ProductsComponent extends Component {
                                onClick={() => this.deleteLocationRow(key, k)}>
                           <i className='fa fa-ban'/></a></td>
                       </tr>
-                    ))}
+                    )) : null}
                     </tbody>
                   </table>
                   <div className='panel-footer'>
@@ -387,7 +387,7 @@ export default class ProductsComponent extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {c._colors.map((col, k) => (
+                    {c._colors ? c._colors.map((col, k) => (
                       <tr key={k}>
                         <td><input type='text' className='form-control'
                                    value={col.name}
@@ -404,7 +404,7 @@ export default class ProductsComponent extends Component {
                         <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteColorRow(key, k)}>
                           <i className='fa fa-ban'/></a></td>
                       </tr>
-                    ))}
+                    )) : null}
                     </tbody>
                   </table>
                   <div className='panel-footer'>
