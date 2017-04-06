@@ -4,7 +4,7 @@ import * as types from '../../client/src/actionTypes/fonts';
 import reducer from '../../client/src/reducers/fonts';
 
 const INITIAL_STATE = {
-  font: null, fonts: [], fontsNumber: 0, fontsError: null, fontsLoading: false
+  font: null, fonts: [], fontsNumber: 0, fontsError: null, fontsMessage: null, fontsLoading: false
 };
 
 describe('fonts reducer', () => {
