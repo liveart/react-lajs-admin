@@ -336,7 +336,6 @@ export default class GraphicsComponent extends Component {
     return this.props.objectHolder['colors'];
   };
 
-
   onColorsSelectChange = val => {
     const arr = [];
     if (val) {
