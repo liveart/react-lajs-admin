@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import View from './View';
+import View from './View/View';
 import * as GraphicModel from '../../../common/models/graphic.json';
 import {
   STATUS_EDITING,

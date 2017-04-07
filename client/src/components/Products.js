@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import View from './View';
+import View from './View/View';
 import * as ProductModel from '../../../common/models/product.json';
 import {
   STATUS_EDITING,
@@ -629,9 +629,6 @@ export default class ProductsComponent extends Component {
     </div>
   );
 
-//  addUnitsRangeRow = () => (
-  //  this.handleSelectedObjectArrayAddNew('locations', {editableAreaUnitsRange: [[0, 0, 1]]})
-  //);
 
   addUnitsRangeRow = key => (
     this.handleSelectedObjectAddNewArray('locations', 'editableAreaUnitsRange', key, [])

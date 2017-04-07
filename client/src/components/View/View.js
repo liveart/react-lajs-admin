@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {FormControl} from 'react-bootstrap';
+import Table from './Table';
 import {
   ID_PROP,
   STATUS_EDITING,
@@ -7,11 +7,12 @@ import {
   STATUS_DEFAULT,
   STATUS_CONFIRM_DELETE,
   STATUS_IMPORT_JSON
-} from '../definitions';
-import {checkNotEmpty} from '../FormValidation';
+} from '../../definitions';
+import {checkNotEmpty} from '../../FormValidation';
 import * as _ from 'lodash';
 const LEAVE_URL_OPTION = 'Import';
 const KEEP_URL_OPTION = 'Keep';
+const INITIAL_STATE = {empty: [], json: '', baseUrl: '', urlSelect: LEAVE_URL_OPTION};
 
 export default class ViewAbstract extends Component {
   static propTypes = {
@@ -31,7 +32,7 @@ export default class ViewAbstract extends Component {
     enableDefaultStatus: PropTypes.func.isRequired,
     /**
      * Function that handles Json import if it's supported.
-     * @param text json raw text to import
+     * @param text json raw text to import.
      */
     handleImportJson: PropTypes.func,
     createEntity: PropTypes.func.isRequired,
@@ -57,7 +58,7 @@ export default class ViewAbstract extends Component {
     changedInputs: PropTypes.object,
     customInputs: PropTypes.object,
     /**
-     * Label will be replaced with property's value if it exists
+     * Label will be replaced with property's value if it exists.
      */
     changedLabels: PropTypes.object,
     representations: PropTypes.object,
@@ -69,12 +70,8 @@ export default class ViewAbstract extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {empty: [], json: '', baseUrl: '', urlSelect: LEAVE_URL_OPTION};
-    if (!String.prototype.capitalizeFirstLetter) {
-      String.prototype.capitalizeFirstLetter = function () {
-        return this.charAt(0).toUpperCase() + this.slice(1);
-      };
-    }
+    this.state = {...INITIAL_STATE};
+    this.definePrototypes();
   }
 
   componentWillUpdate() {
@@ -90,7 +87,7 @@ export default class ViewAbstract extends Component {
 
   componentDidUpdate() {
     if (this.props.errors && this.props.errors.length) {
-      this.props.errors.forEach(prop => this.props.addNotification('error', prop));
+      _.forEach(this.props.errors, prop => this.props.addNotification('error', prop));
     }
 
     if (this.props.message) {
@@ -104,145 +101,20 @@ export default class ViewAbstract extends Component {
     }
   }
 
-  renderTableHeadings = () => {
-    return Object.getOwnPropertyNames(this.props.objectSample).map((prop, i) => {
-      if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
-        return null;
-      }
-
-      if (this.props.representations && this.props.representations.hasOwnProperty(prop)
-        && this.props.representations[prop].header) {
-        return <th key={i}>{this.props.representations[prop].header}</th>;
-      }
-
-      return <th
-        key={i}>{this.props.changedLabels && this.props.changedLabels[prop] ?
-        this.props.changedLabels[prop] : prop.capitalizeFirstLetter()}</th>;
-    });
+  definePrototypes = () => {
+    if (!String.prototype.capitalizeFirstLetter) {
+      String.prototype.capitalizeFirstLetter = function () {
+        return this.charAt(0).toUpperCase() + this.slice(1);
+      };
+    }
   };
 
-  handleSelectedObjectChange = (propertyName, event) => {
+  handleSelectedObjectChange = (propertyName, event) =>
     this.props.setEditingObjectProperty(propertyName, event.target.value);
-  };
-  handleSelectedStateChange = event => {
+
+
+  handleSelectedStateChange = event =>
     this.setState({...this.state, urlSelect: event.target.value, baseUrl: ''});
-  };
-
-  renderTableSortRow = () => {
-    if (!this.props.sortingSupport || this.props.data.length === 0) {
-      return null;
-    }
-
-    return (
-      <tr>
-        {Object.getOwnPropertyNames(this.props.objectSample).map((prop, i) => {
-          if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
-            return null;
-          }
-
-          if (this.props.representations && this.props.representations.hasOwnProperty(prop)) {
-            if (!this.props.representations[prop].sortable) {
-              return <td key={i}></td>;
-            } else if (this.props.representations[prop].sortElem) {
-              return <td key={i}>{this.props.representations[prop].sortElem}</td>;
-            }
-          }
-
-
-          return (
-            <td key={i}><FormControl type='text'
-                                     value={this.props.objectHolder[prop]}
-                                     onChange={e => this.handleSelectedObjectChange(prop, e)}
-            />
-            </td>);
-        })
-        }
-      </tr>);
-  };
-
-  sortRows = () => {
-    const rows = [];
-    for (let i = 0; i < this.props.data.length; ++i) {
-      let add = true;
-
-      Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
-        if (!add) {
-          return;
-        }
-        if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
-          add = true;
-        } else if (typeof this.props.objectHolder[prop] !== 'object') {
-          if (typeof (this.props.data[i])[prop] === 'undefined') {
-            add = this.props.objectHolder[prop] === '';
-          } else if (typeof (this.props.data[i])[prop] === 'boolean') {
-            add = true;
-          } else if (this.props.sortComparators && this.props.sortComparators.hasOwnProperty(prop)) {
-            add = this.props.sortComparators[prop](String((this.props.data[i])[prop]),
-              String(this.props.objectHolder[prop]));
-          } else if (!_.includes((this.props.data[i])[prop], this.props.objectHolder[prop])) {
-            add = false;
-          }
-        }
-      });
-
-      if (add) {
-        rows.push(this.props.data[i]);
-      }
-    }
-    return rows;
-  }
-  ;
-
-  renderTableData = () => {
-    if (!this.props.data.length) {
-      return null;
-    }
-
-    const rows = this.sortRows();
-
-    return rows.map(item => {
-
-      return (
-        <tr key={item.id} onClick={() => this.handleEdit(item)}>
-          {
-            Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
-              if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
-                return null;
-              }
-
-              if (this.props.representations.hasOwnProperty(prop)) {
-                return <td key={String(item.id + prop)}>{this.props.representations[prop].getElem(item[prop])}</td>;
-              }
-
-              if (typeof item[prop] === 'object') {
-                return <td key={String(item.id + prop)}/>;
-              }
-
-              return <td key={String(item.id + prop)}>{item[prop]}</td>;
-            })
-          }
-        </tr>
-      );
-    });
-  };
-
-  renderTable = () => (
-    <div className='panel panel-default'>
-      <tb className='table-responsive'>
-        <table className='table no-margin table-hover table-bordered'>
-          <thead>
-          <tr>
-            {this.renderTableHeadings()}
-          </tr>
-          </thead>
-          <tbody>
-          {this.renderTableSortRow()}
-          {this.renderTableData()}
-          </tbody>
-        </table>
-      </tb>
-    </div>
-  );
 
   renderDefButtons = () => (
     <div className='pull-right'>
@@ -332,13 +204,6 @@ export default class ViewAbstract extends Component {
       </div>
     </section>;
 
-  handleEdit = object => {
-    if (this.props.status === STATUS_DEFAULT) {
-      this.props.enableEditing(this.props.objectSample);
-      this.props.selectRow(object);
-    }
-  };
-
   handleAddNew = () => {
     if (this.props.status === STATUS_DEFAULT) {
       this.props.enableCreating(this.props.objectSample);
@@ -411,9 +276,8 @@ export default class ViewAbstract extends Component {
     }
   };
 
-  handleSaveImportBtnClick = () => {
+  handleSaveImportBtnClick = () =>
     this.props.handleImportJson(this.state.json, this.state.baseUrl, this.state.urlSelect);
-  };
 
   handleCancelBtnClick = () => {
     if (this.props.status !== STATUS_DEFAULT) {
@@ -423,38 +287,39 @@ export default class ViewAbstract extends Component {
     }
   };
 
-  renderInputs = () => Object.getOwnPropertyNames(this.props.objectSample).map((prop, key) => {
-    if (this.props.hiddenInputs.indexOf(prop) > -1) {
-      return null;
-    }
-    return (
-      <div key={key} className='form-group'>
-        <div className='col-md-2'>
-          <p className={'' + (this.props.objectSample[prop].required ? 'req' : '')}>
-            {this.props.changedLabels && this.props.changedLabels[prop] ?
-              this.props.changedLabels[prop] : prop.capitalizeFirstLetter()}
-          </p>
-        </div>
-        <div className='col-md-10'>
-          {
-            this.props.changedInputs && this.props.changedInputs.hasOwnProperty(prop) ?
-              this.props.changedInputs[prop].elem :
-              <input type='text' className='form-control'
-                     value={this.props.objectHolder[prop]}
-                     onChange={e => this.handleSelectedObjectChange(prop, e)}/>
-          }
+  renderInputs = () =>
+    Object.getOwnPropertyNames(this.props.objectSample).map((prop, key) => {
+      if (this.props.hiddenInputs.indexOf(prop) > -1) {
+        return null;
+      }
+      return (
+        <div key={key} className='form-group'>
+          <div className='col-md-2'>
+            <p className={'' + (this.props.objectSample[prop].required ? 'req' : '')}>
+              {this.props.changedLabels && this.props.changedLabels[prop] ?
+                this.props.changedLabels[prop] : prop.capitalizeFirstLetter()}
+            </p>
+          </div>
+          <div className='col-md-10'>
+            {
+              this.props.changedInputs && this.props.changedInputs.hasOwnProperty(prop) ?
+                this.props.changedInputs[prop].elem :
+                <input type='text' className='form-control'
+                       value={this.props.objectHolder[prop]}
+                       onChange={e => this.handleSelectedObjectChange(prop, e)}/>
+            }
 
-          {
-            this.props.status === STATUS_EDITING &&
-            this.props.representations && this.props.representations.hasOwnProperty(prop) ?
-              <div
-                style={{marginTop: 3}}>{this.props.representations[prop].getElem(this.props.objectHolder[prop])}</div> :
-              null
-          }
+            {
+              this.props.status === STATUS_EDITING &&
+              this.props.representations && this.props.representations.hasOwnProperty(prop) ?
+                <div
+                  style={{marginTop: 3}}>{this.props.representations[prop].getElem(this.props.objectHolder[prop])}</div> :
+                null
+            }
+          </div>
         </div>
-      </div>
-    );
-  });
+      );
+    });
 
   renderImportJsonInputs = () => (
     <div className='box-body'>
@@ -556,7 +421,7 @@ export default class ViewAbstract extends Component {
       </div>
       <div className='row'>
         <div className='col-md-12'>
-          {this.renderTable()}
+          <Table {...this.props}/>
         </div>
       </div>
     </section>
@@ -624,12 +489,14 @@ export default class ViewAbstract extends Component {
     }
   };
 
+
+
   render() {
     const {loading} = this.props;
 
     return (
       <div>
-        {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
+        {loading ? <div className='loader'/> : <div className='loaderDone'/>}
         <div className='content-header'>
           <h1>{this.props.pluralTitle || `${ this.props.title}s`}</h1>
         </div>
