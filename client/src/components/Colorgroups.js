@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
 import {RadioGroup, Radio} from 'react-radio-group';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
-import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
+import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import * as ColorgroupModel from '../../../common/models/colorgroup.json';
 import * as _ from 'lodash';
 const Colorgroup = ColorgroupModel.properties;
 

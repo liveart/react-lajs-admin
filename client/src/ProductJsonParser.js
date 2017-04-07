@@ -5,10 +5,10 @@ function parseProducts(cat) {
       const p = {
         ...prod,
         colorizables: prod.colorizableElements ? prod.colorizableElements.map(cr => {
-            const o = {...cr, _colors: cr.colors};
-            delete o.colors;
-            return o;
-          }
+          const o = {...cr, _colors: cr.colors};
+          delete o.colors;
+          return o;
+        }
         ) : [],
         _colors: prod.colors ? prod.colors : []
       };

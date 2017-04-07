@@ -6,7 +6,7 @@ import {
 } from '../../actions/table';
 import {fetchColorgroups, createColorgroup, editColorgroup, deleteColorgroup} from '../../actions/colorgroups';
 import {fetchColors, deleteColor, editColor} from '../../actions/colors';
-import Table from '../../components/colors/Colorgroups';
+import Table from '../../components/Colorgroups';
 
 const mapStateToProps = state => {
   const {token} = state.user;

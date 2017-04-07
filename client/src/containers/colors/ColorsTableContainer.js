@@ -6,7 +6,7 @@ import {
   selectRow, setObjectHolderProperty,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../../actions/table';
-import Table from '../../components/colors/Colors';
+import Table from '../../components/Colors';
 
 const mapStateToProps = state => {
   const {token} = state.user;
