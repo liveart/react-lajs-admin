@@ -112,7 +112,6 @@ export default class ViewAbstract extends Component {
   handleSelectedObjectChange = (propertyName, event) =>
     this.props.setEditingObjectProperty(propertyName, event.target.value);
 
-
   handleSelectedStateChange = event =>
     this.setState({...this.state, urlSelect: event.target.value, baseUrl: ''});
 

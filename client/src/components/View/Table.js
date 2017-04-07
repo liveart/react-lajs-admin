@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {STATUS_DEFAULT} from '../../definitions';
-import * as _ from 'lodash';
+import {includes, forEach} from 'lodash';
 
 export default class Table extends Component {
 
@@ -16,6 +16,9 @@ export default class Table extends Component {
       return <th key={i}>{this.props.changedLabels && this.props.changedLabels[prop] ?
         this.props.changedLabels[prop] : prop.capitalizeFirstLetter()}</th>;
     });
+
+  handleSelectedObjectChange = (propertyName, event) =>
+    this.props.setEditingObjectProperty(propertyName, event.target.value);
 
   renderTableSortRow = () => {
     if (!this.props.sortingSupport || this.props.data.length === 0) {
@@ -48,7 +51,7 @@ export default class Table extends Component {
 
   sortRows = () => {
     const rows = [];
-    _.forEach(this.props.data, d => {
+    forEach(this.props.data, d => {
       let add = true;
 
       Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
@@ -65,7 +68,7 @@ export default class Table extends Component {
           } else if (this.props.sortComparators && this.props.sortComparators.hasOwnProperty(prop)) {
             add = this.props.sortComparators[prop](String(d[prop]),
               String(this.props.objectHolder[prop]));
-          } else if (!_.includes(d[prop], this.props.objectHolder[prop])) {
+          } else if (!includes(d[prop], this.props.objectHolder[prop])) {
             add = false;
           }
         }
@@ -89,11 +92,8 @@ export default class Table extends Component {
     if (!this.props.data.length) {
       return null;
     }
-
     const rows = this.sortRows();
-
     return rows.map(item => {
-
       return (
         <tr key={item.id} onClick={() => this.handleEdit(item)}>
           {

@@ -384,11 +384,12 @@ export default class GraphicsComponent extends Component {
                 },
                 sortable: true,
                 sortElem: <select className='form-control'
-                                  value={this.props.objectHolder['categoryId']}
+                                  value={this.props.objectHolder.categoryId}
                                   onChange={e => this.handleSelectedObjectChange('categoryId', e)}>
                   <option key='any' value=''>...</option>
-                  {this.props.graphicsCategories.map((cat, key) => <option key={key}
-                                                                           value={cat.id}>{cat.name}</option>)}
+                  {_.sortBy(this.props.graphicsCategories, 'name').map((cat, key) =>
+                    <option key={key}
+                            value={cat.id}>{cat.name}</option>)}
                 </select>,
                 header: 'Category'
               }
