@@ -15,6 +15,9 @@ import {
   PRODUCT_TEMPLATES_FOLDER
 } from '../definitions';
 const LEAVE_URL_OPTION = 'Import';
+const ASSIGN_GROUP = 'Assign Color Group';
+const ADD_COLOR = 'Add Individual Colors';
+const COLORS_OPTIONS = ['Assign Color Group', 'Add Individual Colors'];
 const Product = ProductModel.properties;
 
 import {parseJson} from '../ProductJsonParser';
@@ -61,7 +64,14 @@ export default class ProductsComponent extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {newColorizables: [], newColors: [], imgUrl: '', mainImgUrl: '', location: -1};
+    this.state = {
+      newColorizables: [],
+      newColors: [],
+      imgUrl: '',
+      mainImgUrl: '',
+      location: -1,
+      selectedValue: ASSIGN_GROUP,
+    };
     if (!Array.prototype.remove) {
       Array.prototype.remove = function (from, to) {
         const rest = this.slice((to || from) + 1 || this.length);
@@ -168,7 +178,6 @@ export default class ProductsComponent extends Component {
       ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.value;
     }
     this.props.setEditingObjectProperty(fArrName, [...colorizables]);
-    console.log(colorizables);
   };
 
   handleSelectedObjectChange = (propertyName, event) => {
@@ -253,6 +262,13 @@ export default class ProductsComponent extends Component {
     return this.props.colorsList;
   };
 
+  getColorizableColorsOptions = () => {
+    if (!COLORS_OPTIONS || !COLORS_OPTIONS.length) {
+      return [];
+    }
+
+    return _.map(COLORS_OPTIONS, col => ({value: col, name: col}));
+  };
   getSelectedOptions = key => {
     if (!this.props.objectHolder['colors'] || !this.props.objectHolder['colors'].length) {
       return [];
@@ -263,6 +279,17 @@ export default class ProductsComponent extends Component {
     }
   };
 
+  getSelectedColorizableColorsOptions = (key, k) => {
+    if (!this.props.objectHolder['colorizables']['_colors'] || !this.props.objectHolder['colors']['_colors'].length) {
+      return [];
+    }
+    let arr = this.props.objectHolder['colors'];
+
+    if (((arr[key])['_colors'])[k]) {
+      return ((arr[key])['_colors'])[k];
+    }
+  };
+
 
   onColorsSelectChange = (val, key) => {
     const arr = this.props.objectHolder['colors'];
@@ -270,6 +297,12 @@ export default class ProductsComponent extends Component {
       (arr[key])['name'] = val.name;
       (arr[key])['value'] = val.value;
       this.props.setEditingObjectProperty('colors', [...arr]);
+    }
+  };
+  onColorizableColorsSelectChange = (val, key, k) => {
+    if (val) {
+      this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'name', val.name);
+      this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'value', val.value);
     }
   };
 
@@ -353,6 +386,10 @@ export default class ProductsComponent extends Component {
     </div>
   );
 
+  handleColorActionOption = option => {
+    this.setState({...this.state, selectedValue: option.value});
+  };
+
   renderColorizableTable = () => (
     <div className='panel panel-default'>
       <table className='table table-bordered'>
@@ -377,41 +414,24 @@ export default class ProductsComponent extends Component {
                          onChange={e => this.handleSelectedObjectArrayChange('colorizables', key, 'id', e)}/>
               </td>
               <td>
-                <div className='panel panel-default'>
-                  <table className='table'>
-                    <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Value</th>
-                      <th/>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {c._colors ? c._colors.map((col, k) => (
-                      <tr key={k}>
-                        <td><input type='text' className='form-control'
-                                   value={col.name}
-                                   onChange={e =>
-                                     this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'name', e)}/>
-                        </td>
-                        <td><input type='text' className='form-control'
-                                   value={col.value}
-                                   onChange={e =>
-                                     this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'value', e)}/>
-
-                          <span className='label label-default pull-right'
-                                style={{background: col.value}}>{' '}</span></td>
-                        <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteColorRow(key, k)}>
-                          <i className='fa fa-ban'/></a></td>
-                      </tr>
-                    )) : null}
-                    </tbody>
-                  </table>
-                  <div className='panel-footer'>
-                    <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addColorRow(key)}>
-                      <i className='fa fa-plus'/> Add color</a>
-                  </div>
-                </div>
+                <Select
+                  name='colors'
+                  value={this.state.selectedValue}
+                  multi={false}
+                  labelKey='name'
+                  options={this.getColorizableColorsOptions()}
+                  onChange={os => this.handleColorActionOption(os)}
+                />
+                {this.state.selectedValue === ADD_COLOR ? c._colors.map((col, k) =>
+                  <Creatable
+                    name='colors'
+                    value={this.getSelectedColorizableColorsOptions(key, k)}
+                    multi={true}
+                    labelKey='name'
+                    options={this.getOptions()}
+                    onChange={os => this.onColorizableColorsSelectChange(os, key, k)}
+                    isLoading={this.props.colorsLoading}
+                  />) : null }
               </td>
               <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteColorizableRow(key)}>
                 <i className='fa fa-ban'/></a></td>
@@ -450,7 +470,7 @@ export default class ProductsComponent extends Component {
   );
 
   addColorizableRow = () => (
-    this.handleSelectedObjectArrayAddNew('colorizables', {name: '', id: '', _colors: []})
+    this.handleSelectedObjectArrayAddNew('colorizables', {name: '', id: '', _colors: [{name: '', value: ''}]})
   );
 
   deleteColorizableRow = key => (
