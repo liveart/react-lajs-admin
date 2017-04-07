@@ -13,7 +13,7 @@ import * as FontModel from '../../../common/models/font.json';
 const Font = FontModel.properties;
 const location = '/files/fonts/';
 const vectorsLocation = '/files/vectors/';
-import View from './View';
+import View from './View/View';
 
 export default class extends Component {
   static propTypes = {

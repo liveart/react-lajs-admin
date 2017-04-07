@@ -11,7 +11,7 @@ import * as GraphicsCategoryModel from '../../../common/models/graphics-category
 import {RadioGroup, Radio} from 'react-radio-group';
 const GraphicsCategory = GraphicsCategoryModel.properties;
 const location = '/files/thumb/';
-import View from './View';
+import View from './View/View';
 import * as _ from 'lodash';
 const DELETE_CATEGORY = 'DELETE_CATEGORY';
 const MOVE_CATEGORY_TO_OTHER_CATEGORY = 'MOVE_CATEGORY_TO_OTHER_CATEGORY';
