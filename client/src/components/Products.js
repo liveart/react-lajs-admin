@@ -161,11 +161,11 @@ export default class ProductsComponent extends Component {
   handleSelectedObjectArrayArrayChange = (fArrName, sArrName, fInd, sInd, propName, event) => {
     const colorizables = this.props.objectHolder[fArrName];
     if (propName === 'image') {
-      ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.files[0];
+      colorizables[fInd][sArrName][sInd][propName] = event.target.files[0];
     } else if (sArrName === 'editableAreaUnitsRange') {
-      ((((colorizables[fInd])[sArrName])[sInd])[propName]) = Number(event.target.value);
+      colorizables[fInd][sArrName][sInd][propName] = Number(event.target.value);
     } else {
-      ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.value;
+      colorizables[fInd][sArrName][sInd][propName] = event.target.value;
     }
     this.props.setEditingObjectProperty(fArrName, [...colorizables]);
   };
@@ -262,7 +262,6 @@ export default class ProductsComponent extends Component {
     }
   };
 
-
   onColorsSelectChange = (val, key) => {
     const arr = this.props.objectHolder['colors'];
     if (val) {
@@ -272,8 +271,8 @@ export default class ProductsComponent extends Component {
     }
   };
 
-  getNameFromUrl = (name) => {
-    if (typeof (name) === 'string') {
+  getNameFromUrl = name => {
+    if (typeof name === 'string') {
       return name.substring(name.lastIndexOf('/') + 1);
     }
   };
@@ -289,8 +288,8 @@ export default class ProductsComponent extends Component {
         </tr>
         </thead>
         <tbody>
-        {this.props.objectHolder['colors'] ?
-          this.props.objectHolder['colors'].map((c, key) =>
+        {this.props.objectHolder.colors ?
+          this.props.objectHolder.colors.map((c, key) =>
             <tr key={key}>
               <td className='col-md-4'>
                 <Select
@@ -316,14 +315,16 @@ export default class ProductsComponent extends Component {
                     <tbody>
                     {c._locations ? c._locations.map((col, k) => (
                       <tr key={k}>
-                        <td><input type='text' className='form-control'
-                                   value={col.name}
-                                   onChange={e =>
-                                     this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'name', e)}/>
+                        <td>
+                          <input type='text' className='form-control'
+                                 value={col.name}
+                                 onChange={e =>
+                                   this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'name', e)}/>
                         </td>
-                        <td><input type='file' className='form-control' accept='image/*'
-                                   onChange={e =>
-                                     this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'image', e)}/>
+                        <td>
+                          <input type='file' className='form-control' accept='image/*'
+                                 onChange={e =>
+                                   this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'image', e)}/>
                           {typeof (col.image) === 'string' ?
                             <a href={this.getFileUrl(col.image)}>{this.getNameFromUrl(col.image)}</a> : null
                           }  </td>
@@ -364,8 +365,8 @@ export default class ProductsComponent extends Component {
         </tr>
         </thead>
         <tbody>
-        {this.props.objectHolder['colorizables'] ?
-          this.props.objectHolder['colorizables'].map((c, key) =>
+        {this.props.objectHolder.colorizables ?
+          this.props.objectHolder.colorizables.map((c, key) =>
             <tr key={key}>
               <td><input type='text' className='form-control'
                          value={c.name}
@@ -388,15 +389,17 @@ export default class ProductsComponent extends Component {
                     <tbody>
                     {c._colors ? c._colors.map((col, k) => (
                       <tr key={k}>
-                        <td><input type='text' className='form-control'
-                                   value={col.name}
-                                   onChange={e =>
-                                     this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'name', e)}/>
+                        <td>
+                          <input type='text' className='form-control'
+                                 value={col.name}
+                                 onChange={e =>
+                                   this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'name', e)}/>
                         </td>
-                        <td><input type='text' className='form-control'
-                                   value={col.value}
-                                   onChange={e =>
-                                     this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'value', e)}/>
+                        <td>
+                          <input type='text' className='form-control'
+                                 value={col.value}
+                                 onChange={e =>
+                                   this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'value', e)}/>
 
                           <span className='label label-default pull-right'
                                 style={{background: col.value}}>{' '}</span></td>
@@ -483,21 +486,19 @@ export default class ProductsComponent extends Component {
     if (!SIZES || !SIZES.length) {
       return [];
     }
-
     return _.map(SIZES, col => ({value: col, name: col}));
   };
 
   getSelectedSizeOptions = () => {
-    if (!this.props.objectHolder['sizes'] || !this.props.objectHolder['sizes'].length) {
+    if (!this.props.objectHolder.sizes || !this.props.objectHolder.sizes.length) {
       return [];
     }
 
-    if (typeof (this.props.objectHolder['sizes'])[0] === 'string') {
-      return _.map(this.props.objectHolder['sizes'], col => ({value: col, name: col}));
+    if (typeof (this.props.objectHolder.sizes)[0] === 'string') {
+      return _.map(this.props.objectHolder.sizes, col => ({value: col, name: col}));
     }
 
-    return this.props.objectHolder['sizes'];
-
+    return this.props.objectHolder.sizes;
   };
 
   crop = () => {
@@ -578,8 +579,8 @@ export default class ProductsComponent extends Component {
         </tr>
         </thead>
         <tbody>
-        {this.props.objectHolder['editableAreaSizes'] ?
-          this.props.objectHolder['editableAreaSizes'].map((c, key) =>
+        {this.props.objectHolder.editableAreaSizes ?
+          this.props.objectHolder.editableAreaSizes.map((c, key) =>
             <tr key={key}>
               <td><input type='text' className='form-control'
                          value={c.label}
@@ -689,9 +690,9 @@ export default class ProductsComponent extends Component {
   };
 
   saveMulticolor = () => {
-    if (this.props.objectHolder['multicolor'] === true) {
+    if (this.props.objectHolder.multicolor === true) {
       this.props.setEditingObjectProperty('colors', []);
-    } else if (this.props.objectHolder['multicolor'] === false) {
+    } else if (this.props.objectHolder.multicolor === false) {
       this.props.setEditingObjectProperty('colorizables', []);
     }
   };
@@ -710,7 +711,7 @@ export default class ProductsComponent extends Component {
             }}
             handleImportJson={this.handleImportJson}
             hiddenInputs={['id', 'categoryId', 'thumbUrl', 'data', 'pantones',
-              this.props.objectHolder['multicolor'] === true ?
+              this.props.objectHolder.multicolor === true ?
                 'colors' : 'colorizables']}
             enableImportJson={this.props.enableImportJson}
             representations={{
@@ -730,7 +731,6 @@ export default class ProductsComponent extends Component {
                   if (cat) {
                     return cat.name;
                   }
-
                   return null;
                 },
                 sortable: true,
@@ -755,7 +755,9 @@ export default class ProductsComponent extends Component {
                                   onChange={e => this.handleFileChoose('template', e)}/>
                   {typeof (this.props.objectHolder['template']) === 'string' ?
                     <a
-                      href={this.getFileUrl(this.props.objectHolder['template'])}>{this.getNameFromUrl(this.props.objectHolder['template'])}</a> : null
+                      href={this.getFileUrl(this.props.objectHolder['template'])}>
+                      {this.getNameFromUrl(this.props.objectHolder['template'])}
+                    </a> : null
                   }
                 </div>,
                 saveF: this.handleFileUpload,
@@ -815,10 +817,10 @@ export default class ProductsComponent extends Component {
                               }
                             }
                           });
-                          this.props.setEditingObjectProperty('locations', [...this.props.objectHolder['locations'],
+                          this.props.setEditingObjectProperty('locations', [...this.props.objectHolder.locations,
                             {...obj, name: val.name}]);
                           this.setState({
-                            ...this.state, location: _.findIndex(this.props.objectHolder['locations'],
+                            ...this.state, location: _.findIndex(this.props.objectHolder.locations,
                               loc => loc.name === val.name)
                           });
                         }}
@@ -830,7 +832,7 @@ export default class ProductsComponent extends Component {
                             return;
                           }
                           this.setState({
-                            ...this.state, location: _.findIndex(this.props.objectHolder['locations'],
+                            ...this.state, location: _.findIndex(this.props.objectHolder.locations,
                               loc => loc.name === val.name)
                           });
                         }}
@@ -838,7 +840,7 @@ export default class ProductsComponent extends Component {
                     </div>
                   </div>
                   {this.state.location < 0 ||
-                  !this.props.objectHolder['locations'] || !this.props.objectHolder['locations'].length ? null :
+                  !this.props.objectHolder.locations || !this.props.objectHolder.locations.length ? null :
                     <div className='panel panel-default'>
                       <div className='panel-body'>
                         <div className='row'>
@@ -865,12 +867,12 @@ export default class ProductsComponent extends Component {
                                     <div className='input-group-btn'>
                                       <a href={this.getFileUrl(this.getLocationsInputValue('image'))}
                                          className='btn btn-default btn-sm'>{(() => {
-                                           let url = this.getFileUrl(this.getLocationsInputValue('image'));
-                                           if (url.length > 8) {
-                                             url = '...' + url.substr(url.length - 8);
-                                           }
-                                           return url;
-                                         })()
+                                        let url = this.getFileUrl(this.getLocationsInputValue('image'));
+                                        if (url.length > 8) {
+                                          url = '...' + url.substr(url.length - 8);
+                                        }
+                                        return url;
+                                      })()
                                       }</a>
                                     </div> : null
                                   }
@@ -888,12 +890,12 @@ export default class ProductsComponent extends Component {
                                     <div className='input-group-btn'>
                                       <a href={this.getFileUrl(this.getLocationsInputValue('mask'))}
                                          className='btn btn-default btn-sm'>{(() => {
-                                           let url = this.getFileUrl(this.getLocationsInputValue('mask'));
-                                           if (url.length > 8) {
-                                             url = '...' + url.substr(url.length - 8);
-                                           }
-                                           return url;
-                                         })()
+                                        let url = this.getFileUrl(this.getLocationsInputValue('mask'));
+                                        if (url.length > 8) {
+                                          url = '...' + url.substr(url.length - 8);
+                                        }
+                                        return url;
+                                      })()
                                       }</a>
                                     </div> : null
                                   }
@@ -911,12 +913,12 @@ export default class ProductsComponent extends Component {
                                     <div className='input-group-btn'>
                                       <a href={this.getFileUrl(this.getLocationsInputValue('overlayInfo'))}
                                          className='btn btn-default btn-sm'>{(() => {
-                                           let url = this.getFileUrl(this.getLocationsInputValue('overlayInfo'));
-                                           if (url.length > 8) {
-                                             url = '...' + url.substr(url.length - 8);
-                                           }
-                                           return url;
-                                         })()
+                                        let url = this.getFileUrl(this.getLocationsInputValue('overlayInfo'));
+                                        if (url.length > 8) {
+                                          url = '...' + url.substr(url.length - 8);
+                                        }
+                                        return url;
+                                      })()
                                       }</a>
                                     </div> : null
                                   }
@@ -1125,7 +1127,7 @@ export default class ProductsComponent extends Component {
               },
               description: {
                 elem: <textarea className='form-control' rows='3'
-                                value={this.props.objectHolder['description']}
+                                value={this.props.objectHolder.description}
                                 onChange={e => this.handleSelectedObjectChange('description', e)}>
               </textarea>
               },
@@ -1142,7 +1144,7 @@ export default class ProductsComponent extends Component {
               },
               multicolor: {
                 elem: <select className='form-control'
-                              value={this.props.objectHolder['multicolor']}
+                              value={this.props.objectHolder.multicolor}
                               onChange={e => this.props.setEditingObjectProperty('multicolor', e.target.value === 'true')}>
                   <option value={false}>No</option>
                   <option value={true}>Yes</option>
@@ -1173,7 +1175,7 @@ export default class ProductsComponent extends Component {
               },
               hideEditableAreaBorder: {
                 elem: <select className='form-control'
-                              value={this.props.objectHolder['hideEditableAreaBorder']}
+                              value={this.props.objectHolder.hideEditableAreaBorder}
                               onChange={e => this.handleSelectedObjectChange('hideEditableAreaBorder', e)}>
                   <option value={false}>Hidden</option>
                   <option value={true}>Visible</option>
@@ -1181,7 +1183,7 @@ export default class ProductsComponent extends Component {
               },
               namesNumbersEnabled: {
                 elem: <select className='form-control'
-                              value={this.props.objectHolder['namesNumbersEnabled']}
+                              value={this.props.objectHolder.namesNumbersEnabled}
                               onChange={e => this.handleSelectedObjectChange('namesNumbersEnabled', e)}>
                   <option value={false}>Disabled</option>
                   <option value={true}>Enabled</option>
@@ -1189,7 +1191,7 @@ export default class ProductsComponent extends Component {
               },
               resizable: {
                 elem: <select className='form-control'
-                              value={this.props.objectHolder['resizable']}
+                              value={this.props.objectHolder.resizable}
                               onChange={e => this.handleSelectedObjectChange('resizable', e)}>
                   <option value={false}>No</option>
                   <option value={true}>Yes</option>
@@ -1197,7 +1199,7 @@ export default class ProductsComponent extends Component {
               },
               showRuler: {
                 elem: <select className='form-control'
-                              value={this.props.objectHolder['showRuler']}
+                              value={this.props.objectHolder.showRuler}
                               onChange={e => this.handleSelectedObjectChange('showRuler', e)}>
                   <option value={false}>Hidden</option>
                   <option value={true}>Visible</option>
@@ -1208,17 +1210,18 @@ export default class ProductsComponent extends Component {
             customInputs={{
               price: {
                 elem: <input type='text' className='form-control'
-                             value={this.props.objectHolder['data'] ? this.props.objectHolder['data'].price : ''}
+                             value={this.props.objectHolder.data ? this.props.objectHolder.data.price : ''}
                              onChange={e => this.handleSelectedObjectDataChange('data', 'price', e)}/>
               },
               material: {
                 elem: <input type='text' className='form-control'
-                             value={this.props.objectHolder['data'] ? this.props.objectHolder['data'].material : ''}
+                             value={this.props.objectHolder.data ? this.props.objectHolder.data.material : ''}
                              onChange={e => this.handleSelectedObjectDataChange('data', 'material', e)}/>
               },
               useForDecoration: {
                 elem: <select className='form-control'
-                              value={this.props.objectHolder['pantones'] ? this.props.objectHolder['pantones'].useForDecoration : ''}
+                              value={this.props.objectHolder.pantones ?
+                                this.props.objectHolder.pantones.useForDecoration : ''}
                               onChange={e => this.handleSelectedObjectDataChange('pantones', 'useForDecoration', e)}>
                   <option value={false}>No</option>
                   <option value={true}>Yes</option>
@@ -1226,7 +1229,8 @@ export default class ProductsComponent extends Component {
               },
               useForProduct: {
                 elem: <select className='form-control'
-                              value={this.props.objectHolder['pantones'] ? this.props.objectHolder['pantones'].useForProduct : ''}
+                              value={this.props.objectHolder.pantones ?
+                                this.props.objectHolder.pantones.useForProduct : ''}
                               onChange={e => this.handleSelectedObjectDataChange('pantones', 'useForProduct', e)}>
                   <option value={false}>No</option>
                   <option value={true}>Yes</option>
@@ -1237,16 +1241,16 @@ export default class ProductsComponent extends Component {
                   <input type='file' className='form-control' accept='image/*'
                          onChange={e => this.handleFileChoose('thumbUrl', e)}/>
 
-                  {typeof (this.props.objectHolder['thumbUrl']) === 'string' && this.props.status === STATUS_EDITING ?
-                    <div style={{float: 'left'}}><a href={this.getFileUrl(this.props.objectHolder['thumbUrl'])}
+                  {typeof (this.props.objectHolder.thumbUrl) === 'string' && this.props.status === STATUS_EDITING ?
+                    <div style={{float: 'left'}}><a href={this.getFileUrl(this.props.objectHolder.thumbUrl)}
                                                     className='thumbnail'
                                                     style={{marginTop: 8, width: 110}}><img
-                      style={{width: 110}} src={this.getFileUrl(this.props.objectHolder['thumbUrl'])}/>
+                      style={{width: 110}} src={this.getFileUrl(this.props.objectHolder.thumbUrl)}/>
                     </a>
                     </div>
                     : null}
                   <div style={{float: 'left'}}>
-                    {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumbUrl'] ?
+                    {this.props.status === STATUS_CREATING && !this.props.objectHolder.thumbUrl ?
                       <canvas style={{marginTop: 8}} ref='canvas' width='110'
                               height='110' hidden/> :
                       <canvas style={{marginTop: 8}} ref='canvas' width='110'
@@ -1257,7 +1261,7 @@ export default class ProductsComponent extends Component {
               },
               category: {
                 elem: <select className='form-control'
-                              value={this.props.objectHolder['categoryId']}
+                              value={this.props.objectHolder.categoryId}
                               onChange={e => this.handleSelectedObjectChange('categoryId', e)}>
                   <option key='defGroup' value={undefined}>Choose category...</option>
                   {this.props.productsCategories.map((gc, key) => (
@@ -1268,8 +1272,6 @@ export default class ProductsComponent extends Component {
               }
             }}
       />
-    )
-      ;
+    );
   }
-
 }
