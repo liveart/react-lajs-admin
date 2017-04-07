@@ -734,8 +734,8 @@ export default class ProductsComponent extends Component {
                   return null;
                 },
                 sortable: true,
-                sortElem: <Select value={this.props.objectHolder['categoryId']}
-                                  options={this.props.productsCategories}
+                sortElem: <Select value={this.props.objectHolder.categoryId}
+                                  options={_.sortBy(this.props.productsCategories, 'name')}
                                   valueKey='id'
                                   labelKey='name'
                                   onChange={el => {
@@ -867,12 +867,12 @@ export default class ProductsComponent extends Component {
                                     <div className='input-group-btn'>
                                       <a href={this.getFileUrl(this.getLocationsInputValue('image'))}
                                          className='btn btn-default btn-sm'>{(() => {
-                                           let url = this.getFileUrl(this.getLocationsInputValue('image'));
-                                           if (url.length > 8) {
-                                             url = '...' + url.substr(url.length - 8);
-                                           }
-                                           return url;
-                                         })()
+                                        let url = this.getFileUrl(this.getLocationsInputValue('image'));
+                                        if (url.length > 8) {
+                                          url = '...' + url.substr(url.length - 8);
+                                        }
+                                        return url;
+                                      })()
                                       }</a>
                                     </div> : null
                                   }
@@ -890,12 +890,12 @@ export default class ProductsComponent extends Component {
                                     <div className='input-group-btn'>
                                       <a href={this.getFileUrl(this.getLocationsInputValue('mask'))}
                                          className='btn btn-default btn-sm'>{(() => {
-                                           let url = this.getFileUrl(this.getLocationsInputValue('mask'));
-                                           if (url.length > 8) {
-                                             url = '...' + url.substr(url.length - 8);
-                                           }
-                                           return url;
-                                         })()
+                                        let url = this.getFileUrl(this.getLocationsInputValue('mask'));
+                                        if (url.length > 8) {
+                                          url = '...' + url.substr(url.length - 8);
+                                        }
+                                        return url;
+                                      })()
                                       }</a>
                                     </div> : null
                                   }
@@ -913,12 +913,12 @@ export default class ProductsComponent extends Component {
                                     <div className='input-group-btn'>
                                       <a href={this.getFileUrl(this.getLocationsInputValue('overlayInfo'))}
                                          className='btn btn-default btn-sm'>{(() => {
-                                           let url = this.getFileUrl(this.getLocationsInputValue('overlayInfo'));
-                                           if (url.length > 8) {
-                                             url = '...' + url.substr(url.length - 8);
-                                           }
-                                           return url;
-                                         })()
+                                        let url = this.getFileUrl(this.getLocationsInputValue('overlayInfo'));
+                                        if (url.length > 8) {
+                                          url = '...' + url.substr(url.length - 8);
+                                        }
+                                        return url;
+                                      })()
                                       }</a>
                                     </div> : null
                                   }

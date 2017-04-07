@@ -291,7 +291,6 @@ module.exports = function (app) {
   });
 
   app.get('/api/' + LIVE_ART + '/fonts', function (req, res) {
-    const VECTOR_ROOT = '/files/vectors/';
     const Font = loopback.getModel('Font');
     const fonts = [];
     Font.find({

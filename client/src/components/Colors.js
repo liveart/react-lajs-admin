@@ -1,8 +1,9 @@
 import React, {Component, PropTypes} from 'react';
 import {FormControl} from 'react-bootstrap';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
+import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 import {SketchPicker} from 'react-color';
-import * as ColorModel from '../../../../common/models/color.json';
+import {sortBy} from 'lodash';
+import * as ColorModel from '../../../common/models/color.json';
 import * as _ from 'lodash';
 const Color = ColorModel.properties;
 
@@ -91,7 +92,7 @@ export default class ColorsComponent extends Component {
                                        value={this.props.objectHolder[prop]}
                                        onChange={e => this.handleSelectedObjectChange(prop, e)}>
               <option key='defGroup' value={''}>...</option>
-              {this.props.secondaryData.map((cg, key) => (
+              {_.sortBy(this.props.secondaryData).map((cg, key) => (
                 <option key={key} value={cg.id}>{cg.name}</option>
               ))}
             </select></td>;
