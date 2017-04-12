@@ -13,6 +13,7 @@ export function* fetchProductsCategories() {
     yield dispatch({type: actionTypes.PRODUCTS_CATEGORY_FAILURE, message: e});
   }
 }
+
 export function* fetchProductsCategoryById(action) {
   try {
     const res = yield* api.retrieve(endpoint, action.id);
@@ -21,6 +22,7 @@ export function* fetchProductsCategoryById(action) {
     yield dispatch({type: actionTypes.PRODUCTS_CATEGORY_FAILURE, message: e});
   }
 }
+
 export function* fetchProductsCategoriesNumber() {
   try {
     const res = yield* api.retrieveNumber(endpoint);

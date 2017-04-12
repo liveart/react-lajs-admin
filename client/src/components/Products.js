@@ -1217,24 +1217,6 @@ export default class ProductsComponent extends Component {
                              value={this.props.objectHolder.data ? this.props.objectHolder.data.material : ''}
                              onChange={e => this.handleSelectedObjectDataChange('data', 'material', e)}/>
               },
-              useForDecoration: {
-                elem: <select className='form-control'
-                              value={this.props.objectHolder.pantones ?
-                                this.props.objectHolder.pantones.useForDecoration : ''}
-                              onChange={e => this.handleSelectedObjectDataChange('pantones', 'useForDecoration', e)}>
-                  <option value={false}>No</option>
-                  <option value={true}>Yes</option>
-                </select>
-              },
-              useForProduct: {
-                elem: <select className='form-control'
-                              value={this.props.objectHolder.pantones ?
-                                this.props.objectHolder.pantones.useForProduct : ''}
-                              onChange={e => this.handleSelectedObjectDataChange('pantones', 'useForProduct', e)}>
-                  <option value={false}>No</option>
-                  <option value={true}>Yes</option>
-                </select>
-              },
               thumb: {
                 elem: <div>
                   <input type='file' className='form-control' accept='image/*'
@@ -1270,6 +1252,40 @@ export default class ProductsComponent extends Component {
                 </select>,
                 required: true,
                 viewIndex: Product.categoryId.viewIndex
+              },
+              pantones: {
+                elem: <div className='panel panel-default'>
+                  <div className='panel-body'>
+                    <div className='form-group'>
+                      <div className='col-md-2'>
+                        <p>Use for decoration: </p>
+                      </div>
+                      <div className='col-md-10'>
+                        <select className='form-control'
+                                value={this.props.objectHolder.pantones ?
+                                  this.props.objectHolder.pantones.useForDecoration : ''}
+                                onChange={e => this.handleSelectedObjectDataChange('pantones', 'useForDecoration', e)}>
+                          <option value={false}>No</option>
+                          <option value={true}>Yes</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className='form-group'>
+                      <div className='col-md-2'>
+                        <p>Use for product: </p>
+                      </div>
+                      <div className='col-md-10'>
+                        <select className='form-control'
+                                value={this.props.objectHolder.pantones ?
+                                  this.props.objectHolder.pantones.useForProduct : ''}
+                                onChange={e => this.handleSelectedObjectDataChange('pantones', 'useForProduct', e)}>
+                          <option value={false}>No</option>
+                          <option value={true}>Yes</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               }
             }}
       />
