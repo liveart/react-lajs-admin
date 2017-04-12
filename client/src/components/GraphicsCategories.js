@@ -46,12 +46,14 @@ export default class extends Component {
     editSecondaryEntity: PropTypes.func.isRequired,
     deleteSecondaryEntity: PropTypes.func.isRequired
   };
+
   handleFileUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      const image = this.props.objectHolder['thumb'];
-      const uploadThumbnail = (file) => {
-        this.props.uploadThumbnail(file);
-      };
+      const image = this.props.objectHolder.thumb;
+      if (typeof image === 'string') {
+        return;
+      }
+      const uploadThumbnail = file => this.props.uploadThumbnail(file);
       if (image.type !== 'image/svg+xml') {
         const c = this.refs.canvas;
         c.toBlob(function (blob) {
@@ -63,6 +65,7 @@ export default class extends Component {
       }
     }
   };
+
   handleFileChoose = (prop, e) => {
     this.props.setEditingObjectProperty(prop, e.target.files[0]);
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
