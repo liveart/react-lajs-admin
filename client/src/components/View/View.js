@@ -286,13 +286,13 @@ export default class ViewAbstract extends Component {
     }
   };
 
-  renderInputs = () =>
-    Object.getOwnPropertyNames(this.props.objectSample).map((prop, key) => {
+  getDefaultInputs = () =>
+    Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
       if (this.props.hiddenInputs.indexOf(prop) > -1) {
-        return null;
+        return {element: null};
       }
-      return (
-        <div key={key} className='form-group'>
+      return {
+        element: <div key={prop} className='form-group'>
           <div className='col-md-2'>
             <p className={'' + (this.props.objectSample[prop].required ? 'req' : '')}>
               {this.props.changedLabels && this.props.changedLabels[prop] ?
@@ -316,9 +316,37 @@ export default class ViewAbstract extends Component {
                 null
             }
           </div>
-        </div>
-      );
+        </div>,
+        viewIndex: this.props.objectSample[prop].viewIndex || Object.getOwnPropertyNames(this.props.objectSample).length
+      };
     });
+
+  getCustomInputs = () => {
+    if (!this.props.customInputs) {
+      return [];
+    }
+    return Object.getOwnPropertyNames(this.props.customInputs).map(prop => {
+      return {
+        element: <div key={prop} className='form-group'>
+          <div className='col-md-2'>
+            <p className={'' + (this.props.customInputs[prop].required ? 'req' : '')}>
+              {this.props.changedLabels && this.props.changedLabels[prop] ?
+                this.props.changedLabels[prop] : prop.capitalizeFirstLetter()}
+            </p>
+          </div>
+          <div className='col-md-10'>
+            {
+              this.props.customInputs[prop].elem
+            }
+          </div>
+        </div>,
+        viewIndex: this.props.customInputs[prop].viewIndex || Object.getOwnPropertyNames(this.props.objectSample).length
+      };
+    });
+  };
+
+  renderInputs = () =>
+    (_.sortBy([...this.getDefaultInputs(), ...this.getCustomInputs()], 'viewIndex')).map(obj => obj.element);
 
   renderImportJsonInputs = () => (
     <div className='box-body'>
@@ -371,29 +399,6 @@ export default class ViewAbstract extends Component {
     reader.readAsText(e.target.files[0]);
   };
 
-  renderCustomInputs = () => {
-    if (!this.props.customInputs) {
-      return null;
-    }
-    return Object.getOwnPropertyNames(this.props.customInputs).map((prop, key) => {
-      return (
-        <div key={key} className='form-group'>
-          <div className='col-md-2'>
-            <p className={'' + (this.props.customInputs[prop].required ? 'req' : '')}>
-              {this.props.changedLabels && this.props.changedLabels[prop] ?
-                this.props.changedLabels[prop] : prop.capitalizeFirstLetter()}
-            </p>
-          </div>
-          <div className='col-md-10'>
-            {
-              this.props.customInputs[prop].elem
-            }
-          </div>
-        </div>
-      );
-    });
-  };
-
   renderPage = () => {
     if (this.props.status === STATUS_DEFAULT) {
       return this.renderDefault();
@@ -438,7 +443,6 @@ export default class ViewAbstract extends Component {
               <form className='form-horizontal'>
                 <div className='box-body'>
                   {this.renderInputs()}
-                  {this.renderCustomInputs()}
                 </div>
                 <div className='box-footer'>
                   {this.props.status === STATUS_CREATING ? this.renderCreatingButtons() : null}
@@ -487,7 +491,6 @@ export default class ViewAbstract extends Component {
       return this.props.renderDeleteConfirmationButtons();
     }
   };
-
 
 
   render() {

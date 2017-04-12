@@ -200,7 +200,7 @@ export default class ProductsComponent extends Component {
     this.props.setEditingObjectProperty(prop, e.target.files[0]);
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       if (prop === 'image') {
-        const image = this.props.objectHolder['image'];
+        const image = this.props.objectHolder.image;
         const reader = new FileReader();
         reader.onloadend = () => {
           this.setState({
@@ -217,7 +217,7 @@ export default class ProductsComponent extends Component {
   };
 
   handleLocationsNestedFileChoose = (prop, e) => {
-    const locs = [...this.props.objectHolder['locations']];
+    const locs = [...this.props.objectHolder.locations];
     (locs[this.state.location])[prop] = e.target.files[0];
     this.props.setEditingObjectProperty('locations', locs);
   };
@@ -228,7 +228,7 @@ export default class ProductsComponent extends Component {
 
   handleThumbUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      const image = this.props.objectHolder['thumbUrl'];
+      const image = this.props.objectHolder.thumbUrl;
       const uploadThumbnail = file => {
         this.props.uploadProductThumb(file);
       };
@@ -253,17 +253,17 @@ export default class ProductsComponent extends Component {
   };
 
   getSelectedOptions = key => {
-    if (!this.props.objectHolder['colors'] || !this.props.objectHolder['colors'].length) {
+    if (!this.props.objectHolder.colors || !this.props.objectHolder.colors.length) {
       return [];
     }
 
-    if (this.props.objectHolder['colors'][key]) {
-      return this.props.objectHolder['colors'][key];
+    if (this.props.objectHolder.colors[key]) {
+      return this.props.objectHolder.colors[key];
     }
   };
 
   onColorsSelectChange = (val, key) => {
-    const arr = this.props.objectHolder['colors'];
+    const arr = this.props.objectHolder.colors;
     if (val) {
       (arr[key])['name'] = val.name;
       (arr[key])['value'] = val.value;
@@ -701,9 +701,9 @@ export default class ProductsComponent extends Component {
     return (
       <View {...this.props} objectSample={{...Product}}
             sortingSupport={true}
-            hiddenProperties={['id', 'colors', 'locations', 'multicolor', 'description', 'colorizables', 'minDPU', 'minQuantity',
-              'namesNumbersEnabled', 'hideEditableAreaBorder', 'namesNumbersEnabled', 'pantones', 'resizable',
-              'editableAreaSizes', 'showRuler', 'template', 'data', 'sizes']}
+            hiddenProperties={['id', 'colors', 'locations', 'multicolor', 'description', 'colorizables', 'minDPU',
+              'minQuantity', 'namesNumbersEnabled', 'hideEditableAreaBorder', 'namesNumbersEnabled', 'pantones',
+              'resizable', 'editableAreaSizes', 'showRuler', 'template', 'data', 'sizes']}
             changedLabels={{
               hideEditableAreaBorder: 'Editable area border', namesNumbersEnabled: 'Name numbers',
               editableAreaSizes: 'Editable Area Sizes', minDPU: 'Min DPU', minQuantity: 'Min quantity',
@@ -753,10 +753,10 @@ export default class ProductsComponent extends Component {
               template: {
                 elem: <div><input type='file' className='form-control'
                                   onChange={e => this.handleFileChoose('template', e)}/>
-                  {typeof (this.props.objectHolder['template']) === 'string' ?
+                  {typeof (this.props.objectHolder.template) === 'string' ?
                     <a
-                      href={this.getFileUrl(this.props.objectHolder['template'])}>
-                      {this.getNameFromUrl(this.props.objectHolder['template'])}
+                      href={this.getFileUrl(this.props.objectHolder.template)}>
+                      {this.getNameFromUrl(this.props.objectHolder.template)}
                     </a> : null
                   }
                 </div>,
@@ -867,15 +867,14 @@ export default class ProductsComponent extends Component {
                                     <div className='input-group-btn'>
                                       <a href={this.getFileUrl(this.getLocationsInputValue('image'))}
                                          className='btn btn-default btn-sm'>{(() => {
-                                           let url = this.getFileUrl(this.getLocationsInputValue('image'));
-                                           if (url.length > 8) {
-                                             url = '...' + url.substr(url.length - 8);
-                                           }
-                                           return url;
-                                         })()
-                                      }</a>
-                                    </div> : null
-                                  }
+                                        let url = this.getFileUrl(this.getLocationsInputValue('image'));
+                                        if (url.length > 8) {
+                                          url = '...' + url.substr(url.length - 8);
+                                        }
+                                        return url;
+                                      })()}
+                                      </a>
+                                    </div> : null}
                                 </div>
                               </div>
                             </div>
@@ -890,12 +889,12 @@ export default class ProductsComponent extends Component {
                                     <div className='input-group-btn'>
                                       <a href={this.getFileUrl(this.getLocationsInputValue('mask'))}
                                          className='btn btn-default btn-sm'>{(() => {
-                                           let url = this.getFileUrl(this.getLocationsInputValue('mask'));
-                                           if (url.length > 8) {
-                                             url = '...' + url.substr(url.length - 8);
-                                           }
-                                           return url;
-                                         })()
+                                        let url = this.getFileUrl(this.getLocationsInputValue('mask'));
+                                        if (url.length > 8) {
+                                          url = '...' + url.substr(url.length - 8);
+                                        }
+                                        return url;
+                                      })()
                                       }</a>
                                     </div> : null
                                   }
@@ -913,12 +912,12 @@ export default class ProductsComponent extends Component {
                                     <div className='input-group-btn'>
                                       <a href={this.getFileUrl(this.getLocationsInputValue('overlayInfo'))}
                                          className='btn btn-default btn-sm'>{(() => {
-                                           let url = this.getFileUrl(this.getLocationsInputValue('overlayInfo'));
-                                           if (url.length > 8) {
-                                             url = '...' + url.substr(url.length - 8);
-                                           }
-                                           return url;
-                                         })()
+                                        let url = this.getFileUrl(this.getLocationsInputValue('overlayInfo'));
+                                        if (url.length > 8) {
+                                          url = '...' + url.substr(url.length - 8);
+                                        }
+                                        return url;
+                                      })()
                                       }</a>
                                     </div> : null
                                   }
@@ -1257,18 +1256,20 @@ export default class ProductsComponent extends Component {
                               height='110'/>}
                   </div>
                 </div>,
-                required: true
+                required: true,
+                viewIndex: Product.thumbUrl.viewIndex
               },
               category: {
                 elem: <select className='form-control'
                               value={this.props.objectHolder.categoryId}
                               onChange={e => this.handleSelectedObjectChange('categoryId', e)}>
-                  <option key='defGroup' value={undefined}>Choose category...</option>
+                  <option value={undefined}>Choose category...</option>
                   {this.props.productsCategories.map((gc, key) => (
                     <option key={key} value={gc.id}>{gc.name}</option>
                   ))}
                 </select>,
-                required: true
+                required: true,
+                viewIndex: Product.categoryId.viewIndex
               }
             }}
       />

@@ -7,12 +7,28 @@
     "validateUpsert": true
   },
   "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    },
     "name": {
       "type": "string",
-      "required": true
+      "required": true,
+      "viewIndex": 1
+    },
+    "thumbUrl": {
+      "type": "string",
+      "required": true,
+      "viewIndex": 2
+    },
+    "categoryId": {
+      "type": "string",
+      "required": true,
+      "viewIndex": 3
     },
     "description": {
-      "type": "string"
+      "type": "string",
+      "viewIndex": 4
     },
     "data": {
       "type": {
@@ -23,10 +39,6 @@
         "price": "",
         "material": ""
       }
-    },
-    "categoryId": {
-      "type": "string",
-      "required": true
     },
     "minDPU": {
       "type": "number"
@@ -153,15 +165,12 @@
           }
         }
       ],
-      "required": true
+      "required": true,
+      "viewIndex": 5
     },
     "template": {
       "type": "string",
       "required": false
-    },
-    "thumbUrl": {
-      "type": "string",
-      "required": true
     }
   },
   "validations": [],
