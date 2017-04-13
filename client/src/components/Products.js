@@ -560,13 +560,19 @@ export default class ProductsComponent extends Component {
   };
 
   createCustomOption = () => {
-    if (!this.customOptionInput || !this.customOptionInput.value.length) {
+    if (!this.customOptionInput || !this.customOptionInput.value || !this.customOptionInput.value.length) {
       this.props.addNotification('error', 'Incorrect custom property name.');
       return;
     }
     let data = this.props.objectHolder.data;
     data[this.customOptionInput.value] = '';
     this.customOptionInput.value = '';
+    this.props.setEditingObjectProperty('data', {...data});
+  };
+
+  removeCustomOption = prop => {
+    let data = this.props.objectHolder.data;
+    delete data[prop];
     this.props.setEditingObjectProperty('data', {...data});
   };
 
@@ -690,7 +696,7 @@ export default class ProductsComponent extends Component {
                 elem: this.renderColorsTable(),
                 saveF: this.saveMulticolor,
                 getName: color => _.forEach(color, clr => {
-                  if (clr !== null) {
+                  if (clr !== null && clr._locations) {
                     if (clr._locations.length) {
                       _.forEach(clr._locations, lc => {
                         if (typeof (lc.image) === 'object') {
@@ -857,10 +863,16 @@ export default class ProductsComponent extends Component {
                         <div className='col-md-2'>
                           <p>{prop.capitalizeFirstLetter()}: </p>
                         </div>
-                        <div className='col-md-10'>
+                        <div className='col-md-9'>
                           <input type='text' className='form-control'
                                  value={this.props.objectHolder.data[prop]}
                                  onChange={e => this.handleSelectedObjectDataChange('data', prop, e)}/>
+                        </div>
+                        <div className='col-md-1'>
+                          <a className='btn btn-default' href='#' aria-label='Remove'
+                             onClick={() => this.removeCustomOption(prop)}>
+                            <i className='fa fa-times' aria-hidden='true'/>
+                          </a>
                         </div>
                       </div>
                     ) : null}
