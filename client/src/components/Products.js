@@ -559,6 +559,17 @@ export default class ProductsComponent extends Component {
     }
   };
 
+  createCustomOption = () => {
+    if (!this.customOptionInput || !this.customOptionInput.value.length) {
+      this.props.addNotification('error', 'Incorrect custom property name.');
+      return;
+    }
+    let data = this.props.objectHolder.data;
+    data[this.customOptionInput.value] = '';
+    this.customOptionInput.value = '';
+    this.props.setEditingObjectProperty('data', {...data});
+  };
+
   render() {
     return (
       <View {...this.props} objectSample={{...Product}}
@@ -855,7 +866,15 @@ export default class ProductsComponent extends Component {
                     ) : null}
                   </div>
                   <div className='panel-footer'>
-                    <input type='text' className='form-control'/>
+                    <div className='input-group'>
+                      <input type='text' className='form-control' ref={r => this.customOptionInput = r}
+                             placeholder='New option name'/>
+                      <span className='input-group-btn'>
+                      <button type='button' className='btn btn-primary btn-n'
+                              onClick={this.createCustomOption}>Create
+                      </button>
+                    </span>
+                    </div>
                   </div>
                 </div>
               }
