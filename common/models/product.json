@@ -31,14 +31,8 @@
       "viewIndex": 4
     },
     "data": {
-      "type": {
-        "price": "string",
-        "material": "string"
-      },
-      "default": {
-        "price": "",
-        "material": ""
-      }
+      "type": "object",
+      "default": {}
     },
     "minDPU": {
       "type": "number"
