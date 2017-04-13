@@ -16,12 +16,16 @@ import {
   fetchColors
 } from '../actions/colors';
 import {
+  fetchColorgroups
+} from '../actions/colorgroups';
+import {
   enableImportJson
 } from '../actions/table';
 
 const mapStateToProps = state => {
   const {token} = state.user;
   const {colors, colorsLoading} = state.colors;
+  const {colorgroups, colorgroupsLoading} = state.colorgroups;
   const {products, productsError, productsLoading, productsMessage} = state.products;
   const {productsCategories, productsCategoriesLoading} = state.productsCategories;
   const {objectHolder, status} = state.table;
@@ -31,7 +35,9 @@ const mapStateToProps = state => {
     title: 'Product',
     data: products,
     colorsList: colors,
+    colorgroups,
     colorsLoading,
+    colorgroupsLoading,
     message: productsMessage,
     errors,
     loading: productsLoading || productsCategoriesLoading,
@@ -85,6 +91,9 @@ const mapDispatchToProps = dispatch => {
     },
     fetchColors() {
       dispatch(fetchColors());
+    },
+    fetchColorgroups() {
+      dispatch(fetchColorgroups());
     },
     enableImportJson() {
       dispatch(enableImportJson());

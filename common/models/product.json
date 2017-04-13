@@ -43,12 +43,17 @@
         {
           "name": "string",
           "id": "string",
+          "assignColorgroup": false,
           "_colors": [
             {
               "name": "string",
               "value": "string"
             }
-          ]
+          ],
+          "colorgroup": {
+            "name": "string",
+            "id": "string"
+          }
         }
       ]
     },
