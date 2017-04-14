@@ -1675,6 +1675,10 @@ cropperjs@^0.8.0:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/cropperjs/-/cropperjs-0.8.1.tgz#3dc01813e2f6d1df2c8909e1ce092146c692548e"
 
+cropperjs@^1.0.0-rc:
+  version "1.0.0-rc"
+  resolved "https://registry.yarnpkg.com/cropperjs/-/cropperjs-1.0.0-rc.tgz#ff37872d4f967940842da5dabf2954203c7f5a33"
+
 crypt@~0.0.1:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/crypt/-/crypt-0.0.2.tgz#88d7ff7ec0dfb86f713dc87bbb42d044d3e6c41b"
