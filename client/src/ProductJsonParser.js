@@ -48,12 +48,12 @@ function parseNested(category, baseUrl) {
         categories.push(...cat.categories);
       }
       delete cat.categories;
-      res.categories.push({...cat, categoryId: category.id});
+      res.categories.push({...cat, productsCategoryId: category.id});
       categories.forEach(cat2 => {
         const parsed = parseNested(cat2, baseUrl);
         delete cat2.categories;
         delete cat2.products;
-        res.categories.push({...cat2, categoryId: cat.id});
+        res.categories.push({...cat2, productsCategoryId: cat.id});
         res.categories.push(...parsed.categories);
         res.products.push(...parsed.products);
       });

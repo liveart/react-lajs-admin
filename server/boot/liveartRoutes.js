@@ -100,7 +100,7 @@ function getGraphics(category, graphics, req) {
 function getProductCategories(category, categories, products, req, loopback) {
   const cats = [];
   _.forEach(categories, cat => {
-    if (String(cat.graphicsCategoryId) === String(category.id)) {
+    if (String(cat.productsCategoryId) === String(category.id)) {
       cats.push({
         id: cat.id,
         name: cat.name,
@@ -151,7 +151,7 @@ function getProducts(category, products, req, loopback) {
             } else {
               r.colors = cr._colors;
             }
-
+            return r;
           }
         ) : undefined,
         colors: pr.colors ? _.map(pr.colors, cr => ({

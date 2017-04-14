@@ -49,7 +49,7 @@
         {
           "name": "string",
           "id": "string",
-          "assignColorgroup": false,
+          "assignColorgroup": "boolean",
           "_colors": [
             {
               "name": "string",
