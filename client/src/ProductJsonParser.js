@@ -1,16 +1,33 @@
-function parseProducts(cat) {
+function parseProducts(cat, baseUrl) {
   const products = [];
   if (cat.products) {
     products.push(...cat.products.map(prod => {
       const p = {
         ...prod,
-        colorizables: prod.colorizableElements ? prod.colorizableElements.map(cr => {
-          const o = {...cr, _colors: cr.colors};
-          delete o.colors;
-          return o;
-        }
-        ) : [],
-        _colors: prod.colors ? prod.colors : []
+        colorizables: prod.colorizableElements ?
+          prod.colorizableElements.map(
+            cr => {
+              const o = {...cr, _colors: cr.colors};
+              delete o.colors;
+              return o;
+            }
+          ) : [],
+        colors: prod.colors ? prod.colors.map(
+          c => {
+            if (c.location) {
+              c.location.map(
+                loc => {
+                  if (loc.image) {
+                    loc.image = baseUrl + loc.image;
+                  }
+
+                  if (loc.mask) {
+                    loc.mask = baseUrl + loc.mask;
+                  }
+                });
+            }
+            return c;
+          }) : []
       };
       delete p.colorizableElements;
       return p;
@@ -19,13 +36,13 @@ function parseProducts(cat) {
   return products;
 }
 
-function parseNested(category) {
+function parseNested(category, baseUrl) {
   const res = {categories: [], products: []};
-  res.products.push(...parseProducts(category));
+  res.products.push(...parseProducts(category, baseUrl));
   if (category.categories) {
     category.categories.forEach(cat => {
       const categories = [];
-      res.products.push(...parseProducts(cat));
+      res.products.push(...parseProducts(cat, baseUrl));
       delete cat.products;
       if (cat.categories) {
         categories.push(...cat.categories);
@@ -33,7 +50,7 @@ function parseNested(category) {
       delete cat.categories;
       res.categories.push({...cat, categoryId: category.id});
       categories.forEach(cat2 => {
-        const parsed = parseNested(cat2);
+        const parsed = parseNested(cat2, baseUrl);
         delete cat2.categories;
         delete cat2.products;
         res.categories.push({...cat2, categoryId: cat.id});
@@ -54,7 +71,7 @@ export function parseJson(json, baseUrl) {
   const categories = [];
   const productCategoriesList = obj.productCategoriesList;
   productCategoriesList.forEach(cat => {
-    const res = parseNested(cat);
+    const res = parseNested(cat, baseUrl);
     delete cat.products;
     delete cat.categories;
     products.push(...res.products);

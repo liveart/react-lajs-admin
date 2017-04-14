@@ -68,7 +68,7 @@
         {
           "name": "string",
           "value": "string",
-          "_locations": [
+          "location": [
             {
               "name": "string",
               "image": "string"
@@ -89,12 +89,7 @@
       "type": {
         "useForDecoration": "boolean",
         "useForProduct": "boolean"
-      },
-      "default": {
-        "useForDecoration": false,
-        "useForProduct": false
-      },
-      "required": false
+      }
     },
     "resizable": {
       "type": "boolean",
@@ -146,13 +141,6 @@
           "editableAreaUnitsRange": {
             "type": [
               "array"
-            ],
-            "default": [
-              [
-                0,
-                0,
-                1
-              ]
             ]
           },
           "editableAreaUnitsRestrictRotation": {
@@ -160,7 +148,7 @@
             "default": false
           },
           "clipRect": {
-            "type": "number"
+            "type": "array"
           }
         }
       ],

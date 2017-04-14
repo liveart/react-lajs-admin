@@ -5,6 +5,10 @@ const _ = require('lodash');
 const url = require('url');
 
 function deleteEmpty(entity) {
+  return entity;
+  if (!entity) {
+    return entity;
+  }
   Object.keys(entity).forEach(key => {
     if (key === 'id') {
       return;
@@ -39,17 +43,6 @@ function getFullUrl(req, urlStr) {
       host: req.get('host')
     });
     return addr + urlStr.substring(RELATIVE_URL.length);
-  }
-  return urlStr;
-}
-
-function getFullUrlFont(req, urlStr, loc) {
-  if (urlStr.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
-    const addr = url.format({
-      protocol: req.protocol,
-      host: req.get('host')
-    });
-    return addr + loc + urlStr.substring(RELATIVE_URL.length);
   }
   return urlStr;
 }
