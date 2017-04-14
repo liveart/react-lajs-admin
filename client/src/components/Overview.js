@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import InfoWidget from './InfoWidget';
 import {Link} from 'react-router';
 import {Row, Col, Grid} from 'react-bootstrap';

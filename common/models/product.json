@@ -16,15 +16,15 @@
       "required": true,
       "viewIndex": 1
     },
-    "thumbUrl": {
-      "type": "string",
-      "required": true,
-      "viewIndex": 2
-    },
     "categoryId": {
       "type": "string",
       "required": true,
       "viewIndex": 3
+    },
+    "thumbUrl": {
+      "type": "string",
+      "required": true,
+      "viewIndex": 2
     },
     "description": {
       "type": "string",
@@ -156,8 +156,7 @@
       "viewIndex": 5
     },
     "template": {
-      "type": "string",
-      "required": false
+      "type": "string"
     }
   },
   "validations": [],

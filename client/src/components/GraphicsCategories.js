@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {
   ID_PROP,
   STATUS_EDITING,
@@ -10,7 +11,6 @@ import {
 import * as GraphicsCategoryModel from '../../../common/models/graphics-category.json';
 import {RadioGroup, Radio} from 'react-radio-group';
 const GraphicsCategory = GraphicsCategoryModel.properties;
-const location = '/files/thumb/';
 import View from './View/View';
 import * as _ from 'lodash';
 const DELETE_CATEGORY = 'DELETE_CATEGORY';

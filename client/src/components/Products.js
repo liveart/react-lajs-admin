@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import View from './View/View';
 import * as ProductModel from '../../../common/models/product.json';
 import {
@@ -11,8 +12,7 @@ import {
   PRODUCT_LOCATION_IMAGE_FOLDER,
   PRODUCT_LOCATION_MASK_FOLDER,
   PRODUCT_LOCATION_OVERLAY_FOLDER,
-  SIZES,
-  PRODUCT_TEMPLATES_FOLDER
+  SIZES
 } from '../definitions';
 const LEAVE_URL_OPTION = 'Import';
 const ASSIGN_GROUP = 'Assign Color Group';

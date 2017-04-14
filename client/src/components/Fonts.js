@@ -1,18 +1,14 @@
-import React, {Component, PropTypes} from 'react';
-import {FormControl} from 'react-bootstrap';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {
-  ID_PROP,
   STATUS_EDITING,
   STATUS_CREATING,
-  STATUS_DEFAULT,
   RELATIVE_URL,
   FONTS_FOLDER,
   VECTORS_FOLDER
 } from '../definitions';
 import * as FontModel from '../../../common/models/font.json';
 const Font = FontModel.properties;
-const location = '/files/fonts/';
-const vectorsLocation = '/files/vectors/';
 import View from './View/View';
 
 export default class extends Component {
