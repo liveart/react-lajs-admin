@@ -97,7 +97,7 @@ function getGraphics(category, graphics, req) {
   return grs.length ? grs : undefined;
 }
 
-function getProductCategories(category, categories, products, req) {
+function getProductCategories(category, categories, products, req, loopback) {
   const cats = [];
   _.forEach(categories, cat => {
     if (String(cat.graphicsCategoryId) === String(category.id)) {
@@ -105,15 +105,15 @@ function getProductCategories(category, categories, products, req) {
         id: cat.id,
         name: cat.name,
         thumbUrl: getFullUrl(req, cat.thumbUrl),
-        categories: getProductCategories(cat, categories, products, req),
-        products: getProducts(cat, products, req)
+        categories: getProductCategories(cat, categories, products, req, loopback),
+        products: getProducts(cat, products, req, loopback)
       });
     }
   });
   return cats.length ? cats : undefined;
 }
 
-function getProducts(category, products, req) {
+function getProducts(category, products, req, loopback) {
   const prs = [];
   _.forEach(products, pr => {
     if (String(pr.categoryId) === String(category.id)) {
@@ -127,11 +127,33 @@ function getProducts(category, products, req) {
         minDPU: pr.minDPU,
         minQuantity: pr.minQuantity,
         multicolor: pr.multicolor,
-        colorizableElements: pr.colorizables ? _.map(pr.colorizables, cr => ({
-          name: cr.name,
-          id: cr.id,
-          colors: cr._colors
-        })) : undefined,
+        colorizableElements: pr.colorizables ? _.map(pr.colorizables,
+          cr => {
+            const r = {
+              name: cr.name,
+              id: cr.id
+            };
+            if (cr.assignColorgroup && cr.colorgroups) {
+              const colorsArr = [];
+              const Color = loopback.getModel('color');
+              cr.colorgroups.forEach(cg => {
+                Color.find({
+                  where: {
+                    colorgroupId: cg.id
+                  }
+                }, (err, cols) => {
+                  if (!err) {
+                    colorsArr.push(...cols);
+                  }
+                });
+              });
+              r.colors = colorsArr;
+            } else {
+              r.colors = cr._colors;
+            }
+
+          }
+        ) : undefined,
         colors: pr.colors ? _.map(pr.colors, cr => ({
           name: cr.name,
           value: cr.value,
@@ -224,8 +246,8 @@ module.exports = function (app) {
                 id: cat.id,
                 name: cat.name,
                 thumbUrl: getFullUrl(req, cat.thumbUrl),
-                categories: getProductCategories(cat, cats, products, req),
-                products: getProducts(cat, products, req)
+                categories: getProductCategories(cat, cats, products, req, loopback),
+                products: getProducts(cat, products, req, loopback)
               });
             }
           });

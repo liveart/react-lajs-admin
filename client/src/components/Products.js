@@ -23,7 +23,7 @@ import {parseJson} from '../ProductJsonParser';
 import Locations from './Locations';
 import * as _ from 'lodash';
 import Select, {Creatable} from 'react-select';
-import 'cropperjs/dist/cropper.css';
+import 'react-cropper/node_modules/cropperjs/dist/cropper.css';
 
 export default class ProductsComponent extends Component {
   static propTypes = {
