@@ -281,12 +281,11 @@ export default class ProductsComponent extends Component {
   };
 
   getSelectedColorLocationsOptions = (key, k) => {
-    if (!this.props.objectHolder.colors[key]._locations[k]) {
+    if (!this.props.objectHolder.colors[key].location[k]) {
       return {};
     }
     let arr = this.props.objectHolder.colors;
-    console.log(arr[key]._locations[k]);
-    return {name: arr[key]._locations[k].name};
+    return {name: arr[key].location[k].name};
 
   };
 
@@ -358,7 +357,7 @@ export default class ProductsComponent extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {c._locations ? c._locations.map((col, k) => (
+                    {c.location ? c.location.map((col, k) => (
                       <tr key={k}>
                         <td>
                           <Select style={{marginBottom: 6}}
@@ -374,7 +373,7 @@ export default class ProductsComponent extends Component {
                         <td>
                           <input type='file' className='form-control' accept='image/*'
                                  onChange={e =>
-                                   this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'image', e)}/>
+                                   this.handleSelectedObjectArrayArrayChange('colors', 'location', key, k, 'image', e)}/>
                           {typeof (col.image) === 'string' ?
                             <a href={this.getFileUrl(col.image)}>{this.getNameFromUrl(col.image)}</a> : null
                           }  </td>
@@ -410,7 +409,7 @@ export default class ProductsComponent extends Component {
   };
   handleColorLocationActionOption = (option, key, k) => {
     let colors = this.props.objectHolder.colors;
-    colors[key]._locations[k].name = option.value;
+    colors[key].location[k].name = option.value;
     this.props.setEditingObjectProperty('colors', colors);
   };
 
@@ -479,7 +478,7 @@ export default class ProductsComponent extends Component {
   );
 
   addColorsRow = () => (
-    this.handleSelectedObjectArrayAddNew('colors', {name: '', value: '', _locations: []})
+    this.handleSelectedObjectArrayAddNew('colors', {name: '', value: '', location: []})
   );
 
   deleteColorsRow = key => (
@@ -495,11 +494,11 @@ export default class ProductsComponent extends Component {
   );
 
   addLocationRow = colorId => (
-    this.handleSelectedObjectArrayArrayAddNew('colors', '_locations', colorId, {name: '', image: ''})
+    this.handleSelectedObjectArrayArrayAddNew('colors', 'location', colorId, {name: '', image: ''})
   );
 
   deleteLocationRow = (colorId, key) => (
-    this.handleSelectedObjectArrayArrayDeleteElement('colors', '_locations', colorId, key)
+    this.handleSelectedObjectArrayArrayDeleteElement('colors', 'location', colorId, key)
   );
 
   addColorizableRow = () => (
@@ -801,9 +800,9 @@ export default class ProductsComponent extends Component {
                 elem: this.renderColorsTable(),
                 saveF: this.saveMulticolor,
                 getName: color => _.forEach(color, clr => {
-                  if (clr !== null && clr._locations) {
-                    if (clr._locations.length) {
-                      _.forEach(clr._locations, lc => {
+                  if (clr !== null && clr.location) {
+                    if (clr.location.length) {
+                      _.forEach(clr.location, lc => {
                         if (typeof (lc.image) === 'object') {
                           this.handleImageUpload(lc.image);
                           lc.image = this.getName(lc.image, PRODUCT_IMG_FOLDER);
