@@ -305,9 +305,9 @@ module.exports = function (app) {
     });
   });
 
-  app.get('/api/' + LIVE_ART + '/fontsCSS', function (req, res) {
+  app.get('/api/' + LIVE_ART + '/fontsCSS',
+    function (req, res) {
       const Font = loopback.getModel('Font');
-      const location = url + '/files/fonts/';
       const NORMAL = 'normal';
       const BOLD = 'bold';
       const ITALIC = 'italic';

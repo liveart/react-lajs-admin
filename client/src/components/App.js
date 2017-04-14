@@ -41,7 +41,7 @@ export default class App extends Component {
           message,
           autoDismiss,
           action: {
-            label: 'It is intended behaviour',
+            label: 'Proceed',
             callback: actionF
           }
         });

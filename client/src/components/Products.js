@@ -570,7 +570,13 @@ export default class ProductsComponent extends Component {
     this.props.setEditingObjectProperty('data', {...data});
   };
 
-  removeCustomOption = prop => {
+  removeCustomOption = (prop, accepted) => {
+    if (!accepted) {
+      this.props.addNotification('info', 'Are you sure?',
+        `Option ${prop} will be deleted.`,
+        15, f => this.removeCustomOption(prop, true));
+      return;
+    }
     let data = this.props.objectHolder.data;
     delete data[prop];
     this.props.setEditingObjectProperty('data', {...data});
@@ -754,10 +760,10 @@ export default class ProductsComponent extends Component {
                 elem: <div className='panel panel-default'>
                   <div className='panel-body'>
                     <div className='form-group'>
-                      <div className='col-md-2'>
+                      <div className='col-md-3'>
                         <p>Use for decoration: </p>
                       </div>
-                      <div className='col-md-10'>
+                      <div className='col-md-9'>
                         <select className='form-control'
                                 value={this.props.objectHolder.pantones ?
                                   this.props.objectHolder.pantones.useForDecoration : ''}
@@ -768,10 +774,10 @@ export default class ProductsComponent extends Component {
                       </div>
                     </div>
                     <div className='form-group'>
-                      <div className='col-md-2'>
+                      <div className='col-md-3'>
                         <p>Use for product: </p>
                       </div>
-                      <div className='col-md-10'>
+                      <div className='col-md-9'>
                         <select className='form-control'
                                 value={this.props.objectHolder.pantones ?
                                   this.props.objectHolder.pantones.useForProduct : ''}
@@ -788,10 +794,10 @@ export default class ProductsComponent extends Component {
                 elem: <div className='panel panel-default'>
                   <div className='panel-body'>
                     <div className='form-group'>
-                      <div className='col-md-2'>
+                      <div className='col-md-3'>
                         <p>Is multicolor: </p>
                       </div>
-                      <div className='col-md-10'>
+                      <div className='col-md-9'>
                         <select className='form-control'
                                 value={this.props.objectHolder.multicolor}
                                 onChange={e => this.props.setEditingObjectProperty('multicolor', e.target.value === 'true')}>
@@ -801,10 +807,10 @@ export default class ProductsComponent extends Component {
                       </div>
                     </div>
                     <div className='form-group'>
-                      <div className='col-md-2'>
+                      <div className='col-md-3'>
                         <p>Show editable area border: </p>
                       </div>
-                      <div className='col-md-10'>
+                      <div className='col-md-9'>
                         <select className='form-control'
                                 value={this.props.objectHolder.hideEditableAreaBorder}
                                 onChange={e => this.handleSelectedObjectChange('hideEditableAreaBorder', e)}>
@@ -814,10 +820,10 @@ export default class ProductsComponent extends Component {
                       </div>
                     </div>
                     <div className='form-group'>
-                      <div className='col-md-2'>
+                      <div className='col-md-3'>
                         <p>Names / Numbers enabled: </p>
                       </div>
-                      <div className='col-md-10'>
+                      <div className='col-md-9'>
                         <select className='form-control'
                                 value={this.props.objectHolder.namesNumbersEnabled}
                                 onChange={e => this.handleSelectedObjectChange('namesNumbersEnabled', e)}>
@@ -827,10 +833,10 @@ export default class ProductsComponent extends Component {
                       </div>
                     </div>
                     <div className='form-group'>
-                      <div className='col-md-2'>
+                      <div className='col-md-3'>
                         <p>Resizable: </p>
                       </div>
-                      <div className='col-md-10'>
+                      <div className='col-md-9'>
                         <select className='form-control'
                                 value={this.props.objectHolder.resizable}
                                 onChange={e => this.handleSelectedObjectChange('resizable', e)}>
@@ -840,10 +846,10 @@ export default class ProductsComponent extends Component {
                       </div>
                     </div>
                     <div className='form-group'>
-                      <div className='col-md-2'>
+                      <div className='col-md-3'>
                         <p>Show ruler: </p>
                       </div>
-                      <div className='col-md-10'>
+                      <div className='col-md-9'>
                         <select className='form-control'
                                 value={this.props.objectHolder.showRuler}
                                 onChange={e => this.handleSelectedObjectChange('showRuler', e)}>
