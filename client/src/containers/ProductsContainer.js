@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 import {
   fetchProducts, createProduct, editProduct, deleteProduct, uploadProductLocationImage,
   uploadProductLocationMask, uploadProductLocationOverlay,
-  uploadProductImage, uploadProductThumb, uploadTemplateFile
+  uploadProductImage, uploadProductThumb
 } from '../actions/products';
 import {
   fetchProductsCategories, createProductsCategory
@@ -97,9 +97,6 @@ const mapDispatchToProps = dispatch => {
     },
     enableImportJson() {
       dispatch(enableImportJson());
-    },
-    uploadProductTemplate(file) {
-      dispatch(uploadTemplateFile(file));
     },
     uploadProductLocationImage(file) {
       dispatch(uploadProductLocationImage(file));
