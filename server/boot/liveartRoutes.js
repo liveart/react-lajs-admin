@@ -4,38 +4,6 @@ const RELATIVE_URL = '@@RELATIVE';
 const _ = require('lodash');
 const url = require('url');
 
-function deleteEmpty(entity) {
-  return entity;
-  if (!entity) {
-    return entity;
-  }
-  Object.keys(entity).forEach(key => {
-    if (key === 'id') {
-      return;
-    }
-    if (typeof entity[key] === 'string') {
-      if (entity[key] === '') {
-        delete entity[key];
-      }
-    } else if (typeof entity[key] === 'object') {
-      if (Array.isArray(entity[key])) {
-        if (!entity[key].length) {
-          delete entity[key];
-        } else {
-          entity[key].forEach((v, i) => {
-            if (typeof v === 'object') {
-              (entity[key])[i] = deleteEmpty((entity[key])[i]);
-            }
-          });
-        }
-      } else {
-        entity[key] = Object.assign({}, deleteEmpty(entity[key]));
-      }
-    }
-  });
-  return entity;
-}
-
 function getFullUrl(req, urlStr) {
   if (urlStr.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
     const addr = url.format({
@@ -194,7 +162,7 @@ function getProducts(category, products, req) {
       });
     }
   });
-  return prs.length ? deleteEmpty(prs) : undefined;
+  return prs.length ? prs : undefined;
 }
 
 module.exports = function (app) {
