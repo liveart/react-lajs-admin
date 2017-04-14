@@ -276,12 +276,12 @@ export default class ProductsComponent extends Component {
     return [{value: false, name: ADD_COLOR}, {value: true, name: ASSIGN_GROUP}];
   };
   getSelectedOptions = key => {
-    if (!this.props.objectHolder['colors'] || !this.props.objectHolder['colors'].length) {
+    if (!this.props.objectHolder.colors || !this.props.objectHolder.colors.length) {
       return [];
     }
 
-    if (this.props.objectHolder['colors'][key]) {
-      return this.props.objectHolder['colors'][key];
+    if (this.props.objectHolder.colors[key]) {
+      return {name: this.props.objectHolder.colors[key].name, value: this.props.objectHolder.colors[key].value};
     }
   };
 
@@ -315,10 +315,10 @@ export default class ProductsComponent extends Component {
 
 
   onColorsSelectChange = (val, key) => {
-    const arr = this.props.objectHolder['colors'];
+    const arr = this.props.objectHolder.colors;
     if (val) {
-      (arr[key])['name'] = val.name;
-      (arr[key])['value'] = val.value;
+      arr[key].name = val.name;
+      arr[key].value = val.value;
       this.props.setEditingObjectProperty('colors', [...arr]);
     }
   };
@@ -516,7 +516,13 @@ export default class ProductsComponent extends Component {
   );
 
   addColorizableRow = () => (
-    this.handleSelectedObjectArrayAddNew('colorizables', {name: '', id: '', assignColorgroup: false, _colors: []})
+    this.handleSelectedObjectArrayAddNew('colorizables', {
+      name: '',
+      id: '',
+      assignColorgroup: false,
+      _colors: [],
+      colorgroup: {}
+    })
   );
 
   deleteColorizableRow = key => (
@@ -748,6 +754,16 @@ export default class ProductsComponent extends Component {
   saveMulticolor = () => {
     if (this.props.objectHolder.multicolor === true) {
       this.props.setEditingObjectProperty('colors', []);
+      let colorizables = this.props.objectHolder.colorizables;
+      _.forEach(colorizables, c => {
+        if (c.assignColorgroup) {
+          c._colors = [];
+          this.props.setEditingObjectProperty('colorizables', colorizables);
+        } else {
+          c.colorgroup = {};
+          this.props.setEditingObjectProperty('colorizables', colorizables);
+        }
+      });
     } else if (this.props.objectHolder.multicolor === false) {
       this.props.setEditingObjectProperty('colorizables', []);
     }
