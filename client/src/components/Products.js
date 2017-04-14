@@ -234,6 +234,14 @@ export default class ProductsComponent extends Component {
   getColorizableColorsOptions = () => {
     return [{value: false, name: ADD_COLOR}, {value: true, name: ASSIGN_GROUP}];
   };
+
+  getColorsLocationsOptions = () => {
+    if (!this.props.objectHolder.locations || !this.props.objectHolder.locations.length) {
+      return [];
+    }
+    return _.map(this.props.objectHolder.locations, l => ({name: l.name, value: l.name}));
+  };
+
   getSelectedOptions = key => {
     if (!this.props.objectHolder.colors || !this.props.objectHolder.colors.length) {
       return [];
@@ -270,6 +278,16 @@ export default class ProductsComponent extends Component {
     if (arr[key].colorgroup) {
       return {id: arr[key].colorgroup.id, name: arr[key].colorgroup.name};
     }
+  };
+
+  getSelectedColorLocationsOptions = (key, k) => {
+    if (!this.props.objectHolder.colors[key]._locations[k]) {
+      return {};
+    }
+    let arr = this.props.objectHolder.colors;
+    console.log(arr[key]._locations[k]);
+    return {name: arr[key]._locations[k].name};
+
   };
 
 
@@ -343,10 +361,15 @@ export default class ProductsComponent extends Component {
                     {c._locations ? c._locations.map((col, k) => (
                       <tr key={k}>
                         <td>
-                          <input type='text' className='form-control'
-                                 value={col.name}
-                                 onChange={e =>
-                                   this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'name', e)}/>
+                          <Select style={{marginBottom: 6}}
+                                  name='locations'
+                                  value={this.getSelectedColorLocationsOptions(key, k)}
+                                  multi={false}
+                                  labelKey='name'
+                                  options={this.getColorsLocationsOptions()}
+                                  onChange={os => this.handleColorLocationActionOption(os, key, k)}
+                                  clearable={false}
+                          />
                         </td>
                         <td>
                           <input type='file' className='form-control' accept='image/*'
@@ -384,6 +407,11 @@ export default class ProductsComponent extends Component {
     let colorizables = this.props.objectHolder.colorizables;
     colorizables[key].assignColorgroup = option.value;
     this.props.setEditingObjectProperty('colorizables', colorizables);
+  };
+  handleColorLocationActionOption = (option, key, k) => {
+    let colors = this.props.objectHolder.colors;
+    colors[key]._locations[k].name = option.value;
+    this.props.setEditingObjectProperty('colors', colors);
   };
 
   renderColorizableTable = () => (
