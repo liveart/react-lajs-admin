@@ -167,7 +167,7 @@ function getProducts(category, products, req) {
         colors: pr.colors ? _.map(pr.colors, cr => ({
           name: cr.name,
           value: cr.value,
-          locations: cr.locations
+          location: cr.location
         })) : undefined,
         hideEditableAreaBorder: pr.hideEditableAreaBorder,
         namesNumbersEnabled: pr.namesNumbersEnabled,
