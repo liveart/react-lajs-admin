@@ -29,8 +29,6 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, productsError: null, productsMessage: null, productsLoading: true};
     case actionTypes.UPLOAD_PRODUCT_THUMB:
       return {...state, productsError: null, productsMessage: null, productsLoading: true};
-    case actionTypes.UPLOAD_PRODUCT_TEMPLATE:
-      return {...state, productsError: null, productsMessage: null, productsLoading: true};
     case actionTypes.UPLOAD_PRODUCT_LOCATION_IMAGE:
       return {...state, productsError: null, productsMessage: null, productsLoading: true};
     case actionTypes.UPLOAD_PRODUCT_LOCATION_MASK:

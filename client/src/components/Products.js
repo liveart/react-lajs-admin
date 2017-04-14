@@ -17,7 +17,6 @@ import {
 const LEAVE_URL_OPTION = 'Import';
 const ASSIGN_GROUP = 'Assign Color Group';
 const ADD_COLOR = 'Add Individual Colors';
-const COLORS_OPTIONS = ['Assign Color Group', 'Add Individual Colors'];
 const Product = ProductModel.properties;
 
 import {parseJson} from '../ProductJsonParser';
@@ -59,8 +58,7 @@ export default class ProductsComponent extends Component {
     uploadProductLocationOverlay: PropTypes.func.isRequired,
     uploadProductLocationImage: PropTypes.func.isRequired,
     fetchProductsCategories: PropTypes.func.isRequired,
-    token: PropTypes.string,
-    uploadProductTemplate: PropTypes.func.isRequired
+    token: PropTypes.string
   };
 
   constructor(props) {
@@ -633,12 +631,6 @@ export default class ProductsComponent extends Component {
     </div>
   );
 
-  handleFileUpload = () => {
-    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      this.props.uploadProductTemplate(this.props.objectHolder['template']);
-    }
-  };
-
   saveMulticolor = () => {
     if (this.props.objectHolder.multicolor === true) {
       this.props.setEditingObjectProperty('colors', []);
@@ -733,19 +725,6 @@ export default class ProductsComponent extends Component {
               }
             }}
             changedInputs={{
-              template: {
-                elem: <div><input type='file' className='form-control'
-                                  onChange={e => this.handleFileChoose('template', e)}/>
-                  {typeof (this.props.objectHolder.template) === 'string' ?
-                    <a
-                      href={this.getFileUrl(this.props.objectHolder.template)}>
-                      {this.getNameFromUrl(this.props.objectHolder.template)}
-                    </a> : null
-                  }
-                </div>,
-                saveF: this.handleFileUpload,
-                getName: obj => this.getName(obj, PRODUCT_TEMPLATES_FOLDER)
-              },
               thumbUrl: {
                 saveF: this.handleThumbUpload,
                 getName: obj => this.getName(obj, PRODUCT_THUMB_FOLDER)
