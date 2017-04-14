@@ -234,6 +234,14 @@ export default class ProductsComponent extends Component {
   getColorizableColorsOptions = () => {
     return [{value: false, name: ADD_COLOR}, {value: true, name: ASSIGN_GROUP}];
   };
+
+  getColorsLocationsOptions = () => {
+    if (!this.props.objectHolder.locations || !this.props.objectHolder.locations.length) {
+      return [];
+    }
+    return _.map(this.props.objectHolder.locations, l => ({name: l.name, value: l.name}));
+  };
+
   getSelectedOptions = key => {
     if (!this.props.objectHolder.colors || !this.props.objectHolder.colors.length) {
       return [];
@@ -270,6 +278,15 @@ export default class ProductsComponent extends Component {
     if (arr[key].colorgroup) {
       return {id: arr[key].colorgroup.id, name: arr[key].colorgroup.name};
     }
+  };
+
+  getSelectedColorLocationsOptions = (key, k) => {
+    if (!this.props.objectHolder.colors[key].location[k]) {
+      return {};
+    }
+    let arr = this.props.objectHolder.colors;
+    return {name: arr[key].location[k].name};
+
   };
 
 
@@ -340,18 +357,23 @@ export default class ProductsComponent extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {c._locations ? c._locations.map((col, k) => (
+                    {c.location ? c.location.map((col, k) => (
                       <tr key={k}>
                         <td>
-                          <input type='text' className='form-control'
-                                 value={col.name}
-                                 onChange={e =>
-                                   this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'name', e)}/>
+                          <Select style={{marginBottom: 6}}
+                                  name='locations'
+                                  value={this.getSelectedColorLocationsOptions(key, k)}
+                                  multi={false}
+                                  labelKey='name'
+                                  options={this.getColorsLocationsOptions()}
+                                  onChange={os => this.handleColorLocationActionOption(os, key, k)}
+                                  clearable={false}
+                          />
                         </td>
                         <td>
                           <input type='file' className='form-control' accept='image/*'
                                  onChange={e =>
-                                   this.handleSelectedObjectArrayArrayChange('colors', '_locations', key, k, 'image', e)}/>
+                                   this.handleSelectedObjectArrayArrayChange('colors', 'location', key, k, 'image', e)}/>
                           {typeof (col.image) === 'string' ?
                             <a href={this.getFileUrl(col.image)}>{this.getNameFromUrl(col.image)}</a> : null
                           }  </td>
@@ -384,6 +406,11 @@ export default class ProductsComponent extends Component {
     let colorizables = this.props.objectHolder.colorizables;
     colorizables[key].assignColorgroup = option.value;
     this.props.setEditingObjectProperty('colorizables', colorizables);
+  };
+  handleColorLocationActionOption = (option, key, k) => {
+    let colors = this.props.objectHolder.colors;
+    colors[key].location[k].name = option.value;
+    this.props.setEditingObjectProperty('colors', colors);
   };
 
   renderColorizableTable = () => (
@@ -451,7 +478,7 @@ export default class ProductsComponent extends Component {
   );
 
   addColorsRow = () => (
-    this.handleSelectedObjectArrayAddNew('colors', {name: '', value: '', _locations: []})
+    this.handleSelectedObjectArrayAddNew('colors', {name: '', value: '', location: []})
   );
 
   deleteColorsRow = key => (
@@ -467,11 +494,11 @@ export default class ProductsComponent extends Component {
   );
 
   addLocationRow = colorId => (
-    this.handleSelectedObjectArrayArrayAddNew('colors', '_locations', colorId, {name: '', image: ''})
+    this.handleSelectedObjectArrayArrayAddNew('colors', 'location', colorId, {name: '', image: ''})
   );
 
   deleteLocationRow = (colorId, key) => (
-    this.handleSelectedObjectArrayArrayDeleteElement('colors', '_locations', colorId, key)
+    this.handleSelectedObjectArrayArrayDeleteElement('colors', 'location', colorId, key)
   );
 
   addColorizableRow = () => (
@@ -773,9 +800,9 @@ export default class ProductsComponent extends Component {
                 elem: this.renderColorsTable(),
                 saveF: this.saveMulticolor,
                 getName: color => _.forEach(color, clr => {
-                  if (clr !== null && clr._locations) {
-                    if (clr._locations.length) {
-                      _.forEach(clr._locations, lc => {
+                  if (clr !== null && clr.location) {
+                    if (clr.location.length) {
+                      _.forEach(clr.location, lc => {
                         if (typeof (lc.image) === 'object') {
                           this.handleImageUpload(lc.image);
                           lc.image = this.getName(lc.image, PRODUCT_IMG_FOLDER);
