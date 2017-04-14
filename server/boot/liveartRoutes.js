@@ -161,10 +161,7 @@ function getProducts(category, products, req) {
         name: pr.name,
         thumbUrl: getFullUrl(req, pr.thumbUrl),
         description: pr.description,
-        data: {
-          price: pr.data && pr.data.price && pr.data.price !== '' ? pr.data.price : undefined,
-          material: pr.data && pr.data.material && pr.data.material !== '' ? pr.data.material : undefined
-        },
+        data: pr.data,
         categoryId: pr.categoryId,
         minDPU: pr.minDPU,
         minQuantity: pr.minQuantity,
@@ -308,54 +305,54 @@ module.exports = function (app) {
     });
   });
 
-  app.get('/api/' + LIVE_ART + '/fontsCSS', function (req, res) {
-    const Font = loopback.getModel('Font');
-    const location = url + '/files/fonts/';
-    const NORMAL = 'normal';
-    const BOLD = 'bold';
-    const ITALIC = 'italic';
+  app.get('/api/' + LIVE_ART + '/fontsCSS',
+    function (req, res) {
+      const Font = loopback.getModel('Font');
+      const NORMAL = 'normal';
+      const BOLD = 'bold';
+      const ITALIC = 'italic';
 
-    Font.find({
-      order: 'name ASC'
-    }, (err, fnts) => {
-      if (err) {
-        res.status(500).send('Error occurred');
-      }
-      let cssJS = {
-        type: 'stylesheet',
-        stylesheet: {
-          rules: []
+      Font.find({
+        order: 'name ASC'
+      }, (err, fnts) => {
+        if (err) {
+          res.status(500).send('Error occurred');
         }
-      };
-      fnts.map(font => {
-        if (font.fileNormal) {
-          cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileNormal, NORMAL, NORMAL,req)
+        let cssJS = {
+          type: 'stylesheet',
+          stylesheet: {
+            rules: []
+          }
+        };
+        fnts.map(font => {
+          if (font.fileNormal) {
+            cssJS.stylesheet.rules.push(
+              getFontFaceRule(font.fontFamily, font.fileNormal, NORMAL, NORMAL, req)
             );
-        }
-        if (font.fileBold) {
-          cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileBold, BOLD, NORMAL,req)
+          }
+          if (font.fileBold) {
+            cssJS.stylesheet.rules.push(
+              getFontFaceRule(font.fontFamily, font.fileBold, BOLD, NORMAL, req)
             );
-        }
+          }
 
-        if (font.fileItalic) {
-          cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileItalic, NORMAL, ITALIC,req)
+          if (font.fileItalic) {
+            cssJS.stylesheet.rules.push(
+              getFontFaceRule(font.fontFamily, font.fileItalic, NORMAL, ITALIC, req)
             );
-        }
+          }
 
-        if (font.fileBoldItalic) {
-          cssJS.stylesheet.rules.push(
-              getFontFaceRule(font.fontFamily, font.fileBoldItalic, BOLD, ITALIC,req)
+          if (font.fileBoldItalic) {
+            cssJS.stylesheet.rules.push(
+              getFontFaceRule(font.fontFamily, font.fileBoldItalic, BOLD, ITALIC, req)
             );
-        }
+          }
+        });
+        res.set('Content-Type', 'text/css');
+        res.set('X-Content-Type-Options', 'nosniff');
+        res.send(css.stringify(cssJS));
       });
-      res.set('Content-Type', 'text/css');
-      res.set('X-Content-Type-Options', 'nosniff');
-      res.send(css.stringify(cssJS));
-    });
-  }
+    }
   )
   ;
 }

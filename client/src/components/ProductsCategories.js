@@ -1,5 +1,12 @@
 import React, {Component, PropTypes} from 'react';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_CONFIRM_DELETE, RELATIVE_URL, PRODUCT_CATEGORIES_THUMB_FOLDER} from '../definitions';
+import {
+  ID_PROP,
+  STATUS_EDITING,
+  STATUS_CREATING,
+  STATUS_CONFIRM_DELETE,
+  RELATIVE_URL,
+  PRODUCT_CATEGORIES_THUMB_FOLDER
+} from '../definitions';
 import * as ProductsCategoryModel from '../../../common/models/products-category.json';
 import {RadioGroup, Radio} from 'react-radio-group';
 const ProductsCategory = ProductsCategoryModel.properties;
@@ -38,13 +45,13 @@ export default class extends Component {
     deleteSecondaryEntity: PropTypes.func.isRequired
   };
 
-
   handleFileUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      const image = this.props.objectHolder['thumbUrl'];
-      const uploadThumbnail = (file) => {
-        this.props.uploadThumbnail(file);
-      };
+      const image = this.props.objectHolder.thumbUrl;
+      if (typeof image === 'string') {
+        return;
+      }
+      const uploadThumbnail = file => this.props.uploadThumbnail(file);
       if (image.type !== 'image/svg+xml') {
         const c = this.refs.canvas;
         c.toBlob(function (blob) {
@@ -56,10 +63,11 @@ export default class extends Component {
       }
     }
   };
+
   handleFileChoose = (prop, e) => {
     this.props.setEditingObjectProperty(prop, e.target.files[0]);
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      const image = this.props.objectHolder['thumbUrl'];
+      const image = this.props.objectHolder.thumbUrl;
       const img = new Image();
       let imageOut = new Image();
       const reader = new FileReader();
@@ -118,7 +126,8 @@ export default class extends Component {
                 <Radio value={DELETE_PRODUCTS}/>&nbsp; Delete all the linked products
               </div>
               <div>
-                <Radio value={MOVE_PRODUCTS_TO_OTHER_CATEGORY}/>&nbsp; Move products of this category to other category &nbsp;
+                <Radio value={MOVE_PRODUCTS_TO_OTHER_CATEGORY}/>&nbsp; Move products of this category to other
+                category &nbsp;
                 <select
                   value={this.state.newProduct}
                   onChange={this.handleMoveProductToCategory}>
@@ -257,7 +266,7 @@ export default class extends Component {
             hiddenInputs={['id', 'productsCategoryId', 'thumbUrl']}
             representations={{
               thumbUrl: {
-                getElem:  val =>
+                getElem: val =>
                   val ? <a href={this.getFileUrl(val)} className='thumbnail'
                            style={{width: 100}}><img
                     src={this.getFileUrl(val)} alt='thumb'
