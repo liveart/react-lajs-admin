@@ -31,8 +31,11 @@ export default class ProductsComponent extends Component {
     title: PropTypes.string.isRequired,
     addNotification: PropTypes.func.isRequired,
     fetchColors: PropTypes.func.isRequired,
+    fetchColorgroups: PropTypes.func.isRequired,
     colors: PropTypes.arrayOf(PropTypes.object),
     colorsLoading: PropTypes.bool.isRequired,
+    colorgroups: PropTypes.arrayOf(PropTypes.object),
+    colorgroupsLoading: PropTypes.bool.isRequired,
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     errors: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool.isRequired,
@@ -79,6 +82,12 @@ export default class ProductsComponent extends Component {
   componentWillReceiveProps(props) {
     if (this.props.status === STATUS_DEFAULT && (props.status === STATUS_CREATING || props.status === STATUS_EDITING)) {
       this.props.fetchColors();
+      this.props.fetchColorgroups();
+      if (this.state.location > -1) {
+        this.setState({
+          ...this.state, location: -1
+        });
+      }
     }
   }
 
@@ -214,13 +223,16 @@ export default class ProductsComponent extends Component {
 
     return this.props.colorsList;
   };
-
-  getColorizableColorsOptions = () => {
-    if (!COLORS_OPTIONS || !COLORS_OPTIONS.length) {
+  getColorgroupsOptions = () => {
+    if (!this.props.colorgroups || !this.props.colorgroups.length) {
       return [];
     }
 
-    return _.map(COLORS_OPTIONS, col => ({value: col, name: col}));
+    return this.props.colorgroups;
+  };
+
+  getColorizableColorsOptions = () => {
+    return [{value: false, name: ADD_COLOR}, {value: true, name: ASSIGN_GROUP}];
   };
   getSelectedOptions = key => {
     if (!this.props.objectHolder.colors || !this.props.objectHolder.colors.length) {
@@ -228,7 +240,7 @@ export default class ProductsComponent extends Component {
     }
 
     if (this.props.objectHolder.colors[key]) {
-      return this.props.objectHolder.colors[key];
+      return {name: this.props.objectHolder.colors[key].name, value: this.props.objectHolder.colors[key].value};
     }
   };
 
@@ -241,13 +253,31 @@ export default class ProductsComponent extends Component {
       return _.map(arr[key]._colors, col => ({value: col.value, name: col.name}));
     }
   };
+  getSelectedColorizableOptions = (key) => {
+    let arr = this.props.objectHolder.colorizables;
+    if (!arr[key].assignColorgroup) {
+      return {value: arr[key].assignColorgroup, name: ADD_COLOR};
+    } else {
+      return {value: arr[key].assignColorgroup, name: ASSIGN_GROUP};
+    }
+  };
+
+  getSelectedColorizableColorgroupOptions = (key) => {
+    if (!this.props.objectHolder.colorizables[key].colorgroup) {
+      return {};
+    }
+    let arr = this.props.objectHolder.colorizables;
+    if (arr[key].colorgroup) {
+      return {id: arr[key].colorgroup.id, name: arr[key].colorgroup.name};
+    }
+  };
 
 
   onColorsSelectChange = (val, key) => {
     const arr = this.props.objectHolder.colors;
     if (val) {
-      (arr[key])['name'] = val.name;
-      (arr[key])['value'] = val.value;
+      arr[key].name = val.name;
+      arr[key].value = val.value;
       this.props.setEditingObjectProperty('colors', [...arr]);
     }
   };
@@ -257,6 +287,13 @@ export default class ProductsComponent extends Component {
     if (val) {
       _.forEach(val, v => colors.push({name: v.name, value: v.value}));
       colorizables[key]._colors = colors;
+      this.props.setEditingObjectProperty('colorizables', colorizables);
+    }
+  };
+  onColorizableColorgroupSelectChange = (val, key) => {
+    let colorizables = this.props.objectHolder.colorizables;
+    if (val) {
+      colorizables[key].colorgroup = {name: val.name, id: val.id};
       this.props.setEditingObjectProperty('colorizables', colorizables);
     }
   };
@@ -343,8 +380,10 @@ export default class ProductsComponent extends Component {
     </div>
   );
 
-  handleColorActionOption = option => {
-    this.setState({...this.state, selectedValue: option.value});
+  handleColorActionOption = (option, key) => {
+    let colorizables = this.props.objectHolder.colorizables;
+    colorizables[key].assignColorgroup = option.value;
+    this.props.setEditingObjectProperty('colorizables', colorizables);
   };
 
   renderColorizableTable = () => (
@@ -373,14 +412,14 @@ export default class ProductsComponent extends Component {
               <td className='col-md-4'>
                 <Select style={{marginBottom: 6}}
                         name='colors'
-                        value={this.state.selectedValue}
+                        value={this.getSelectedColorizableOptions(key)}
                         multi={false}
                         labelKey='name'
                         options={this.getColorizableColorsOptions()}
-                        onChange={os => this.handleColorActionOption(os)}
+                        onChange={os => this.handleColorActionOption(os, key)}
                         clearable={false}
                 />
-                {this.state.selectedValue === ADD_COLOR ?
+                {!c.assignColorgroup ?
                   <Creatable
                     name='colors'
                     value={this.getSelectedColorizableColorsOptions(key)}
@@ -389,7 +428,15 @@ export default class ProductsComponent extends Component {
                     options={this.getOptions()}
                     onChange={os => this.onColorizableColorsSelectChange(os, key)}
                     isLoading={this.props.colorsLoading}
-                  /> : null }
+                  /> : <Select
+                    name='colorgroup'
+                    value={this.getSelectedColorizableColorgroupOptions(key)}
+                    multi={false}
+                    labelKey='name'
+                    options={this.getColorgroupsOptions()}
+                    onChange={os => this.onColorizableColorgroupSelectChange(os, key)}
+                    isLoading={this.props.colorgroupsLoading}
+                  /> }
               </td>
               <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteColorizableRow(key)}>
                 <i className='fa fa-ban'/></a></td>
@@ -428,19 +475,17 @@ export default class ProductsComponent extends Component {
   );
 
   addColorizableRow = () => (
-    this.handleSelectedObjectArrayAddNew('colorizables', {name: '', id: '', _colors: []})
+    this.handleSelectedObjectArrayAddNew('colorizables', {
+      name: '',
+      id: '',
+      assignColorgroup: false,
+      _colors: [],
+      colorgroup: {}
+    })
   );
 
   deleteColorizableRow = key => (
     this.handleSelectedObjectArrayDeleteElement('colorizables', key)
-  );
-
-  addColorRow = colorizableId => (
-    this.handleSelectedObjectArrayArrayAddNew('colorizables', '_colors', colorizableId, {name: '', value: ''})
-  );
-
-  deleteColorRow = (colorizableId, key) => (
-    this.handleSelectedObjectArrayArrayDeleteElement('colorizables', '_colors', colorizableId, key)
   );
 
   getFileUrl = url => {
@@ -570,6 +615,16 @@ export default class ProductsComponent extends Component {
   saveMulticolor = () => {
     if (this.props.objectHolder.multicolor === true) {
       this.props.setEditingObjectProperty('colors', []);
+      let colorizables = this.props.objectHolder.colorizables;
+      _.forEach(colorizables, c => {
+        if (c.assignColorgroup) {
+          c._colors = [];
+          this.props.setEditingObjectProperty('colorizables', colorizables);
+        } else {
+          c.colorgroup = {};
+          this.props.setEditingObjectProperty('colorizables', colorizables);
+        }
+      });
     } else if (this.props.objectHolder.multicolor === false) {
       this.props.setEditingObjectProperty('colorizables', []);
     }
