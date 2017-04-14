@@ -1,5 +1,5 @@
 import {createStore, applyMiddleware, compose} from 'redux';
-import {createLogger} from 'redux-logger'
+import {createLogger} from 'redux-logger';
 import reducer from '../reducers';
 
 module.exports = function configureStore(sagaMiddleware) {

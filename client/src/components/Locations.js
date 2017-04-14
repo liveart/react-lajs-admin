@@ -6,8 +6,8 @@ import {
   STATUS_CREATING,
   STATUS_DEFAULT
 } from '../definitions';
-import * as LocationModel from '../../../common/models/location.json';
-const Location = LocationModel.properties;
+import * as ProductModel from '../../../common/models/product.json';
+const Location = ProductModel.properties.locations.type[0];
 import Cropper from 'react-cropper';
 
 export default class Locations extends Component {
@@ -36,11 +36,11 @@ export default class Locations extends Component {
   }
 
   getLocationsInputValue = propertyName => {
-    if (this.state.location < 0 || !this.props.objectHolder['locations'] ||
-      !this.props.objectHolder['locations'].length) {
+    if (this.state.location < 0 || !this.props.objectHolder.locations ||
+      !this.props.objectHolder.locations.length) {
       return '';
     }
-    return ((this.props.objectHolder['locations'])[this.state.location])[propertyName];
+    return ((this.props.objectHolder.locations)[this.state.location])[propertyName];
   };
 
   getImageUrl = image => {
@@ -187,7 +187,7 @@ export default class Locations extends Component {
               onNewOptionClick={val => {
                 let obj = {};
                 forEach(Object.getOwnPropertyNames(Location), p => {
-                  if (Location[p].type === 'array') {
+                  if (Location[p].type === 'array' || Array.isArray(Location[p].type)) {
                     obj[p] = [];
                   } else {
                     if (typeof Location[p].default === 'boolean') {

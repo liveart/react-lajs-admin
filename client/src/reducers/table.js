@@ -33,7 +33,7 @@ export default function (state = INITIAL_STATE, action) {
     case ENABLE_EDITING: {
       let holder = {};
       Object.getOwnPropertyNames(action.object).forEach(prop => {
-        holder[prop] = '';
+
       });
       return {...INITIAL_STATE, status: STATUS_EDITING, objectHolder: Object.assign({}, holder)};
     }
@@ -43,7 +43,16 @@ export default function (state = INITIAL_STATE, action) {
         if (typeof action.object[prop].default !== 'undefined') {
           holder[prop] = action.object[prop].default;
         } else {
-          holder[prop] = '';
+          if (typeof action.object[prop].type === 'object' || action.object[prop].type === 'object' ||
+            action.object[prop].type === 'array') {
+            if (action.object[prop].type === 'array' || Array.isArray(action.object[prop].type)) {
+              holder[prop] = [];
+            } else {
+              holder[prop] = {};
+            }
+          } else {
+            holder[prop] = '';
+          }
         }
       });
       return {...INITIAL_STATE, status: STATUS_CREATING, objectHolder: Object.assign({}, holder)};

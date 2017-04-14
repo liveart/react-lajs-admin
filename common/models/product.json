@@ -123,8 +123,7 @@
             "required": true
           },
           "image": {
-            "type": "string",
-            "required": false
+            "type": "string"
           },
           "mask": {
             "type": "string"
