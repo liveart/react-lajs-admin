@@ -169,7 +169,7 @@ export default class Locations extends Component {
     return (
       <div>
         <div className='row' style={{marginBottom: 6}}>
-          <div className='col-lg-12'>
+          <div className='col-md-11'>
             <Creatable
               name='location'
               className='onTop'
@@ -217,6 +217,32 @@ export default class Locations extends Component {
                 });
               }}
             />
+          </div>
+          <div className='col-md-1'>
+            <a className='btn btn-default' href='#' aria-label='Add'
+               onClick={() => {
+                 const val = 'New location';
+                 let obj = {};
+                 forEach(Object.getOwnPropertyNames(Location), p => {
+                   if (Location[p].type === 'array' || Array.isArray(Location[p].type)) {
+                     obj[p] = [];
+                   } else {
+                     if (typeof Location[p].default === 'boolean') {
+                       obj[p] = Location[p].default;
+                     } else {
+                       obj[p] = '';
+                     }
+                   }
+                 });
+                 this.props.setEditingObjectProperty('locations', [...this.props.objectHolder.locations,
+                   {...obj, name: val.name}]);
+                 this.setState({
+                   ...this.state, location: findIndex(this.props.objectHolder.locations,
+                     loc => loc.name === val.name)
+                 });
+               }}>
+              <i className='fa fa-plus' aria-hidden='true'></i>
+            </a>
           </div>
         </div>
         {this.state.location < 0 ||
@@ -471,7 +497,6 @@ export default class Locations extends Component {
                                  if (vals && vals.length > 2) {
                                    return vals[2];
                                  }
-
                                  return '';
                                })()}/>
                       </div>
@@ -499,7 +524,6 @@ export default class Locations extends Component {
                                  if (vals && vals.length > 1) {
                                    return vals[1];
                                  }
-
                                  return '';
                                })()}/>
                       </div>
