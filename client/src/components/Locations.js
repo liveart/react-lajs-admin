@@ -345,6 +345,77 @@ export default class Locations extends Component {
                   </div>
 
                   <div className='row' style={{marginBottom: 6}}>
+                    <div className='col-lg-6'>
+                      <div className='input-group input-group-sm'>
+                        <span className='input-group-addon'>Top x</span>
+                        <input type='text' className='form-control'
+                               onChange={e =>
+                                 this.changeLocationsNestedArrValue('clipRect', 0, Number(e.target.value))}
+                               value={(() => {
+                                 const vals = this.getLocationsInputValue('clipRect') || [];
+                                 if (vals && vals.length) {
+                                   return vals[0];
+                                 }
+
+                                 return '';
+                               })()}/>
+                      </div>
+                    </div>
+                    <div className='col-lg-6'>
+                      <div className='input-group input-group-sm'>
+                        <span className='input-group-addon'>Top y</span>
+                        <input type='text' className='form-control'
+                               onChange={e =>
+                                 this.changeLocationsNestedArrValue('clipRect', 1, Number(e.target.value))}
+                               value={
+                                 (() => {
+                                   const vals = this.getLocationsInputValue('clipRect') || [];
+                                   if (vals && vals.length > 1) {
+                                     return vals[1];
+                                   }
+
+                                   return '';
+                                 })()}/>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='row' style={{marginBottom: 6}}>
+                    <div className='col-lg-6'>
+                      <div className='input-group input-group-sm'>
+                        <span className='input-group-addon'>Bottom x</span>
+                        <input type='text' className='form-control'
+                               onChange={e =>
+                                 this.changeLocationsNestedArrValue('clipRect', 2, Number(e.target.value))}
+                               value={(() => {
+                                 const vals = this.getLocationsInputValue('clipRect') || [];
+                                 if (vals && vals.length > 2) {
+                                   return vals[2];
+                                 }
+
+                                 return '';
+                               })()}/>
+                      </div>
+                    </div>
+                    <div className='col-lg-6'>
+                      <div className='input-group input-group-sm'>
+                        <span className='input-group-addon'>Bottom y</span>
+                        <input type='text' className='form-control'
+                               onChange={e =>
+                                 this.changeLocationsNestedArrValue('clipRect', 3, Number(e.target.value))}
+                               value={
+                                 (() => {
+                                   const vals = this.getLocationsInputValue('clipRect') || [];
+                                   if (vals && vals.length > 3) {
+                                     return vals[3];
+                                   }
+
+                                   return '';
+                                 })()}/>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className='row' style={{marginBottom: 6}}>
                     <div className='col-lg-12'>
                       {this.renderUnitsRangeTable()}
                     </div>
