@@ -14,3 +14,11 @@
 /client/public/files/productLocationMask/*
 /client/public/files/productLocationOverlay/*
 /client/public/files/productCategoriesThumbs/*
+!/client/public/files/productThumbs/.gitkeep
+!/client/public/files/thumb/.gitkeep
+/client/public/files/productLocationOverlay/.gitkeep
+!/client/public/files/productLocationMask/.gitkeep
+!/client/public/files/productLocationImage/.gitkeep
+!/client/public/files/productImages/.gitkeep
+!/client/public/files/productCategoriesThumbs/.gitkeep
+!/client/public/files/fonts/.gitkeep
