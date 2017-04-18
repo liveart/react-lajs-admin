@@ -12,6 +12,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
     "css": "^2.2.1",

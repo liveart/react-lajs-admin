@@ -3,6 +3,7 @@ const LIVE_ART = 'liveart';
 const RELATIVE_URL = '@@RELATIVE';
 const _ = require('lodash');
 const url = require('url');
+const Promise = require('bluebird');
 
 function getFullUrl(req, urlStr) {
   if (urlStr.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
@@ -97,7 +98,7 @@ function getGraphics(category, graphics, req) {
   return grs.length ? grs : undefined;
 }
 
-function getProductCategories(category, categories, products, req, loopback) {
+function getProductCategories(category, categories, products, req, colorsArr) {
   const cats = [];
   _.forEach(categories, cat => {
     if (String(cat.productsCategoryId) === String(category.id)) {
@@ -105,15 +106,15 @@ function getProductCategories(category, categories, products, req, loopback) {
         id: cat.id,
         name: cat.name,
         thumbUrl: getFullUrl(req, cat.thumbUrl),
-        categories: getProductCategories(cat, categories, products, req, loopback),
-        products: getProducts(cat, products, req, loopback)
+        categories: getProductCategories(cat, categories, products, req, colorsArr),
+        products: getProducts(cat, products, req, colorsArr)
       });
     }
   });
   return cats.length ? cats : undefined;
 }
 
-function getProducts(category, products, req, loopback) {
+function getProducts(category, products, req, colorsArr) {
   const prs = [];
   _.forEach(products, pr => {
     if (String(pr.categoryId) === String(category.id)) {
@@ -133,21 +134,15 @@ function getProducts(category, products, req, loopback) {
               name: cr.name,
               id: cr.id
             };
-            if (cr.assignColorgroup && cr.colorgroups) {
-              const colorsArr = [];
-              const Color = loopback.getModel('color');
-              cr.colorgroups.forEach(cg => {
-                Color.find({
-                  where: {
-                    colorgroupId: cg.id
-                  }
-                }, (err, cols) => {
-                  if (!err) {
-                    colorsArr.push(...cols);
-                  }
-                });
-              });
-              r.colors = colorsArr;
+            if (cr.assignColorgroup && cr.colorgroup) {
+              const cg = cr.colorgroup;
+              console.log(cg.id);
+              r.colors = [...colorsArr
+                .filter(c => String(c.colorgroupId) === String(cg.id))
+                .map(c => ({
+                  name: c.name,
+                  value: c.value
+                }))];
             } else {
               r.colors = cr._colors;
             }
@@ -227,34 +222,30 @@ module.exports = function (app) {
   app.get('/api/' + LIVE_ART + '/products', function (req, res) {
     const result = {};
     const Product = loopback.getModel('product');
-    Product.find((err, products) => {
-      if (err) {
-        res.status(500).send('Error occurred');
-      }
-
-      const ProductCategories = loopback.getModel('productsCategory');
-      ProductCategories.find((err, cats) => {
-        if (err) {
-          res.status(500).send('Error occurred');
-        }
-
+    const ProductCategories = loopback.getModel('productsCategory');
+    const Color = loopback.getModel('color');
+    Product.find().then(products => {
+      ProductCategories.find().then(cats => {
         if (cats && cats.length) {
-          result.productCategoriesList = [];
-          _.forEach(cats, cat => {
-            if (!cat.productsCategoryId || cat.productsCategoryId === '') {
-              result.productCategoriesList.push({
-                id: cat.id,
-                name: cat.name,
-                thumbUrl: getFullUrl(req, cat.thumbUrl),
-                categories: getProductCategories(cat, cats, products, req, loopback),
-                products: getProducts(cat, products, req, loopback)
-              });
-            }
-          });
-          res.json(result);
+          Color.find().then(colorsArr => {
+            console.log('here', colorsArr[0])
+            result.productCategoriesList = [];
+            _.forEach(cats, cat => {
+              if (!cat.productsCategoryId || cat.productsCategoryId === '') {
+                result.productCategoriesList.push({
+                  id: cat.id,
+                  name: cat.name,
+                  thumbUrl: getFullUrl(req, cat.thumbUrl),
+                  categories: getProductCategories(cat, cats, products, req, colorsArr),
+                  products: getProducts(cat, products, req, colorsArr)
+                });
+              }
+            });
+            res.json(result);
+          }).catch(() => res.status(500).send('Error occurred'));
         }
-      });
-    });
+      }).catch(() => res.status(500).send('Error occurred'));
+    }).catch(() => res.status(500).send('Error occurred'));
   });
 
   app.get('/api/' + LIVE_ART + '/colors', function (req, res) {
