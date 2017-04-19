@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Select, {Creatable} from 'react-select';
 import * as ConfigModel from '../../../common/models/configuration.json';
 import View from './View/View';
+import ConfigurationOptions from './ConfigurationOptions';
 const Configuration = ConfigModel.properties;
 
 export default class extends Component {
@@ -33,6 +34,32 @@ export default class extends Component {
 
   handleSelectedObjectChange = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
+  };
+
+  handleSelectedObjectAddNewArray = (fArr, sArr, key, obj) => {
+    let arr = (this.props.objectHolder[fArr]);
+    if (typeof (arr[key])[sArr] !== 'object') {
+      (arr[key])[sArr] = [];
+    }
+    ((arr[key])[sArr])[(arr[key])[sArr].length] = [...obj];
+    this.props.setEditingObjectProperty(fArr, [...arr]);
+  };
+  handleSelectedObjectArrayArrayDeleteElement = (fArr, sArr, colorizableKey, key) => {
+    const arr = (this.props.objectHolder[fArr]);
+    ((arr[colorizableKey])[sArr]).remove(key);
+    this.props.setEditingObjectProperty(fArr, [...arr]);
+  };
+
+  handleSelectedObjectArrayArrayChange = (fArrName, sArrName, fInd, sInd, propName, event) => {
+    const colorizables = this.props.objectHolder[fArrName];
+    if (propName === 'image') {
+      colorizables[fInd][sArrName][sInd][propName] = event.target.files[0];
+    } else if (sArrName === 'editableAreaUnitsRange') {
+      colorizables[fInd][sArrName][sInd][propName] = Number(event.target.value);
+    } else {
+      colorizables[fInd][sArrName][sInd][propName] = event.target.value;
+    }
+    this.props.setEditingObjectProperty(fArrName, [...colorizables]);
   };
 
   render() {
@@ -92,6 +119,12 @@ export default class extends Component {
                   isLoading={this.props.loading}
                   clearable={false}
                 />
+              },
+              options: {
+                elem: <ConfigurationOptions {...this.props}
+                                            handleSelectedObjectAddNewArray={this.handleSelectedObjectAddNewArray}
+                                            handleSelectedObjectArrayArrayChange={this.handleSelectedObjectArrayArrayChange}
+                                            handleSelectedObjectArrayArrayDeleteElement={this.handleSelectedObjectArrayArrayDeleteElement}/>
               }
             }}
             customInputs={{
