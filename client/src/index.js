@@ -47,6 +47,7 @@ ReactDOM.render((
         <Route path='/graphicsCategories' component={GraphicsCategoriesTableContainer}/>
         <Route path='/productsCategories' component={ProductsCategoriesContainer}/>
         <Route path='/products' component={ProductsContainer}/>
+        <Route path='/mainConfig' component={ProductsContainer}/>
       </Route>
     </Router>
   </Provider>

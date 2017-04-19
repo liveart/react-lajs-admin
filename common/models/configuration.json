@@ -1,0 +1,102 @@
+{
+  "name": "Configuration",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "productsList": {
+      "type": "string",
+      "required": true
+    },
+    "defaultProductId": {
+      "type": "string"
+    },
+    "defaultProductSize": {
+      "type": [
+        "number"
+      ]
+    },
+    "fonts": {
+      "type": "string",
+      "required": true
+    },
+    "colors": {
+      "type": "string",
+      "required": true
+    },
+    "colorsPantonesUrl": {
+      "type": "string"
+    },
+    "graphicsList": {
+      "type": "string",
+      "required": true
+    },
+    "social": {
+      "type": "string",
+      "required": true
+    },
+    "options": {
+      "type": "object",
+      "required": true
+    },
+    "textEffects": {
+      "type": "string",
+      "required": true
+    },
+    "defaultNameObjectText": {
+      "type": "string",
+      "required": true
+    },
+    "defaultNumberObjectText": {
+      "type": "string",
+      "required": true
+    },
+    "assetsUrl": {
+      "type": "string",
+      "required": true
+    },
+    "galleryBaseUrl": {
+      "type": "string",
+      "required": true
+    },
+    "getQuoteUrl": {
+      "type": "string",
+      "required": true
+    },
+    "getDesignsUrl": {
+      "type": "string",
+      "required": true
+    },
+    "saveDesignUrl": {
+      "type": "string",
+      "required": true
+    },
+    "loadDesignUrl": {
+      "type": "string",
+      "required": true
+    },
+    "redirectUrl": {
+      "type": "string",
+      "required": true
+    },
+    "uploadImageUrl": {
+      "type": "string",
+      "required": true
+    },
+    "shareLinkUrl": {
+      "type": "string",
+      "required": true
+    },
+    "redirectWindow": {
+      "type": "string",
+      "required": true,
+      "default": "(default)"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

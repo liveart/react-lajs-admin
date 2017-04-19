@@ -9,7 +9,6 @@ export const GRAPHIC_CATEGORY_FOLDER = 'files/thumb/';
 export const FONTS_FOLDER = 'files/fonts/';
 export const VECTORS_FOLDER = 'files/vectors/';
 export const PRODUCT_CATEGORIES_THUMB_FOLDER = 'files/productCategoriesThumbs/';
-export const PRODUCT_TEMPLATES_FOLDER = 'files/productTemplates/';
 export const PRODUCT_LOCATION_IMAGE_FOLDER = 'files/productLocationImage/';
 export const PRODUCT_LOCATION_MASK_FOLDER = 'files/productLocationMask/';
 export const PRODUCT_LOCATION_OVERLAY_FOLDER = 'files/productLocationOverlay/';

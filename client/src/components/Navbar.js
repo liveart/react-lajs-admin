@@ -59,6 +59,11 @@ export default class NavBar extends Component {
                 <i className='fa fa-clone'/> <span>Products Categories</span>
               </Link>
             </li>
+            <li>
+              <Link to='/mainConfig' activeClassName='active'>
+                <i className='fa fa-file-o'/> <span>Main Config</span>
+              </Link>
+            </li>
             <li className='header'>ADDITIONAL</li>
             <li>
               <Link to='/admins' activeClassName='active'>
