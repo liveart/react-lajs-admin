@@ -60,7 +60,7 @@ export default class NavBar extends Component {
               </Link>
             </li>
             <li>
-              <Link to='/mainConfig' activeClassName='active'>
+              <Link to='/configurations' activeClassName='active'>
                 <i className='fa fa-file-o'/> <span>Main Config</span>
               </Link>
             </li>

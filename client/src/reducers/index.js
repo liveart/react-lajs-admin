@@ -8,6 +8,7 @@ import graphicsCategories from './graphicsCategories';
 import graphics from './graphics';
 import productsCategories from './productsCategories';
 import products from './products';
+import configurations from './configurations';
 import {routerReducer} from 'react-router-redux';
 
 const rootReducer = combineReducers({
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   graphicsCategories,
   productsCategories,
   products,
+  configurations,
   routing: routerReducer
 });
 
