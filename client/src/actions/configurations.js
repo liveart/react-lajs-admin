@@ -1,44 +1,38 @@
-import * as actionTypes from '../actionTypes/colors';
+import * as actionTypes from '../actionTypes/configurations';
 
-export const fetchColors = () => {
+export const fetchConfigurations = () => {
   return {
-    type: actionTypes.FETCH_COLORS
+    type: actionTypes.FETCH_CONFIGURATIONS
   };
 };
 
-export const fetchColorById = id => {
+export const fetchConfigurationById = id => {
   return {
-    type: actionTypes.FETCH_COLOR_BY_ID,
+    type: actionTypes.FETCH_CONFIGURATION_BY_ID,
     id
   };
 };
 
-export const fetchColorsNumber = () => {
+export const createConfiguration = (configuration, token) => {
   return {
-    type: actionTypes.FETCH_COLORS_NUMBER
-  };
-};
-
-export const createColor = (color, token) => {
-  return {
-    type: actionTypes.CREATE_COLOR,
-    color,
+    type: actionTypes.CREATE_CONFIGURATION,
+    configuration,
     token
   };
 };
 
-export const editColor = (id, color, token) => {
+export const editConfiguration = (id, configuration, token) => {
   return {
-    type: actionTypes.EDIT_COLOR,
+    type: actionTypes.EDIT_CONFIGURATION,
     id,
-    newColor: color,
+    newConfiguration: configuration,
     token
   };
 };
 
-export const deleteColor = (id, token) => {
+export const deleteConfiguration = (id, token) => {
   return {
-    type: actionTypes.DELETE_COLOR,
+    type: actionTypes.DELETE_CONFIGURATION,
     id,
     token
   };
