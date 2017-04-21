@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "Configuration",
   "base": "PersistedModel",
   "idInjection": true,
@@ -30,7 +30,13 @@
       "viewIndex": 3
     },
     "colors": {
-      "type": "string",
+      "type": {
+        "url": "string",
+        "pantones_url": {
+          "type": "string",
+          "default": ""
+        }
+      },
       "required": true,
       "viewIndex": 4
     },

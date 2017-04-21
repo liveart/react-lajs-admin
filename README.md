@@ -1,4 +1,4 @@
-# Admin Dashboard
+﻿# Admin Dashboard
 
 ##### v0.0.4
 
@@ -39,4 +39,4 @@ graphics: */api/liveart/graphics*
 
 products: */api/liveart/products*
 
-
+config: */api/liveart/configuration*

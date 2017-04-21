@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 const LIVE_ART = 'liveart';
 const RELATIVE_URL = '@@RELATIVE';
 const _ = require('lodash');
@@ -255,10 +255,31 @@ module.exports = function (app) {
       if (err) {
         res.status(500).send('Error occurred');
       }
-      cs.map(col => colors.push({name: col.name, value: col.value}));
+      cs.map(col => colors.push({ name: col.name, value: col.value }));
 
-      res.json({colors: colors});
+      res.json({ colors: colors });
     });
+  });
+
+  app.get('/api/' + LIVE_ART + '/configuration', function (req, res) {
+    const Configuration = loopback.getModel('Configuration');
+    const configs = [];
+    Configuration
+      .find()
+      .then(confs => {
+        if (confs.length) {
+          const conf = confs[0].__data;
+          delete conf.name;
+          delete conf.id;
+          res.json(_.assignIn({}, conf, {
+            productsList: { url: conf.productsList },
+            fonts: { url: conf.fonts },
+            graphicsList: { url: conf.graphicsList },
+            social: { url: conf.social }
+          }));
+        }
+      })
+      .catch(() => res.status(500).send('Error occurred'));
   });
 
   app.get('/api/' + LIVE_ART + '/fonts', function (req, res) {
@@ -275,7 +296,7 @@ module.exports = function (app) {
         italicAllowed: f.italicAllowed, vector: f.vector ? getFullUrl(req, f.vector) : undefined
       }));
 
-      res.json({fonts: fonts});
+      res.json({ fonts: fonts });
     });
   });
 
@@ -328,6 +349,6 @@ module.exports = function (app) {
       });
     }
   )
-  ;
+    ;
 }
-;
+  ;

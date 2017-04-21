@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+﻿import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router';
 
@@ -61,7 +61,7 @@ export default class NavBar extends Component {
             </li>
             <li>
               <Link to='/configurations' activeClassName='active'>
-                <i className='fa fa-file-o'/> <span>Main Config</span>
+                <i className='fa fa-file-o'/> <span>Configurations</span>
               </Link>
             </li>
             <li className='header'>ADDITIONAL</li>
