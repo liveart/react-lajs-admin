@@ -62,6 +62,27 @@ export default class extends Component {
     this.props.setEditingObjectProperty(fArrName, [...colorizables]);
   };
 
+
+  getSelectedSizeOptions = () => {
+    if (!this.props.objectHolder.defaultProductSize || !this.props.objectHolder.defaultProductSize.length) {
+      return [];
+    }
+
+    if (typeof (this.props.objectHolder.defaultProductSize)[0] === 'string') {
+      return _.map(this.props.objectHolder.defaultProductSize, col => ({value: col, name: col}));
+    }
+
+    return this.props.objectHolder.defaultProductSize;
+  };
+
+  onSizeSelectChange = val => {
+    const arr = [];
+    if (val) {
+      _.forEach(val, v => arr.push(v.name));
+      this.props.setEditingObjectProperty('defaultProductSize', arr);
+    }
+  };
+
   render() {
     return (
       <View {...this.props} objectSample={Configuration} sortingSupport={true}
@@ -85,6 +106,7 @@ export default class extends Component {
               redirectWindow: 'Redirect Window'
             }}
             changedInputs={{
+
               colors: {
                 elem: <div className='panel panel-default'>
                   <div className='panel-body'>
@@ -166,9 +188,15 @@ export default class extends Component {
                         <p>Product size: </p>
                       </div>
                       <div className='col-md-9'>
-                        <input type='text' className='form-control'
-                               value={this.props.objectHolder.defaultProductSize}
-                               onChange={e => this.handleSelectedObjectChange('defaultProductSize', e)}/>
+                        <Creatable
+                          name='sizes'
+                          className='onTop1'
+                          value={this.getSelectedSizeOptions()}
+                          multi={true}
+                          isOptionUnique={() => (true)}
+                          labelKey='name'
+                          onChange={this.onSizeSelectChange}
+                        />
                       </div>
                     </div>
                   </div>
