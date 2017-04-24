@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {FormControl} from 'react-bootstrap';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
 import {SketchPicker} from 'react-color';
-import {sortBy} from 'lodash';
 import * as ColorModel from '../../../common/models/color.json';
 import * as _ from 'lodash';
 const Color = ColorModel.properties;

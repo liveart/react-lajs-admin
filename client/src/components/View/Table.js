@@ -102,7 +102,7 @@ export default class Table extends Component {
                 return null;
               }
 
-              if (this.props.representations.hasOwnProperty(prop)) {
+              if (this.props.representations && this.props.representations.hasOwnProperty(prop)) {
                 return <td key={String(item.id + prop)}>{this.props.representations[prop].getElem(item[prop])}</td>;
               }
 

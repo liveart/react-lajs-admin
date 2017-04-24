@@ -14,16 +14,15 @@ import {
   PRODUCT_LOCATION_OVERLAY_FOLDER,
   SIZES
 } from '../definitions';
-const LEAVE_URL_OPTION = 'Import';
-const ASSIGN_GROUP = 'Assign Color Group';
-const ADD_COLOR = 'Add Individual Colors';
-const Product = ProductModel.properties;
-
 import {parseJson} from '../ProductJsonParser';
 import Locations from './Locations';
 import * as _ from 'lodash';
 import Select, {Creatable} from 'react-select';
 import '../../public/assets/css/cropper.css';
+const LEAVE_URL_OPTION = 'Import';
+const ASSIGN_GROUP = 'Assign Color Group';
+const ADD_COLOR = 'Add Individual Colors';
+const Product = ProductModel.properties;
 
 export default class ProductsComponent extends Component {
   static propTypes = {
@@ -250,7 +249,7 @@ export default class ProductsComponent extends Component {
     }
   };
 
-  getSelectedColorizableColorsOptions = (key) => {
+  getSelectedColorizableColorsOptions = key => {
     if (!this.props.objectHolder.colorizables[key]._colors || !this.props.objectHolder.colorizables[key]._colors.length) {
       return [];
     }
@@ -259,7 +258,7 @@ export default class ProductsComponent extends Component {
       return _.map(arr[key]._colors, col => ({value: col.value, name: col.name}));
     }
   };
-  getSelectedColorizableOptions = (key) => {
+  getSelectedColorizableOptions = key => {
     let arr = this.props.objectHolder.colorizables;
     if (!arr[key].assignColorgroup) {
       return {value: arr[key].assignColorgroup, name: ADD_COLOR};
@@ -268,7 +267,7 @@ export default class ProductsComponent extends Component {
     }
   };
 
-  getSelectedColorizableColorgroupOptions = (key) => {
+  getSelectedColorizableColorgroupOptions = key => {
     if (!this.props.objectHolder.colorizables[key].colorgroup) {
       return {};
     }

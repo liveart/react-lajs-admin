@@ -21,7 +21,7 @@
       "type": "string"
     },
     "editableArea": {
-      "type":  "array"
+      "type": "array"
     },
     "editableAreaUnits": {
       "type": "array"

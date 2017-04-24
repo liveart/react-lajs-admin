@@ -8,6 +8,7 @@ import * as graphicsWatchers from './sagas/watchers/graphics';
 import * as graphicsCategoriesWatchers from './sagas/watchers/graphicsCategories';
 import * as productsCategoriesWatchers from './sagas/watchers/productsCategories';
 import * as productsWatchers from './sagas/watchers/products';
+import * as configWatchers from './sagas/watchers/configurations';
 
 export default function* root() {
   yield [
@@ -70,6 +71,11 @@ export default function* root() {
     fork(productsWatchers.watchUploadProductThumb),
     fork(productsWatchers.watchUploadProductLocationImage),
     fork(productsWatchers.watchUploadProductLocationMask),
-    fork(productsWatchers.watchUploadProductLocationOverlay)
+    fork(productsWatchers.watchUploadProductLocationOverlay),
+    fork(configWatchers.watchFetchConfigurations),
+    fork(configWatchers.watchFetchConfigurationById),
+    fork(configWatchers.watchCreateConfiguration),
+    fork(configWatchers.watchEditConfiguration),
+    fork(configWatchers.watchDeleteConfiguration)
   ];
 }

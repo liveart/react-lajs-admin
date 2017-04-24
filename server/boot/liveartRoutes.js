@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 const LIVE_ART = 'liveart';
 const RELATIVE_URL = '@@RELATIVE';
 const _ = require('lodash');
@@ -136,7 +136,6 @@ function getProducts(category, products, req, colorsArr) {
             };
             if (cr.assignColorgroup && cr.colorgroup) {
               const cg = cr.colorgroup;
-              console.log(cg.id);
               r.colors = [...colorsArr
                 .filter(c => String(c.colorgroupId) === String(cg.id))
                 .map(c => ({
@@ -228,7 +227,6 @@ module.exports = function (app) {
       ProductCategories.find().then(cats => {
         if (cats && cats.length) {
           Color.find().then(colorsArr => {
-            console.log('here', colorsArr[0])
             result.productCategoriesList = [];
             _.forEach(cats, cat => {
               if (!cat.productsCategoryId || cat.productsCategoryId === '') {
@@ -259,6 +257,29 @@ module.exports = function (app) {
 
       res.json({colors: colors});
     });
+  });
+
+  app.get('/api/' + LIVE_ART + '/configuration', function (req, res) {
+    const Configuration = loopback.getModel('Configuration');
+    Configuration
+      .find({where: {isMain: true}})
+      .then(confs => {
+        if (confs.length) {
+          const conf = confs[0].__data;
+          delete conf.name;
+          delete conf.id;
+          delete conf.isMain;
+          res.json(_.assignIn({}, conf, {
+            productsList: {url: conf.productsList},
+            fonts: {url: conf.fonts},
+            graphicsList: {url: conf.graphicsList},
+            social: {url: conf.social}
+          }));
+        } else {
+          res.json({msg: 'No configurations set for Api'});
+        }
+      })
+      .catch(() => res.status(500).send('Error occurred'));
   });
 
   app.get('/api/' + LIVE_ART + '/fonts', function (req, res) {

@@ -1,0 +1,169 @@
+﻿{
+  "name": "Configuration",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "viewIndex": 1
+    },
+    "isMain": {
+      "type": "boolean",
+      "default": false
+    },
+    "productsList": {
+      "type": "string",
+      "required": true,
+      "viewIndex": 2
+    },
+    "defaultProductId": {
+      "type": "string"
+    },
+    "defaultProductSize": {
+      "type": [
+        "number"
+      ]
+    },
+    "fonts": {
+      "type": "string",
+      "required": true,
+      "viewIndex": 3
+    },
+    "colors": {
+      "type": {
+        "url": "string",
+        "pantones_url": {
+          "type": "string",
+          "default": ""
+        }
+      },
+      "required": true,
+      "viewIndex": 4
+    },
+    "colorsPantonesUrl": {
+      "type": "string"
+    },
+    "graphicsList": {
+      "type": "string",
+      "required": true,
+      "viewIndex": 5
+    },
+    "social": {
+      "type": "string",
+      "required": true,
+      "viewIndex": 7
+    },
+    "options": {
+      "type": {
+        "deleteOnDoubleClick": "boolean",
+        "includeProductInDesign": "boolean",
+        "includePrintingAreaInDesign": "boolean",
+        "includeMaskInDesign": "boolean",
+        "fontsCSSUrl": "string",
+        "zoomEnabled": "boolean",
+        "minZoom": "number",
+        "maxZoom": "number",
+        "zoomStep": "number",
+        "checkeredBackground": "boolean",
+        "unit": "string",
+        "unit2": "string",
+        "unitConversionMult": "number",
+        "showProductSelector": "boolean",
+        "checkTextFXThrottle": "number",
+        "minDPU": "number",
+        "showUploadedColorsDialog": "boolean",
+        "fitProductImage": "boolean",
+        "enableSnapGuides": "boolean"
+      },
+      "default": {
+        "deleteOnDoubleClick": false,
+        "includeProductInDesign": false,
+        "includePrintingAreaInDesign": false,
+        "includeMaskInDesign": false,
+        "fontsCSSUrl": "",
+        "zoomEnabled": false,
+        "minZoom": 50,
+        "maxZoom": 150,
+        "zoomStep": 10,
+        "checkeredBackground": true,
+        "unit": "cm",
+        "unit2": "m",
+        "unitConversionMult": 10,
+        "showProductSelector": true,
+        "checkTextFXThrottle": 400,
+        "minDPU": 0,
+        "showUploadedColorsDialog": true,
+        "fitProductImage": false,
+        "enableSnapGuides": true
+      },
+      "required": true
+    },
+    "textEffects": {
+      "type": {
+        "config": "string",
+        "url": "string"
+      },
+      "required": true
+    },
+    "defaultNameObjectText": {
+      "type": "string",
+      "required": true
+    },
+    "defaultNumberObjectText": {
+      "type": "string",
+      "required": true
+    },
+    "assetsUrl": {
+      "type": "string",
+      "required": true,
+      "viewIndex": 6
+    },
+    "galleryBaseUrl": {
+      "type": "string"
+    },
+    "getQuoteUrl": {
+      "type": "string",
+      "required": true,
+      "viewIndex": 8
+    },
+    "getDesignsUrl": {
+      "type": "string",
+      "required": true
+    },
+    "saveDesignUrl": {
+      "type": "string",
+      "required": true
+    },
+    "loadDesignUrl": {
+      "type": "string",
+      "required": true
+    },
+    "redirectUrl": {
+      "type": "string",
+      "required": true,
+      "viewIndex": 9
+    },
+    "uploadImageUrl": {
+      "type": "string",
+      "required": true,
+      "viewIndex": 10
+    },
+    "shareLinkUrl": {
+      "type": "string",
+      "required": true,
+      "viewIndex": 11
+    },
+    "redirectWindow": {
+      "type": "string",
+      "default": "(default)"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
