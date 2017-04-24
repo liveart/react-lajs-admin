@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {STATUS_DEFAULT} from '../definitions';
 import {SketchPicker} from 'react-color';
-import {sortBy} from 'lodash';
 import * as ColorModel from '../../../common/models/color.json';
 import * as _ from 'lodash';
 const Color = ColorModel.properties;

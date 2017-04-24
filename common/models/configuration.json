@@ -11,6 +11,10 @@
       "required": true,
       "viewIndex": 1
     },
+    "isMain": {
+      "type": "boolean",
+      "default": false
+    },
     "productsList": {
       "type": "string",
       "required": true,

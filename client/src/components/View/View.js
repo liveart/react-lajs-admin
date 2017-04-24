@@ -66,7 +66,8 @@ export default class ViewAbstract extends Component {
     /**
      * Custom comparator for sorting.
      */
-    sortComparators: PropTypes.object
+    sortComparators: PropTypes.object,
+    customDefaultRender: PropTypes.object
   };
 
   constructor(props) {
@@ -416,6 +417,10 @@ export default class ViewAbstract extends Component {
 
   renderDefault = () => (
     <section className='content'>
+      {this.props.customDefaultRender ?
+        <div className='row'>
+          {this.props.customDefaultRender}
+        </div> : null}
       <div className='row'>
         <div className='col-md-6'>
           <p>{`${this.props.title} entries: ${this.props.data.length}`}</p>
