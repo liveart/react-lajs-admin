@@ -83,6 +83,12 @@ export default class extends Component {
     }
   };
 
+  arrowRenderer = () => {
+    return (
+      <span>+</span>
+    );
+  };
+
   render() {
     return (
       <View {...this.props} objectSample={Configuration} sortingSupport={true}
@@ -196,12 +202,15 @@ export default class extends Component {
                       </div>
                       <div className='col-md-9'>
                         <Creatable
+                          arrowRenderer={this.arrowRenderer}
                           name='sizes'
                           className='onTop1'
                           value={this.getSelectedSizeOptions()}
                           multi={true}
                           isOptionUnique={() => (true)}
                           labelKey='name'
+                          placeholder='Type a name to add location...'
+                          noResultsText=''
                           onChange={this.onSizeSelectChange}
                         />
                       </div>
