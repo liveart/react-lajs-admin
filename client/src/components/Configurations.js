@@ -115,7 +115,7 @@ export default class extends Component {
       <View {...this.props} objectSample={Configuration} sortingSupport={true}
             hiddenProperties={Object.getOwnPropertyNames(Configuration).filter(p => p !== 'name')}
             hiddenInputs={['id', 'colorsPantonesUrl', 'defaultNameObjectText', 'defaultNumberObjectText',
-              'defaultProductSize', 'defaultProductId', 'getDesignsUrl', 'saveDesignUrl', 'loadDesignUrl']}
+              'defaultProductSize', 'defaultProductId', 'getDesignsUrl', 'saveDesignUrl', 'loadDesignUrl', 'isMain']}
             changedLabels={{
               productsList: 'Products Url',
               fonts: 'Fonts Url',
