@@ -24,12 +24,6 @@ export default class App extends Component {
     }
   }
 
-  componentWillUpdate() {
-    if (this.props.token) {
-      this.props.validateUserToken(this.props.token);
-    }
-  }
-
   addNotification = (level, title, message, autoDismiss, actionF) => {
     if (!autoDismiss) {
       autoDismiss = 3;

@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import Select, {Creatable} from 'react-select';
 import * as ConfigModel from '../../../common/models/configuration.json';
+import {forEach, map, findIndex, filter} from 'lodash';
 import View from './View/View';
 import ConfigurationOptions from './ConfigurationOptions';
 const Configuration = ConfigModel.properties;
@@ -69,7 +70,7 @@ export default class extends Component {
     }
 
     if (typeof (this.props.objectHolder.defaultProductSize)[0] === 'string') {
-      return _.map(this.props.objectHolder.defaultProductSize, col => ({value: col, name: col}));
+      return map(this.props.objectHolder.defaultProductSize, col => ({value: col, name: col}));
     }
 
     return this.props.objectHolder.defaultProductSize;
@@ -78,7 +79,7 @@ export default class extends Component {
   onSizeSelectChange = val => {
     const arr = [];
     if (val) {
-      _.forEach(val, v => arr.push(v.name));
+      forEach(val, v => arr.push(v.name));
       this.props.setEditingObjectProperty('defaultProductSize', arr);
     }
   };
@@ -87,6 +88,26 @@ export default class extends Component {
     return (
       <span>+</span>
     );
+  };
+
+  getMainConfigValue = () => {
+    const i = findIndex(this.props.data, c => c.isMain === true);
+    if (i > -1) {
+      return this.props.data[i];
+    }
+
+    return '';
+  };
+
+  updateMainConfig = o => {
+    const id = o ? o.id : null;
+    filter(this.props.data, conf => {
+      if (conf.isMain && (!id || conf.id !== id)) {
+        this.props.editEntity(conf.id, {...conf, isMain: false});
+      } else if (id && conf.id === id && !conf.isMain) {
+        this.props.editEntity(conf.id, {...conf, isMain: true});
+      }
+    });
   };
 
   render() {
@@ -113,7 +134,6 @@ export default class extends Component {
               shareLinkUrl: 'Share Link Url'
             }}
             changedInputs={{
-
               colors: {
                 elem: <div className='panel panel-default'>
                   <div className='panel-body'>
@@ -290,8 +310,22 @@ export default class extends Component {
                 viewIndex: 12
               }
             }}
+            customDefaultRender={
+              <div>
+                <div className='col-md-12'>
+                  <label>Used configuration:</label>
+                  <Select style={{marginBottom: 8}}
+                          value={this.getMainConfigValue()}
+                          valueKey='id'
+                          labelKey='name'
+                          options={this.props.data}
+                          isLoading={this.props.loading}
+                          onChange={o => this.updateMainConfig(o)}
+                  />
+                </div>
+              </div>
+            }
       />
     );
   }
-
 }

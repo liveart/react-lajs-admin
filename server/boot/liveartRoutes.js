@@ -136,7 +136,6 @@ function getProducts(category, products, req, colorsArr) {
             };
             if (cr.assignColorgroup && cr.colorgroup) {
               const cg = cr.colorgroup;
-              console.log(cg.id);
               r.colors = [...colorsArr
                 .filter(c => String(c.colorgroupId) === String(cg.id))
                 .map(c => ({
@@ -228,7 +227,6 @@ module.exports = function (app) {
       ProductCategories.find().then(cats => {
         if (cats && cats.length) {
           Color.find().then(colorsArr => {
-            console.log('here', colorsArr[0])
             result.productCategoriesList = [];
             _.forEach(cats, cat => {
               if (!cat.productsCategoryId || cat.productsCategoryId === '') {
@@ -255,28 +253,30 @@ module.exports = function (app) {
       if (err) {
         res.status(500).send('Error occurred');
       }
-      cs.map(col => colors.push({ name: col.name, value: col.value }));
+      cs.map(col => colors.push({name: col.name, value: col.value}));
 
-      res.json({ colors: colors });
+      res.json({colors: colors});
     });
   });
 
   app.get('/api/' + LIVE_ART + '/configuration', function (req, res) {
     const Configuration = loopback.getModel('Configuration');
-    const configs = [];
     Configuration
-      .find()
+      .find({where: {isMain: true}})
       .then(confs => {
         if (confs.length) {
           const conf = confs[0].__data;
           delete conf.name;
           delete conf.id;
+          delete conf.isMain;
           res.json(_.assignIn({}, conf, {
-            productsList: { url: conf.productsList },
-            fonts: { url: conf.fonts },
-            graphicsList: { url: conf.graphicsList },
-            social: { url: conf.social }
+            productsList: {url: conf.productsList},
+            fonts: {url: conf.fonts},
+            graphicsList: {url: conf.graphicsList},
+            social: {url: conf.social}
           }));
+        } else {
+          res.json({msg: 'No configurations set for Api'});
         }
       })
       .catch(() => res.status(500).send('Error occurred'));
@@ -296,7 +296,7 @@ module.exports = function (app) {
         italicAllowed: f.italicAllowed, vector: f.vector ? getFullUrl(req, f.vector) : undefined
       }));
 
-      res.json({ fonts: fonts });
+      res.json({fonts: fonts});
     });
   });
 
@@ -349,6 +349,6 @@ module.exports = function (app) {
       });
     }
   )
-    ;
-}
   ;
+}
+;
