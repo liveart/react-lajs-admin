@@ -17,7 +17,7 @@ const mapStateToProps = state => {
   const loading = colorsLoading || colorgroupsLoading;
 
   return {
-    title: 'Colors',
+    title: 'Color',
     data: colors,
     secondaryData: colorgroups,
     message: colorsMessage,
