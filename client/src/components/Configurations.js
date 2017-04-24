@@ -146,6 +146,38 @@ export default class extends Component {
                   </div>
                 </div>
               },
+              textEffects: {
+                elem: <div className='panel panel-default'>
+                  <div className='panel-body'>
+                    <div className='form-group'>
+                      <div className='col-md-3'>
+                        <p>Config: </p>
+                      </div>
+                      <div className='col-md-9'>
+                        <input type='text' className='form-control'
+                               value={this.props.objectHolder.textEffects ? this.props.objectHolder.textEffects.config : ''}
+                               onChange={e => this.props.setEditingObjectProperty('textEffects', {
+                                 ...this.props.objectHolder.textEffects,
+                                 config: e.target.value
+                               })}/>
+                      </div>
+                    </div>
+                    <div className='form-group'>
+                      <div className='col-md-3'>
+                        <p>Url: </p>
+                      </div>
+                      <div className='col-md-9'>
+                        <input type='text' className='form-control'
+                               value={this.props.objectHolder.textEffects ? this.props.objectHolder.textEffects.url : ''}
+                               onChange={e => this.props.setEditingObjectProperty('textEffects', {
+                                 ...this.props.objectHolder.textEffects,
+                                 url: e.target.value
+                               })}/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              },
               redirectWindow: {
                 elem: <Select
                   value={this.props.objectHolder.redirectWindow}

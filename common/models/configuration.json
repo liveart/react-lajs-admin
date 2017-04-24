@@ -99,7 +99,10 @@
       "required": true
     },
     "textEffects": {
-      "type": "string",
+      "type": {
+        "config": "string",
+        "url": "string"
+      },
       "required": true
     },
     "defaultNameObjectText": {
