@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 
 import {
   selectRow, setObjectHolderProperty, enableEditing, enableCreating,
-  enableDefaultStatus, setInitialState
+  enableDefaultStatus, setInitialState, enableConfirmDelete
 } from '../../actions/table';
 import {fetchColorgroups, createColorgroup, editColorgroup, deleteColorgroup} from '../../actions/colorgroups';
 import {fetchColors, deleteColor, editColor} from '../../actions/colors';
@@ -17,7 +17,7 @@ const mapStateToProps = state => {
   const {objectHolder, status} = state.table;
 
   return {
-    title: 'Color Groups',
+    title: 'Color Group',
     data: colorgroups,
     secondaryData: colors,
     message: colorgroupsMessage,
@@ -69,6 +69,9 @@ const mapDispatchToProps = dispatch => {
     },
     restoreTableState(object) {
       dispatch(setInitialState(object));
+    },
+    enableConfirmDelete() {
+      dispatch(enableConfirmDelete());
     }
   };
 };
