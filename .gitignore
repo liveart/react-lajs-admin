@@ -1,4 +1,4 @@
-﻿/.idea/
+﻿
 /node_modules/
 /npm-debug.log
 /coverage/
@@ -23,3 +23,4 @@
 !/client/public/files/productCategoriesThumbs/.gitkeep
 !/client/public/files/fonts/.gitkeep
 /.vs/
+/.idea/
