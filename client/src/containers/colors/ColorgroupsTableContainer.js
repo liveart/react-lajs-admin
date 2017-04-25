@@ -6,12 +6,16 @@ import {
 } from '../../actions/table';
 import {fetchColorgroups, createColorgroup, editColorgroup, deleteColorgroup} from '../../actions/colorgroups';
 import {fetchColors, deleteColor, editColor} from '../../actions/colors';
+import {fetchProducts} from '../../actions/products';
+import {fetchGraphics} from '../../actions/graphics';
 import Table from '../../components/Colorgroups';
 
 const mapStateToProps = state => {
   const {token} = state.user;
   const {colorgroups, colorgroupsError, colorgroupsLoading, colorgroupsMessage} = state.colorgroups;
   const {colors} = state.colors;
+  const {products} = state.products;
+  const {graphics} = state.graphics;
   const errors = colorgroupsError ? [colorgroupsError] : [];
   const loading = colorgroupsLoading;
   const {objectHolder, status} = state.table;
@@ -20,6 +24,8 @@ const mapStateToProps = state => {
     title: 'Color Group',
     data: colorgroups,
     secondaryData: colors,
+    products,
+    graphics,
     message: colorgroupsMessage,
     errors,
     loading,
@@ -36,6 +42,12 @@ const mapDispatchToProps = dispatch => {
     },
     fetchSecondaryData() {
       dispatch(fetchColors());
+    },
+    fetchGraphics() {
+      dispatch(fetchGraphics());
+    },
+    fetchProducts() {
+      dispatch(fetchProducts());
     },
     selectRow(object) {
       dispatch(selectRow(object));
