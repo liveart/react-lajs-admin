@@ -26,12 +26,18 @@ export default class extends Component {
     deleteEntity: PropTypes.func.isRequired,
     setEditingObjectProperty: PropTypes.func.isRequired,
     restoreTableState: PropTypes.func.isRequired,
-    token: PropTypes.string.isRequired
+    token: PropTypes.string.isRequired,
+    fetchProducts: PropTypes.func.isRequired,
+    products: PropTypes.arrayOf(PropTypes.object)
   };
 
   redirectWindowOptions = [{value: '(default)', label: 'Default'},
     {value: 'parent', label: 'Parent'},
     {value: 'top', label: 'Top'}];
+
+  componentWillMount() {
+    this.props.fetchProducts();
+  }
 
   handleSelectedObjectChange = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
@@ -45,6 +51,7 @@ export default class extends Component {
     ((arr[key])[sArr])[(arr[key])[sArr].length] = [...obj];
     this.props.setEditingObjectProperty(fArr, [...arr]);
   };
+
   handleSelectedObjectArrayArrayDeleteElement = (fArr, sArr, colorizableKey, key) => {
     const arr = (this.props.objectHolder[fArr]);
     ((arr[colorizableKey])[sArr]).remove(key);
@@ -240,33 +247,41 @@ export default class extends Component {
                     </div>
                     <div className='form-group'>
                       <div className='col-md-3'>
-                        <p>Product id: </p>
+                        <p>Product: </p>
                       </div>
                       <div className='col-md-9'>
-                        <input type='text' className='form-control'
-                               value={this.props.objectHolder.defaultProductId}
-                               onChange={e => this.handleSelectedObjectChange('defaultProductId', e)}/>
-                      </div>
-                    </div>
-                    <div className='form-group'>
-                      <div className='col-md-3'>
-                        <p>Product size: </p>
-                      </div>
-                      <div className='col-md-9'>
-                        <Creatable
-                          arrowRenderer={this.arrowRenderer}
-                          name='sizes'
-                          className='onTop1'
-                          value={this.getSelectedSizeOptions()}
-                          multi={true}
-                          isOptionUnique={() => (true)}
+                        <Select
+                          value={this.props.objectHolder.defaultProductId}
+                          options={this.props.products}
+                          className='onTop'
+                          placeholder='No default product selected...'
                           labelKey='name'
-                          placeholder='Type a name to add location...'
-                          noResultsText=''
-                          onChange={this.onSizeSelectChange}
+                          valueKey='id'
+                          onChange={o => o ? this.props.setEditingObjectProperty('defaultProductId', o.id) :
+                            this.props.setEditingObjectProperty('defaultProductId', '')}
                         />
                       </div>
                     </div>
+                    {this.props.objectHolder.defaultProductId &&
+                    this.props.objectHolder.defaultProductId.length ?
+                      <div className='form-group'>
+                        <div className='col-md-3'>
+                          <p>Product size: </p>
+                        </div>
+                        <div className='col-md-9'>
+                          <Creatable
+                            arrowRenderer={this.arrowRenderer}
+                            name='sizes'
+                            value={this.getSelectedSizeOptions()}
+                            multi={true}
+                            isOptionUnique={() => true}
+                            labelKey='name'
+                            placeholder='Type to add new size...'
+                            noResultsText=''
+                            onChange={this.onSizeSelectChange}
+                          />
+                        </div>
+                      </div> : null}
                   </div>
                 </div>,
                 required: true

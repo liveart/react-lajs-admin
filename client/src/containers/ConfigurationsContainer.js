@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import {
   fetchConfigurations, createConfiguration, editConfiguration, deleteConfiguration
 } from '../actions/configurations';
+import {fetchProducts} from '../actions/products';
 import {
   selectRow, setObjectHolderProperty, enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../actions/table';
@@ -11,10 +12,12 @@ const mapStateToProps = state => {
   const {token} = state.user;
   const {configurations, configurationsError, configurationsLoading, configurationsMessage} = state.configurations;
   const {objectHolder, status} = state.table;
+  const {products} = state.products;
   const errors = configurationsError ? [configurationsError] : [];
   return {
     title: 'Configuration',
     data: configurations,
+    products,
     errors,
     loading: configurationsLoading,
     message: configurationsMessage,
@@ -55,6 +58,9 @@ const mapDispatchToProps = dispatch => {
     },
     restoreTableState(object) {
       dispatch(setInitialState(object));
+    },
+    fetchProducts() {
+      dispatch(fetchProducts());
     }
   };
 };
