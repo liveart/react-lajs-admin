@@ -41,7 +41,7 @@ export default class ColorgroupsComponent extends Component {
 
   constructor() {
     super();
-    this.state = {deleting: false, selectedValue: DELETE_COLORS, newGroup: '', linkedProduct: []};
+    this.state = {deleting: false, selectedValue: DELETE_COLORS, newGroup: '', linkedProduct: [], linkedGraphic: []};
   }
 
   componentWillMount() {
@@ -61,15 +61,44 @@ export default class ColorgroupsComponent extends Component {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
 
-  isColorgroupLinked = () => {
+  isColorgroupLinkedProduct = () => {
     let isLinked = true;
     this.state.linkedProduct = [];
     _.forEach(this.props.products, prod => {
       _.forEach(prod.colorizables, col => {
-        if (col.colorgroup !== undefined && col.colorgroup.id === this.props.objectHolder.id) {
-          this.state.linkedProduct.push(prod.name);
-          isLinked = false;
+        if (col.assignColorgroup) {
+          if (col.colorgroup !== undefined && col.colorgroup.id === this.props.objectHolder.id) {
+            this.state.linkedProduct.push(prod.name);
+            isLinked = false;
+            return false;
+          }
+        } else {
+          let colors = _.filter(this.props.secondaryData, {'colorgroupId': this.props.objectHolder.id});
+          let arr = _.intersectionBy(col._colors, colors, 'name');
+          if (arr.length) {
+            this.state.linkedProduct.push(prod.name);
+            isLinked = false;
+            return false;
+          }
         }
+      });
+    });
+    return isLinked;
+  };
+
+  isColorgroupLinkedGraphic = () => {
+    let isLinked = true;
+    this.state.linkedGraphic = [];
+    _.forEach(this.props.graphics, prod => {
+      _.forEach(prod.colorizables, col => {
+        let colors = _.filter(this.props.secondaryData, {'colorgroupId': this.props.objectHolder.id});
+        let arr = _.intersectionBy(col._colors, colors, 'name');
+        if (arr.length) {
+          this.state.linkedGraphic.push(prod.name);
+          isLinked = false;
+          return false;
+        }
+
       });
     });
     return isLinked;
@@ -78,36 +107,38 @@ export default class ColorgroupsComponent extends Component {
   renderDelete = () => {
     return (
       <div className='form-group'>
-        <div className='col-md-3'>
-        </div>
-        {!this.isColorgroupLinked() ?
-          <div className='col-md-6'>
-            <h5>Group linked to {this.state.linkedProduct + ' '}</h5>
-          </div> :
-          <div className='col-md-6'>
-            <h1>Choose an action</h1>
-            <div className='form-group'>
-              <RadioGroup name='fruit' selectedValue={this.state.selectedValue}
-                          onChange={this.handleColorsActionOption}>
-                <div>
-                  <Radio value={DELETE_COLORS}/>&nbsp; Delete all the colors linked to this group
-                </div>
-                <div>
-                  <Radio value={MOVE_COLORS_TO_OTHER_GROUP}/>&nbsp; Move colors to other group &nbsp;
-                  <select value={this.state.newGroup}
-                          onChange={this.handleMoveToGroup}>
-                    {this.props.data.map((cg, key) => (
-                      <option key={key} value={cg.id}>{cg.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <Radio value={LEAVE_COLORS_WITHOUT_GROUP}/>&nbsp; Unlink and leave the colors without any group
-                </div>
-              </RadioGroup>
-            </div>
-          </div>}
-        <div className='col-md-3'>
+        <div className='col-md-9'>
+          {!this.isColorgroupLinkedProduct() || !this.isColorgroupLinkedGraphic() ?
+            <div>
+              <h4>Group linked to:</h4>
+              {this.state.linkedProduct.length ? 'Products: ' + this.state.linkedProduct : null}
+              {this.state.linkedGraphic.length ? 'Graphics: ' + this.state.linkedGraphic : null}
+            </div> :
+            <div className='col-md-6'>
+              <h1>Choose an action</h1>
+              <div className='form-group'>
+                <RadioGroup name='fruit' selectedValue={this.state.selectedValue}
+                            onChange={this.handleColorsActionOption}>
+                  <div>
+                    <Radio value={DELETE_COLORS}/>&nbsp; Delete all the colors linked to this group
+                  </div>
+                  <div>
+                    <Radio value={MOVE_COLORS_TO_OTHER_GROUP}/>&nbsp; Move colors to other group &nbsp;
+                    <select value={this.state.newGroup}
+                            onChange={this.handleMoveToGroup}>
+                      {this.props.data.map((cg, key) => (
+                        <option key={key} value={cg.id}>{cg.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <Radio value={LEAVE_COLORS_WITHOUT_GROUP}/>&nbsp; Unlink and leave the colors without any group
+                  </div>
+                </RadioGroup>
+              </div>
+            </div>}
+          <div className='col-md-3'>
+          </div>
         </div>
       </div>
     );
