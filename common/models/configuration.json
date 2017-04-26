@@ -31,7 +31,8 @@
     "fonts": {
       "type": "string",
       "required": true,
-      "viewIndex": 3
+      "viewIndex": 3,
+      "hint": "Indicates URL to get Fonts JSON structure"
     },
     "colors": {
       "type": {

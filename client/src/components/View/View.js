@@ -11,6 +11,7 @@ import {
 } from '../../definitions';
 import {checkNotEmpty} from '../../FormValidation';
 import * as _ from 'lodash';
+import ReactTooltip from 'react-tooltip';
 const LEAVE_URL_OPTION = 'Import';
 const KEEP_URL_OPTION = 'Keep';
 const INITIAL_STATE = {empty: [], json: '', baseUrl: '', urlSelect: LEAVE_URL_OPTION};
@@ -299,7 +300,11 @@ export default class ViewAbstract extends Component {
             <p className={'' + (this.props.objectSample[prop].required ? 'req' : '')}>
               {this.props.changedLabels && this.props.changedLabels[prop] ?
                 this.props.changedLabels[prop] : prop.capitalizeFirstLetter()}
+              {this.props.objectSample[prop].hint ? <small>&nbsp;<i className='fa fa-question'
+                                                                    data-tip={this.props.objectSample[prop].hint}></i>
+              </small> : null}
             </p>
+            {this.props.objectSample[prop].hint ? <ReactTooltip effect='solid'/> : null}
           </div>
           <div className='col-md-10'>
             {
@@ -497,7 +502,6 @@ export default class ViewAbstract extends Component {
       return this.props.renderDeleteConfirmationButtons();
     }
   };
-
 
   render() {
     const {loading} = this.props;

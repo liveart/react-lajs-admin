@@ -89,7 +89,7 @@ export default class App extends Component {
     return (
       <div>
         <Header email={this.props.email}/>
-        <NavbarContainer/>
+        <NavbarContainer />
         <main style={{height: '95vh', 'overflowY': 'scroll', 'overflowX': 'hidden'}} className='content-wrapper'>
           <section className='ct'>{React.Children.map(children, child => React.cloneElement(child, {
             addNotification: this.addNotification
