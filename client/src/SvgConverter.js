@@ -91,7 +91,8 @@ export function processSVGContent(fileContents) {
   }
   newDom = clearSVG(newDom);
   const graphicObject = getGraphicObject(classes);
-  return {graphicObject, newDom};
+  const colors = classes.map(cl => cl.substring(cl.indexOf('#'), cl.indexOf(';')));
+  return {graphicObject, newDom, colors};
 }
 
 // clearing SVG string

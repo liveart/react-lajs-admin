@@ -149,16 +149,21 @@ export default class GraphicsComponent extends Component {
               const r = new FileReader();
               r.onload = e => {
                 const contents = e.target.result;
-                const {graphicObject, newDom} = converter.processSVGContent(contents);
+                const {graphicObject, newDom, colors} = converter.processSVGContent(contents);
                 const blob = new Blob([newDom], {type: 'application/octet-binary'});
                 const file = new File([blob], image.name, {type: image.type});
                 this.props.setEditingObjectProperty(prop, file);
                 this.props.setEditingObjectProperty(null, {...this.props.objectHolder, ...graphicObject});
+                const foundColors = _.intersection(this.props.colors.map(c => c.value), colors);
+                if (foundColors.length < colors.length) {
+                  this.props.addNotification('warning', 'Some of the colors from the selected image are not present' +
+                    ' in the color list.');
+                }
               };
               r.readAsText(image);
             } else {
-              this.props.addNotification('info', 'Some options have been parsed from the selected image',
-                'Should the parsed properties be automatically inserted?',
+              this.props.addNotification('info', 'Some options might be parsed from the selected svg image',
+                'Try parsing multicolor option and colorizable elements from the image?',
                 15, f => this.handleFileChoose(prop, e, true));
             }
           }
