@@ -25,6 +25,25 @@
     "colors": {
       "type": "array"
     },
+    "colorizables": {
+      "type": [
+        {
+          "name": "string",
+          "id": "string",
+          "assignColorgroup": "boolean",
+          "_colors": [
+            {
+              "name": "string",
+              "value": "string"
+            }
+          ],
+          "colorgroup": {
+            "name": "string",
+            "id": "string"
+          }
+        }
+      ]
+    },
     "colorize": {
       "type": "boolean",
       "default": false
@@ -42,17 +61,7 @@
     }
   },
   "validations": [],
-  "relations": {
-    "colorizableElements": {
-      "type": "embedsMany",
-      "model": "colorizableElement",
-      "property": "colorizables",
-      "options": {
-        "validate": true,
-        "forceId": false
-      }
-    }
-  },
+  "relations": {},
   "acls": [
     {
       "accessType": "WRITE",

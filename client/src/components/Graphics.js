@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import View from './View/View';
+import Select, {Creatable} from 'react-select';
 import * as GraphicModel from '../../../common/models/graphic.json';
 import {
   STATUS_EDITING,
@@ -8,13 +9,14 @@ import {
   STATUS_DEFAULT,
   RELATIVE_URL,
   GRAPHIC_IMG_FOLDER,
-  GRAPHIC_THUMB_FOLDER
+  GRAPHIC_THUMB_FOLDER,
+  ASSIGN_GROUP,
+  ADD_COLOR
 } from '../definitions';
 import {parseJson} from '../GraphicJsonParser';
 import * as converter from '../SvgConverter';
 const Graphic = GraphicModel.properties;
 const LEAVE_URL_OPTION = 'Import';
-import {Creatable} from 'react-select';
 import * as _ from 'lodash';
 
 export default class GraphicsComponent extends Component {
@@ -26,6 +28,9 @@ export default class GraphicsComponent extends Component {
     message: PropTypes.string,
     loading: PropTypes.bool.isRequired,
     colorsLoading: PropTypes.bool.isRequired,
+    fetchColorgroups: PropTypes.func.isRequired,
+    colorgroups: PropTypes.arrayOf(PropTypes.object),
+    colorgroupsLoading: PropTypes.bool.isRequired,
     fetchData: PropTypes.func.isRequired,
     objectHolder: PropTypes.object,
     status: PropTypes.string.isRequired,
@@ -69,6 +74,7 @@ export default class GraphicsComponent extends Component {
   componentWillReceiveProps(props) {
     if (this.props.status === STATUS_DEFAULT && (props.status === STATUS_CREATING || props.status === STATUS_EDITING)) {
       this.props.fetchColors();
+      this.props.fetchColorgroups();
     }
   }
 
@@ -91,15 +97,6 @@ export default class GraphicsComponent extends Component {
     const arr = this.props.objectHolder[arrName];
     arr.remove(key);
     this.props.setEditingObjectProperty(arrName, [...arr]);
-  };
-
-  handleSelectedObjectArrayArrayAddNew = (fArr, sArr, colorizableKey, obj) => {
-    let arr = (this.props.objectHolder[fArr]);
-    if (typeof (arr[colorizableKey])[sArr] !== 'object') {
-      (arr[colorizableKey])[sArr] = [];
-    }
-    ((arr[colorizableKey])[sArr])[(arr[colorizableKey])[sArr].length] = {...obj};
-    this.props.setEditingObjectProperty(fArr, [...arr]);
   };
 
   handleSelectedObjectArrayArrayDeleteElement = (fArr, sArr, colorizableKey, key) => {
@@ -196,15 +193,76 @@ export default class GraphicsComponent extends Component {
       }
     }
   };
+  getColorgroupsOptions = () => {
+    if (!this.props.colorgroups || !this.props.colorgroups.length) {
+      return [];
+    }
+    return this.props.colorgroups;
+  };
+
+  getColorizableColorsOptions = () => {
+    return [{value: false, name: ADD_COLOR}, {value: true, name: ASSIGN_GROUP}];
+  };
+
+  getSelectedColorizableColorsOptions = key => {
+    if (!this.props.objectHolder.colorizables[key]._colors || !this.props.objectHolder.colorizables[key]._colors.length) {
+      return [];
+    }
+    let arr = this.props.objectHolder.colorizables;
+    if (arr[key]._colors) {
+      return _.map(arr[key]._colors, col => ({value: col.value, name: col.name}));
+    }
+  };
+  getSelectedColorizableOptions = key => {
+    let arr = this.props.objectHolder.colorizables;
+    if (!arr[key].assignColorgroup) {
+      return {value: arr[key].assignColorgroup, name: ADD_COLOR};
+    } else {
+      return {value: arr[key].assignColorgroup, name: ASSIGN_GROUP};
+    }
+  };
+
+  getSelectedColorizableColorgroupOptions = key => {
+    if (!this.props.objectHolder.colorizables[key].colorgroup) {
+      return {};
+    }
+    let arr = this.props.objectHolder.colorizables;
+    if (arr[key].colorgroup) {
+      return {id: arr[key].colorgroup.id, name: arr[key].colorgroup.name};
+    }
+  };
+
+  onColorizableColorsSelectChange = (val, key) => {
+    let colorizables = this.props.objectHolder.colorizables;
+    let colors = [];
+    if (val) {
+      _.forEach(val, v => colors.push({name: v.name, value: v.value}));
+      colorizables[key]._colors = colors;
+      this.props.setEditingObjectProperty('colorizables', colorizables);
+    }
+  };
+  onColorizableColorgroupSelectChange = (val, key) => {
+    let colorizables = this.props.objectHolder.colorizables;
+    if (val) {
+      colorizables[key].colorgroup = {name: val.name, id: val.id};
+      this.props.setEditingObjectProperty('colorizables', colorizables);
+    }
+  };
+
+  handleColorActionOption = (option, key) => {
+    let colorizables = this.props.objectHolder.colorizables;
+    colorizables[key].assignColorgroup = option.value;
+    this.props.setEditingObjectProperty('colorizables', colorizables);
+  };
 
   renderColorizableTable = () => (
     <div className='panel panel-default'>
       <table className='table table-bordered'>
         <thead>
         <tr>
-          <th>name</th>
-          <th>id</th>
-          <th>colors</th>
+          <th>Name</th>
+          <th>Id</th>
+          <th>Colors</th>
           <th/>
         </tr>
         </thead>
@@ -212,50 +270,42 @@ export default class GraphicsComponent extends Component {
         {this.props.objectHolder.colorizables ?
           this.props.objectHolder.colorizables.map((c, key) =>
             <tr key={key}>
-              <td><input type='text' className='form-control'
-                         value={c.name}
-                         onChange={e => this.handleSelectedObjectArrayChange('colorizables', key, 'name', e)}/>
+              <td className='col-md-4'><input type='text' className='form-control'
+                                              value={c.name}
+                                              onChange={e => this.handleSelectedObjectArrayChange('colorizables', key, 'name', e)}/>
               </td>
-              <td><input type='text' className='form-control'
-                         value={c.id}
-                         onChange={e => this.handleSelectedObjectArrayChange('colorizables', key, 'id', e)}/>
+              <td className='col-md-4'><input type='text' className='form-control'
+                                              value={c.id}
+                                              onChange={e => this.handleSelectedObjectArrayChange('colorizables', key, 'id', e)}/>
               </td>
-              <td>
-                <div className='panel panel-default'>
-                  <table className='table'>
-                    <thead>
-                    <tr>
-                      <th>name</th>
-                      <th>value</th>
-                      <th/>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {!c._colors ? null : c._colors.map((col, k) => (
-                      <tr key={k}>
-                        <td><input type='text' className='form-control'
-                                   value={col.name}
-                                   onChange={e =>
-                                     this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'name', e)}/>
-                        </td>
-                        <td><input type='text' className='form-control'
-                                   value={col.value}
-                                   onChange={e =>
-                                     this.handleSelectedObjectArrayArrayChange('colorizables', '_colors', key, k, 'value', e)}/>
-
-                          <span className='label label-default pull-right'
-                                style={{background: col.value}}>{' '}</span></td>
-                        <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteColorRow(key, k)}>
-                          <i className='fa fa-ban'/></a></td>
-                      </tr>
-                    ))}
-                    </tbody>
-                  </table>
-                  <div className='panel-footer'>
-                    <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addColorRow(key)}>
-                      <i className='fa fa-plus'/> Add color</a>
-                  </div>
-                </div>
+              <td className='col-md-4'>
+                <Select style={{marginBottom: 6}}
+                        name='colors'
+                        value={this.getSelectedColorizableOptions(key)}
+                        multi={false}
+                        labelKey='name'
+                        options={this.getColorizableColorsOptions()}
+                        onChange={os => this.handleColorActionOption(os, key)}
+                        clearable={false}
+                />
+                {!c.assignColorgroup ?
+                  <Creatable
+                    name='colors'
+                    value={this.getSelectedColorizableColorsOptions(key)}
+                    multi={true}
+                    labelKey='name'
+                    options={this.getOptions()}
+                    onChange={os => this.onColorizableColorsSelectChange(os, key)}
+                    isLoading={this.props.colorsLoading}
+                  /> : <Select
+                    name='colorgroup'
+                    value={this.getSelectedColorizableColorgroupOptions(key)}
+                    multi={false}
+                    labelKey='name'
+                    options={this.getColorgroupsOptions()}
+                    onChange={os => this.onColorizableColorgroupSelectChange(os, key)}
+                    isLoading={this.props.colorgroupsLoading}
+                  /> }
               </td>
               <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteColorizableRow(key)}>
                 <i className='fa fa-ban'/></a></td>
@@ -274,12 +324,6 @@ export default class GraphicsComponent extends Component {
 
   deleteColorizableRow = key =>
     this.handleSelectedObjectArrayDeleteElement('colorizables', key);
-
-  addColorRow = colorizableId =>
-    this.handleSelectedObjectArrayArrayAddNew('colorizables', '_colors', colorizableId, {name: '', value: ''});
-
-  deleteColorRow = (colorizableId, key) =>
-    this.handleSelectedObjectArrayArrayDeleteElement('colorizables', '_colors', colorizableId, key);
 
   handleImportJson = (json, baseUrl, urlOption, forceNoBase) => {
     if (!baseUrl.length && !forceNoBase && urlOption !== LEAVE_URL_OPTION) {
@@ -356,6 +400,19 @@ export default class GraphicsComponent extends Component {
       _.forEach(val, v => arr.push({name: v.name, value: v.value}));
       this.props.setEditingObjectProperty('colors', arr);
     }
+  };
+
+  saveColorizables = () => {
+    let colorizables = this.props.objectHolder.colorizables;
+    _.forEach(colorizables, c => {
+      if (c.assignColorgroup) {
+        c._colors = [];
+        this.props.setEditingObjectProperty('colorizables', colorizables);
+      } else {
+        c.colorgroup = {};
+        this.props.setEditingObjectProperty('colorizables', colorizables);
+      }
+    });
   };
 
   render() {
@@ -453,7 +510,8 @@ export default class GraphicsComponent extends Component {
                 </select>
               },
               colorizables: {
-                elem: this.renderColorizableTable()
+                elem: this.renderColorizableTable(),
+                saveF: this.saveColorizables
               }
             }
             }
