@@ -43,7 +43,9 @@
     "redux-saga": "^0.14.6",
     "serve-favicon": "^2.0.1",
     "strong-error-handler": "^1.0.1",
-    "whatwg-fetch": "^2.0.3"
+    "whatwg-fetch": "^2.0.3",
+    "xmldom": "^0.1.27",
+    "xpath": "^0.0.24"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

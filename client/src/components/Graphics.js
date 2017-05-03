@@ -11,6 +11,7 @@ import {
   GRAPHIC_THUMB_FOLDER
 } from '../definitions';
 import {parseJson} from '../GraphicJsonParser';
+import * as converter from '../SvgConverter';
 const Graphic = GraphicModel.properties;
 const LEAVE_URL_OPTION = 'Import';
 import {Creatable} from 'react-select';
@@ -149,8 +150,16 @@ export default class GraphicsComponent extends Component {
             ...this.state,
             imgUrl: reader.result
           });
+
+          const r = new FileReader();
+          r.onload = e => {
+            const contents = e.target.result;
+            converter.processSVGContent(contents);
+          };
+          r.readAsText(image);
         };
         reader.readAsDataURL(image);
+
       }
       if (prop === 'thumb') {
         this.toCanvas(prop);
@@ -252,27 +261,23 @@ export default class GraphicsComponent extends Component {
     </div>
   );
 
-  addColorizableRow = () => (
-    this.handleSelectedObjectArrayAddNew('colorizables', {name: '', id: '', _colors: []})
-  );
+  addColorizableRow = () =>
+    this.handleSelectedObjectArrayAddNew('colorizables', {name: '', id: '', _colors: []});
 
-  deleteColorizableRow = key => (
-    this.handleSelectedObjectArrayDeleteElement('colorizables', key)
-  );
+  deleteColorizableRow = key =>
+    this.handleSelectedObjectArrayDeleteElement('colorizables', key);
 
-  addColorRow = colorizableId => (
-    this.handleSelectedObjectArrayArrayAddNew('colorizables', '_colors', colorizableId, {name: '', value: ''})
-  );
+  addColorRow = colorizableId =>
+    this.handleSelectedObjectArrayArrayAddNew('colorizables', '_colors', colorizableId, {name: '', value: ''});
 
-  deleteColorRow = (colorizableId, key) => (
-    this.handleSelectedObjectArrayArrayDeleteElement('colorizables', '_colors', colorizableId, key)
-  );
+  deleteColorRow = (colorizableId, key) =>
+    this.handleSelectedObjectArrayArrayDeleteElement('colorizables', '_colors', colorizableId, key);
 
   handleImportJson = (json, baseUrl, urlOption, forceNoBase) => {
     if (!baseUrl.length && !forceNoBase && urlOption !== LEAVE_URL_OPTION) {
       this.props.addNotification('warning', 'Base url is not set',
         'Not setting correct base url will result in broken links.',
-        15, (f) => this.handleImportJson(json, baseUrl, urlOption, true));
+        15, f => this.handleImportJson(json, baseUrl, urlOption, true));
       return;
     }
     if (!forceNoBase && urlOption !== LEAVE_URL_OPTION) {
@@ -280,7 +285,7 @@ export default class GraphicsComponent extends Component {
       if (!r.test(baseUrl)) {
         this.props.addNotification('warning', 'The specified base url seems not to have a protocol',
           'Not setting correct base url will result in broken links.',
-          15, (f) => this.handleImportJson(json, baseUrl, urlOption, true));
+          15, f => this.handleImportJson(json, baseUrl, urlOption, true));
         return;
       }
     }
