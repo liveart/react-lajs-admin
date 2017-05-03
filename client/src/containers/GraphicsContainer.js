@@ -10,6 +10,9 @@ import {
   fetchColors
 } from '../actions/colors';
 import {
+  fetchColorgroups
+} from '../actions/colorgroups';
+import {
   selectRow, setObjectHolderProperty, enableImportJson,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../actions/table';
@@ -19,6 +22,7 @@ const mapStateToProps = state => {
   const {token} = state.user;
   const {graphics, graphicsError, graphicsLoading, graphicsMessage} = state.graphics;
   const {colors, colorsLoading} = state.colors;
+  const {colorgroups, colorgroupsLoading} = state.colorgroups;
   const {graphicsCategories, graphicsCategoriesLoading} = state.graphicsCategories;
   const {objectHolder, status} = state.table;
   const errors = graphicsError ? [graphicsError] : [];
@@ -26,6 +30,8 @@ const mapStateToProps = state => {
     title: 'Graphic',
     data: graphics,
     colors,
+    colorgroups,
+    colorgroupsLoading,
     errors,
     loading: graphicsLoading || graphicsCategoriesLoading || colorsLoading,
     colorsLoading,
@@ -89,6 +95,9 @@ const mapDispatchToProps = dispatch => {
     },
     fetchColors() {
       dispatch(fetchColors());
+    },
+    fetchColorgroups() {
+      dispatch(fetchColorgroups());
     }
   };
 };

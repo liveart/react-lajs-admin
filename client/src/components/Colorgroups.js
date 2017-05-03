@@ -85,7 +85,12 @@ export default class ColorgroupsComponent extends Component {
   isColorgroupLinkedGraphic = () => {
     linkedGraphic = [];
     this.props.graphics.forEach(g => {
-      g.colorizables.forEach(c => {
+      g.colorizables.filter(c => c.assignColorgroup === true).forEach(c => {
+        if (c.colorgroup && c.colorgroup.id === this.props.objectHolder.id) {
+          linkedGraphic.push(g.name);
+        }
+      });
+      g.colorizables.filter(c => c.assignColorgroup === false).forEach(c => {
         let arr = _.intersectionBy(c._colors, this.props.secondaryData.filter(col =>
         col.colorgroupId === this.props.objectHolder.id), 'name');
         if (arr.length) {
@@ -125,7 +130,8 @@ export default class ColorgroupsComponent extends Component {
                     <select value={this.state.newGroup}
                             onChange={this.handleMoveToGroup}>
                       {this.props.data.map((cg, key) => (
-                        <option key={key} value={cg.id}>{cg.name}</option>
+                        this.props.objectHolder.id !== cg.id ?
+                          <option key={key} value={cg.id}>{cg.name}</option> : null
                       ))}
                     </select>
                   </div>

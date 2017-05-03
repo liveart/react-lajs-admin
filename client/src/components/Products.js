@@ -12,7 +12,9 @@ import {
   PRODUCT_LOCATION_IMAGE_FOLDER,
   PRODUCT_LOCATION_MASK_FOLDER,
   PRODUCT_LOCATION_OVERLAY_FOLDER,
-  SIZES
+  SIZES,
+  ASSIGN_GROUP,
+  ADD_COLOR
 } from '../definitions';
 import {parseJson} from '../ProductJsonParser';
 import Locations from './Locations';
@@ -20,8 +22,6 @@ import * as _ from 'lodash';
 import Select, {Creatable} from 'react-select';
 import '../../public/assets/css/cropper.css';
 const LEAVE_URL_OPTION = 'Import';
-const ASSIGN_GROUP = 'Assign Color Group';
-const ADD_COLOR = 'Add Individual Colors';
 const Product = ProductModel.properties;
 
 export default class ProductsComponent extends Component {

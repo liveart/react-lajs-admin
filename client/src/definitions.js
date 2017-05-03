@@ -15,6 +15,9 @@ export const PRODUCT_LOCATION_OVERLAY_FOLDER = 'files/productLocationOverlay/';
 
 export const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
+export const ASSIGN_GROUP = 'Assign Color Group';
+export const ADD_COLOR = 'Add Individual Colors';
+
 export const STATUS_EDITING = 'STATUS_EDITING';
 export const STATUS_CONFIRM_DELETE = 'STATUS_CONFIRM_DELETE';
 export const STATUS_CREATING = 'STATUS_CREATING';

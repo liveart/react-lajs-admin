@@ -60,10 +60,6 @@
     "dataSource": "remote-dev-mongo",
     "public": true
   },
-  "colorizableElement": {
-    "dataSource": "remote-dev-mongo",
-    "public": true
-  },
   "graphicsCategory": {
     "dataSource": "remote-dev-mongo",
     "public": true
