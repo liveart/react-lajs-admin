@@ -157,8 +157,8 @@ export default class GraphicsComponent extends Component {
               };
               r.readAsText(image);
             } else {
-              this.props.addNotification('info', 'Some options have been parsed from the selected image',
-                'Should the parsed properties be automatically inserted?',
+              this.props.addNotification('info', 'Some options might be parsed from the selected svg image',
+                'Try parsing multicolor option and colorizable elements from the image?',
                 15, f => this.handleFileChoose(prop, e, true));
             }
           }
