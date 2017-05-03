@@ -151,7 +151,7 @@ export default class GraphicsComponent extends Component {
                 const contents = e.target.result;
                 const {graphicObject, newDom} = converter.processSVGContent(contents);
                 const blob = new Blob([newDom], {type: 'application/octet-binary'});
-                const file = new File([blob], image.name);
+                const file = new File([blob], image.name, {type: image.type});
                 this.props.setEditingObjectProperty(prop, file);
                 this.props.setEditingObjectProperty(null, {...this.props.objectHolder, ...graphicObject});
               };
