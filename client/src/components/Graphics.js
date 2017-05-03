@@ -119,7 +119,7 @@ export default class GraphicsComponent extends Component {
   };
 
   handleImgAsThumb = () => {
-    this.props.setEditingObjectProperty('thumb', this.props.objectHolder['image']);
+    this.props.setEditingObjectProperty('thumb', this.props.objectHolder.image);
     this.toCanvas('thumb');
   };
 
@@ -128,41 +128,45 @@ export default class GraphicsComponent extends Component {
     const img = new Image();
     let imageOut = new Image();
     const reader = new FileReader();
-    reader.onload = function (e) {
-      img.src = e.target.result;
-    };
+    reader.onload = e => img.src = e.target.result;
     reader.readAsDataURL(image);
     const c = this.refs.canvas;
     const ctx = c.getContext('2d');
-    img.onload = function () {
-      imageOut = ctx.drawImage(img, 0, 0, 100, 100);
-    };
+    img.onload = () => imageOut = ctx.drawImage(img, 0, 0, 100, 100);
   };
 
-  handleFileChoose = (prop, e) => {
+  handleFileChoose = (prop, e, overwrite) => {
+    e.persist();
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       if (prop === 'image') {
         const image = e.target.files[0];
+        this.props.setEditingObjectProperty(prop, image);
         const reader = new FileReader();
         reader.onloadend = () => {
           this.setState({
             ...this.state,
             imgUrl: reader.result
           });
-
-          const r = new FileReader();
-          r.onload = e => {
-            const contents = e.target.result;
-            const {graphicObject, newDom} = converter.processSVGContent(contents);
-            const blob = new Blob([newDom], {type: 'application/octet-binary'});
-            const file = new File([blob], image.name);
-            this.props.setEditingObjectProperty(prop, file);
-            this.props.setEditingObjectProperty(null, {...this.props.objectHolder, ...graphicObject});
-          };
-          r.readAsText(image);
+          if (image.type === 'image/svg+xml') {
+            if (overwrite) {
+              const r = new FileReader();
+              r.onload = e => {
+                const contents = e.target.result;
+                const {graphicObject, newDom} = converter.processSVGContent(contents);
+                const blob = new Blob([newDom], {type: 'application/octet-binary'});
+                const file = new File([blob], image.name);
+                this.props.setEditingObjectProperty(prop, file);
+                this.props.setEditingObjectProperty(null, {...this.props.objectHolder, ...graphicObject});
+              };
+              r.readAsText(image);
+            } else {
+              this.props.addNotification('info', 'Some options have been parsed from the selected image',
+                'Should the parsed properties be automatically inserted?',
+                15, f => this.handleFileChoose(prop, e, true));
+            }
+          }
         };
         reader.readAsDataURL(image);
-
       }
       if (prop === 'thumb') {
         this.props.setEditingObjectProperty(prop, e.target.files[0]);
