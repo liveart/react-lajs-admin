@@ -10,6 +10,8 @@ import * as _ from 'lodash';
 const DELETE_COLORS = 'DELETE_COLORS';
 const MOVE_COLORS_TO_OTHER_GROUP = 'MOVE_COLORS_TO_OTHER_GROUP';
 const LEAVE_COLORS_WITHOUT_GROUP = 'LEAVE_COLORS_WITHOUT_GROUP';
+let linkedProduct = [];
+let linkedGraphic = [];
 export default class ColorgroupsComponent extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
@@ -41,7 +43,7 @@ export default class ColorgroupsComponent extends Component {
 
   constructor() {
     super();
-    this.state = {deleting: false, selectedValue: DELETE_COLORS, newGroup: '', linkedProduct: [], linkedGraphic: []};
+    this.state = {deleting: false, selectedValue: DELETE_COLORS, newGroup: ''};
   }
 
   componentWillMount() {
@@ -62,57 +64,53 @@ export default class ColorgroupsComponent extends Component {
   };
 
   isColorgroupLinkedProduct = () => {
-    let isLinked = true;
-    this.state.linkedProduct = [];
-    _.forEach(this.props.products, prod => {
-      _.forEach(prod.colorizables, col => {
-        if (col.assignColorgroup) {
-          if (col.colorgroup !== undefined && col.colorgroup.id === this.props.objectHolder.id) {
-            this.state.linkedProduct.push(prod.name);
-            isLinked = false;
-            return false;
-          }
-        } else {
-          let colors = _.filter(this.props.secondaryData, {'colorgroupId': this.props.objectHolder.id});
-          let arr = _.intersectionBy(col._colors, colors, 'name');
-          if (arr.length) {
-            this.state.linkedProduct.push(prod.name);
-            isLinked = false;
-            return false;
-          }
+    linkedProduct = [];
+    this.props.products.forEach(p => {
+      p.colorizables.filter(c => c.assignColorgroup === true).forEach(c => {
+        if (c.colorgroup && c.colorgroup.id === this.props.objectHolder.id) {
+          linkedProduct.push(p.name);
+        }
+      });
+      p.colorizables.filter(c => c.assignColorgroup === false).forEach(c => {
+        let arr = _.intersectionBy(c._colors, this.props.secondaryData.filter(col =>
+        col.colorgroupId === this.props.objectHolder.id), 'name');
+        if (arr.length) {
+          linkedProduct.push(p.name);
         }
       });
     });
-    return isLinked;
+    linkedProduct = _.sortedUniq(linkedProduct);
   };
 
   isColorgroupLinkedGraphic = () => {
-    let isLinked = true;
-    this.state.linkedGraphic = [];
-    _.forEach(this.props.graphics, prod => {
-      _.forEach(prod.colorizables, col => {
-        let colors = _.filter(this.props.secondaryData, {'colorgroupId': this.props.objectHolder.id});
-        let arr = _.intersectionBy(col._colors, colors, 'name');
+    linkedGraphic = [];
+    this.props.graphics.forEach(g => {
+      g.colorizables.forEach(c => {
+        let arr = _.intersectionBy(c._colors, this.props.secondaryData.filter(col =>
+        col.colorgroupId === this.props.objectHolder.id), 'name');
         if (arr.length) {
-          this.state.linkedGraphic.push(prod.name);
-          isLinked = false;
-          return false;
+          linkedGraphic.push(g.name);
         }
-
       });
+      let arr = _.intersectionBy(g.colors, this.props.secondaryData.filter(col =>
+      col.colorgroupId === this.props.objectHolder.id), 'name');
+      if (arr.length) {
+        linkedGraphic.push(g.name);
+      }
     });
-    return isLinked;
+    linkedGraphic = _.sortedUniq(linkedGraphic);
   };
 
   renderDelete = () => {
     return (
       <div className='form-group'>
         <div className='col-md-9'>
-          {!this.isColorgroupLinkedProduct() || !this.isColorgroupLinkedGraphic() ?
+          {(!this.isColorgroupLinkedProduct() && linkedProduct.length) || (!this.isColorgroupLinkedGraphic() && linkedGraphic.length) ?
             <div>
               <h4>Group linked to:</h4>
-              {this.state.linkedProduct.length ? 'Products: ' + this.state.linkedProduct : null}
-              {this.state.linkedGraphic.length ? 'Graphics: ' + this.state.linkedGraphic : null}
+              {linkedProduct.length ? 'Products: ' + linkedProduct : null}
+              &nbsp;
+              {linkedGraphic.length ? 'Graphics: ' + linkedGraphic : null}
             </div> :
             <div className='col-md-6'>
               <h1>Choose an action</h1>
