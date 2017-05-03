@@ -61,7 +61,7 @@ function getColors(colors) {
   return _.map(colors, col => col.value);
 }
 
-function getCategories(category, categories, graphics, req) {
+function getCategories(category, categories, graphics, req, colorsArr) {
   const cats = [];
   _.forEach(categories, cat => {
     if (String(cat.graphicsCategoryId) === String(category.id)) {
@@ -70,14 +70,14 @@ function getCategories(category, categories, graphics, req) {
         name: cat.name,
         thumb: getFullUrl(req, cat.thumb),
         categories: getCategories(cat, categories, graphics, req),
-        graphicsList: getGraphics(cat, graphics, req)
+        graphicsList: getGraphics(cat, graphics, req, colorsArr)
       });
     }
   });
   return cats.length ? cats : undefined;
 }
 
-function getGraphics(category, graphics, req) {
+function getGraphics(category, graphics, req, colorsArr) {
   const grs = [];
   _.forEach(graphics, gr => {
     if (String(gr.categoryId) === String(category.id)) {
@@ -91,7 +91,26 @@ function getGraphics(category, graphics, req) {
         multicolor: gr.multicolor,
         thumb: getFullUrl(req, gr.thumb),
         image: getFullUrl(req, gr.image),
-        colorizableElements: fixColorizables(gr.colorizables)
+        colorizableElements: gr.colorizables ? _.map(gr.colorizables,
+          cr => {
+            const r = {
+              name: cr.name,
+              id: cr.id
+            };
+            if (cr.assignColorgroup && cr.colorgroup) {
+              const cg = cr.colorgroup;
+              r.colors = [...colorsArr
+                .filter(c => String(c.colorgroupId) === String(cg.id))
+                .map(c => ({
+                  name: c.name,
+                  value: c.value
+                }))];
+            } else {
+              r.colors = cr._colors;
+            }
+            return r;
+          }
+        ) : undefined,
       });
     }
   });
@@ -187,6 +206,7 @@ module.exports = function (app) {
   app.get('/api/' + LIVE_ART + '/graphics', function (req, res) {
     const result = {};
     const Graphic = loopback.getModel('graphic');
+    const Color = loopback.getModel('color');
     Graphic.find((err, graphics) => {
       if (err) {
         res.status(500).send('Error occurred');
@@ -199,20 +219,22 @@ module.exports = function (app) {
         }
 
         if (cats && cats.length) {
-          result.graphicsCategoriesList = [];
-          _.forEach(cats, cat => {
-            if (!cat.graphicsCategoryId || cat.graphicsCategoryId === '') {
-              result.graphicsCategoriesList.push({
-                id: cat.id,
-                name: cat.name,
-                thumb: getFullUrl(req, cat.thumb),
-                categories: getCategories(cat, cats, graphics, req),
-                graphicsList: getGraphics(cat, graphics, req)
-              });
-            }
-          });
+          Color.find().then(colorsArr => {
+            result.graphicsCategoriesList = [];
+            _.forEach(cats, cat => {
+              if (!cat.graphicsCategoryId || cat.graphicsCategoryId === '') {
+                result.graphicsCategoriesList.push({
+                  id: cat.id,
+                  name: cat.name,
+                  thumb: getFullUrl(req, cat.thumb),
+                  categories: getCategories(cat, cats, graphics, req, colorsArr),
+                  graphicsList: getGraphics(cat, graphics, req, colorsArr)
+                });
+              }
+            });
 
-          res.json(result);
+            res.json(result);
+          }).catch(() => res.status(500).send('Error occurred'));
         }
       });
     });
