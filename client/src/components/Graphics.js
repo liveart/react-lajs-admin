@@ -104,14 +104,14 @@ export default class GraphicsComponent extends Component {
 
   handleSelectedObjectArrayArrayDeleteElement = (fArr, sArr, colorizableKey, key) => {
     const arr = (this.props.objectHolder[fArr]);
-    ((arr[colorizableKey])[sArr]).remove(key);
+    arr[colorizableKey][sArr].remove(key);
     this.props.setEditingObjectProperty(fArr, [...arr]);
   };
 
   handleSelectedObjectArrayArrayChange = (fArrName, sArrName, fInd, sInd, propName, event) => {
-    const colorizables = this.props.objectHolder[fArrName];
-    ((((colorizables[fInd])[sArrName])[sInd])[propName]) = event.target.value;
-    this.props.setEditingObjectProperty(fArrName, [...colorizables]);
+    const arr = this.props.objectHolder[fArrName];
+    arr[fInd][sArrName][sInd][propName] = event.target.value;
+    this.props.setEditingObjectProperty(fArrName, [...arr]);
   };
 
   handleSelectedObjectChange = (propertyName, event) => {
@@ -140,10 +140,9 @@ export default class GraphicsComponent extends Component {
   };
 
   handleFileChoose = (prop, e) => {
-    this.props.setEditingObjectProperty(prop, e.target.files[0]);
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       if (prop === 'image') {
-        const image = this.props.objectHolder['image'];
+        const image = e.target.files[0];
         const reader = new FileReader();
         reader.onloadend = () => {
           this.setState({
@@ -154,7 +153,11 @@ export default class GraphicsComponent extends Component {
           const r = new FileReader();
           r.onload = e => {
             const contents = e.target.result;
-            converter.processSVGContent(contents);
+            const {graphicObject, newDom} = converter.processSVGContent(contents);
+            const blob = new Blob([newDom], {type: 'application/octet-binary'});
+            const file = new File([blob], image.name);
+            this.props.setEditingObjectProperty(prop, file);
+            this.props.setEditingObjectProperty(null, {...this.props.objectHolder, ...graphicObject});
           };
           r.readAsText(image);
         };
@@ -162,6 +165,7 @@ export default class GraphicsComponent extends Component {
 
       }
       if (prop === 'thumb') {
+        this.props.setEditingObjectProperty(prop, e.target.files[0]);
         this.toCanvas(prop);
       }
     }

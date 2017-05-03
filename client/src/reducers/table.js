@@ -25,17 +25,19 @@ export default function (state = INITIAL_STATE, action) {
     }
     case SET_OBJECT_HOLDER_PROPERTY: {
       let newObj = state.objectHolder;
-      newObj[action.propertyName] = action.value;
+      if (!action.propertyName && typeof action.propertyName === 'object') {
+        newObj = action.value;
+      } else {
+        newObj[action.propertyName] = action.value;
+      }
       return {
         ...state, objectHolder: Object.assign({}, newObj)
       };
     }
     case ENABLE_EDITING: {
       let holder = {};
-      Object.getOwnPropertyNames(action.object).forEach(prop => {
-
-      });
-      return {...INITIAL_STATE, status: STATUS_EDITING, objectHolder: Object.assign({}, holder)};
+      Object.getOwnPropertyNames(action.object).forEach(prop => holder[prop] = '');
+      return {...INITIAL_STATE, status: STATUS_EDITING, objectHolder: {}};
     }
     case ENABLE_CREATING: {
       let holder = {};

@@ -1,6 +1,5 @@
-var path = require('path'),
-  xpath = require('xpath'),
-  dom = require('xmldom').DOMParser;
+import * as xpath from 'xpath';
+import {DOMParser as DOM} from 'xmldom';
 
 function getAttribute(node, name) {
   let attribs = node.attributes;
@@ -13,7 +12,7 @@ function getAttribute(node, name) {
 }
 
 export function processSVGContent(fileContents) {
-  let doc = new dom().parseFromString(fileContents);
+  let doc = new DOM().parseFromString(fileContents);
 
   // 2. Converting fill attribute to styles
   let nodes = xpath.select('//*[@fill]', doc);
@@ -91,10 +90,8 @@ export function processSVGContent(fileContents) {
     }
   }
   newDom = clearSVG(newDom);
-  const graphicObj = getGraphicObject(classes);
-  console.warn(graphicObj);
-  console.warn(newDom);
-  return {graphicObj, newDom};
+  const graphicObject = getGraphicObject(classes);
+  return {graphicObject, newDom};
 }
 
 // clearing SVG string
@@ -133,7 +130,7 @@ function getGraphicObject(classes) {
   const obj = {};
   if (classes.length > 1) {
     obj.multicolor = true;
-    obj.colorizableElements = [
+    obj.colorizables = [
       ...classes.map((cl, i) => ({name: `Color ${i + 1}`, id: `.color${i + 1}`}))];
   } else {
     obj.colorize = true;

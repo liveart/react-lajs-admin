@@ -24,3 +24,4 @@
 !/client/public/files/fonts/.gitkeep
 /.vs/
 /.idea/
+!/client/public/files/graphicImages/.gitkeep
