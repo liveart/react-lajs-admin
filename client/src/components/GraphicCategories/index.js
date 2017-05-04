@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import {PTypes} from './PropTypes';
 import {
   ID_PROP,
   STATUS_EDITING,
@@ -7,11 +7,11 @@ import {
   STATUS_CONFIRM_DELETE,
   GRAPHIC_CATEGORY_FOLDER,
   RELATIVE_URL
-} from '../definitions';
-import * as GraphicsCategoryModel from '../../../common/models/graphics-category.json';
+} from '../../definitions';
+import * as GraphicsCategoryModel from '../../../../common/models/graphics-category.json';
 import {RadioGroup, Radio} from 'react-radio-group';
 const GraphicsCategory = GraphicsCategoryModel.properties;
-import View from './View';
+import View from '../View/index';
 import * as _ from 'lodash';
 const DELETE_CATEGORY = 'DELETE_CATEGORY';
 const MOVE_CATEGORY_TO_OTHER_CATEGORY = 'MOVE_CATEGORY_TO_OTHER_CATEGORY';
@@ -19,33 +19,7 @@ const DELETE_GRAPHICS = 'DELETE_GRAPHICS';
 const MOVE_GRAPHICS_TO_OTHER_CATEGORY = 'MOVE_GRAPHICS_TO_OTHER_CATEGORY';
 
 export default class extends Component {
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-    pluralTitle: PropTypes.string.isRequired,
-    data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    errors: PropTypes.arrayOf(PropTypes.object),
-    message: PropTypes.string,
-    loading: PropTypes.bool.isRequired,
-    fetchData: PropTypes.func.isRequired,
-    objectHolder: PropTypes.object,
-    status: PropTypes.string.isRequired,
-    selectRow: PropTypes.func.isRequired,
-    enableEditing: PropTypes.func.isRequired,
-    enableCreating: PropTypes.func.isRequired,
-    enableDefaultStatus: PropTypes.func.isRequired,
-    createEntity: PropTypes.func.isRequired,
-    editEntity: PropTypes.func.isRequired,
-    deleteEntity: PropTypes.func.isRequired,
-    setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired,
-    uploadThumbnail: PropTypes.func.isRequired,
-    deleteThumbnail: PropTypes.func.isRequired,
-    token: PropTypes.string.isRequired,
-    secondaryData: PropTypes.arrayOf(PropTypes.any).isRequired,
-    fetchSecondaryData: PropTypes.func.isRequired,
-    editSecondaryEntity: PropTypes.func.isRequired,
-    deleteSecondaryEntity: PropTypes.func.isRequired
-  };
+  static propTypes = PTypes;
 
   handleFileUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {

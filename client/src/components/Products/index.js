@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import View from './View';
-import * as ProductModel from '../../../common/models/product.json';
+import {PTypes} from './PropTypes';
+import View from '../View/index';
+import * as ProductModel from '../../../../common/models/product.json';
 import {
   STATUS_EDITING,
   STATUS_CREATING,
@@ -15,50 +15,17 @@ import {
   SIZES,
   ASSIGN_GROUP,
   ADD_COLOR
-} from '../definitions';
-import {parseJson} from '../ProductJsonParser';
-import Locations from './Locations';
+} from '../../definitions';
+import {parseJson} from '../../ProductJsonParser';
+import Locations from '../Graphics/Locations';
 import * as _ from 'lodash';
 import Select, {Creatable} from 'react-select';
-import '../../public/assets/css/cropper.css';
+import '../../../public/assets/css/cropper.css';
 const LEAVE_URL_OPTION = 'Import';
 const Product = ProductModel.properties;
 
 export default class ProductsComponent extends Component {
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-    addNotification: PropTypes.func.isRequired,
-    fetchColors: PropTypes.func.isRequired,
-    fetchColorgroups: PropTypes.func.isRequired,
-    colors: PropTypes.arrayOf(PropTypes.object),
-    colorsLoading: PropTypes.bool.isRequired,
-    colorgroups: PropTypes.arrayOf(PropTypes.object),
-    colorgroupsLoading: PropTypes.bool.isRequired,
-    data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    errors: PropTypes.arrayOf(PropTypes.string),
-    loading: PropTypes.bool.isRequired,
-    fetchData: PropTypes.func.isRequired,
-    objectHolder: PropTypes.object,
-    status: PropTypes.string.isRequired,
-    selectRow: PropTypes.func.isRequired,
-    enableEditing: PropTypes.func.isRequired,
-    enableCreating: PropTypes.func.isRequired,
-    enableDefaultStatus: PropTypes.func.isRequired,
-    createEntity: PropTypes.func.isRequired,
-    editEntity: PropTypes.func.isRequired,
-    deleteEntity: PropTypes.func.isRequired,
-    createProductsCategory: PropTypes.func.isRequired,
-    setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired,
-    productsCategories: PropTypes.array.isRequired,
-    uploadProductImage: PropTypes.func.isRequired,
-    uploadProductThumb: PropTypes.func.isRequired,
-    uploadProductLocationMask: PropTypes.func.isRequired,
-    uploadProductLocationOverlay: PropTypes.func.isRequired,
-    uploadProductLocationImage: PropTypes.func.isRequired,
-    fetchProductsCategories: PropTypes.func.isRequired,
-    token: PropTypes.string
-  };
+  static propTypes = PTypes;
 
   constructor(props) {
     super(props);

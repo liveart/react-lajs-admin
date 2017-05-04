@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import Table from './Table';
+import {PTypes} from './PropTypes';
 import {
   ID_PROP,
   STATUS_EDITING,
@@ -18,7 +18,7 @@ const KEEP_URL_OPTION = 'Keep';
 const INITIAL_STATE = {empty: [], json: '', baseUrl: '', urlSelect: LEAVE_URL_OPTION};
 
 export default class ViewAbstract extends Component {
-
+  static propTypes = PTypes;
 
   constructor(props) {
     super(props);

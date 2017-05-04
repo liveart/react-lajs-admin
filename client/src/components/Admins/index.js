@@ -1,28 +1,10 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../definitions';
+import {PTypes} from './PropTypes';
+import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 const User = {email: '', password: ''};
 
 export default class extends Component {
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-    data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    errors: PropTypes.arrayOf(PropTypes.string),
-    loading: PropTypes.bool.isRequired,
-    fetchUsers: PropTypes.func.isRequired,
-    email: PropTypes.string.isRequired,
-    objectHolder: PropTypes.object,
-    status: PropTypes.string.isRequired,
-    selectRow: PropTypes.func.isRequired,
-    enableEditing: PropTypes.func.isRequired,
-    enableCreating: PropTypes.func.isRequired,
-    enableDefaultStatus: PropTypes.func.isRequired,
-    registerUser: PropTypes.func.isRequired,
-    setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired,
-    token: PropTypes.string.isRequired,
-    validateUserToken: PropTypes.func.isRequired
-  };
+  static propTypes = PTypes;
 
   componentWillMount() {
     this.props.restoreTableState(User);

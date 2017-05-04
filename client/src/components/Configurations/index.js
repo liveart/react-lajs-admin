@@ -1,35 +1,14 @@
 ﻿import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import {PTypes} from './PropTypes';
 import Select, {Creatable} from 'react-select';
-import * as ConfigModel from '../../../common/models/configuration.json';
+import * as ConfigModel from '../../../../common/models/configuration.json';
 import {forEach, map, findIndex, filter} from 'lodash';
-import View from './View';
+import View from '../View/index';
 import ConfigurationOptions from './ConfigurationOptions';
 const Configuration = ConfigModel.properties;
 
 export default class extends Component {
-  static propTypes = {
-    message: PropTypes.string,
-    title: PropTypes.string.isRequired,
-    data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    errors: PropTypes.arrayOf(PropTypes.string),
-    loading: PropTypes.bool.isRequired,
-    fetchData: PropTypes.func.isRequired,
-    objectHolder: PropTypes.object,
-    status: PropTypes.string.isRequired,
-    selectRow: PropTypes.func.isRequired,
-    enableEditing: PropTypes.func.isRequired,
-    enableCreating: PropTypes.func.isRequired,
-    enableDefaultStatus: PropTypes.func.isRequired,
-    createEntity: PropTypes.func.isRequired,
-    editEntity: PropTypes.func.isRequired,
-    deleteEntity: PropTypes.func.isRequired,
-    setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired,
-    token: PropTypes.string.isRequired,
-    fetchProducts: PropTypes.func.isRequired,
-    products: PropTypes.arrayOf(PropTypes.object)
-  };
+  static propTypes = PTypes;
 
   redirectWindowOptions = [{value: '(default)', label: 'Default'},
     {value: 'parent', label: 'Parent'},
