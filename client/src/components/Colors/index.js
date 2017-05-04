@@ -39,7 +39,6 @@ export default class ColorsComponent extends Component {
   render() {
     return (
       <View {...this.props} objectSample={Color} sortingSupport={true}
-            hiddenProperties={['id']}
             representations={{
               colorgroupId: {
                 getElem: val => {

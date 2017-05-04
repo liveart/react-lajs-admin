@@ -639,9 +639,6 @@ export default class ProductsComponent extends Component {
     return (
       <View {...this.props} objectSample={{...Product}}
             sortingSupport={true}
-            hiddenProperties={['id', 'colors', 'locations', 'multicolor', 'description', 'colorizables', 'minDPU',
-              'minQuantity', 'hideEditableAreaBorder', 'namesNumbersEnabled', 'pantones',
-              'resizable', 'editableAreaSizes', 'showRuler', 'template', 'data', 'sizes']}
             changedLabels={{
               editableAreaSizes: 'Editable Area Sizes', minDPU: 'Min DPU', minQuantity: 'Min quantity',
               customOptions: 'Custom Options'

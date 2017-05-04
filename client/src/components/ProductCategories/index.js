@@ -238,7 +238,6 @@ export default class extends Component {
   render() {
     return (
       <View {...this.props} objectSample={ProductsCategory} sortingSupport={true}
-            hiddenProperties={['id', 'productsCategoryId']}
             representations={{
               thumbUrl: {
                 getElem: val =>

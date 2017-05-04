@@ -6,7 +6,8 @@ export default class Table extends Component {
 
   renderTableHeadings = () =>
     Object.getOwnPropertyNames(this.props.objectSample).map((prop, i) => {
-      if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
+    console.log(prop);
+      if (this.props.objectSample[prop].showInTable === false) {
         return null;
       }
       if (this.props.representations && this.props.representations.hasOwnProperty(prop)
@@ -28,7 +29,7 @@ export default class Table extends Component {
     return (
       <tr>
         {Object.getOwnPropertyNames(this.props.objectSample).map((prop, i) => {
-          if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
+          if (this.props.objectSample[prop].showInTable === false) {
             return null;
           }
 
@@ -58,7 +59,7 @@ export default class Table extends Component {
         if (!add) {
           return;
         }
-        if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
+        if (this.props.objectSample[prop].showInTable === false) {
           add = true;
         } else if (typeof this.props.objectHolder[prop] !== 'object') {
           if (typeof d[prop] === 'undefined') {
@@ -98,7 +99,7 @@ export default class Table extends Component {
         <tr key={item.id} onClick={() => this.handleEdit(item)}>
           {
             Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
-              if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
+              if (this.props.objectSample[prop].showInTable === false) {
                 return null;
               }
 

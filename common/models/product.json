@@ -17,21 +17,21 @@
       "type": "string",
       "required": true,
       "viewIndex": 1,
-      "showInTable": false,
+      "showInTable": true,
       "showInput": true
     },
     "categoryId": {
       "type": "string",
       "required": true,
       "viewIndex": 3,
-      "showInTable": false,
+      "showInTable": true,
       "showInput": false
     },
     "thumbUrl": {
       "type": "string",
       "required": true,
       "viewIndex": 2,
-      "showInTable": false,
+      "showInTable": true,
       "showInput": false
     },
     "description": {

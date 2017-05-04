@@ -16,13 +16,13 @@
     "name": {
       "type": "string",
       "required": true,
-      "showInTable": false,
+      "showInTable": true,
       "showInput": true
     },
     "thumb": {
       "type": "string",
       "required": true,
-      "showInTable": false,
+      "showInTable": true,
       "showInput": false
     },
     "graphicsCategoryId": {

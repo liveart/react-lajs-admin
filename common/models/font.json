@@ -12,33 +12,33 @@
     "name": {
       "type": "string",
       "required": true,
-      "showInTable": false,
+      "showInTable": true,
       "showInput": true
     },
     "fontFamily": {
       "type": "string",
       "required": true,
-      "showInTable": false,
+      "showInTable": true,
       "showInput": true
     },
     "fileNormal": {
       "type": "string",
-      "showInTable": false,
+      "showInTable": true,
       "showInput": true
     },
     "fileBold": {
       "type": "string",
-      "showInTable": false,
+      "showInTable": true,
       "showInput": true
     },
     "fileItalic": {
       "type": "string",
-      "showInTable": false,
+      "showInTable": true,
       "showInput": true
     },
     "fileBoldItalic": {
       "type": "string",
-      "showInTable": false,
+      "showInTable": true,
       "showInput": true
     },
     "boldAllowed": {
@@ -53,7 +53,7 @@
     },
     "vector": {
       "type": "string",
-      "showInTable": false,
+      "showInTable": true,
       "showInput": true
     }
   },

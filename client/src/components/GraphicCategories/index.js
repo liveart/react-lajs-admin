@@ -238,7 +238,6 @@ export default class extends Component {
   render() {
     return (
       <View {...this.props} objectSample={GraphicsCategory} sortingSupport={true}
-            hiddenProperties={['id', 'graphicsCategoryId']}
             representations={{
               thumb: {
                 getElem: val => <a href={this.getFileUrl(val)} className='thumbnail' style={{width: 100}}>

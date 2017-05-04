@@ -12,7 +12,7 @@
     "name": {
       "type": "string",
       "required": true,
-      "showInTable": false,
+      "showInTable": true,
       "showInput": true
     }
   },
