@@ -17,7 +17,7 @@ import {
   ADD_COLOR
 } from '../../definitions';
 import {parseJson} from '../../ProductJsonParser';
-import Locations from '../Graphics/Locations';
+import Locations from './Locations';
 import * as _ from 'lodash';
 import Select, {Creatable} from 'react-select';
 import '../../../public/assets/css/cropper.css';
@@ -127,15 +127,12 @@ export default class ProductsComponent extends Component {
     const img = new Image();
     let imageOut = new Image();
     const reader = new FileReader();
-    reader.onload = function (e) {
-      img.src = e.target.result;
-    };
+    reader.onload = (e) => img.src = e.target.result;
     reader.readAsDataURL(image);
     const c = this.refs.canvas;
     const ctx = c.getContext('2d');
-    img.onload = function () {
-      imageOut = ctx.drawImage(img, 0, 0, 110, 110);
-    };
+    ctx.clearRect(0, 0, c.width, c.height);
+    img.onload = () => imageOut = ctx.drawImage(img, 0, 0, 110, 110);
   };
 
   handleFileChoose = (prop, e) => {

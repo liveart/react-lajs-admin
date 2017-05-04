@@ -94,8 +94,9 @@ export default class GraphicsComponent extends Component {
     const reader = new FileReader();
     reader.onload = e => img.src = e.target.result;
     reader.readAsDataURL(image);
-    const c = this.refs.canvas;
-    const ctx = c.getContext('2d');
+    let c = this.refs.canvas;
+    let ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, c.width, c.height);
     img.onload = () => imageOut = ctx.drawImage(img, 0, 0, 100, 100);
   };
 
