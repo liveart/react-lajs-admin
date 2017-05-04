@@ -16,7 +16,7 @@
     "name": {
       "type": "string",
       "required": true,
-      "showInTable": false,
+      "showInTable": true,
       "showInput": true
     },
     "description": {
@@ -27,7 +27,7 @@
     "categoryId": {
       "type": "string",
       "required": true,
-      "showInTable": false,
+      "showInTable": true,
       "showInput": false
     },
     "colors": {
@@ -70,7 +70,7 @@
     },
     "thumb": {
       "type": "string",
-      "showInTable": false,
+      "showInTable": true,
       "showInput": false
     },
     "image": {

@@ -16,7 +16,7 @@
       "type": "string",
       "required": true,
       "viewIndex": 1,
-      "showInTable": false,
+      "showInTable": true,
       "showInput": true
     },
     "isMain": {

@@ -75,8 +75,6 @@ export default class extends Component {
   render() {
     return (
       <View {...this.props} objectSample={Font} sortingSupport={true}
-            hiddenProperties={['id', 'boldAllowed', 'italicAllowed']}
-
             representations={{
               fileNormal: {
                 getElem: val =>

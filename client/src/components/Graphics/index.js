@@ -390,12 +390,10 @@ export default class GraphicsComponent extends Component {
 
   render() {
     return (
-      <View {...this.props} objectSample={{...Graphic, colorizables: []}}
+      <View {...this.props} objectSample={{...Graphic}}
             sortingSupport={true}
             enableImportJson={this.props.enableImportJson}
             handleImportJson={this.handleImportJson}
-            hiddenProperties={['id', 'colors', 'colorize',
-              'colorizableElements', 'multicolor', 'description', 'image', 'colorizables']}
             sortComparators={{categoryId: (data, id) => id === '' ? true : data === id}}
             representations={{
               thumb: {
