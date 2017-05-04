@@ -30,8 +30,6 @@ export default class ColorsComponent extends Component {
   render() {
     return (
       <View {...this.props} objectSample={Color} sortingSupport={true}
-            hiddenProperties={['id']}
-            hiddenInputs={['id']}
             representations={{
               colorgroupId: {
                 getElem: val => {
@@ -41,7 +39,6 @@ export default class ColorsComponent extends Component {
                   }
                   return null;
                 },
-                sortable: true,
                 sortElem: <select className='form-control'
                                   value={this.props.objectHolder['colorgroupId']}
                                   onChange={e => this.updateObject('colorgroupId', e)}>
@@ -61,8 +58,7 @@ export default class ColorsComponent extends Component {
                     </div>);
                   }
                   return null;
-                },
-                sortable: true
+                }
               }
             }}
             changedInputs={{

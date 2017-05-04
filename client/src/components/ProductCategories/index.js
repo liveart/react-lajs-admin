@@ -238,8 +238,6 @@ export default class extends Component {
   render() {
     return (
       <View {...this.props} objectSample={ProductsCategory} sortingSupport={true}
-            hiddenProperties={['id', 'productsCategoryId']}
-            hiddenInputs={['id', 'productsCategoryId', 'thumbUrl']}
             representations={{
               thumbUrl: {
                 getElem: val =>
@@ -247,9 +245,7 @@ export default class extends Component {
                            style={{width: 100}}><img
                     src={this.getFileUrl(val)} alt='thumb'
                     style={{width: 100}}/></a> :
-                    null,
-                sortable: false,
-                header: 'Thumb'
+                    null
               },
             }}
             changedInputs={{

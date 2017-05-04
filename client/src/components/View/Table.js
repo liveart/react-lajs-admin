@@ -6,16 +6,12 @@ import {includes, forEach, keys} from 'lodash';
 export default class Table extends Component {
 
   renderTableHeadings = () =>
-    keys(this.props.objectSample).map(key => {
-      if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(key) > -1) {
+    Object.getOwnPropertyNames(this.props.objectSample).map((prop, i) => {
+      if (this.props.objectSample[prop].showInTable === false) {
         return null;
       }
-      if (this.props.representations && this.props.representations.hasOwnProperty(key)
-        && this.props.representations[key].header) {
-        return <th key={key}>{this.props.representations[key].header}</th>;
-      }
-      return <th key={key}>{this.props.changedLabels && this.props.changedLabels[key] ?
-        this.props.changedLabels[key] : capitalizeFirstLetter(key)}</th>;
+      return <th key={i}>{this.props.objectSample[prop].header ?
+        this.props.objectSample[prop].header : prop.capitalizeFirstLetter()}</th>;
     });
 
   updateObject = (propertyName, event) =>
@@ -28,16 +24,16 @@ export default class Table extends Component {
 
     return (
       <tr>
-        {keys(this.props.objectSample).map(key => {
-          if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(key) > -1) {
+        {Object.getOwnPropertyNames(this.props.objectSample).map((prop, i) => {
+          if (this.props.objectSample[prop].showInTable === false) {
             return null;
           }
 
-          if (this.props.representations && this.props.representations[key]) {
-            if (!this.props.representations[key].sortable) {
-              return <td key={key}/>;
-            } else if (this.props.representations[key].sortElem) {
-              return <td key={key}>{this.props.representations[key].sortElem}</td>;
+          if (this.props.representations && this.props.representations.hasOwnProperty(prop)) {
+            if (this.props.objectSample[prop].sortable === false) {
+              return <td key={i}/>;
+            } else if (this.props.representations[prop].sortElem) {
+              return <td key={i}>{this.props.representations[prop].sortElem}</td>;
             }
           }
 
@@ -59,7 +55,7 @@ export default class Table extends Component {
         if (!add) {
           return;
         }
-        if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
+        if (this.props.objectSample[prop].showInTable === false) {
           add = true;
         } else if (typeof this.props.objectHolder[prop] !== 'object') {
           if (typeof d[prop] === 'undefined') {
@@ -98,7 +94,7 @@ export default class Table extends Component {
         <tr key={item.id} onClick={() => this.handleEdit(item)}>
           {
             Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
-              if (this.props.hiddenProperties && this.props.hiddenProperties.indexOf(prop) > -1) {
+              if (this.props.objectSample[prop].showInTable === false) {
                 return null;
               }
 

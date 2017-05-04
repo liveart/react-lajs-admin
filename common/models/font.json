@@ -3,61 +3,73 @@
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "showInTable": false,
+      "showInput": false
+    },
     "name": {
       "type": "string",
       "required": true,
-      "sqlite3": {
-        "columnName": "name"
-      }
+      "showInTable": true,
+      "showInput": true,
+      "sortable": true
     },
     "fontFamily": {
       "type": "string",
       "required": true,
-      "sqlite3": {
-        "columnName": "fontFamily"
-      }
+      "showInTable": true,
+      "showInput": true,
+      "sortable": true,
+      "header": "Font Family"
     },
     "fileNormal": {
       "type": "string",
-      "sqlite3": {
-        "columnName": "fileNormal"
-      }
+      "showInTable": true,
+      "showInput": true,
+      "sortable": false,
+      "header": "File Normal"
     },
     "fileBold": {
       "type": "string",
-      "sqlite3": {
-        "columnName": "fileBold"
-      }
+      "showInTable": true,
+      "showInput": true,
+      "sortable": false,
+      "header": "File Bold"
     },
     "fileItalic": {
       "type": "string",
-      "sqlite3": {
-        "columnName": "fileItalic"
-      }
+      "showInTable": true,
+      "showInput": true,
+      "sortable": false,
+      "header": "File Italic"
     },
     "fileBoldItalic": {
       "type": "string",
-      "sqlite3": {
-        "columnName": "fileBoldItalic"
-      }
+      "showInTable": true,
+      "showInput": true,
+      "sortable": false,
+      "header": "File Bold&Italic"
     },
     "boldAllowed": {
       "type": "boolean",
-      "sqlite3": {
-        "columnName": "boldAllowed"
-      }
+      "showInTable": false,
+      "showInput": true,
+      "header": "Bold Allowed"
     },
     "italicAllowed": {
       "type": "boolean",
-      "sqlite3": {
-        "columnName": "italicAllowed"
-      }
+      "showInTable": false,
+      "showInput": true,
+      "header": "Italic Allowed"
     },
     "vector": {
       "type": "string",
-      "sqlite3": {
-        "columnName": "vector"
-      }
+      "showInTable": true,
+      "showInput": true,
+      "sortable": false,
+      "header": "Vector"
     }
   },
   "validations": [],

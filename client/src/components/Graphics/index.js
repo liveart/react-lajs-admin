@@ -390,13 +390,10 @@ export default class GraphicsComponent extends Component {
 
   render() {
     return (
-      <View {...this.props} objectSample={{...Graphic, colorizables: []}}
+      <View {...this.props} objectSample={{...Graphic}}
             sortingSupport={true}
             enableImportJson={this.props.enableImportJson}
             handleImportJson={this.handleImportJson}
-            hiddenProperties={['id', 'colors', 'colorize',
-              'colorizableElements', 'multicolor', 'description', 'image', 'colorizables']}
-            hiddenInputs={['id', 'categoryId', 'thumb', 'image']}
             sortComparators={{categoryId: (data, id) => id === '' ? true : data === id}}
             representations={{
               thumb: {
@@ -405,16 +402,14 @@ export default class GraphicsComponent extends Component {
                            style={{width: 100}}><img
                     src={this.getFileUrl(val)} alt='thumb'
                     style={{width: 100}}/></a> :
-                    null,
-                sortable: false
+                    null
               },
               image: {
                 getElem: val => val ?
                   <a href={this.getFileUrl(val)} className='thumbnail'
                      style={{width: 100}}><img
                     src={this.getFileUrl(val)} alt='image'
-                    style={{width: 100}}/></a> : null,
-                sortable: false
+                    style={{width: 100}}/></a> : null
               },
               categoryId: {
                 getElem: val => {
@@ -425,7 +420,6 @@ export default class GraphicsComponent extends Component {
 
                   return null;
                 },
-                sortable: true,
                 sortElem: <select className='form-control'
                                   value={this.props.objectHolder.categoryId}
                                   onChange={e => this.handleSelectedObjectChange('categoryId', e)}>
@@ -433,8 +427,7 @@ export default class GraphicsComponent extends Component {
                   {_.sortBy(this.props.graphicsCategories, 'name').map((cat, key) =>
                     <option key={key}
                             value={cat.id}>{cat.name}</option>)}
-                </select>,
-                header: 'Category'
+                </select>
               }
             }}
             changedInputs={{

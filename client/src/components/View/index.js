@@ -142,15 +142,15 @@ export default class ViewAbstract extends Component {
 
   getDefaultInputs = () =>
     Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
-      if (this.props.hiddenInputs.indexOf(prop) > -1) {
+      if (this.props.objectSample[prop].showInput === false) {
         return {element: null};
       }
       return {
         element: <div key={prop} className='form-group'>
           <div className='col-md-2'>
             <p className={'' + (this.props.objectSample[prop].required ? 'req' : '')}>
-              {this.props.changedLabels && this.props.changedLabels[prop] ?
-                this.props.changedLabels[prop] : capitalizeFirstLetter(prop)}
+              {this.props.objectSample[prop].header ?
+                this.props.objectSample[prop].header : prop.capitalizeFirstLetter()}
               {this.props.objectSample[prop].hint ? <small>&nbsp;<i className='fa fa-question'
                                                                     data-tip={this.props.objectSample[prop].hint}/>
               </small> : null}
