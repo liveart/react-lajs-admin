@@ -9,21 +9,31 @@
   "properties": {
     "id": {
       "type": "string",
-      "id": true
+      "id": true,
+      "showInTable": false,
+      "showInput": false
     },
     "name": {
       "type": "string",
-      "required": true
+      "required": true,
+      "showInTable": false,
+      "showInput": true
     },
     "description": {
-      "type": "string"
+      "type": "string",
+      "showInTable": false,
+      "showInput": true
     },
     "categoryId": {
       "type": "string",
-      "required": true
+      "required": true,
+      "showInTable": false,
+      "showInput": false
     },
     "colors": {
-      "type": "array"
+      "type": "array",
+      "showInTable": false,
+      "showInput": true
     },
     "colorizables": {
       "type": [
@@ -42,22 +52,32 @@
             "id": "string"
           }
         }
-      ]
+      ],
+      "showInTable": false,
+      "showInput": true
     },
     "colorize": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "showInTable": false,
+      "showInput": true
     },
     "multicolor": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "showInTable": false,
+      "showInput": true
     },
     "thumb": {
-      "type": "string"
+      "type": "string",
+      "showInTable": false,
+      "showInput": false
     },
     "image": {
       "type": "string",
-      "required": true
+      "required": true,
+      "showInTable": false,
+      "showInput": false
     }
   },
   "validations": [],

@@ -3,61 +3,58 @@
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "showInTable": false,
+      "showInput": false
+    },
     "name": {
       "type": "string",
       "required": true,
-      "sqlite3": {
-        "columnName": "name"
-      }
+      "showInTable": false,
+      "showInput": true
     },
     "fontFamily": {
       "type": "string",
       "required": true,
-      "sqlite3": {
-        "columnName": "fontFamily"
-      }
+      "showInTable": false,
+      "showInput": true
     },
     "fileNormal": {
       "type": "string",
-      "sqlite3": {
-        "columnName": "fileNormal"
-      }
+      "showInTable": false,
+      "showInput": true
     },
     "fileBold": {
       "type": "string",
-      "sqlite3": {
-        "columnName": "fileBold"
-      }
+      "showInTable": false,
+      "showInput": true
     },
     "fileItalic": {
       "type": "string",
-      "sqlite3": {
-        "columnName": "fileItalic"
-      }
+      "showInTable": false,
+      "showInput": true
     },
     "fileBoldItalic": {
       "type": "string",
-      "sqlite3": {
-        "columnName": "fileBoldItalic"
-      }
+      "showInTable": false,
+      "showInput": true
     },
     "boldAllowed": {
       "type": "boolean",
-      "sqlite3": {
-        "columnName": "boldAllowed"
-      }
+      "showInTable": false,
+      "showInput": true
     },
     "italicAllowed": {
       "type": "boolean",
-      "sqlite3": {
-        "columnName": "italicAllowed"
-      }
+      "showInTable": false,
+      "showInput": true
     },
     "vector": {
       "type": "string",
-      "sqlite3": {
-        "columnName": "vector"
-      }
+      "showInTable": false,
+      "showInput": true
     }
   },
   "validations": [],

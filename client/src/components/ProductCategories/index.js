@@ -239,7 +239,6 @@ export default class extends Component {
     return (
       <View {...this.props} objectSample={ProductsCategory} sortingSupport={true}
             hiddenProperties={['id', 'productsCategoryId']}
-            hiddenInputs={['id', 'productsCategoryId', 'thumbUrl']}
             representations={{
               thumbUrl: {
                 getElem: val =>

@@ -3,18 +3,30 @@
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "showInTable": false,
+      "showInput": false
+    },
     "name": {
       "type": "string",
-      "required": true
+      "required": true,
+      "showInTable": false,
+      "showInput": true
     },
     "colorgroupId": {
       "type": "string",
-      "required": false
+      "required": false,
+      "showInTable": false,
+      "showInput": true
     },
     "value": {
       "type": "string",
       "required": true,
-      "default": "#000000"
+      "default": "#000000",
+      "showInTable": false,
+      "showInput": true
     }
   },
   "validations": [],

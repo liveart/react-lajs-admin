@@ -9,40 +9,58 @@
   "properties": {
     "id": {
       "type": "string",
-      "id": true
+      "id": true,
+      "showInTable": false,
+      "showInput": false
     },
     "name": {
       "type": "string",
       "required": true,
-      "viewIndex": 1
+      "viewIndex": 1,
+      "showInTable": false,
+      "showInput": true
     },
     "categoryId": {
       "type": "string",
       "required": true,
-      "viewIndex": 3
+      "viewIndex": 3,
+      "showInTable": false,
+      "showInput": false
     },
     "thumbUrl": {
       "type": "string",
       "required": true,
-      "viewIndex": 2
+      "viewIndex": 2,
+      "showInTable": false,
+      "showInput": false
     },
     "description": {
       "type": "string",
-      "viewIndex": 4
+      "viewIndex": 4,
+      "showInTable": false,
+      "showInput": true
     },
     "data": {
       "type": "object",
-      "default": {}
+      "default": {},
+      "showInTable": false,
+      "showInput": false
     },
     "minDPU": {
-      "type": "number"
+      "type": "number",
+      "showInTable": false,
+      "showInput": true
     },
     "minQuantity": {
-      "type": "number"
+      "type": "number",
+      "showInTable": false,
+      "showInput": true
     },
     "multicolor": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "showInTable": false,
+      "showInput": false
     },
     "colorizables": {
       "type": [
@@ -61,7 +79,9 @@
             "id": "string"
           }
         }
-      ]
+      ],
+      "showInTable": false,
+      "showInput": true
     },
     "colors": {
       "type": [
@@ -75,25 +95,35 @@
             }
           ]
         }
-      ]
+      ],
+      "showInTable": false,
+      "showInput": true
     },
     "hideEditableAreaBorder": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "showInTable": false,
+      "showInput": false
     },
     "namesNumbersEnabled": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "showInTable": false,
+      "showInput": false
     },
     "pantones": {
       "type": {
         "useForDecoration": "boolean",
         "useForProduct": "boolean"
-      }
+      },
+      "showInTable": false,
+      "showInput": false
     },
     "resizable": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "showInTable": false,
+      "showInput": false
     },
     "editableAreaSizes": {
       "type": [
@@ -103,17 +133,23 @@
           "height": "number"
         }
       ],
-      "required": false
+      "required": false,
+      "showInTable": false,
+      "showInput": true
     },
     "showRuler": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "showInTable": false,
+      "showInput": false
     },
     "sizes": {
       "type": [
         "string"
       ],
-      "required": false
+      "required": false,
+      "showInTable": false,
+      "showInput": true
     },
     "locations": {
       "type": [
@@ -152,10 +188,14 @@
         }
       ],
       "required": true,
-      "viewIndex": 5
+      "viewIndex": 5,
+      "showInTable": false,
+      "showInput": true
     },
     "template": {
-      "type": "string"
+      "type": "string",
+      "showInTable": false,
+      "showInput": true
     }
   },
   "validations": [],

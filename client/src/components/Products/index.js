@@ -647,10 +647,6 @@ export default class ProductsComponent extends Component {
               customOptions: 'Custom Options'
             }}
             handleImportJson={this.handleImportJson}
-            hiddenInputs={['id', 'categoryId', 'thumbUrl', 'data', 'pantones', 'hideEditableAreaBorder',
-              'namesNumbersEnabled', 'showRuler', 'resizable', 'multicolor',
-              this.props.objectHolder.multicolor === true ?
-                'colors' : 'colorizables']}
             enableImportJson={this.props.enableImportJson}
             representations={{
               thumbUrl: {

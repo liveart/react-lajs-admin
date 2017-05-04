@@ -240,7 +240,7 @@ export default class ViewAbstract extends Component {
 
   getDefaultInputs = () =>
     Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
-      if (this.props.hiddenInputs.indexOf(prop) > -1) {
+      if (this.props.objectSample[prop].showInput === false) {
         return {element: null};
       }
       return {
