@@ -639,10 +639,6 @@ export default class ProductsComponent extends Component {
     return (
       <View {...this.props} objectSample={{...Product}}
             sortingSupport={true}
-            changedLabels={{
-              editableAreaSizes: 'Editable Area Sizes', minDPU: 'Min DPU', minQuantity: 'Min quantity',
-              customOptions: 'Custom Options'
-            }}
             handleImportJson={this.handleImportJson}
             enableImportJson={this.props.enableImportJson}
             representations={{
@@ -652,9 +648,7 @@ export default class ProductsComponent extends Component {
                            style={{width: 110}}><img
                     src={this.getFileUrl(val)} alt='thumb'
                     style={{width: 110}}/></a> :
-                    null,
-                sortable: false,
-                header: 'Thumb'
+                    null
               },
               categoryId: {
                 getElem: val => {
@@ -664,7 +658,6 @@ export default class ProductsComponent extends Component {
                   }
                   return null;
                 },
-                sortable: true,
                 sortElem: <Select value={this.props.objectHolder.categoryId}
                                   options={_.sortBy(this.props.productsCategories, 'name')}
                                   valueKey='id'
@@ -676,8 +669,7 @@ export default class ProductsComponent extends Component {
                                       this.props.setEditingObjectProperty('categoryId', '');
                                     }
                                   }}
-                />,
-                header: 'Category'
+                />
               }
             }}
             changedInputs={{

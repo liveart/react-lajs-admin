@@ -245,9 +245,7 @@ export default class extends Component {
                            style={{width: 100}}><img
                     src={this.getFileUrl(val)} alt='thumb'
                     style={{width: 100}}/></a> :
-                    null,
-                sortable: false,
-                header: 'Thumb'
+                    null
               },
             }}
             changedInputs={{

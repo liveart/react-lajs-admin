@@ -13,20 +13,23 @@
       "type": "string",
       "required": true,
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": true
     },
     "colorgroupId": {
       "type": "string",
       "required": false,
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": true
     },
     "value": {
       "type": "string",
       "required": true,
       "default": "#000000",
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": false
     }
   },
   "validations": [],

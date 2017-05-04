@@ -17,7 +17,8 @@
       "required": true,
       "viewIndex": 1,
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": true
     },
     "isMain": {
       "type": "boolean",
@@ -30,7 +31,8 @@
       "required": true,
       "viewIndex": 2,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Products Url"
     },
     "defaultProductId": {
       "type": "string",
@@ -50,7 +52,8 @@
       "viewIndex": 3,
       "hint": "Indicates URL to get Fonts JSON structure",
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Fonts Url"
     },
     "colors": {
       "type": {
@@ -75,14 +78,16 @@
       "required": true,
       "viewIndex": 5,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Graphics Url"
     },
     "social": {
       "type": "string",
       "required": true,
       "viewIndex": 7,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Social Url"
     },
     "options": {
       "type": {
@@ -138,7 +143,8 @@
       },
       "required": true,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Text Effects"
     },
     "defaultNameObjectText": {
       "type": "string",
@@ -157,64 +163,74 @@
       "required": true,
       "viewIndex": 6,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Assets Url"
     },
     "galleryBaseUrl": {
       "type": "string",
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Gallery Base Url"
     },
     "getQuoteUrl": {
       "type": "string",
       "required": true,
       "viewIndex": 8,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Quotes Url"
     },
     "getDesignsUrl": {
       "type": "string",
       "required": true,
       "showInTable": false,
-      "showInput": false
+      "showInput": false,
+      "header": "Designs Url"
     },
     "saveDesignUrl": {
       "type": "string",
       "required": true,
       "showInTable": false,
-      "showInput": false
+      "showInput": false,
+      "header": "Save Design Url"
     },
     "loadDesignUrl": {
       "type": "string",
       "required": true,
       "showInTable": false,
-      "showInput": false
+      "showInput": false,
+      "header": "Load Design Url"
     },
     "redirectUrl": {
       "type": "string",
       "required": true,
       "viewIndex": 9,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Redirect Url"
     },
     "uploadImageUrl": {
       "type": "string",
       "required": true,
       "viewIndex": 10,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Upload Image Url"
     },
     "shareLinkUrl": {
       "type": "string",
       "required": true,
       "viewIndex": 11,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Share Link Url"
     },
     "redirectWindow": {
       "type": "string",
       "default": "(default)",
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Redirect Window"
     }
   },
   "validations": [],

@@ -48,7 +48,6 @@ export default class ColorsComponent extends Component {
                   }
                   return null;
                 },
-                sortable: true,
                 sortElem: <select className='form-control'
                                   value={this.props.objectHolder['colorgroupId']}
                                   onChange={e => this.handleSelectedObjectChange('colorgroupId', e)}>
@@ -68,8 +67,7 @@ export default class ColorsComponent extends Component {
                     </div>);
                   }
                   return null;
-                },
-                sortable: true
+                }
               }
             }}
             changedInputs={{
@@ -88,9 +86,6 @@ export default class ColorsComponent extends Component {
                                     onChange={this.handleColorChange}/>
               }
             }
-            }
-            customInputs={{}
-
             }
       />
     );

@@ -80,36 +80,31 @@ export default class extends Component {
                 getElem: val =>
                   val ? <a href={this.getFileUrl(val)}
                            style={{width: 100}}>{this.getName(val)}</a> :
-                    null,
-                header: 'File Normal'
+                    null
               },
               fileBold: {
                 getElem: val =>
                   val ? <a href={this.getFileUrl(val)}
                            style={{width: 100}}>{this.getName(val)}</a> :
-                    null,
-                header: 'File Bold'
+                    null
               },
               fileItalic: {
                 getElem: val =>
                   val ? <a href={this.getFileUrl(val)}
                            style={{width: 100}}>{this.getName(val)}</a> :
-                    null,
-                header: 'File Italic'
+                    null
               },
               fileBoldItalic: {
                 getElem: val =>
                   val ? <a href={this.getFileUrl(val)}
                            style={{width: 100}}>{this.getName(val)}</a> :
-                    null,
-                header: 'File Bold&Italic'
+                    null
               },
               vector: {
                 getElem: val =>
                   val ? <a href={this.getFileUrl(val)}
                            style={{width: 100}}>{this.getName(val)}</a> :
-                    null,
-                header: 'Vector'
+                    null
               },
 
             }}

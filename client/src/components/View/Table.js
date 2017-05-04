@@ -6,16 +6,11 @@ export default class Table extends Component {
 
   renderTableHeadings = () =>
     Object.getOwnPropertyNames(this.props.objectSample).map((prop, i) => {
-    console.log(prop);
       if (this.props.objectSample[prop].showInTable === false) {
         return null;
       }
-      if (this.props.representations && this.props.representations.hasOwnProperty(prop)
-        && this.props.representations[prop].header) {
-        return <th key={i}>{this.props.representations[prop].header}</th>;
-      }
-      return <th key={i}>{this.props.changedLabels && this.props.changedLabels[prop] ?
-        this.props.changedLabels[prop] : prop.capitalizeFirstLetter()}</th>;
+      return <th key={i}>{this.props.objectSample[prop].header ?
+        this.props.objectSample[prop].header : prop.capitalizeFirstLetter()}</th>;
     });
 
   handleSelectedObjectChange = (propertyName, event) =>
@@ -34,7 +29,7 @@ export default class Table extends Component {
           }
 
           if (this.props.representations && this.props.representations.hasOwnProperty(prop)) {
-            if (!this.props.representations[prop].sortable) {
+            if (this.props.objectSample[prop].sortable === false) {
               return <td key={i}/>;
             } else if (this.props.representations[prop].sortElem) {
               return <td key={i}>{this.props.representations[prop].sortElem}</td>;

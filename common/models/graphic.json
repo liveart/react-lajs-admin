@@ -17,7 +17,8 @@
       "type": "string",
       "required": true,
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": true
     },
     "description": {
       "type": "string",
@@ -28,7 +29,9 @@
       "type": "string",
       "required": true,
       "showInTable": true,
-      "showInput": false
+      "showInput": false,
+      "sortable": true,
+      "header": "Category"
     },
     "colors": {
       "type": "array",
@@ -71,7 +74,8 @@
     "thumb": {
       "type": "string",
       "showInTable": true,
-      "showInput": false
+      "showInput": false,
+      "sortable": false
     },
     "image": {
       "type": "string",

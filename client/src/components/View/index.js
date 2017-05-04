@@ -247,8 +247,8 @@ export default class ViewAbstract extends Component {
         element: <div key={prop} className='form-group'>
           <div className='col-md-2'>
             <p className={'' + (this.props.objectSample[prop].required ? 'req' : '')}>
-              {this.props.changedLabels && this.props.changedLabels[prop] ?
-                this.props.changedLabels[prop] : prop.capitalizeFirstLetter()}
+              {this.props.objectSample[prop].header ?
+                this.props.objectSample[prop].header : prop.capitalizeFirstLetter()}
               {this.props.objectSample[prop].hint ? <small>&nbsp;<i className='fa fa-question'
                                                                     data-tip={this.props.objectSample[prop].hint}></i>
               </small> : null}

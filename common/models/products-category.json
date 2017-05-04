@@ -17,13 +17,16 @@
       "type": "string",
       "required": true,
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": true
     },
     "thumbUrl": {
       "type": "string",
       "required": true,
       "showInTable": true,
-      "showInput": false
+      "showInput": false,
+      "sortable": false,
+      "header": "Thumb"
     },
     "productsCategoryId": {
       "type": "string",

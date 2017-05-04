@@ -241,8 +241,7 @@ export default class extends Component {
             representations={{
               thumb: {
                 getElem: val => <a href={this.getFileUrl(val)} className='thumbnail' style={{width: 100}}>
-                  <img src={this.getFileUrl(val)} alt='thumb' style={{width: 100}}/></a>,
-                sortable: false
+                  <img src={this.getFileUrl(val)} alt='thumb' style={{width: 100}}/></a>
               },
             }}
             changedInputs={{

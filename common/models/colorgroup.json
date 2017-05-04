@@ -13,7 +13,8 @@
       "type": "string",
       "required": true,
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": true
     }
   },
   "validations": [],

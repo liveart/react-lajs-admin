@@ -18,21 +18,26 @@
       "required": true,
       "viewIndex": 1,
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": true
     },
     "categoryId": {
       "type": "string",
       "required": true,
       "viewIndex": 3,
       "showInTable": true,
-      "showInput": false
+      "showInput": false,
+      "sortable": true,
+      "header": "Category"
     },
     "thumbUrl": {
       "type": "string",
       "required": true,
       "viewIndex": 2,
       "showInTable": true,
-      "showInput": false
+      "showInput": false,
+      "sortable": false,
+      "header": "Thumb"
     },
     "description": {
       "type": "string",
@@ -49,12 +54,14 @@
     "minDPU": {
       "type": "number",
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Min DPU"
     },
     "minQuantity": {
       "type": "number",
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Min Quantity"
     },
     "multicolor": {
       "type": "boolean",
@@ -135,7 +142,8 @@
       ],
       "required": false,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": ""
     },
     "showRuler": {
       "type": "boolean",

@@ -13,48 +13,63 @@
       "type": "string",
       "required": true,
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": true
     },
     "fontFamily": {
       "type": "string",
       "required": true,
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": true,
+      "header": "Font Family"
     },
     "fileNormal": {
       "type": "string",
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": false,
+      "header": "File Normal"
     },
     "fileBold": {
       "type": "string",
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": false,
+      "header": "File Bold"
     },
     "fileItalic": {
       "type": "string",
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": false,
+      "header": "File Italic"
     },
     "fileBoldItalic": {
       "type": "string",
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": false,
+      "header": "File Bold&Italic"
     },
     "boldAllowed": {
       "type": "boolean",
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Bold Allowed"
     },
     "italicAllowed": {
       "type": "boolean",
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "header": "Italic Allowed"
     },
     "vector": {
       "type": "string",
       "showInTable": true,
-      "showInput": true
+      "showInput": true,
+      "sortable": false,
+      "header": "Vector"
     }
   },
   "validations": [],

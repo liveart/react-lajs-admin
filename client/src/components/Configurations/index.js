@@ -99,23 +99,6 @@ export default class extends Component {
   render() {
     return (
       <View {...this.props} objectSample={Configuration} sortingSupport={true}
-            changedLabels={{
-              productsList: 'Products Url',
-              fonts: 'Fonts Url',
-              graphicsList: 'Graphics Url',
-              social: 'Social Url',
-              assetsUrl: 'Assets Url',
-              galleryBaseUrl: 'Gallery Base Url',
-              getQuoteUrl: 'Quotes Url',
-              getDesignsUrl: 'Designs Url',
-              saveDesignUrl: 'Save Design Url',
-              loadDesignUrl: 'Load Design Url',
-              redirectUrl: 'Redirect Url',
-              uploadImageUrl: 'Upload Image Url',
-              textEffects: 'Text Effects',
-              redirectWindow: 'Redirect Window',
-              shareLinkUrl: 'Share Link Url'
-            }}
             changedInputs={{
               colors: {
                 elem: <div className='panel panel-default'>
