@@ -16,12 +16,8 @@ import {
   setInitialState,
   enableConfirmDelete
 } from '../actions/table';
-import {
-  fetchProducts,
-  deleteProduct,
-  editProduct
-} from '../actions/products';
-import ProductsCategories from '../components/ProductsCategories';
+import {fetchProducts, deleteProduct, editProduct} from '../actions/products';
+import ProductsCategories from '../components/ProductCategories';
 
 const mapStateToProps = state => {
   const {products} = state.products;

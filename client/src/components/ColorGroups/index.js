@@ -1,45 +1,19 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import {PTypes} from './PropTypes';
 import {RadioGroup, Radio} from 'react-radio-group';
-import {STATUS_CONFIRM_DELETE, STATUS_DEFAULT, STATUS_CREATING, STATUS_EDITING} from '../definitions';
-import * as ColorgroupModel from '../../../common/models/colorgroup.json';
-const Colorgroup = ColorgroupModel.properties;
-import View from './View/View';
+import {STATUS_CONFIRM_DELETE, STATUS_DEFAULT, STATUS_CREATING, STATUS_EDITING} from '../../definitions';
+import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
+import View from '../View/index';
 import * as _ from 'lodash';
-
+const Colorgroup = ColorgroupModel.properties;
 const DELETE_COLORS = 'DELETE_COLORS';
 const MOVE_COLORS_TO_OTHER_GROUP = 'MOVE_COLORS_TO_OTHER_GROUP';
 const LEAVE_COLORS_WITHOUT_GROUP = 'LEAVE_COLORS_WITHOUT_GROUP';
 let linkedProduct = [];
 let linkedGraphic = [];
+
 export default class ColorgroupsComponent extends Component {
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-    message: PropTypes.string,
-    addNotification: PropTypes.func.isRequired,
-    data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    products: PropTypes.arrayOf(PropTypes.any).isRequired,
-    graphics: PropTypes.arrayOf(PropTypes.any).isRequired,
-    errors: PropTypes.arrayOf(PropTypes.string),
-    loading: PropTypes.bool.isRequired,
-    fetchData: PropTypes.func.isRequired,
-    fetchSecondaryData: PropTypes.func.isRequired,
-    fetchGraphics: PropTypes.func.isRequired,
-    fetchProducts: PropTypes.func.isRequired,
-    objectHolder: PropTypes.object,
-    status: PropTypes.string.isRequired,
-    selectRow: PropTypes.func.isRequired,
-    enableEditing: PropTypes.func.isRequired,
-    enableCreating: PropTypes.func.isRequired,
-    enableDefaultStatus: PropTypes.func.isRequired,
-    createEntity: PropTypes.func.isRequired,
-    editEntity: PropTypes.func.isRequired,
-    deleteEntity: PropTypes.func.isRequired,
-    deleteSecondary: PropTypes.func.isRequired,
-    setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired,
-    token: PropTypes.string
-  };
+  static propTypes = PTypes;
 
   constructor() {
     super();
@@ -147,6 +121,7 @@ export default class ColorgroupsComponent extends Component {
       </div>
     );
   };
+
   renderDeleteBtn = () => (
     <div>
       <div className='pull-right'>
@@ -166,6 +141,7 @@ export default class ColorgroupsComponent extends Component {
       </div>
     </div>
   );
+
   handleDeleteBtnClick = confirmed => {
     if (this.props.status === STATUS_CONFIRM_DELETE && confirmed) {
       if (this.state.selectedValue === DELETE_COLORS) {
@@ -195,6 +171,7 @@ export default class ColorgroupsComponent extends Component {
       this.setState({...this.state, deleting: true});
     }
   };
+
   handleColorsActionOption = option => {
     this.setState({...this.state, selectedValue: option});
   };
@@ -206,13 +183,7 @@ export default class ColorgroupsComponent extends Component {
   render() {
     return (
       <View {...this.props} objectSample={Colorgroup} sortingSupport={true}
-            hiddenProperties={['id']}
-            hiddenInputs={['id']}
-            representations={{}}
-            changedInputs={{}
-            }
-            customInputs={{}
-            }
+            hiddenProperties={['id']} hiddenInputs={['id']}
             deleteConfirmation={true}
             renderDeleteConfirmationDialog={this.renderDelete}
             renderDeleteConfirmationButtons={this.renderDeleteBtn}

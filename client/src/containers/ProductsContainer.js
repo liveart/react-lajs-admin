@@ -12,15 +12,9 @@ import {
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../actions/table';
 import Products from '../components/Products';
-import {
-  fetchColors
-} from '../actions/colors';
-import {
-  fetchColorgroups
-} from '../actions/colorgroups';
-import {
-  enableImportJson
-} from '../actions/table';
+import {fetchColors} from '../actions/colors';
+import {fetchColorgroups} from '../actions/colorgroups';
+import {enableImportJson} from '../actions/table';
 
 const mapStateToProps = state => {
   const {token} = state.user;

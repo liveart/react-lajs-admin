@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import Table from './Table';
+import {PTypes} from './PropTypes';
 import {
   ID_PROP,
   STATUS_EDITING,
   STATUS_CREATING,
   STATUS_DEFAULT,
   STATUS_CONFIRM_DELETE,
-  STATUS_IMPORT_JSON
+  STATUS_IMPORT_JSON,
+  ElementTypes
 } from '../../definitions';
 import {checkNotEmpty} from '../../FormValidation';
 import * as _ from 'lodash';
@@ -17,59 +18,7 @@ const KEEP_URL_OPTION = 'Keep';
 const INITIAL_STATE = {empty: [], json: '', baseUrl: '', urlSelect: LEAVE_URL_OPTION};
 
 export default class ViewAbstract extends Component {
-  static propTypes = {
-    addNotification: PropTypes.func.isRequired,
-    message: PropTypes.string,
-    title: PropTypes.string.isRequired,
-    pluralTitle: PropTypes.string,
-    data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    errors: PropTypes.arrayOf(PropTypes.string),
-    loading: PropTypes.bool.isRequired,
-    fetchData: PropTypes.func.isRequired,
-    objectHolder: PropTypes.object,
-    status: PropTypes.string.isRequired,
-    selectRow: PropTypes.func.isRequired,
-    enableEditing: PropTypes.func.isRequired,
-    enableCreating: PropTypes.func.isRequired,
-    enableDefaultStatus: PropTypes.func.isRequired,
-    /**
-     * Function that handles Json import if it's supported.
-     * @param text json raw text to import.
-     */
-    handleImportJson: PropTypes.func,
-    createEntity: PropTypes.func.isRequired,
-    editEntity: PropTypes.func.isRequired,
-    deleteEntity: PropTypes.func.isRequired,
-    setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired,
-    token: PropTypes.string,
-    objectSample: PropTypes.object.isRequired,
-    handleDelete: PropTypes.func,
-    deleteConfirmation: PropTypes.bool,
-    enableConfirmDelete: PropTypes.func,
-    renderDeleteConfirmationDialog: PropTypes.func,
-    renderDeleteConfirmationButtons: PropTypes.func,
-    /**
-     * Function to enable related state.
-     * Defines if Json import is supported.
-     */
-    enableImportJson: PropTypes.func,
-    sortingSupport: PropTypes.bool,
-    hiddenProperties: PropTypes.array,
-    hiddenInputs: PropTypes.array,
-    changedInputs: PropTypes.object,
-    customInputs: PropTypes.object,
-    /**
-     * Label will be replaced with property's value if it exists.
-     */
-    changedLabels: PropTypes.object,
-    representations: PropTypes.object,
-    /**
-     * Custom comparator for sorting.
-     */
-    sortComparators: PropTypes.object,
-    customDefaultRender: PropTypes.object
-  };
+  static propTypes = PTypes;
 
   constructor(props) {
     super(props);

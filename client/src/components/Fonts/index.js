@@ -1,39 +1,19 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import {PTypes} from './PropTypes';
 import {
   STATUS_EDITING,
   STATUS_CREATING,
   RELATIVE_URL,
   FONTS_FOLDER,
-  VECTORS_FOLDER
-} from '../definitions';
-import * as FontModel from '../../../common/models/font.json';
+  VECTORS_FOLDER,
+  ElementTypes
+} from '../../definitions';
+import * as FontModel from '../../../../common/models/font.json';
 const Font = FontModel.properties;
-import View from './View/View';
+import View from '../View/index';
 
 export default class extends Component {
-  static propTypes = {
-    message: PropTypes.string,
-    title: PropTypes.string.isRequired,
-    data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    errors: PropTypes.arrayOf(PropTypes.string),
-    loading: PropTypes.bool.isRequired,
-    fetchData: PropTypes.func.isRequired,
-    objectHolder: PropTypes.object,
-    status: PropTypes.string.isRequired,
-    selectRow: PropTypes.func.isRequired,
-    enableEditing: PropTypes.func.isRequired,
-    enableCreating: PropTypes.func.isRequired,
-    enableDefaultStatus: PropTypes.func.isRequired,
-    createEntity: PropTypes.func.isRequired,
-    editEntity: PropTypes.func.isRequired,
-    deleteEntity: PropTypes.func.isRequired,
-    setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired,
-    uploadFontFile: PropTypes.func.isRequired,
-    uploadVector: PropTypes.func.isRequired,
-    token: PropTypes.string.isRequired
-  };
+  static propTypes = PTypes;
 
   handleFileNormalUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
@@ -85,7 +65,8 @@ export default class extends Component {
       return url;
     }
   };
-  getName = (name) => {
+
+  getName = name => {
     if (typeof (name) === 'string') {
       return name.substring(name.lastIndexOf('/') + 1);
     }
@@ -96,6 +77,7 @@ export default class extends Component {
       <View {...this.props} objectSample={Font} sortingSupport={true}
             hiddenProperties={['id', 'boldAllowed', 'italicAllowed']}
             hiddenInputs={['id']}
+
             representations={{
               fileNormal: {
                 getElem: val =>

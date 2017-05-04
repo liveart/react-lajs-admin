@@ -1,6 +1,5 @@
 import {connect} from 'react-redux';
 import {fetchUsers, registerUser, editUser, deleteUser, validateToken} from '../actions/user';
-
 import {
   selectRow, setObjectHolderProperty,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState

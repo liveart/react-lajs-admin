@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import View from './View/View';
+import {PTypes} from './PropTypes';
+import View from '../View/index';
 import Select, {Creatable} from 'react-select';
-import * as GraphicModel from '../../../common/models/graphic.json';
+import * as GraphicModel from '../../../../common/models/graphic.json';
 import {
   STATUS_EDITING,
   STATUS_CREATING,
@@ -12,48 +12,15 @@ import {
   GRAPHIC_THUMB_FOLDER,
   ASSIGN_GROUP,
   ADD_COLOR
-} from '../definitions';
-import {parseJson} from '../GraphicJsonParser';
-import * as converter from '../SvgConverter';
+} from '../../definitions';
+import {parseJson} from '../../GraphicJsonParser';
+import * as converter from '../../SvgConverter';
 const Graphic = GraphicModel.properties;
 const LEAVE_URL_OPTION = 'Import';
 import * as _ from 'lodash';
 
 export default class GraphicsComponent extends Component {
-  static propTypes = {
-    addNotification: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
-    data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    errors: PropTypes.arrayOf(PropTypes.string),
-    message: PropTypes.string,
-    loading: PropTypes.bool.isRequired,
-    colorsLoading: PropTypes.bool.isRequired,
-    fetchColorgroups: PropTypes.func.isRequired,
-    colorgroups: PropTypes.arrayOf(PropTypes.object),
-    colorgroupsLoading: PropTypes.bool.isRequired,
-    fetchData: PropTypes.func.isRequired,
-    objectHolder: PropTypes.object,
-    status: PropTypes.string.isRequired,
-    selectRow: PropTypes.func.isRequired,
-    enableEditing: PropTypes.func.isRequired,
-    enableImportJson: PropTypes.func.isRequired,
-    enableCreating: PropTypes.func.isRequired,
-    enableDefaultStatus: PropTypes.func.isRequired,
-    createGraphicsCategory: PropTypes.func.isRequired,
-    createEntity: PropTypes.func.isRequired,
-    editEntity: PropTypes.func.isRequired,
-    deleteEntity: PropTypes.func.isRequired,
-    setEditingObjectProperty: PropTypes.func.isRequired,
-    uploadThumbnail: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired,
-    graphicsCategories: PropTypes.array.isRequired,
-    uploadGraphicImage: PropTypes.func.isRequired,
-    uploadGraphicThumb: PropTypes.func.isRequired,
-    fetchGraphicsCategories: PropTypes.func.isRequired,
-    fetchColors: PropTypes.func.isRequired,
-    colors: PropTypes.arrayOf(PropTypes.object),
-    token: PropTypes.string
-  };
+  static propTypes = PTypes;
 
   constructor(props) {
     super(props);

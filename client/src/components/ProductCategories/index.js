@@ -1,55 +1,29 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import {PTypes} from './PropTypes';
 import {
   ID_PROP,
   STATUS_EDITING,
   STATUS_CREATING,
   STATUS_CONFIRM_DELETE,
-  GRAPHIC_CATEGORY_FOLDER,
-  RELATIVE_URL
-} from '../definitions';
-import * as GraphicsCategoryModel from '../../../common/models/graphics-category.json';
+  RELATIVE_URL,
+  PRODUCT_CATEGORIES_THUMB_FOLDER
+} from '../../definitions';
+import * as ProductsCategoryModel from '../../../../common/models/products-category.json';
 import {RadioGroup, Radio} from 'react-radio-group';
-const GraphicsCategory = GraphicsCategoryModel.properties;
-import View from './View/View';
+import View from '../View';
 import * as _ from 'lodash';
+const ProductsCategory = ProductsCategoryModel.properties;
 const DELETE_CATEGORY = 'DELETE_CATEGORY';
 const MOVE_CATEGORY_TO_OTHER_CATEGORY = 'MOVE_CATEGORY_TO_OTHER_CATEGORY';
-const DELETE_GRAPHICS = 'DELETE_GRAPHICS';
-const MOVE_GRAPHICS_TO_OTHER_CATEGORY = 'MOVE_GRAPHICS_TO_OTHER_CATEGORY';
+const DELETE_PRODUCTS = 'DELETE_PRODUCTS';
+const MOVE_PRODUCTS_TO_OTHER_CATEGORY = 'MOVE_PRODUCTS_TO_OTHER_CATEGORY';
 
 export default class extends Component {
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-    pluralTitle: PropTypes.string.isRequired,
-    data: PropTypes.arrayOf(PropTypes.any).isRequired,
-    errors: PropTypes.arrayOf(PropTypes.object),
-    message: PropTypes.string,
-    loading: PropTypes.bool.isRequired,
-    fetchData: PropTypes.func.isRequired,
-    objectHolder: PropTypes.object,
-    status: PropTypes.string.isRequired,
-    selectRow: PropTypes.func.isRequired,
-    enableEditing: PropTypes.func.isRequired,
-    enableCreating: PropTypes.func.isRequired,
-    enableDefaultStatus: PropTypes.func.isRequired,
-    createEntity: PropTypes.func.isRequired,
-    editEntity: PropTypes.func.isRequired,
-    deleteEntity: PropTypes.func.isRequired,
-    setEditingObjectProperty: PropTypes.func.isRequired,
-    restoreTableState: PropTypes.func.isRequired,
-    uploadThumbnail: PropTypes.func.isRequired,
-    deleteThumbnail: PropTypes.func.isRequired,
-    token: PropTypes.string.isRequired,
-    secondaryData: PropTypes.arrayOf(PropTypes.any).isRequired,
-    fetchSecondaryData: PropTypes.func.isRequired,
-    editSecondaryEntity: PropTypes.func.isRequired,
-    deleteSecondaryEntity: PropTypes.func.isRequired
-  };
+  static propTypes = PTypes;
 
   handleFileUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      const image = this.props.objectHolder.thumb;
+      const image = this.props.objectHolder.thumbUrl;
       if (typeof image === 'string') {
         return;
       }
@@ -69,7 +43,7 @@ export default class extends Component {
   handleFileChoose = (prop, e) => {
     this.props.setEditingObjectProperty(prop, e.target.files[0]);
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      const image = this.props.objectHolder['thumb'];
+      const image = this.props.objectHolder.thumbUrl;
       const img = new Image();
       let imageOut = new Image();
       const reader = new FileReader();
@@ -109,39 +83,39 @@ export default class extends Component {
                 <Radio value={MOVE_CATEGORY_TO_OTHER_CATEGORY}/>&nbsp; Move all the linked categories to other
                 category &nbsp;
                 <select
-                  value={this.state.newGraphicsCategory}
+                  value={this.state.newProductsCategory}
                   onChange={this.handleMoveToCategory}>
                   <option value={''}>Root category</option>
                   {this.props.data.map((cg, key) => (
                     this.props.objectHolder[ID_PROP] !== cg.id ?
-                      this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId ?
+                      this.props.objectHolder[ID_PROP] !== cg.productsCategoryId ?
                         <option key={key} value={cg.id}>{cg.name}</option> :
                         <option disabled='disabled' key={key} value={cg.id}>{cg.name} </option> : null
                   ))}
                 </select>
               </div>
             </RadioGroup>
-            <h3>Linked graphics</h3>
+            <h3>Linked products</h3>
             <RadioGroup selectedValue={this.state.selectedSecondaryValue}
-                        onChange={e => this.handleGraphicActionOption(e)}>
+                        onChange={e => this.handleProductActionOption(e)}>
               <div>
-                <Radio value={DELETE_GRAPHICS}/>&nbsp; Delete all the linked graphics
+                <Radio value={DELETE_PRODUCTS}/>&nbsp; Delete all the linked products
               </div>
               <div>
-                <Radio value={MOVE_GRAPHICS_TO_OTHER_CATEGORY}/>&nbsp; Move graphics of this category to other
+                <Radio value={MOVE_PRODUCTS_TO_OTHER_CATEGORY}/>&nbsp; Move products of this category to other
                 category &nbsp;
                 <select
-                  value={this.state.newGraphic}
-                  onChange={this.handleMoveGraphicToCategory}>
+                  value={this.state.newProduct}
+                  onChange={this.handleMoveProductToCategory}>
                   <option value=''>Select category</option>
                   {this.props.data.map((cg, key) => (
                     this.props.objectHolder[ID_PROP] !== cg.id ?
-                      this.props.objectHolder[ID_PROP] === cg.graphicsCategoryId && this.state.selectedValue === DELETE_CATEGORY ?
+                      this.props.objectHolder[ID_PROP] === cg.productsCategoryId && this.state.selectedValue === DELETE_CATEGORY ?
                         <option disabled='disabled' key={key}>{cg.name}</option> :
                         <option key={key} value={cg.id}>{cg.name} </option> : null
                   ))}
                 </select>
-                {this.state.newGraphic === '' && this.state.selectedSecondaryValue === MOVE_GRAPHICS_TO_OTHER_CATEGORY ?
+                {this.state.newProduct === '' && this.state.selectedSecondaryValue === MOVE_PRODUCTS_TO_OTHER_CATEGORY ?
                   <div className='text-red'>Please choose category.</div> : null}
               </div>
             </RadioGroup>
@@ -151,10 +125,9 @@ export default class extends Component {
     );
   };
 
-  deleteRelatedCats = (catId, cats, graphicsAction) => {
+  deleteRelatedCats = (catId, cats, productsAction) => {
     this.props.deleteEntity(catId, this.props.token);
-
-    if (graphicsAction !== MOVE_GRAPHICS_TO_OTHER_CATEGORY || catId !== this.props.objectHolder.id) {
+    if (productsAction !== MOVE_PRODUCTS_TO_OTHER_CATEGORY || catId !== this.props.objectHolder.id) {
       this.props.secondaryData.forEach(g => {
         if (g.categoryId === catId) {
           this.props.deleteSecondaryEntity(g.id, this.props.token);
@@ -163,8 +136,8 @@ export default class extends Component {
     }
     cats = _.filter(cats, cat => cat.id !== catId);
     cats.forEach(cat => {
-      if (cat.graphicsCategoryId === catId) {
-        this.deleteRelatedCats(cat.id, cats, graphicsAction);
+      if (cat.productsCategoryId === catId) {
+        this.deleteRelatedCats(cat.id, cats, productsAction);
       }
     });
   };
@@ -177,29 +150,29 @@ export default class extends Component {
       } else {
         if (this.state.selectedValue === MOVE_CATEGORY_TO_OTHER_CATEGORY) {
           this.props.data.forEach(c => {
-            if (c.graphicsCategoryId === this.props.objectHolder.id) {
-              this.props.editEntity(c.id, {...c, graphicsCategoryId: this.state.newGraphicsCategory}, this.props.token);
+            if (c.productsCategoryId === this.props.objectHolder.id) {
+              this.props.editEntity(c.id, {...c, productsCategoryId: this.state.newProductsCategory}, this.props.token);
             }
           });
           this.props.deleteEntity(this.props.objectHolder.id, this.props.token);
         }
       }
-      if (this.state.selectedSecondaryValue === MOVE_GRAPHICS_TO_OTHER_CATEGORY) {
+      if (this.state.selectedSecondaryValue === MOVE_PRODUCTS_TO_OTHER_CATEGORY) {
         this.props.secondaryData.forEach(c => {
           if (c.categoryId === this.props.objectHolder.id) {
-            this.props.editSecondaryEntity(c.id, {...c, categoryId: this.state.newGraphic}, this.props.token);
+            this.props.editSecondaryEntity(c.id, {...c, categoryId: this.state.newProduct}, this.props.token);
           }
         });
       }
       this.props.enableDefaultStatus();
-      this.props.restoreTableState(GraphicsCategory);
+      this.props.restoreTableState(ProductsCategory);
 
     }
   };
 
   handleCategoryActionOption = option => {
     if (option === DELETE_CATEGORY) {
-      this.setState({...this.state, selectedValue: option, newGraphic: ''});
+      this.setState({...this.state, selectedValue: option, newProduct: ''});
     } else if (option === MOVE_CATEGORY_TO_OTHER_CATEGORY) {
       this.setState({...this.state, selectedValue: option});
     }
@@ -207,23 +180,23 @@ export default class extends Component {
   };
 
   handleMoveToCategory = e => {
-    this.setState({...this.state, newGraphicsCategory: e.target.value});
+    this.setState({...this.state, newProductsCategory: e.target.value});
 
   };
 
-  handleGraphicActionOption = option => {
+  handleProductActionOption = option => {
     this.setState({...this.state, selectedSecondaryValue: option});
 
   };
 
-  handleMoveGraphicToCategory = e => {
-    this.setState({...this.state, newGraphic: e.target.value});
+  handleMoveProductToCategory = e => {
+    this.setState({...this.state, newProduct: e.target.value});
   };
 
   renderDeleteBtn = () => (
     <div>
       <div className='pull-right'>
-        {this.state.newGraphic === '' && this.state.selectedSecondaryValue === MOVE_GRAPHICS_TO_OTHER_CATEGORY ?
+        {this.state.newProduct === '' && this.state.selectedSecondaryValue === MOVE_PRODUCTS_TO_OTHER_CATEGORY ?
           <button disabled type='button' className='btn btn-danger'
                   onClick={() => this.handleDeleteBtnClick(true)}>Delete
           </button> :
@@ -233,23 +206,12 @@ export default class extends Component {
         <button type='button' className='btn btn-default'
                 onClick={() => {
                   this.props.enableDefaultStatus();
-                  this.props.restoreTableState(GraphicsCategory);
+                  this.props.restoreTableState(ProductsCategory);
                 }}>Cancel
         </button>
       </div>
     </div>
   );
-
-  constructor() {
-    super();
-    this.state = {
-      deleting: false,
-      selectedValue: DELETE_CATEGORY,
-      newGraphicsCategory: '',
-      selectedSecondaryValue: DELETE_GRAPHICS,
-      newGraphic: ''
-    };
-  }
 
   getFileUrl = url => _.includes(url, RELATIVE_URL) ? url.substring(RELATIVE_URL.length) : url;
 
@@ -261,22 +223,39 @@ export default class extends Component {
     return undefined;
   };
 
+  constructor() {
+    super();
+    this.state = {
+      deleting: false,
+      selectedValue: DELETE_CATEGORY,
+      newProductsCategory: '',
+      selectedSecondaryValue: DELETE_PRODUCTS,
+      newProduct: ''
+    };
+  }
+
+
   render() {
     return (
-      <View {...this.props} objectSample={GraphicsCategory} sortingSupport={true}
-            hiddenProperties={['id', 'graphicsCategoryId']}
-            hiddenInputs={['id', 'graphicsCategoryId', 'thumb']}
+      <View {...this.props} objectSample={ProductsCategory} sortingSupport={true}
+            hiddenProperties={['id', 'productsCategoryId']}
+            hiddenInputs={['id', 'productsCategoryId', 'thumbUrl']}
             representations={{
-              thumb: {
-                getElem: val => <a href={this.getFileUrl(val)} className='thumbnail' style={{width: 100}}>
-                  <img src={this.getFileUrl(val)} alt='thumb' style={{width: 100}}/></a>,
-                sortable: false
+              thumbUrl: {
+                getElem: val =>
+                  val ? <a href={this.getFileUrl(val)} className='thumbnail'
+                           style={{width: 100}}><img
+                    src={this.getFileUrl(val)} alt='thumb'
+                    style={{width: 100}}/></a> :
+                    null,
+                sortable: false,
+                header: 'Thumb'
               },
             }}
             changedInputs={{
-              thumb: {
+              thumbUrl: {
                 saveF: this.handleFileUpload,
-                getName: obj => this.getName(obj, GRAPHIC_CATEGORY_FOLDER)
+                getName: obj => this.getName(obj, PRODUCT_CATEGORIES_THUMB_FOLDER)
               }
             }
             }
@@ -284,17 +263,18 @@ export default class extends Component {
               thumb: {
                 elem: <div>
                   <input type='file' className='form-control' accept='image/*'
-                         onChange={e => this.handleFileChoose('thumb', e)}/>
+                         onChange={e => this.handleFileChoose('thumbUrl', e)}/>
 
-                  {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
-                    <div style={{float: 'left'}}><a href={this.getFileUrl(this.props.objectHolder['thumb'])}
+                  {typeof (this.props.objectHolder['thumbUrl']) === 'string' && this.props.status === STATUS_EDITING ?
+                    <div style={{float: 'left'}}><a href={this.getFileUrl(this.props.objectHolder['thumbUrl'])}
                                                     className='thumbnail'
-                                                    style={{marginTop: 8, width: 100}}><img style={{width: 100}}
-                                                                                            src={this.getFileUrl(this.props.objectHolder['thumb'])}/></a>
+                                                    style={{marginTop: 8, width: 100}}><img
+                      style={{width: 100}} src={this.getFileUrl(this.props.objectHolder['thumbUrl'])}/>
+                    </a>
                     </div>
                     : null}
                   <div style={{float: 'left'}}>
-                    {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumb'] ?
+                    {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumbUrl'] ?
                       <canvas style={{marginTop: 8}} ref='canvas' width='100'
                               height='100' hidden/> :
                       <canvas style={{marginTop: 8}} ref='canvas' width='100'
@@ -305,12 +285,12 @@ export default class extends Component {
               },
               category: {
                 elem: <select className='form-control'
-                              onChange={e => this.handleSelectedObjectChange('graphicsCategoryId', e)}
-                              value={this.props.objectHolder['graphicsCategoryId']}>
+                              onChange={e => this.handleSelectedObjectChange('productsCategoryId', e)}
+                              value={this.props.objectHolder['productsCategoryId']}>
                   <option key='rootCategory' value={''}>Root category</option>
                   {this.props.data.map(cg => (
                     this.props.objectHolder[ID_PROP] !== cg.id ?
-                      (this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId) || (cg.graphicsCategoryId === '') ?
+                      (this.props.objectHolder[ID_PROP] !== cg.productsCategoryId) || (cg.productsCategoryId === '') ?
                         <option key={cg.id} value={cg.id}>{cg.name}</option> :
                         <option disabled='disabled' key={cg.id} value={cg.id}>{cg.name} </option> : null
                   ))}
@@ -326,4 +306,7 @@ export default class extends Component {
       />
     );
   }
+
+
 }
+

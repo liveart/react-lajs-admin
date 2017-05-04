@@ -21,7 +21,7 @@ import {
   deleteGraphic,
   editGraphic
 } from '../actions/graphics';
-import GraphicsCategories from '../components/GraphicsCategories';
+import GraphicsCategories from '../components/GraphicCategories';
 
 const mapStateToProps = state => {
   const {graphics} = state.graphics;

@@ -38,7 +38,7 @@ export default class Overview extends Component {
 
     return (
       <main>
-        {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
+        {loading ? <div className='loader'/> : <div className='loaderDone'/>}
         <section className='content-header'>
           <h1>Overview</h1>
         </section>
@@ -54,7 +54,7 @@ export default class Overview extends Component {
             </Row>
           </Grid>
         </section>
-      </main >
+      </main>
     );
   }
 }
