@@ -26,7 +26,7 @@ import ProductsCategories from '../components/ProductsCategories';
 const mapStateToProps = state => {
   const {products} = state.products;
   const {token} = state.user;
-  const {productsCategories, productsCategoriesError, productsCategoriesLoading} = state.productsCategories;
+  const {productsCategories, productsCategoriesError, productsCategoriesLoading, productsCategoriesMessage} = state.productsCategories;
   const {status, objectHolder} = state.table;
   const errors = productsCategoriesError ? [productsCategoriesError] : [];
   return {
@@ -34,6 +34,7 @@ const mapStateToProps = state => {
     pluralTitle: 'Product Categories',
     data: productsCategories,
     secondaryData: products,
+    message: productsCategoriesMessage,
     errors,
     loading: productsCategoriesLoading,
     objectHolder,

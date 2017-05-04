@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
 import {forEach, map, findIndex, forOwn} from 'lodash';
 import Select, {Creatable} from 'react-select';
-import {
-  STATUS_EDITING,
-  STATUS_CREATING,
-  STATUS_DEFAULT
-} from '../definitions';
 const IN_FT = Number(12);
 const CM_M = Number(10);
 
@@ -23,7 +18,7 @@ export default class ConfigurationOptions extends Component {
   }
 
   getOptionsInputValue = propertyName => {
-    if (!this.props.objectHolder.options[propertyName]) {
+    if (!this.props.objectHolder.options || !this.props.objectHolder.options[propertyName]) {
       return '';
     }
     return this.props.objectHolder.options[propertyName];

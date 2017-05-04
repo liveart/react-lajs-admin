@@ -43,7 +43,8 @@ export default class extends Component {
     secondaryData: PropTypes.arrayOf(PropTypes.any).isRequired,
     fetchSecondaryData: PropTypes.func.isRequired,
     editSecondaryEntity: PropTypes.func.isRequired,
-    deleteSecondaryEntity: PropTypes.func.isRequired
+    deleteSecondaryEntity: PropTypes.func.isRequired,
+    message: PropTypes.string
   };
 
   handleFileUpload = () => {
