@@ -18,7 +18,7 @@ export default class ConfigurationOptions extends Component {
   }
 
   getOptionsInputValue = propertyName => {
-    if (!this.props.objectHolder.options[propertyName]) {
+    if (!this.props.objectHolder.options || !this.props.objectHolder.options[propertyName]) {
       return '';
     }
     return this.props.objectHolder.options[propertyName];
