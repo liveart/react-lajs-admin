@@ -28,4 +28,9 @@ export const MESSAGE_ENTITY_CREATED = 'has been successfully added.';
 export const MESSAGE_ENTITY_UPDATED = 'has been successfully updated.';
 export const MESSAGE_ENTITY_DELETED = 'has been successfully deleted.';
 
-export const ElementTypes = {SELECT: 'SELECT', CREATABLE_SELECT: 'CREATABLE_SELECT', TEXTAREA: 'TEXTAREA'};
+export const ElementTypes = {
+  BINARY_SELECT: 'BINARY_SELECT',
+  SELECT: 'SELECT',
+  CREATABLE_SELECT: 'CREATABLE_SELECT',
+  TEXTAREA: 'TEXTAREA'
+};

@@ -5,7 +5,8 @@ import {
   STATUS_CREATING,
   RELATIVE_URL,
   FONTS_FOLDER,
-  VECTORS_FOLDER
+  VECTORS_FOLDER,
+  ElementTypes
 } from '../../definitions';
 import * as FontModel from '../../../../common/models/font.json';
 const Font = FontModel.properties;
@@ -64,7 +65,8 @@ export default class extends Component {
       return url;
     }
   };
-  getName = (name) => {
+
+  getName = name => {
     if (typeof (name) === 'string') {
       return name.substring(name.lastIndexOf('/') + 1);
     }
@@ -75,6 +77,7 @@ export default class extends Component {
       <View {...this.props} objectSample={Font} sortingSupport={true}
             hiddenProperties={['id', 'boldAllowed', 'italicAllowed']}
             hiddenInputs={['id']}
+
             representations={{
               fileNormal: {
                 getElem: val =>
