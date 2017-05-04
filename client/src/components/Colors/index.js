@@ -5,7 +5,7 @@ import {SketchPicker} from 'react-color';
 import * as ColorModel from '../../../common/models/color.json';
 import * as _ from 'lodash';
 const Color = ColorModel.properties;
-import View from './View/View';
+import View from './View/index';
 
 export default class ColorsComponent extends Component {
   static propTypes = {

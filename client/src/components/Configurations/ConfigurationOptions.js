@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
 import {forEach, map, findIndex, forOwn} from 'lodash';
-import Select, {Creatable} from 'react-select';
-import {
-  STATUS_EDITING,
-  STATUS_CREATING,
-  STATUS_DEFAULT
-} from '../definitions';
+import {Creatable} from 'react-select';
 const IN_FT = Number(12);
 const CM_M = Number(10);
 
@@ -48,7 +43,6 @@ export default class ConfigurationOptions extends Component {
       this.props.setEditingObjectProperty('options', option);
     }
   };
-
 
   render() {
     return (

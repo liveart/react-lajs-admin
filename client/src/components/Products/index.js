@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import View from './View/View';
+import View from './View';
 import * as ProductModel from '../../../common/models/product.json';
 import {
   STATUS_EDITING,

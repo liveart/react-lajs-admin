@@ -4,7 +4,7 @@ import {RadioGroup, Radio} from 'react-radio-group';
 import {STATUS_CONFIRM_DELETE, STATUS_DEFAULT, STATUS_CREATING, STATUS_EDITING} from '../definitions';
 import * as ColorgroupModel from '../../../common/models/colorgroup.json';
 const Colorgroup = ColorgroupModel.properties;
-import View from './View/View';
+import View from './View';
 import * as _ from 'lodash';
 
 const DELETE_COLORS = 'DELETE_COLORS';
@@ -12,6 +12,7 @@ const MOVE_COLORS_TO_OTHER_GROUP = 'MOVE_COLORS_TO_OTHER_GROUP';
 const LEAVE_COLORS_WITHOUT_GROUP = 'LEAVE_COLORS_WITHOUT_GROUP';
 let linkedProduct = [];
 let linkedGraphic = [];
+
 export default class ColorgroupsComponent extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,

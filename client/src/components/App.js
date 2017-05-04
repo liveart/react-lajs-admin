@@ -4,8 +4,7 @@ import Header from './Header';
 import NavbarContainer from '../containers/NavbarContainer';
 import LoginForm from '../containers/LoginContainer';
 import 'react-select/dist/react-select.css';
-
-const NotificationSystem = require('react-notification-system');
+import NotificationSystem from 'react-notification-system';
 
 export default class App extends Component {
   static propTypes = {
@@ -67,7 +66,6 @@ export default class App extends Component {
     if (typeof error !== 'string' || !error.length) {
       return null;
     }
-
     return (
       <div className='row col-md-offset-5 col-md-2'>
         <div className='callout callout-danger lead'>{this.props.error}</div>
@@ -97,6 +95,7 @@ export default class App extends Component {
             <NotificationSystem ref={elem => this._notificationSystem = elem}/>
           </section>
         </main>
-      </div>);
+      </div>
+    );
   }
 }

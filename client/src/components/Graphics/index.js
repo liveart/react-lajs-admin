@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import View from './View/View';
+import View from './View';
 import Select, {Creatable} from 'react-select';
 import * as GraphicModel from '../../../common/models/graphic.json';
 import {

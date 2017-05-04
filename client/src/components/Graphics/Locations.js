@@ -5,8 +5,8 @@ import {
   STATUS_EDITING,
   STATUS_CREATING,
   STATUS_DEFAULT
-} from '../definitions';
-import * as ProductModel from '../../../common/models/product.json';
+} from '../../definitions';
+import * as ProductModel from '../../../../common/models/product.json';
 const Location = ProductModel.properties.locations.type[0];
 import Cropper from 'react-cropper';
 

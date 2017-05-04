@@ -8,7 +8,7 @@ import {fetchColorgroups, createColorgroup, editColorgroup, deleteColorgroup} fr
 import {fetchColors, deleteColor, editColor} from '../../actions/colors';
 import {fetchProducts} from '../../actions/products';
 import {fetchGraphics} from '../../actions/graphics';
-import Table from '../../components/Colorgroups';
+import Table from '../../components/ColorGroups/index';
 
 const mapStateToProps = state => {
   const {token} = state.user;
