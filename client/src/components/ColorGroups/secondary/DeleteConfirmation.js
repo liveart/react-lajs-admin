@@ -9,6 +9,8 @@ import {
 
 export default class DeleteConfirmation extends Component {
   static propTypes = {
+    data: PropTypes.arrayOf(PropTypes.any).isRequired,
+    objectHolder: PropTypes.object,
     newGroup: PropTypes.object,
     selectedValue: PropTypes.string,
     linkedProducts: PropTypes.array.isRequired,

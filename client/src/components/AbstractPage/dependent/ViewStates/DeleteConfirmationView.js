@@ -16,8 +16,8 @@ export default class DeleteConfirmationView extends Component {
                     this.props.renderDeleteConfirmationDialog : null}
                 </div>
                 <div className='box-footer'>
-                  {typeof this.props.renderDeleteConfirmationButtons === 'function' ?
-                    this.props.renderDeleteConfirmationButtons() : null}
+                  {typeof this.props.renderDeleteConfirmationButtons === 'object' ?
+                    this.props.renderDeleteConfirmationButtons : null}
                 </div>
               </form>
             </div>

@@ -13,7 +13,8 @@ import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
 import intersectionBy from 'lodash/intersectionBy';
 import sortedUniq from 'lodash/sortedUniq';
 import DeleteConfirmation from './secondary/DeleteConfirmation';
-import View from '../AbstractPage/index';
+import DeleteButton from './secondary/DeleteButton';
+import AbstractPage from '../AbstractPage/index';
 const Colorgroup = ColorgroupModel.properties;
 let linkedProducts = [];
 let linkedGraphics = [];
@@ -23,7 +24,7 @@ export default class ColorgroupsComponent extends Component {
 
   constructor() {
     super();
-    this.state = {deleting: false, selectedValue: DELETE_COLORS, newGroup: ''};
+    this.state = {deleting: false, selectedValue: DELETE_COLORS, newGroup: {}};
   }
 
   componentWillMount() {
@@ -82,25 +83,6 @@ export default class ColorgroupsComponent extends Component {
     linkedGraphics = sortedUniq(linkedGraphics);
   };
 
-  renderDeleteBtn = () => (
-    <div>
-      <div className='pull-right'>
-        {this.state.newGraphic === '' && this.state.selectedSecondaryValue === MOVE_COLORS_TO_OTHER_GROUP ?
-          <button disabled type='button' className='btn btn-danger'
-                  onClick={() => this.handleDeleteBtnClick(true)}>Delete
-          </button> :
-          <button type='button' className='btn btn-danger'
-                  onClick={() => this.handleDeleteBtnClick(true)}>Delete
-          </button>}
-        <button type='button' className='btn btn-default'
-                onClick={() => {
-                  this.props.enableDefaultStatus();
-                  this.props.restoreTableState(Colorgroup);
-                }}>Cancel
-        </button>
-      </div>
-    </div>
-  );
 
   handleDeleteBtnClick = confirmed => {
     if (this.props.status === STATUS_CONFIRM_DELETE && confirmed) {
@@ -142,19 +124,23 @@ export default class ColorgroupsComponent extends Component {
 
   render() {
     return (
-      <View {...this.props} objectSample={Colorgroup} sortingSupport={true}
-            deleteConfirmation={true}
-            renderDeleteConfirmationDialog={<DeleteConfirmation data={this.props.data}
-                                                                objectHolder={this.props.objectHolder}
-                                                                newGroup={this.state.newGroup}
-                                                                selectedValue={this.state.selectedValue}
-                                                                linkedProducts={linkedProducts}
-                                                                linkedGraphics={linkedGraphics}
-                                                                isLinkedToProduct={this.isLinkedToProduct}
-                                                                isLinkedToGraphic={this.isLinkedToGraphic}
-                                                                handleMoveToGroup={this.handleMoveToGroup}
-                                                                handleColorsActionOption={this.handleColorsActionOption}/>}
-            renderDeleteConfirmationButtons={this.renderDeleteBtn}
+      <AbstractPage {...this.props} objectSample={Colorgroup} sortingSupport={true}
+                    deleteConfirmation={true}
+                    renderDeleteConfirmationDialog={<DeleteConfirmation data={this.props.data}
+                                                                        objectHolder={this.props.objectHolder}
+                                                                        newGroup={this.state.newGroup}
+                                                                        selectedValue={this.state.selectedValue}
+                                                                        linkedProducts={linkedProducts}
+                                                                        linkedGraphics={linkedGraphics}
+                                                                        isLinkedToProduct={this.isLinkedToProduct}
+                                                                        isLinkedToGraphic={this.isLinkedToGraphic}
+                                                                        handleMoveToGroup={this.handleMoveToGroup}
+                                                                        handleColorsActionOption={this.handleColorsActionOption}/>}
+                    renderDeleteConfirmationButtons={<DeleteButton newGroup={this.state.newGroup}
+                                                                   selectedValue={this.state.selectedValue}
+                                                                   enableDefaultStatus={this.props.enableDefaultStatus}
+                                                                   restoreTableState={this.props.restoreTableState}
+                                                                   handleDeleteBtnClick={this.handleDeleteBtnClick}/>}
       />
     );
   }
