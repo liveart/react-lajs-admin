@@ -3,21 +3,12 @@ import {PTypes} from './PropTypes';
 import {STATUS_DEFAULT} from '../../definitions';
 import {SketchPicker} from 'react-color';
 import * as ColorModel from '../../../../common/models/color.json';
-import * as _ from 'lodash';
+import {sortBy} from 'lodash';
 const Color = ColorModel.properties;
 import View from '../View/index';
 
 export default class ColorsComponent extends Component {
   static propTypes = PTypes;
-
-  constructor(props) {
-    super(props);
-    if (!String.prototype.capitalizeFirstLetter) {
-      String.prototype.capitalizeFirstLetter = function () {
-        return this.charAt(0).toUpperCase() + this.slice(1);
-      };
-    }
-  }
 
   componentWillMount() {
     this.props.restoreTableState(Color);
@@ -25,7 +16,7 @@ export default class ColorsComponent extends Component {
     this.props.fetchSecondaryData();
   }
 
-  handleSelectedObjectChange = (propertyName, event) => {
+  updateObject = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
   handleColorChange = color => {
@@ -39,8 +30,6 @@ export default class ColorsComponent extends Component {
   render() {
     return (
       <View {...this.props} objectSample={Color} sortingSupport={true}
-            hiddenProperties={['id']}
-            hiddenInputs={['id']}
             representations={{
               colorgroupId: {
                 getElem: val => {
@@ -50,12 +39,11 @@ export default class ColorsComponent extends Component {
                   }
                   return null;
                 },
-                sortable: true,
                 sortElem: <select className='form-control'
                                   value={this.props.objectHolder['colorgroupId']}
-                                  onChange={e => this.handleSelectedObjectChange('colorgroupId', e)}>
+                                  onChange={e => this.updateObject('colorgroupId', e)}>
                   <option key='defGroup' value={''}>...</option>
-                  {_.sortBy(this.props.secondaryData).map((cg, key) => (
+                  {sortBy(this.props.secondaryData).map((cg, key) => (
                     <option key={key} value={cg.id}>{cg.name}</option>
                   ))}
                 </select>
@@ -70,33 +58,24 @@ export default class ColorsComponent extends Component {
                     </div>);
                   }
                   return null;
-                },
-                sortable: true
+                }
               }
             }}
             changedInputs={{
               colorgroupId: {
                 elem: <select className='form-control'
                               value={this.props.objectHolder['colorgroupId']}
-                              onChange={e => this.handleSelectedObjectChange('colorgroupId', e)}>
+                              onChange={e => this.updateObject('colorgroupId', e)}>
                   <option key='defGroup' value={''}>...</option>
-                  {_.sortBy(this.props.secondaryData).map((cg, key) => (
-                    <option key={key} value={cg.id}>{cg.name}</option>
-                  ))}
+                  {sortBy(this.props.secondaryData).map(cg => <option key={cg.id} value={cg.id}>{cg.name}</option>)}
                 </select>
               },
               value: {
                 elem: <SketchPicker color={this.props.objectHolder.value}
                                     onChange={this.handleColorChange}/>
               }
-            }
-            }
-            customInputs={{}
-
-            }
+            }}
       />
     );
   }
-
-
 }

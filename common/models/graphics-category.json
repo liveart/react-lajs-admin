@@ -9,19 +9,29 @@
   "properties": {
     "id": {
       "type": "string",
-      "id": true
+      "id": true,
+      "showInTable": false,
+      "showInput": false
     },
     "name": {
       "type": "string",
-      "required": true
+      "required": true,
+      "showInTable": true,
+      "showInput": true,
+      "sortable": true
     },
     "thumb": {
       "type": "string",
-      "required": true
+      "required": true,
+      "showInTable": true,
+      "showInput": false,
+      "sortable": false
     },
     "graphicsCategoryId": {
       "type": "string",
-      "required": false
+      "required": false,
+      "showInTable": false,
+      "showInput": false
     }
   },
   "validations": [],

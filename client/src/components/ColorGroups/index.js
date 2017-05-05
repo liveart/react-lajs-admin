@@ -183,7 +183,6 @@ export default class ColorgroupsComponent extends Component {
   render() {
     return (
       <View {...this.props} objectSample={Colorgroup} sortingSupport={true}
-            hiddenProperties={['id']} hiddenInputs={['id']}
             deleteConfirmation={true}
             renderDeleteConfirmationDialog={this.renderDelete}
             renderDeleteConfirmationButtons={this.renderDeleteBtn}
