@@ -1,19 +1,20 @@
 import React, {Component} from 'react';
+import {capitalizeFirstLetter} from '../../utils';
 import {STATUS_DEFAULT} from '../../definitions';
-import {includes, forEach} from 'lodash';
+import {includes, forEach, keys} from 'lodash';
 
 export default class Table extends Component {
 
   renderTableHeadings = () =>
-    Object.getOwnPropertyNames(this.props.objectSample).map((prop, i) => {
-      if (this.props.objectSample[prop].showInTable === false) {
+    keys(this.props.objectSample).map(key => {
+      if (this.props.objectSample[key].showInTable === false) {
         return null;
       }
-      return <th key={i}>{this.props.objectSample[prop].header ?
-        this.props.objectSample[prop].header : prop.capitalizeFirstLetter()}</th>;
+      return <th key={key}>{this.props.objectSample[key].header ?
+        this.props.objectSample[key].header : capitalizeFirstLetter(key)}</th>;
     });
 
-  handleSelectedObjectChange = (propertyName, event) =>
+  updateObject = (propertyName, event) =>
     this.props.setEditingObjectProperty(propertyName, event.target.value);
 
   renderTableSortRow = () => {
@@ -23,22 +24,22 @@ export default class Table extends Component {
 
     return (
       <tr>
-        {Object.getOwnPropertyNames(this.props.objectSample).map((prop, i) => {
-          if (this.props.objectSample[prop].showInTable === false) {
+        {keys(this.props.objectSample).map(key => {
+          if (this.props.objectSample[key].showInTable === false) {
             return null;
           }
 
-          if (this.props.representations && this.props.representations.hasOwnProperty(prop)) {
-            if (this.props.objectSample[prop].sortable === false) {
-              return <td key={i}/>;
-            } else if (this.props.representations[prop].sortElem) {
-              return <td key={i}>{this.props.representations[prop].sortElem}</td>;
+          if (this.props.representations && this.props.representations.hasOwnProperty(key)) {
+            if (this.props.objectSample[key].sortable === false) {
+              return <td key={key}/>;
+            } else if (this.props.representations[key].sortElem) {
+              return <td key={key}>{this.props.representations[key].sortElem}</td>;
             }
           }
 
-          return <td key={i}><input type='text' className='form-control'
-                                    value={this.props.objectHolder[prop]}
-                                    onChange={e => this.handleSelectedObjectChange(prop, e)}/>
+          return <td key={key}><input type='text' className='form-control'
+                                      value={this.props.objectHolder[key]}
+                                      onChange={e => this.updateObject(key, e)}/>
           </td>;
         })}
       </tr>
@@ -69,7 +70,6 @@ export default class Table extends Component {
           }
         }
       });
-
       if (add) {
         rows.push(d);
       }

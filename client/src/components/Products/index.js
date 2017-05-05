@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
+import {capitalizeFirstLetter} from'../../utils';
 import View from '../View';
 import * as ProductModel from '../../../../common/models/product.json';
 import {
@@ -892,7 +893,7 @@ export default class ProductsComponent extends Component {
                     {this.props.objectHolder.data ? Object.getOwnPropertyNames(this.props.objectHolder.data).map(prop =>
                       <div key={prop} className='form-group'>
                         <div className='col-md-2'>
-                          <p>{prop.capitalizeFirstLetter()}: </p>
+                          <p>{capitalizeFirstLetter(prop)}: </p>
                         </div>
                         <div className='col-md-9'>
                           <input type='text' className='form-control'
