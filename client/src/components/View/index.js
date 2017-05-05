@@ -150,7 +150,7 @@ export default class ViewAbstract extends Component {
           <div className='col-md-2'>
             <p className={'' + (this.props.objectSample[prop].required ? 'req' : '')}>
               {this.props.objectSample[prop].header ?
-                this.props.objectSample[prop].header : prop.capitalizeFirstLetter()}
+                this.props.objectSample[prop].header : capitalizeFirstLetter(prop)}
               {this.props.objectSample[prop].hint ? <small>&nbsp;<i className='fa fa-question'
                                                                     data-tip={this.props.objectSample[prop].hint}/>
               </small> : null}
