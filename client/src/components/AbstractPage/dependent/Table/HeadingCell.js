@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {capitalizeFirstLetter} from '../../../utils';
+import {capitalizeFirstLetter} from '../../../../utils';
 
 export default class HeadingCell extends Component {
   static propTypes = {

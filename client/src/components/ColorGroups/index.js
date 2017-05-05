@@ -10,10 +10,10 @@ import {
   LEAVE_COLORS_WITHOUT_GROUP
 } from '../../definitions';
 import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
-import View from '../View/index';
 import intersectionBy from 'lodash/intersectionBy';
 import sortedUniq from 'lodash/sortedUniq';
 import DeleteConfirmation from './secondary/DeleteConfirmation';
+import View from '../AbstractPage/index';
 const Colorgroup = ColorgroupModel.properties;
 let linkedProducts = [];
 let linkedGraphics = [];

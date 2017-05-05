@@ -3,7 +3,7 @@ import {PTypes} from './PropTypes';
 import Select, {Creatable} from 'react-select';
 import * as ConfigModel from '../../../../common/models/configuration.json';
 import {forEach, map, findIndex, filter} from 'lodash';
-import View from '../View/index';
+import View from '../AbstractPage/index';
 import ConfigurationOptions from './ConfigurationOptions';
 const Configuration = ConfigModel.properties;
 

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import keys from 'lodash/keys';
 
-export default class Body extends Component {
+export default class Row extends Component {
   static propTypes = {
     objectSample: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,

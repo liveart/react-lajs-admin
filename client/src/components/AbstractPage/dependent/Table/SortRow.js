@@ -7,6 +7,7 @@ export default class SortRow extends Component {
     sortingSupport: PropTypes.bool,
     objectSample: PropTypes.object.isRequired,
     objectHolder: PropTypes.object.isRequired,
+    updateObject: PropTypes.func.isRequired,
     count: PropTypes.number,
     representations: PropTypes.object
   };
@@ -34,7 +35,7 @@ export default class SortRow extends Component {
           return <td key={key}>
             <input type='text' className='form-control'
                    value={this.props.objectHolder[key]}
-                   onChange={e => this.updateObject(key, e)}/>
+                   onChange={e => this.props.updateObject(key, e)}/>
           </td>;
         })}
       </tr>

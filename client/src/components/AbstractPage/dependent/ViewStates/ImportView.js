@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import ImportButtonGroup from './ButtonGroups/ImportButtonGroup';
+import ImportButtonGroup from '../ButtonGroups/ImportButtonGroup';
 const LEAVE_URL_OPTION = 'Import';
 const KEEP_URL_OPTION = 'Keep';
 

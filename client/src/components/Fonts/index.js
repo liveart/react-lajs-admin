@@ -10,7 +10,7 @@ import {
 } from '../../definitions';
 import * as FontModel from '../../../../common/models/font.json';
 const Font = FontModel.properties;
-import View from '../View/index';
+import View from '../AbstractPage/index';
 
 export default class extends Component {
   static propTypes = PTypes;
