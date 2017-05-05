@@ -1,16 +1,22 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
-import {RadioGroup, Radio} from 'react-radio-group';
-import {STATUS_CONFIRM_DELETE, STATUS_DEFAULT, STATUS_CREATING, STATUS_EDITING} from '../../definitions';
+import {
+  STATUS_CONFIRM_DELETE,
+  STATUS_DEFAULT,
+  STATUS_CREATING,
+  STATUS_EDITING,
+  MOVE_COLORS_TO_OTHER_GROUP,
+  DELETE_COLORS,
+  LEAVE_COLORS_WITHOUT_GROUP
+} from '../../definitions';
 import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
 import View from '../View/index';
-import * as _ from 'lodash';
+import intersectionBy from 'lodash/intersectionBy';
+import sortedUniq from 'lodash/sortedUniq';
+import DeleteConfirmation from './DeleteConfirmation';
 const Colorgroup = ColorgroupModel.properties;
-const DELETE_COLORS = 'DELETE_COLORS';
-const MOVE_COLORS_TO_OTHER_GROUP = 'MOVE_COLORS_TO_OTHER_GROUP';
-const LEAVE_COLORS_WITHOUT_GROUP = 'LEAVE_COLORS_WITHOUT_GROUP';
-let linkedProduct = [];
-let linkedGraphic = [];
+let linkedProducts = [];
+let linkedGraphics = [];
 
 export default class ColorgroupsComponent extends Component {
   static propTypes = PTypes;
@@ -33,93 +39,47 @@ export default class ColorgroupsComponent extends Component {
     }
   }
 
-  handleSelectedObjectChange = (propertyName, event) => {
-    this.props.setEditingObjectProperty(propertyName, event.target.value);
-  };
-
-  isColorgroupLinkedProduct = () => {
-    linkedProduct = [];
+  isLinkedToProduct = () => {
+    linkedProducts = [];
     this.props.products.forEach(p => {
       p.colorizables.filter(c => c.assignColorgroup === true).forEach(c => {
         if (c.colorgroup && c.colorgroup.id === this.props.objectHolder.id) {
-          linkedProduct.push(p.name);
+          linkedProducts.push(p.name);
         }
       });
       p.colorizables.filter(c => c.assignColorgroup === false).forEach(c => {
-        let arr = _.intersectionBy(c._colors, this.props.secondaryData.filter(col =>
+        let arr = intersectionBy(c._colors, this.props.secondaryData.filter(col =>
         col.colorgroupId === this.props.objectHolder.id), 'name');
         if (arr.length) {
-          linkedProduct.push(p.name);
+          linkedProducts.push(p.name);
         }
       });
     });
-    linkedProduct = _.sortedUniq(linkedProduct);
+    linkedProducts = sortedUniq(linkedProducts);
   };
 
-  isColorgroupLinkedGraphic = () => {
-    linkedGraphic = [];
+  isLinkedToGraphic = () => {
+    linkedGraphics = [];
     this.props.graphics.forEach(g => {
       g.colorizables.filter(c => c.assignColorgroup === true).forEach(c => {
         if (c.colorgroup && c.colorgroup.id === this.props.objectHolder.id) {
-          linkedGraphic.push(g.name);
+          linkedGraphics.push(g.name);
         }
       });
       g.colorizables.filter(c => c.assignColorgroup === false).forEach(c => {
-        let arr = _.intersectionBy(c._colors, this.props.secondaryData.filter(col =>
+        let arr = intersectionBy(c._colors, this.props.secondaryData.filter(col =>
         col.colorgroupId === this.props.objectHolder.id), 'name');
         if (arr.length) {
-          linkedGraphic.push(g.name);
+          linkedGraphics.push(g.name);
         }
       });
-      let arr = _.intersectionBy(g.colors, this.props.secondaryData.filter(col =>
+      let arr = intersectionBy(g.colors, this.props.secondaryData.filter(col =>
       col.colorgroupId === this.props.objectHolder.id), 'name');
       if (arr.length) {
-        linkedGraphic.push(g.name);
+        linkedGraphics.push(g.name);
       }
     });
-    linkedGraphic = _.sortedUniq(linkedGraphic);
-  };
-
-  renderDelete = () => {
-    return (
-      <div className='form-group'>
-        <div className='col-md-9'>
-          {(!this.isColorgroupLinkedProduct() && linkedProduct.length) || (!this.isColorgroupLinkedGraphic() && linkedGraphic.length) ?
-            <div>
-              <h4>Group linked to:</h4>
-              {linkedProduct.length ? 'Products: ' + linkedProduct : null}
-              &nbsp;
-              {linkedGraphic.length ? 'Graphics: ' + linkedGraphic : null}
-            </div> :
-            <div className='col-md-6'>
-              <h1>Choose an action</h1>
-              <div className='form-group'>
-                <RadioGroup name='fruit' selectedValue={this.state.selectedValue}
-                            onChange={this.handleColorsActionOption}>
-                  <div>
-                    <Radio value={DELETE_COLORS}/>&nbsp; Delete all the colors linked to this group
-                  </div>
-                  <div>
-                    <Radio value={MOVE_COLORS_TO_OTHER_GROUP}/>&nbsp; Move colors to other group &nbsp;
-                    <select value={this.state.newGroup}
-                            onChange={this.handleMoveToGroup}>
-                      {this.props.data.map((cg, key) => (
-                        this.props.objectHolder.id !== cg.id ?
-                          <option key={key} value={cg.id}>{cg.name}</option> : null
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <Radio value={LEAVE_COLORS_WITHOUT_GROUP}/>&nbsp; Unlink and leave the colors without any group
-                  </div>
-                </RadioGroup>
-              </div>
-            </div>}
-          <div className='col-md-3'>
-          </div>
-        </div>
-      </div>
-    );
+    linkedGraphics = sortedUniq(linkedGraphics);
   };
 
   renderDeleteBtn = () => (
@@ -184,7 +144,16 @@ export default class ColorgroupsComponent extends Component {
     return (
       <View {...this.props} objectSample={Colorgroup} sortingSupport={true}
             deleteConfirmation={true}
-            renderDeleteConfirmationDialog={this.renderDelete}
+            renderDeleteConfirmationDialog={<DeleteConfirmation data={this.props.data}
+                                                                objectHolder={this.props.objectHolder}
+                                                                newGroup={this.state.newGroup}
+                                                                selectedValue={this.state.selectedValue}
+                                                                linkedProducts={linkedProducts}
+                                                                linkedGraphics={linkedGraphics}
+                                                                isLinkedToProduct={this.isLinkedToProduct}
+                                                                isLinkedToGraphic={this.isLinkedToGraphic}
+                                                                handleMoveToGroup={this.handleMoveToGroup}
+                                                                handleColorsActionOption={this.handleColorsActionOption}/>}
             renderDeleteConfirmationButtons={this.renderDeleteBtn}
       />
     );

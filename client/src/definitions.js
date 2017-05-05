@@ -18,6 +18,10 @@ export const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 export const ASSIGN_GROUP = 'Assign Color Group';
 export const ADD_COLOR = 'Add Individual Colors';
 
+export const DELETE_COLORS = 'DELETE_COLORS';
+export const MOVE_COLORS_TO_OTHER_GROUP = 'MOVE_COLORS_TO_OTHER_GROUP';
+export const LEAVE_COLORS_WITHOUT_GROUP = 'LEAVE_COLORS_WITHOUT_GROUP';
+
 export const STATUS_EDITING = 'STATUS_EDITING';
 export const STATUS_CONFIRM_DELETE = 'STATUS_CONFIRM_DELETE';
 export const STATUS_CREATING = 'STATUS_CREATING';

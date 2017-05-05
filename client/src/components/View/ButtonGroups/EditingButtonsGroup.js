@@ -25,7 +25,7 @@ export default class EditingButtonGroup extends Component {
           continue edit
         </button>
         <button type='button' className='btn btn-danger'
-                onClick={this.handleDeleteBtnClick}>Delete
+                onClick={this.props.onDeleteBtnClick}>Delete
         </button>
       </div>
     </div>;

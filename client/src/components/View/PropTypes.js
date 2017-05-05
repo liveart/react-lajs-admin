@@ -30,7 +30,7 @@ export const PTypes = {
   handleDelete: PropTypes.func,
   deleteConfirmation: PropTypes.bool,
   enableConfirmDelete: PropTypes.func,
-  renderDeleteConfirmationDialog: PropTypes.func,
+  renderDeleteConfirmationDialog: PropTypes.object,
   renderDeleteConfirmationButtons: PropTypes.func,
   /**
    * Function to enable related state.
