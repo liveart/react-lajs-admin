@@ -13,7 +13,7 @@ import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
 import View from '../View/index';
 import intersectionBy from 'lodash/intersectionBy';
 import sortedUniq from 'lodash/sortedUniq';
-import DeleteConfirmation from './DeleteConfirmation';
+import DeleteConfirmation from './secondary/DeleteConfirmation';
 const Colorgroup = ColorgroupModel.properties;
 let linkedProducts = [];
 let linkedGraphics = [];
