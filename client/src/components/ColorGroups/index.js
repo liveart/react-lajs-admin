@@ -3,7 +3,7 @@ import {PTypes} from './PropTypes';
 import {RadioGroup, Radio} from 'react-radio-group';
 import {STATUS_CONFIRM_DELETE, STATUS_DEFAULT, STATUS_CREATING, STATUS_EDITING} from '../../definitions';
 import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
-import View from '../View/index';
+import View from '../AbstractPage/index';
 import * as _ from 'lodash';
 const Colorgroup = ColorgroupModel.properties;
 const DELETE_COLORS = 'DELETE_COLORS';

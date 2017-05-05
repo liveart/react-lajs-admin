@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
 import {capitalizeFirstLetter} from'../../utils';
-import View from '../View';
+import View from '../AbstractPage';
 import * as ProductModel from '../../../../common/models/product.json';
 import {
   STATUS_EDITING,

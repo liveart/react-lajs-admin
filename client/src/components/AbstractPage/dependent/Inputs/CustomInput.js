@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {capitalizeFirstLetter} from '../../utils';
-import {STATUS_EDITING} from '../../definitions';
+import {capitalizeFirstLetter} from '../../../../utils';
+import {STATUS_EDITING} from '../../../../definitions';
 
 export default class DefaultInput extends Component {
   static propTypes = {

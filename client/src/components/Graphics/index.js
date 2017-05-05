@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
-import View from '../View/index';
+import View from '../AbstractPage/index';
 import Select, {Creatable} from 'react-select';
 import * as GraphicModel from '../../../../common/models/graphic.json';
 import {

@@ -10,7 +10,7 @@ import {
 } from '../../definitions';
 import * as ProductsCategoryModel from '../../../../common/models/products-category.json';
 import {RadioGroup, Radio} from 'react-radio-group';
-import View from '../View';
+import View from '../AbstractPage';
 import * as _ from 'lodash';
 const ProductsCategory = ProductsCategoryModel.properties;
 const DELETE_CATEGORY = 'DELETE_CATEGORY';
