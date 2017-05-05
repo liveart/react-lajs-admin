@@ -59,7 +59,7 @@ export default class extends Component {
       return map(this.props.objectHolder.defaultProductSize, col => ({value: col, name: col}));
     }
 
-    return this.props.objectHolder.defaultProductSize;
+    return map(this.props.objectHolder.defaultProductSize, col => ({value: col, name: col}));
   };
 
   onSizeSelectChange = val => {
