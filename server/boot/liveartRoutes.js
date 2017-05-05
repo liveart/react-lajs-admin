@@ -1,204 +1,14 @@
 ﻿'use strict';
+const getFullUrl = require('../routesUtils/FullUrl');
+const getProducts = require('../routesUtils/Products');
+const getProductCategories = require('../routesUtils/ProductCategories');
+const getGraphics = require('../routesUtils/Graphics');
+const getCategories = require('../routesUtils/GraphicCategories');
+const getFontFaceRule = require('../routesUtils/Fonts');
+const forEach = require('lodash/forEach');
+const assignIn = require('lodash/assignIn');
+
 const LIVE_ART = 'liveart';
-const RELATIVE_URL = '@@RELATIVE';
-const _ = require('lodash');
-const url = require('url');
-const Promise = require('bluebird');
-
-function getFullUrl(req, urlStr) {
-  if (urlStr.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
-    const addr = url.format({
-      protocol: req.protocol,
-      host: req.get('host')
-    });
-    return addr + urlStr.substring(RELATIVE_URL.length);
-  }
-  return urlStr;
-}
-
-function getFontFaceRule(family, file, weight, style, req) {
-  return {
-    type: 'font-face',
-    declarations: [
-      {
-        type: 'declaration',
-        property: 'font-family',
-        value: '"' + family + '"',
-      }, {
-        type: 'declaration',
-        property: 'src',
-        value: 'url("' + getFullUrl(req, file) + '")',
-      }, {
-        type: 'declaration',
-        property: 'font-weight',
-        value: weight,
-      }, {
-        type: 'declaration',
-        property: 'font-style',
-        value: style,
-      }
-    ]
-  };
-}
-
-function fixColorizables(colorizables) {
-  return _.map(colorizables, col => ({
-    id: col.id,
-    name: col.name,
-    colors: col._colors
-  }));
-}
-
-function getColors(colors) {
-  if (!colors || !colors.length) {
-    return undefined;
-  }
-
-  if (typeof colors[0] === 'string') {
-    return colors;
-  }
-
-  return _.map(colors, col => col.value);
-}
-
-function getCategories(category, categories, graphics, req, colorsArr) {
-  const cats = [];
-  _.forEach(categories, cat => {
-    if (String(cat.graphicsCategoryId) === String(category.id)) {
-      cats.push({
-        id: cat.id,
-        name: cat.name,
-        thumb: getFullUrl(req, cat.thumb),
-        categories: getCategories(cat, categories, graphics, req),
-        graphicsList: getGraphics(cat, graphics, req, colorsArr)
-      });
-    }
-  });
-  return cats.length ? cats : undefined;
-}
-
-function getGraphics(category, graphics, req, colorsArr) {
-  const grs = [];
-  _.forEach(graphics, gr => {
-    if (String(gr.categoryId) === String(category.id)) {
-      grs.push({
-        id: gr.id,
-        categoryId: gr.categoryId,
-        name: gr.name,
-        description: gr.description,
-        colors: getColors(gr.colors),
-        colorize: gr.colorize,
-        multicolor: gr.multicolor,
-        thumb: getFullUrl(req, gr.thumb),
-        image: getFullUrl(req, gr.image),
-        colorizableElements: gr.colorizables ? _.map(gr.colorizables,
-          cr => {
-            const r = {
-              name: cr.name,
-              id: cr.id
-            };
-            if (cr.assignColorgroup && cr.colorgroup) {
-              const cg = cr.colorgroup;
-              r.colors = [...colorsArr
-                .filter(c => String(c.colorgroupId) === String(cg.id))
-                .map(c => ({
-                  name: c.name,
-                  value: c.value
-                }))];
-            } else {
-              r.colors = cr._colors;
-            }
-            return r;
-          }
-        ) : undefined,
-      });
-    }
-  });
-  return grs.length ? grs : undefined;
-}
-
-function getProductCategories(category, categories, products, req, colorsArr) {
-  const cats = [];
-  _.forEach(categories, cat => {
-    if (String(cat.productsCategoryId) === String(category.id)) {
-      cats.push({
-        id: cat.id,
-        name: cat.name,
-        thumbUrl: getFullUrl(req, cat.thumbUrl),
-        categories: getProductCategories(cat, categories, products, req, colorsArr),
-        products: getProducts(cat, products, req, colorsArr)
-      });
-    }
-  });
-  return cats.length ? cats : undefined;
-}
-
-function getProducts(category, products, req, colorsArr) {
-  const prs = [];
-  _.forEach(products, pr => {
-    if (String(pr.categoryId) === String(category.id)) {
-      prs.push({
-        id: pr.id,
-        name: pr.name,
-        thumbUrl: getFullUrl(req, pr.thumbUrl),
-        description: pr.description,
-        data: pr.data,
-        categoryId: pr.categoryId,
-        minDPU: pr.minDPU,
-        minQuantity: pr.minQuantity,
-        multicolor: pr.multicolor,
-        colorizableElements: pr.colorizables ? _.map(pr.colorizables,
-          cr => {
-            const r = {
-              name: cr.name,
-              id: cr.id
-            };
-            if (cr.assignColorgroup && cr.colorgroup) {
-              const cg = cr.colorgroup;
-              r.colors = [...colorsArr
-                .filter(c => String(c.colorgroupId) === String(cg.id))
-                .map(c => ({
-                  name: c.name,
-                  value: c.value
-                }))];
-            } else {
-              r.colors = cr._colors;
-            }
-            return r;
-          }
-        ) : undefined,
-        colors: pr.colors ? _.map(pr.colors, cr => ({
-          name: cr.name,
-          value: cr.value,
-          location: cr.location
-        })) : undefined,
-        hideEditableAreaBorder: pr.hideEditableAreaBorder,
-        namesNumbersEnabled: pr.namesNumbersEnabled,
-        pantones: {
-          useForDecoration: pr.pantones ? pr.pantones.useForDecoration : undefined,
-          useForProduct: pr.pantones ? pr.pantones.useForProduct : undefined
-        },
-        resizable: pr.resizable,
-        editableAreaSizes: pr.editableAreaSizes,
-        showRuler: pr.showRuler,
-        sizes: pr.sizes,
-        locations: pr.locations ? _.map(pr.locations, loc => (
-          {
-            name: loc.name,
-            image: loc.image ? getFullUrl(req, loc.image) : undefined,
-            mask: pr.mask ? getFullUrl(req, loc.mask) : undefined,
-            overlayInfo: pr.overlayInfo ? getFullUrl(req, loc.overlayInfo) : undefined,
-            editableArea: loc.editableArea,
-            editableAreaUnits: loc.editableAreaUnits,
-            editableAreaUnitsRange: loc.editableAreaUnitsRange,
-            editableAreaUnitsRestrictRotation: loc.editableAreaUnitsRestrictRotation,
-            clipRect: loc.clipRect
-          })) : undefined
-      });
-    }
-  });
-  return prs.length ? prs : undefined;
-}
 
 module.exports = function (app) {
   const loopback = require('loopback');
@@ -221,7 +31,7 @@ module.exports = function (app) {
         if (cats && cats.length) {
           Color.find().then(colorsArr => {
             result.graphicsCategoriesList = [];
-            _.forEach(cats, cat => {
+            forEach(cats, cat => {
               if (!cat.graphicsCategoryId || cat.graphicsCategoryId === '') {
                 result.graphicsCategoriesList.push({
                   id: cat.id,
@@ -250,7 +60,7 @@ module.exports = function (app) {
         if (cats && cats.length) {
           Color.find().then(colorsArr => {
             result.productCategoriesList = [];
-            _.forEach(cats, cat => {
+            forEach(cats, cat => {
               if (!cat.productsCategoryId || cat.productsCategoryId === '') {
                 result.productCategoriesList.push({
                   id: cat.id,
@@ -291,7 +101,7 @@ module.exports = function (app) {
           delete conf.name;
           delete conf.id;
           delete conf.isMain;
-          res.json(_.assignIn({}, conf, {
+          res.json(assignIn({}, conf, {
             productsList: {url: conf.productsList},
             fonts: {url: conf.fonts},
             graphicsList: {url: conf.graphicsList},
