@@ -12,8 +12,10 @@ import {
 import DefaultView from './DefaultView';
 import DeleteConfirmationView from './DeleteConfirmationView';
 import ImportView from './ImportView';
+import DefaultInput from './DefaultInput';
 import {checkNotEmpty} from '../../FormValidation';
 import * as _ from 'lodash';
+import keys from 'lodash/keys';
 import ReactTooltip from 'react-tooltip';
 import EditingView from './EditingView';
 const LEAVE_URL_OPTION = 'Import';
@@ -52,10 +54,7 @@ export default class ViewAbstract extends Component {
     }
   }
 
-  updateObject = (propertyName, event) =>
-    this.props.setEditingObjectProperty(propertyName, event.target.value);
-
-  handleSelectedStateChange = event => this.setState({...this.state, urlSelect: event.target.value, baseUrl: ''});
+  updateObject = (propertyName, event) => this.props.setEditingObjectProperty(propertyName, event.target.value);
 
   handleAddNew = () => {
     if (this.props.status === STATUS_DEFAULT) {
@@ -86,7 +85,7 @@ export default class ViewAbstract extends Component {
   };
 
   handleSaveBtnClick = redirect => {
-    const properties = Object.getOwnPropertyNames(this.props.objectSample);
+    const properties = keys(this.props.objectSample);
     const empty = properties.filter(p => p !== ID_PROP &&
     (!checkNotEmpty(this.props.objectHolder[p]) && this.props.objectSample[p].required));
     if (empty.length) {
@@ -141,40 +140,18 @@ export default class ViewAbstract extends Component {
   };
 
   getDefaultInputs = () =>
-    Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
+    keys(this.props.objectSample).map(prop => {
       if (this.props.objectSample[prop].showInput === false) {
         return {element: null};
       }
       return {
-        element: <div key={prop} className='form-group'>
-          <div className='col-md-2'>
-            <p className={'' + (this.props.objectSample[prop].required ? 'req' : '')}>
-              {this.props.objectSample[prop].header ?
-                this.props.objectSample[prop].header : capitalizeFirstLetter(prop)}
-              {this.props.objectSample[prop].hint ? <small>&nbsp;<i className='fa fa-question'
-                                                                    data-tip={this.props.objectSample[prop].hint}/>
-              </small> : null}
-            </p>
-            {this.props.objectSample[prop].hint ? <ReactTooltip effect='solid'/> : null}
-          </div>
-          <div className='col-md-10'>
-            {
-              this.props.changedInputs && this.props.changedInputs.hasOwnProperty(prop) ?
-                this.props.changedInputs[prop].elem :
-                <input type='text' className='form-control'
-                       value={this.props.objectHolder[prop]}
-                       onChange={e => this.updateObject(prop, e)}/>
-            }
-            {
-              this.props.status === STATUS_EDITING &&
-              this.props.representations && this.props.representations.hasOwnProperty(prop) ?
-                <div
-                  style={{marginTop: 3}}>{this.props.representations[prop].getElem(this.props.objectHolder[prop])}</div> :
-                null
-            }
-          </div>
-        </div>,
-        viewIndex: this.props.objectSample[prop].viewIndex || Object.getOwnPropertyNames(this.props.objectSample).length
+        element: <DefaultInput key={prop}
+                               property={prop}
+                               item={this.props.objectSample[prop]}
+                               objectHolder={this.props.objectHolder}
+                               representations={this.props.representations}
+                               changedInputs={this.props.changedInputs}/>,
+        viewIndex: this.props.objectSample[prop].viewIndex || keys(this.props.objectSample).length
       };
     });
 
@@ -182,7 +159,7 @@ export default class ViewAbstract extends Component {
     if (!this.props.customInputs) {
       return [];
     }
-    return Object.getOwnPropertyNames(this.props.customInputs).map(prop => {
+    return keys(this.props.customInputs).map(prop => {
       return {
         element: <div key={prop} className='form-group'>
           <div className='col-md-2'>
@@ -197,7 +174,7 @@ export default class ViewAbstract extends Component {
             }
           </div>
         </div>,
-        viewIndex: this.props.customInputs[prop].viewIndex || Object.getOwnPropertyNames(this.props.objectSample).length
+        viewIndex: this.props.customInputs[prop].viewIndex || keys(this.props.objectSample).length
       };
     });
   };

@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {
-  STATUS_EDITING,
-  STATUS_CREATING
-} from '../../definitions';
+import {STATUS_EDITING, STATUS_CREATING} from '../../definitions';
 import CreatingButtonGroup from './ButtonGroups/CreatingButtonGroup';
 import EditingButtonGroup from './ButtonGroups/EditingButtonsGroup';
 

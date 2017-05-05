@@ -66,10 +66,10 @@ export default class extends Component {
 
       <div className='pull-right'>
         { this.props.data.length > 1 ? (
-            <button type='button' className='btn btn-danger'
-                    onClick={this.handleDeleteBtnClick}>Delete
-            </button>
-          ) : null
+          <button type='button' className='btn btn-danger'
+                  onClick={this.handleDeleteBtnClick}>Delete
+          </button>
+        ) : null
         }
       </div>
     </div>
@@ -266,14 +266,12 @@ export default class extends Component {
 
     return (
       <main>
-        {loading ? <div className='loader'></div> : <div className='loaderDone'></div>}
+        {loading ? <div className='loader'/> : <div className='loaderDone'/>}
         <div className='content-header'>
           <h1>Admins</h1>
         </div>
-        {
-          errors.length === 0 ? null : errors.map((err, k) => <div key={k} className='alert alert-danger'>Error:
-              {err}</div>)
-        }
+        {errors.length === 0 ? null : errors.map(err =>
+          <div key={err} className='alert alert-danger'>Error: {err}</div>)}
         {this.renderPage()}
       </main>
     );
