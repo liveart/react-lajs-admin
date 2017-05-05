@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, LEAVE_URL_OPTION} from '../../definitions';
-import View from './View';
+import AbstractPageView from './AbstractPageView';
 import {checkNotEmpty} from '../../FormValidation';
 import keys from 'lodash/keys';
 import forEach from 'lodash/forEach';
@@ -83,7 +83,6 @@ export default class AbstractPage extends Component {
         if (this.props.status === STATUS_CREATING && this.props.objectHolder[prop] === '') {
           return;
         }
-
         if (this.props.changedInputs && this.props.changedInputs[prop]
           && typeof this.props.changedInputs[prop].saveF === 'function') {
           if (this.props.objectHolder[prop]) {
@@ -99,7 +98,6 @@ export default class AbstractPage extends Component {
         }
       }
     });
-
     if (this.props.status === STATUS_EDITING) {
       this.props.editEntity(this.props.objectHolder.id, entity, this.props.token);
       if (redirect) {
@@ -140,20 +138,19 @@ export default class AbstractPage extends Component {
   };
 
   render() {
-    return <View {...this.props}
-                 handleAddNew={this.handleAddNew}
-                 handleImportFromJson={this.handleImportFromJson}
-                 handleCancelBtnClick={this.handleCancelBtnClick}
-                 handleSaveBtnClick={this.handleSaveBtnClick}
-                 handleDeleteBtnClick={this.handleDeleteBtnClick}
-                 handleFileChoose={this.handleFileSelection}
-                 urlSelect={this.state.urlSelect}
-                 baseUrl={this.state.baseUrl}
-                 updateObject={this.updateObject}
-                 onBaseUrlChange={this.handleBaseUrlChange}
-                 onJsonChange={this.handleJsonChange}
-                 onCancelBtnClick={this.handleCancelBtnClick}
-                 onSaveBtnClick={this.handleSaveImportBtnClick}
-    />;
+    return <AbstractPageView {...this.props}
+                             handleAddNew={this.handleAddNew}
+                             handleImportFromJson={this.handleImportFromJson}
+                             handleCancelBtnClick={this.handleCancelBtnClick}
+                             handleSaveBtnClick={this.handleSaveBtnClick}
+                             handleDeleteBtnClick={this.handleDeleteBtnClick}
+                             handleFileChoose={this.handleFileSelection}
+                             urlSelect={this.state.urlSelect}
+                             baseUrl={this.state.baseUrl}
+                             updateObject={this.updateObject}
+                             onBaseUrlChange={this.handleBaseUrlChange}
+                             onJsonChange={this.handleJsonChange}
+                             onCancelBtnClick={this.handleCancelBtnClick}
+                             onSaveBtnClick={this.handleSaveImportBtnClick}/>;
   }
 }

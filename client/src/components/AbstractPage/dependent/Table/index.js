@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {STATUS_DEFAULT} from '../../../definitions';
+import {STATUS_DEFAULT} from '../../../../definitions';
 import TableView from './TableView';
 
 export default class Table extends Component {
