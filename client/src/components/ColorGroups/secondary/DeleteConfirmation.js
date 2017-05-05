@@ -11,12 +11,10 @@ export default class ColorgroupDeleteConfirmation extends Component {
   static propTypes = {
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     objectHolder: PropTypes.object,
-    newGroup: PropTypes.object,
+    newGroup: PropTypes.string,
     selectedValue: PropTypes.string,
     linkedProducts: PropTypes.array.isRequired,
     linkedGraphics: PropTypes.array.isRequired,
-    isLinkedToProduct: PropTypes.func.isRequired,
-    isLinkedToGraphic: PropTypes.func.isRequired,
     handleMoveToGroup: PropTypes.func.isRequired,
     handleColorsActionOption: PropTypes.func.isRequired
   };
@@ -24,8 +22,7 @@ export default class ColorgroupDeleteConfirmation extends Component {
   render() {
     return <div className='form-group'>
       <div className='col-md-9'>
-        {(!this.props.isLinkedToProduct() && this.props.linkedProducts.length) ||
-        (!this.props.isLinkedToGraphic() && this.props.linkedGraphics.length) ?
+        {this.props.linkedProducts.length || this.props.linkedGraphics.length ?
           <div>
             <h4>Group linked to:</h4>
             {this.props.linkedProducts.length ? 'Products: ' + this.props.linkedProducts : null}

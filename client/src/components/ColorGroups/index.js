@@ -16,15 +16,13 @@ import DeleteConfirmation from './secondary/DeleteConfirmation';
 import DeleteButton from './secondary/DeleteButton';
 import AbstractPage from '../AbstractPage/index';
 const Colorgroup = ColorgroupModel.properties;
-let linkedProducts = [];
-let linkedGraphics = [];
 
 export default class ColorgroupsComponent extends Component {
   static propTypes = PTypes;
 
-  constructor() {
-    super();
-    this.state = {deleting: false, selectedValue: DELETE_COLORS, newGroup: {}};
+  constructor(props) {
+    super(props);
+    this.state = {deleting: false, selectedValue: DELETE_COLORS, newGroup: '', linkedProducts: [], linkedGraphics: []};
   }
 
   componentWillMount() {
@@ -34,53 +32,61 @@ export default class ColorgroupsComponent extends Component {
 
   componentWillReceiveProps(props) {
     if (this.props.status === STATUS_DEFAULT && (props.status === STATUS_CREATING || props.status === STATUS_EDITING)) {
-      this.props.fetchGraphics();
-      this.props.fetchProducts();
       this.props.fetchSecondaryData();
+      this.props.fetchProducts();
+      this.props.fetchGraphics();
+
+    }
+    if (this.props.status === STATUS_EDITING && props.status === STATUS_CONFIRM_DELETE) {
+      this.isLinkedToGraphic();
+      this.isLinkedToProduct();
     }
   }
 
   isLinkedToProduct = () => {
-    linkedProducts = [];
+    let linked = [];
     this.props.products.forEach(p => {
       p.colorizables.filter(c => c.assignColorgroup === true).forEach(c => {
         if (c.colorgroup && c.colorgroup.id === this.props.objectHolder.id) {
-          linkedProducts.push(p.name);
+          linked.push(p.name);
         }
       });
       p.colorizables.filter(c => c.assignColorgroup === false).forEach(c => {
         let arr = intersectionBy(c._colors, this.props.secondaryData.filter(col =>
         col.colorgroupId === this.props.objectHolder.id), 'name');
         if (arr.length) {
-          linkedProducts.push(p.name);
+          linked.push(p.name);
         }
       });
     });
-    linkedProducts = sortedUniq(linkedProducts);
+    linked = sortedUniq(linked);
+    this.setState({...this.state, linkedProducts: linked});
   };
 
   isLinkedToGraphic = () => {
-    linkedGraphics = [];
+    let linked = [];
     this.props.graphics.forEach(g => {
       g.colorizables.filter(c => c.assignColorgroup === true).forEach(c => {
         if (c.colorgroup && c.colorgroup.id === this.props.objectHolder.id) {
-          linkedGraphics.push(g.name);
+          linked.push(g.name);
         }
       });
       g.colorizables.filter(c => c.assignColorgroup === false).forEach(c => {
         let arr = intersectionBy(c._colors, this.props.secondaryData.filter(col =>
         col.colorgroupId === this.props.objectHolder.id), 'name');
         if (arr.length) {
-          linkedGraphics.push(g.name);
+          linked.push(g.name);
         }
       });
       let arr = intersectionBy(g.colors, this.props.secondaryData.filter(col =>
       col.colorgroupId === this.props.objectHolder.id), 'name');
       if (arr.length) {
-        linkedGraphics.push(g.name);
+        linked.push(g.name);
       }
     });
-    linkedGraphics = sortedUniq(linkedGraphics);
+    linked = sortedUniq(linked);
+    console.warn(linked)
+    this.setState({...this.state, linkedGraphics: linked});
   };
 
 
@@ -126,21 +132,23 @@ export default class ColorgroupsComponent extends Component {
     return (
       <AbstractPage {...this.props} objectSample={Colorgroup} sortingSupport={true}
                     deleteConfirmation={true}
-                    renderDeleteConfirmationDialog={<DeleteConfirmation data={this.props.data}
-                                                                        objectHolder={this.props.objectHolder}
-                                                                        newGroup={this.state.newGroup}
-                                                                        selectedValue={this.state.selectedValue}
-                                                                        linkedProducts={linkedProducts}
-                                                                        linkedGraphics={linkedGraphics}
-                                                                        isLinkedToProduct={this.isLinkedToProduct}
-                                                                        isLinkedToGraphic={this.isLinkedToGraphic}
-                                                                        handleMoveToGroup={this.handleMoveToGroup}
-                                                                        handleColorsActionOption={this.handleColorsActionOption}/>}
-                    renderDeleteConfirmationButtons={<DeleteButton newGroup={this.state.newGroup}
-                                                                   selectedValue={this.state.selectedValue}
-                                                                   enableDefaultStatus={this.props.enableDefaultStatus}
-                                                                   restoreTableState={this.props.restoreTableState}
-                                                                   handleDeleteBtnClick={this.handleDeleteBtnClick}/>}
+                    renderDeleteConfirmationDialog={
+                      <DeleteConfirmation data={this.props.data}
+                                          objectHolder={this.props.objectHolder}
+                                          newGroup={this.state.newGroup}
+                                          selectedValue={this.state.selectedValue}
+                                          linkedProducts={this.state.linkedProducts}
+                                          linkedGraphics={this.state.linkedGraphics}
+                                          handleMoveToGroup={this.handleMoveToGroup}
+                                          handleColorsActionOption={this.handleColorsActionOption}/>}
+                    renderDeleteConfirmationButtons={
+                      <DeleteButton linkedProducts={this.state.linkedProducts}
+                                    linkedGraphics={this.state.linkedGraphics}
+                                    newGroup={this.state.newGroup}
+                                    selectedValue={this.state.selectedValue}
+                                    enableDefaultStatus={this.props.enableDefaultStatus}
+                                    restoreTableState={this.props.restoreTableState}
+                                    handleDeleteBtnClick={this.handleDeleteBtnClick}/>}
       />
     );
   }

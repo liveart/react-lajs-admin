@@ -21,6 +21,17 @@ const MOVE_PRODUCTS_TO_OTHER_CATEGORY = 'MOVE_PRODUCTS_TO_OTHER_CATEGORY';
 export default class extends Component {
   static propTypes = PTypes;
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      deleting: false,
+      selectedValue: DELETE_CATEGORY,
+      newProductsCategory: '',
+      selectedSecondaryValue: DELETE_PRODUCTS,
+      newProduct: ''
+    };
+  }
+
   handleFileUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       const image = this.props.objectHolder.thumbUrl;
@@ -222,18 +233,6 @@ export default class extends Component {
 
     return undefined;
   };
-
-  constructor() {
-    super();
-    this.state = {
-      deleting: false,
-      selectedValue: DELETE_CATEGORY,
-      newProductsCategory: '',
-      selectedSecondaryValue: DELETE_PRODUCTS,
-      newProduct: ''
-    };
-  }
-
 
   render() {
     return (
