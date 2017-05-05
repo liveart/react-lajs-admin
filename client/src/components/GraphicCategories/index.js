@@ -6,20 +6,32 @@ import {
   STATUS_CREATING,
   STATUS_CONFIRM_DELETE,
   GRAPHIC_CATEGORY_FOLDER,
-  RELATIVE_URL
+  RELATIVE_URL,
+  DELETE_CATEGORY,
+  MOVE_GRAPHICS_TO_OTHER_CATEGORY,
+  MOVE_CATEGORY_TO_OTHER_CATEGORY,
+  DELETE_GRAPHICS
 } from '../../definitions';
 import * as GraphicsCategoryModel from '../../../../common/models/graphics-category.json';
-import {RadioGroup, Radio} from 'react-radio-group';
 const GraphicsCategory = GraphicsCategoryModel.properties;
-import View from '../AbstractPage/index';
-import * as _ from 'lodash';
-const DELETE_CATEGORY = 'DELETE_CATEGORY';
-const MOVE_CATEGORY_TO_OTHER_CATEGORY = 'MOVE_CATEGORY_TO_OTHER_CATEGORY';
-const DELETE_GRAPHICS = 'DELETE_GRAPHICS';
-const MOVE_GRAPHICS_TO_OTHER_CATEGORY = 'MOVE_GRAPHICS_TO_OTHER_CATEGORY';
+import View from './View';
+import filter from 'lodash/filter';
+import includes from 'lodash/includes';
+
 
 export default class extends Component {
   static propTypes = PTypes;
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      deleting: false,
+      selectedValue: DELETE_CATEGORY,
+      newGraphicsCategory: '',
+      selectedSecondaryValue: DELETE_GRAPHICS,
+      newGraphic: ''
+    };
+  }
 
   handleFileUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
@@ -64,67 +76,6 @@ export default class extends Component {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
 
-  renderDelete = () => {
-    return (
-      <div className='form-group'>
-        <div className='col-md-3'>
-        </div>
-        <div className='col-md-6'>
-          <h1>Choose an action</h1>
-          <div className='form-group'>
-            <h3>Linked categories</h3>
-            <RadioGroup selectedValue={this.state.selectedValue}
-                        onChange={e => this.handleCategoryActionOption(e)}>
-              <div>
-                <Radio value={DELETE_CATEGORY}/>&nbsp; Delete all the categories
-                linked to this category
-              </div>
-              <div>
-                <Radio value={MOVE_CATEGORY_TO_OTHER_CATEGORY}/>&nbsp; Move all the linked categories to other
-                category &nbsp;
-                <select
-                  value={this.state.newGraphicsCategory}
-                  onChange={this.handleMoveToCategory}>
-                  <option value={''}>Root category</option>
-                  {this.props.data.map((cg, key) => (
-                    this.props.objectHolder[ID_PROP] !== cg.id ?
-                      this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId ?
-                        <option key={key} value={cg.id}>{cg.name}</option> :
-                        <option disabled='disabled' key={key} value={cg.id}>{cg.name} </option> : null
-                  ))}
-                </select>
-              </div>
-            </RadioGroup>
-            <h3>Linked graphics</h3>
-            <RadioGroup selectedValue={this.state.selectedSecondaryValue}
-                        onChange={e => this.handleGraphicActionOption(e)}>
-              <div>
-                <Radio value={DELETE_GRAPHICS}/>&nbsp; Delete all the linked graphics
-              </div>
-              <div>
-                <Radio value={MOVE_GRAPHICS_TO_OTHER_CATEGORY}/>&nbsp; Move graphics of this category to other
-                category &nbsp;
-                <select
-                  value={this.state.newGraphic}
-                  onChange={this.handleMoveGraphicToCategory}>
-                  <option value=''>Select category</option>
-                  {this.props.data.map((cg, key) => (
-                    this.props.objectHolder[ID_PROP] !== cg.id ?
-                      this.props.objectHolder[ID_PROP] === cg.graphicsCategoryId && this.state.selectedValue === DELETE_CATEGORY ?
-                        <option disabled='disabled' key={key}>{cg.name}</option> :
-                        <option key={key} value={cg.id}>{cg.name} </option> : null
-                  ))}
-                </select>
-                {this.state.newGraphic === '' && this.state.selectedSecondaryValue === MOVE_GRAPHICS_TO_OTHER_CATEGORY ?
-                  <div className='text-red'>Please choose category.</div> : null}
-              </div>
-            </RadioGroup>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   deleteRelatedCats = (catId, cats, graphicsAction) => {
     this.props.deleteEntity(catId, this.props.token);
 
@@ -135,7 +86,7 @@ export default class extends Component {
         }
       });
     }
-    cats = _.filter(cats, cat => cat.id !== catId);
+    cats = filter(cats, cat => cat.id !== catId);
     cats.forEach(cat => {
       if (cat.graphicsCategoryId === catId) {
         this.deleteRelatedCats(cat.id, cats, graphicsAction);
@@ -194,38 +145,7 @@ export default class extends Component {
     this.setState({...this.state, newGraphic: e.target.value});
   };
 
-  renderDeleteBtn = () => (
-    <div>
-      <div className='pull-right'>
-        {this.state.newGraphic === '' && this.state.selectedSecondaryValue === MOVE_GRAPHICS_TO_OTHER_CATEGORY ?
-          <button disabled type='button' className='btn btn-danger'
-                  onClick={() => this.handleDeleteBtnClick(true)}>Delete
-          </button> :
-          <button type='button' className='btn btn-danger'
-                  onClick={() => this.handleDeleteBtnClick(true)}>Delete
-          </button>}
-        <button type='button' className='btn btn-default'
-                onClick={() => {
-                  this.props.enableDefaultStatus();
-                  this.props.restoreTableState(GraphicsCategory);
-                }}>Cancel
-        </button>
-      </div>
-    </div>
-  );
-
-  constructor() {
-    super();
-    this.state = {
-      deleting: false,
-      selectedValue: DELETE_CATEGORY,
-      newGraphicsCategory: '',
-      selectedSecondaryValue: DELETE_GRAPHICS,
-      newGraphic: ''
-    };
-  }
-
-  getFileUrl = url => _.includes(url, RELATIVE_URL) ? url.substring(RELATIVE_URL.length) : url;
+  getFileUrl = url => includes(url, RELATIVE_URL) ? url.substring(RELATIVE_URL.length) : url;
 
   getName = (obj, url) => {
     if (typeof obj === 'object') {
@@ -238,61 +158,17 @@ export default class extends Component {
   render() {
     return (
       <View {...this.props} objectSample={GraphicsCategory} sortingSupport={true}
-            representations={{
-              thumb: {
-                getElem: val => <a href={this.getFileUrl(val)} className='thumbnail' style={{width: 100}}>
-                  <img src={this.getFileUrl(val)} alt='thumb' style={{width: 100}}/></a>
-              },
-            }}
-            changedInputs={{
-              thumb: {
-                saveF: this.handleFileUpload,
-                getName: obj => this.getName(obj, GRAPHIC_CATEGORY_FOLDER)
-              }
-            }
-            }
-            customInputs={{
-              thumb: {
-                elem: <div>
-                  <input type='file' className='form-control' accept='image/*'
-                         onChange={e => this.handleFileChoose('thumb', e)}/>
-
-                  {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
-                    <div style={{float: 'left'}}><a href={this.getFileUrl(this.props.objectHolder['thumb'])}
-                                                    className='thumbnail'
-                                                    style={{marginTop: 8, width: 100}}><img style={{width: 100}}
-                                                                                            src={this.getFileUrl(this.props.objectHolder['thumb'])}/></a>
-                    </div>
-                    : null}
-                  <div style={{float: 'left'}}>
-                    {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumb'] ?
-                      <canvas style={{marginTop: 8}} ref='canvas' width='100'
-                              height='100' hidden/> :
-                      <canvas style={{marginTop: 8}} ref='canvas' width='100'
-                              height='100'/>}
-                  </div>
-                </div>,
-                required: true
-              },
-              category: {
-                elem: <select className='form-control'
-                              onChange={e => this.handleSelectedObjectChange('graphicsCategoryId', e)}
-                              value={this.props.objectHolder['graphicsCategoryId']}>
-                  <option key='rootCategory' value={''}>Root category</option>
-                  {this.props.data.map(cg => (
-                    this.props.objectHolder[ID_PROP] !== cg.id ?
-                      (this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId) || (cg.graphicsCategoryId === '') ?
-                        <option key={cg.id} value={cg.id}>{cg.name}</option> :
-                        <option disabled='disabled' key={cg.id} value={cg.id}>{cg.name} </option> : null
-                  ))}
-                </select>
-              }
-            }
-
-            }
-            deleteConfirmation={true}
-            renderDeleteConfirmationDialog={this.renderDelete}
-            renderDeleteConfirmationButtons={this.renderDeleteBtn}
+            newGraphic={this.state.newGraphic}
+            newGraphicsCategory={this.state.newGraphicsCategory}
+            selectedValue={this.state.selectedValue}
+            selectedSecondaryValue={this.state.selectedSecondaryValue}
+            handleMoveToCategory={this.handleMoveToCategory}
+            handleCategoryActionOption={this.handleCategoryActionOption}
+            handleGraphicActionOption={this.handleGraphicActionOption}
+            handleMoveGraphicToCategory={this.handleMoveGraphicToCategory}
+            getName={this.getName}
+            getFileUrl={this.getFileUrl}
+            handleFileUpload={this.handleFileUpload}
 
       />
     );

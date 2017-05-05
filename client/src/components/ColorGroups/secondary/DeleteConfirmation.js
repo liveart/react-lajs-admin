@@ -7,7 +7,7 @@ import {
   LEAVE_COLORS_WITHOUT_GROUP
 } from '../../../definitions';
 
-export default class DeleteConfirmation extends Component {
+export default class ColorgroupDeleteConfirmation extends Component {
   static propTypes = {
     data: PropTypes.arrayOf(PropTypes.any).isRequired,
     objectHolder: PropTypes.object,
