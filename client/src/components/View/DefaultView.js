@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import Table from './Table';
+import Table from './Table/index';
 import DefaultButtonGroup from './ButtonGroups/DefaultButtonGroup';
 
 export default class DefaultView extends Component {

@@ -166,6 +166,7 @@ export default class GraphicsComponent extends Component {
       }
     }
   };
+
   getColorgroupsOptions = () => {
     if (!this.props.colorgroups || !this.props.colorgroups.length) {
       return [];
@@ -186,6 +187,7 @@ export default class GraphicsComponent extends Component {
       return _.map(arr[key]._colors, col => ({value: col.value, name: col.name}));
     }
   };
+
   getSelectedColorizableOptions = key => {
     let arr = this.props.objectHolder.colorizables;
     if (!arr[key].assignColorgroup) {
@@ -214,6 +216,7 @@ export default class GraphicsComponent extends Component {
       this.props.setEditingObjectProperty('colorizables', colorizables);
     }
   };
+
   onColorizableColorgroupSelectChange = (val, key) => {
     let colorizables = this.props.objectHolder.colorizables;
     if (val) {
@@ -423,9 +426,9 @@ export default class GraphicsComponent extends Component {
                 sortElem: <select className='form-control'
                                   value={this.props.objectHolder.categoryId}
                                   onChange={e => this.handleSelectedObjectChange('categoryId', e)}>
-                  <option key='any' value=''>...</option>
-                  {_.sortBy(this.props.graphicsCategories, 'name').map((cat, key) =>
-                    <option key={key}
+                  <option value=''>...</option>
+                  {_.sortBy(this.props.graphicsCategories, 'name').map(cat =>
+                    <option key={cat.id}
                             value={cat.id}>{cat.name}</option>)}
                 </select>
               }

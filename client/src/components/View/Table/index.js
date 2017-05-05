@@ -51,21 +51,21 @@ export default class Table extends Component {
     forEach(this.props.data, d => {
       let add = true;
 
-      Object.getOwnPropertyNames(this.props.objectSample).map(prop => {
+      keys(this.props.objectSample).map(key => {
         if (!add) {
           return;
         }
-        if (this.props.objectSample[prop].showInTable === false) {
+        if (this.props.objectSample[key].showInTable === false) {
           add = true;
-        } else if (typeof this.props.objectHolder[prop] !== 'object') {
-          if (typeof d[prop] === 'undefined') {
-            add = this.props.objectHolder[prop] === '';
-          } else if (typeof d[prop] === 'boolean') {
+        } else if (typeof this.props.objectHolder[key] !== 'object') {
+          if (typeof d[key] === 'undefined') {
+            add = this.props.objectHolder[key] === '';
+          } else if (typeof d[key] === 'boolean') {
             add = true;
-          } else if (this.props.sortComparators && this.props.sortComparators.hasOwnProperty(prop)) {
-            add = this.props.sortComparators[prop](String(d[prop]),
-              String(this.props.objectHolder[prop]));
-          } else if (!includes(d[prop], this.props.objectHolder[prop])) {
+          } else if (this.props.sortComparators && this.props.sortComparators.hasOwnProperty(key)) {
+            add = this.props.sortComparators[key](String(d[key]),
+              String(this.props.objectHolder[key]));
+          } else if (!includes(d[key], this.props.objectHolder[key])) {
             add = false;
           }
         }
