@@ -28,7 +28,8 @@ export default class AbstractPageView extends Component {
                                item={this.props.objectSample[prop]}
                                objectHolder={this.props.objectHolder}
                                representations={this.props.representations}
-                               changedInputs={this.props.changedInputs}/>,
+                               changedInputs={this.props.changedInputs}
+                               updateObject={this.props.updateObject}/>,
         viewIndex: this.props.objectSample[prop].viewIndex || keys(this.props.objectSample).length
       };
     });

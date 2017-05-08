@@ -9,7 +9,8 @@ export default class DefaultInput extends Component {
     property: PropTypes.string.isRequired,
     item: PropTypes.object.isRequired,
     representations: PropTypes.object,
-    changedInputs: PropTypes.object
+    changedInputs: PropTypes.object,
+    updateObject: PropTypes.func.isRequired
   };
 
   render() {
@@ -31,7 +32,7 @@ export default class DefaultInput extends Component {
             this.props.changedInputs[property].elem :
             <input type='text' className='form-control'
                    value={this.props.objectHolder[property]}
-                   onChange={e => this.updateObject(property, e)}/>
+                   onChange={e => this.props.updateObject(property, e)}/>
         }
         {
           this.props.status === STATUS_EDITING &&
