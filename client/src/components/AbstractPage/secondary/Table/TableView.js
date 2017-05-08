@@ -29,6 +29,7 @@ export default class TableView extends Component {
               this.props.objectHolder, this.props.sortComparators).map(item =>
               <Row key={item.id}
                    objectSample={this.props.objectSample}
+                   secondaryData={this.props.secondaryData}
                    handleEdit={this.props.handleEdit}
                    representations={this.props.representations}
                    item={item}/>)}

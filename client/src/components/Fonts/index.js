@@ -5,8 +5,7 @@ import {
   STATUS_CREATING,
   RELATIVE_URL,
   FONTS_FOLDER,
-  VECTORS_FOLDER,
-  ElementTypes
+  VECTORS_FOLDER
 } from '../../definitions';
 import * as FontModel from '../../../../common/models/font.json';
 const Font = FontModel.properties;
@@ -66,104 +65,58 @@ export default class extends Component {
     }
   };
 
-  getName = name => {
-    if (typeof (name) === 'string') {
-      return name.substring(name.lastIndexOf('/') + 1);
-    }
-  };
-
   render() {
-    return (
-      <View {...this.props} objectSample={Font} sortingSupport={true}
-            representations={{
-              fileNormal: {
-                getElem: val =>
-                  val ? <a href={this.getFileUrl(val)}
-                           style={{width: 100}}>{this.getName(val)}</a> :
-                    null
-              },
-              fileBold: {
-                getElem: val =>
-                  val ? <a href={this.getFileUrl(val)}
-                           style={{width: 100}}>{this.getName(val)}</a> :
-                    null
-              },
-              fileItalic: {
-                getElem: val =>
-                  val ? <a href={this.getFileUrl(val)}
-                           style={{width: 100}}>{this.getName(val)}</a> :
-                    null
-              },
-              fileBoldItalic: {
-                getElem: val =>
-                  val ? <a href={this.getFileUrl(val)}
-                           style={{width: 100}}>{this.getName(val)}</a> :
-                    null
-              },
-              vector: {
-                getElem: val =>
-                  val ? <a href={this.getFileUrl(val)}
-                           style={{width: 100}}>{this.getName(val)}</a> :
-                    null
-              },
-
-            }}
-            changedInputs={{
-              fileNormal: {
-                elem: <input type='file' className='form-control' accept='.woff'
-                             onChange={e => this.handleFileChoose('fileNormal', e)}/>,
-                saveF: this.handleFileNormalUpload,
-                getName: obj => this.getSaveUrl(obj, FONTS_FOLDER)
-              },
-              fileBold: {
-                elem: <input type='file' className='form-control' accept='.woff'
-                             onChange={e => this.handleFileChoose('fileBold', e)}/>,
-                saveF: this.handleFileBoldUpload,
-                getName: obj => this.getSaveUrl(obj, FONTS_FOLDER)
-              },
-              fileItalic: {
-                elem: <input type='file' className='form-control' accept='.woff'
-                             onChange={e => this.handleFileChoose('fileItalic', e)}/>,
-                saveF: this.handleFileItalicUpload,
-                getName: obj => this.getSaveUrl(obj, FONTS_FOLDER)
-              },
-              fileBoldItalic: {
-                elem: <input type='file' className='form-control' accept='.woff'
-                             onChange={e => this.handleFileChoose('fileBoldItalic', e)}/>,
-                saveF: this.handleFileBoldItalicUpload,
-                getName: obj => this.getSaveUrl(obj, FONTS_FOLDER)
-              },
-              vector: {
-                elem: <input type='file' className='form-control' accept='.js'
-                             onChange={e => this.handleFileChoose('vector', e)}/>,
-                saveF: this.handleVectorUpload,
-                getName: obj => this.getSaveUrl(obj, VECTORS_FOLDER)
-              },
-              boldAllowed: {
-                elem: <select type='text' className='form-control'
-                              value={this.props.objectHolder['boldAllowed']}
-                              onChange={e => this.handleSelectedObjectChange('boldAllowed', e)}>
-                  <option value=''>...</option>
-                  <option value='true'>Yes</option>
-                  <option value='false'>No</option>
-                </select>
-              },
-              italicAllowed: {
-                elem: <select type='text' className='form-control'
-                              value={this.props.objectHolder['italicAllowed']}
-                              onChange={e => this.handleSelectedObjectChange('italicAllowed', e)}>
-                  <option value=''>...</option>
-                  <option value='true'>Yes</option>
-                  <option value='false'>No</option>
-                </select>
-              }
-            }
-            }
-            customInputs={{}
-
-            }
-      />
-    );
+    return <View {...this.props} objectSample={Font} sortingSupport={true}
+                 changedInputs={{
+                   fileNormal: {
+                     elem: <input type='file' className='form-control' accept='.woff'
+                                  onChange={e => this.handleFileChoose('fileNormal', e)}/>,
+                     saveF: this.handleFileNormalUpload,
+                     getName: obj => this.getSaveUrl(obj, FONTS_FOLDER)
+                   },
+                   fileBold: {
+                     elem: <input type='file' className='form-control' accept='.woff'
+                                  onChange={e => this.handleFileChoose('fileBold', e)}/>,
+                     saveF: this.handleFileBoldUpload,
+                     getName: obj => this.getSaveUrl(obj, FONTS_FOLDER)
+                   },
+                   fileItalic: {
+                     elem: <input type='file' className='form-control' accept='.woff'
+                                  onChange={e => this.handleFileChoose('fileItalic', e)}/>,
+                     saveF: this.handleFileItalicUpload,
+                     getName: obj => this.getSaveUrl(obj, FONTS_FOLDER)
+                   },
+                   fileBoldItalic: {
+                     elem: <input type='file' className='form-control' accept='.woff'
+                                  onChange={e => this.handleFileChoose('fileBoldItalic', e)}/>,
+                     saveF: this.handleFileBoldItalicUpload,
+                     getName: obj => this.getSaveUrl(obj, FONTS_FOLDER)
+                   },
+                   vector: {
+                     elem: <input type='file' className='form-control' accept='.js'
+                                  onChange={e => this.handleFileChoose('vector', e)}/>,
+                     saveF: this.handleVectorUpload,
+                     getName: obj => this.getSaveUrl(obj, VECTORS_FOLDER)
+                   },
+                   boldAllowed: {
+                     elem: <select type='text' className='form-control'
+                                   value={this.props.objectHolder['boldAllowed']}
+                                   onChange={e => this.handleSelectedObjectChange('boldAllowed', e)}>
+                       <option value=''>...</option>
+                       <option value='true'>Yes</option>
+                       <option value='false'>No</option>
+                     </select>
+                   },
+                   italicAllowed: {
+                     elem: <select type='text' className='form-control'
+                                   value={this.props.objectHolder['italicAllowed']}
+                                   onChange={e => this.handleSelectedObjectChange('italicAllowed', e)}>
+                       <option value=''>...</option>
+                       <option value='true'>Yes</option>
+                       <option value='false'>No</option>
+                     </select>
+                   }
+                 }}
+    />;
   }
-
 }

@@ -36,3 +36,8 @@ export const ElementTypes = {
   CREATABLE_SELECT: 'CREATABLE_SELECT',
   TEXTAREA: 'TEXTAREA'
 };
+
+export const Representations = {
+  TEXT: 'TEXT',
+  LINK: 'LINK'
+};
