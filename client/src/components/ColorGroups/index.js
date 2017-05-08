@@ -35,15 +35,18 @@ export default class ColorgroupsComponent extends Component {
       this.props.fetchSecondaryData();
       this.props.fetchProducts();
       this.props.fetchGraphics();
-
-    }
-    if (this.props.status === STATUS_EDITING && props.status === STATUS_CONFIRM_DELETE) {
-      this.isLinkedToGraphic();
-      this.isLinkedToProduct();
     }
   }
 
-  isLinkedToProduct = () => {
+  componentDidUpdate(props) {
+    if (props.status === STATUS_EDITING && this.props.status === STATUS_CONFIRM_DELETE) {
+      let linkedG = this.getLinkedToGraphic();
+      let linkedP = this.getLinkedToProduct();
+      this.setState({...this.state, linkedGraphics: linkedG, linkedProducts: linkedP});
+    }
+  }
+
+  getLinkedToProduct = () => {
     let linked = [];
     this.props.products.forEach(p => {
       p.colorizables.filter(c => c.assignColorgroup === true).forEach(c => {
@@ -60,10 +63,10 @@ export default class ColorgroupsComponent extends Component {
       });
     });
     linked = sortedUniq(linked);
-    this.setState({...this.state, linkedProducts: linked});
+    return linked;
   };
 
-  isLinkedToGraphic = () => {
+  getLinkedToGraphic = () => {
     let linked = [];
     this.props.graphics.forEach(g => {
       g.colorizables.filter(c => c.assignColorgroup === true).forEach(c => {
@@ -85,8 +88,7 @@ export default class ColorgroupsComponent extends Component {
       }
     });
     linked = sortedUniq(linked);
-    console.warn(linked)
-    this.setState({...this.state, linkedGraphics: linked});
+    return linked;
   };
 
 
