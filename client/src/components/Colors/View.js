@@ -13,13 +13,6 @@ export default class ColorsView extends Component {
       <AbstractPage {...this.props} objectSample={Color} sortingSupport={true}
                     representations={{
                       colorgroupId: {
-                        getElem: val => {
-                          let col = getGroupById(val, this.props.secondaryData);
-                          if (this.props.status === STATUS_DEFAULT) {
-                            return col;
-                          }
-                          return null;
-                        },
                         sortElem: <select className='form-control'
                                           value={this.props.objectHolder['colorgroupId']}
                                           onChange={e => this.props.handleColorgroupChange('colorgroupId', e)}>
@@ -28,18 +21,6 @@ export default class ColorsView extends Component {
                             <option key={key} value={cg.id}>{cg.name}</option>
                           ))}
                         </select>
-                      },
-                      value: {
-                        getElem: val => {
-                          if (this.props.status === STATUS_DEFAULT) {
-                            return (<div>
-                              {val}
-                              <span className='label label-default pull-right'
-                                    style={{background: val}}>{' '}</span>
-                            </div>);
-                          }
-                          return null;
-                        }
                       }
                     }}
                     changedInputs={{

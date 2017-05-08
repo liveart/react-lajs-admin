@@ -10,12 +10,6 @@ export default class GraphicCategoriesView extends Component {
   render() {
     return (
       <AbstractPage {...this.props} objectSample={GraphicsCategory} sortingSupport={true}
-                    representations={{
-                      thumb: {
-                        getElem: val => <a href={this.props.getFileUrl(val)} className='thumbnail' style={{width: 100}}>
-                          <img src={this.props.getFileUrl(val)} alt='thumb' style={{width: 100}}/></a>
-                      },
-                    }}
                     changedInputs={{
                       thumb: {
                         saveF: () => this.props.handleFileUpload(this.refs.canvas),

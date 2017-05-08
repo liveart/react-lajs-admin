@@ -10,43 +10,21 @@ const Graphic = GraphicModel.properties;
 
 export default class GraphicsView extends Component {
   render() {
-    return <AbstractPage {...this.props} objectSample={{...Graphic}}
+    return <AbstractPage {...this.props}
+                         objectSample={Graphic}
                          sortingSupport={true}
+                         secondaryData={this.props.graphicsCategories}
                          enableImportJson={this.props.enableImportJson}
                          handleImportJson={this.props.handleImportJson}
                          sortComparators={{categoryId: (data, id) => id === '' ? true : data === id}}
                          representations={{
-                           thumb: {
-                             getElem: val =>
-                               val ? <a href={this.props.getFileUrl(val)} className='thumbnail'
-                                        style={{width: 100}}><img
-                                 src={this.props.getFileUrl(val)} alt='thumb'
-                                 style={{width: 100}}/></a> :
-                                 null
-                           },
-                           image: {
-                             getElem: val => val ?
-                               <a href={this.props.getFileUrl(val)} className='thumbnail'
-                                  style={{width: 100}}><img
-                                 src={this.props.getFileUrl(val)} alt='image'
-                                 style={{width: 100}}/></a> : null
-                           },
                            categoryId: {
-                             getElem: val => {
-                               let cat = this.props.graphicsCategories.find(c => String(c.id) === val);
-                               if (cat) {
-                                 return cat.name;
-                               }
-
-                               return null;
-                             },
                              sortElem: <select className='form-control'
                                                value={this.props.objectHolder.categoryId}
                                                onChange={e => this.props.handleSelectedObjectChange('categoryId', e)}>
                                <option value=''>...</option>
                                {sortBy(this.props.graphicsCategories, 'name').map(cat =>
-                                 <option key={cat.id}
-                                         value={cat.id}>{cat.name}</option>)}
+                                 <option key={cat.id} value={cat.id}>{cat.name}</option>)}
                              </select>
                            }
                          }}

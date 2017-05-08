@@ -22,8 +22,9 @@ export default class ColorsComponent extends Component {
 
   render() {
     return (
-      <View {...this.props} {...this}
-      />
+      <View {...this.props}
+            handleColorgroupChange={this.handleColorgroupChange}
+            handleColorChange={this.handleColorChange}/>
     );
   }
 }
