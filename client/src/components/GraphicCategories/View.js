@@ -18,7 +18,7 @@ export default class View extends Component {
                     }}
                     changedInputs={{
                       thumb: {
-                        saveF: this.props.handleFileUpload,
+                        saveF: () => this.props.handleFileUpload(this.refs.canvas),
                         getName: obj => this.props.getName(obj, GRAPHIC_CATEGORY_FOLDER)
                       }
                     }
@@ -27,7 +27,7 @@ export default class View extends Component {
                       thumb: {
                         elem: <div>
                           <input type='file' className='form-control' accept='image/*'
-                                 onChange={e => this.props.handleFileChoose('thumb', e)}/>
+                                 onChange={e => this.props.handleFileChoose('thumb', e, this.refs.canvas)}/>
 
                           {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
                             <div style={{float: 'left'}}><a

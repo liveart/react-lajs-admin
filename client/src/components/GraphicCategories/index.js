@@ -17,6 +17,7 @@ const GraphicsCategory = GraphicsCategoryModel.properties;
 import View from './View';
 import filter from 'lodash/filter';
 import includes from 'lodash/includes';
+import {getFileUrl} from '../../utils';
 
 
 export default class extends Component {
@@ -29,11 +30,12 @@ export default class extends Component {
       selectedValue: DELETE_CATEGORY,
       newGraphicsCategory: '',
       selectedSecondaryValue: DELETE_GRAPHICS,
-      newGraphic: ''
+      newGraphic: '',
+      imgUrl: ''
     };
   }
 
-  handleFileUpload = () => {
+  handleFileUpload = ref => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       const image = this.props.objectHolder.thumb;
       if (typeof image === 'string') {
@@ -41,7 +43,7 @@ export default class extends Component {
       }
       const uploadThumbnail = file => this.props.uploadThumbnail(file);
       if (image.type !== 'image/svg+xml') {
-        const c = this.refs.canvas;
+        const c = ref;
         c.toBlob(function (blob) {
           blob.name = image.name;
           uploadThumbnail(blob);
@@ -52,7 +54,7 @@ export default class extends Component {
     }
   };
 
-  handleFileChoose = (prop, e) => {
+  handleFileChoose = (prop, e, ref) => {
     this.props.setEditingObjectProperty(prop, e.target.files[0]);
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       const image = this.props.objectHolder['thumb'];
@@ -63,7 +65,7 @@ export default class extends Component {
         img.src = e.target.result;
       };
       reader.readAsDataURL(image);
-      const c = this.refs.canvas;
+      const c = ref;
       const ctx = c.getContext('2d');
       ctx.clearRect(0, 0, 100, 100);
       img.onload = function () {
@@ -157,19 +159,13 @@ export default class extends Component {
 
   render() {
     return (
-      <View {...this.props} objectSample={GraphicsCategory} sortingSupport={true}
+      <View {...this.props} {...this}
             newGraphic={this.state.newGraphic}
             newGraphicsCategory={this.state.newGraphicsCategory}
             selectedValue={this.state.selectedValue}
             selectedSecondaryValue={this.state.selectedSecondaryValue}
-            handleMoveToCategory={this.handleMoveToCategory}
-            handleCategoryActionOption={this.handleCategoryActionOption}
-            handleGraphicActionOption={this.handleGraphicActionOption}
-            handleMoveGraphicToCategory={this.handleMoveGraphicToCategory}
-            getName={this.getName}
-            getFileUrl={this.getFileUrl}
-            handleFileUpload={this.handleFileUpload}
-
+            imgUrl={this.state.imgUrl}
+            getFileUrl={getFileUrl}
       />
     );
   }
