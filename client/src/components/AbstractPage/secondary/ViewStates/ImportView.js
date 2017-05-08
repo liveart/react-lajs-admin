@@ -6,10 +6,11 @@ const KEEP_URL_OPTION = 'Keep';
 
 export default class ImportView extends Component {
   static propTypes = {
-    json: PropTypes.string,
-    urlSelect: PropTypes.string,
-    baseUrl: PropTypes.string,
-    onFileChoose: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired,
+    json: PropTypes.string.isRequired,
+    urlSelect: PropTypes.string.isRequired,
+    baseUrl: PropTypes.string.isRequired,
+    handleFileSelection: PropTypes.func.isRequired,
     onBaseUrlChange: PropTypes.func.isRequired,
     onJsonChange: PropTypes.func.isRequired,
     updateObject: PropTypes.func.isRequired,
@@ -34,7 +35,7 @@ export default class ImportView extends Component {
                     </div>
                     <div className='col-md-9'>
                       <input type='file' className='form-control' accept='.json'
-                             onChange={this.props.onFileChoose}/>
+                             onChange={this.props.handleFileSelection}/>
                     </div>
                   </div>
                   <div className='form-group'>

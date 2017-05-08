@@ -70,25 +70,25 @@ export default class GraphicsComponent extends Component {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
 
-  handleImgAsThumb = () => {
+  handleImgAsThumb = thumbRef => {
     this.props.setEditingObjectProperty('thumb', this.props.objectHolder.image);
-    this.toCanvas('thumb');
+    this.toCanvas('thumb', thumbRef);
   };
 
-  toCanvas = prop => {
+  toCanvas = (prop, ref) => {
     const image = this.props.objectHolder[prop];
     const img = new Image();
     let imageOut = new Image();
     const reader = new FileReader();
     reader.onload = e => img.src = e.target.result;
     reader.readAsDataURL(image);
-    let c = this.refs.canvas;
+    let c = ref;
     let ctx = c.getContext('2d');
     ctx.clearRect(0, 0, c.width, c.height);
     img.onload = () => imageOut = ctx.drawImage(img, 0, 0, 100, 100);
   };
 
-  handleFileSelection = (prop, e, overwrite) => {
+  handleFileSelection = (prop, e, overwrite, thumbRef) => {
     e.persist();
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       if (prop === 'image') {
@@ -128,7 +128,7 @@ export default class GraphicsComponent extends Component {
       }
       if (prop === 'thumb') {
         this.props.setEditingObjectProperty(prop, e.target.files[0]);
-        this.toCanvas(prop);
+        this.toCanvas(prop, thumbRef);
       }
     }
   };
@@ -137,14 +137,14 @@ export default class GraphicsComponent extends Component {
     this.props.uploadGraphicImage(img);
   };
 
-  handleThumbUpload = () => {
+  handleThumbUpload = ref => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       const image = this.props.objectHolder.thumb;
       const uploadThumbnail = thumb => {
         this.props.uploadGraphicThumb(thumb);
       };
       if (image.type !== 'image/svg+xml') {
-        const c = this.refs.canvas;
+        const c = ref;
         c.toBlob(function (blob) {
           blob.name = image.name;
           uploadThumbnail(blob);
@@ -300,32 +300,8 @@ export default class GraphicsComponent extends Component {
 
   render() {
     return <View {...this.props}
-                 handleSelectedObjectArrayChange={this.handleSelectedObjectArrayChange}
-                 handleSelectedObjectArrayAddNew={this.handleSelectedObjectArrayAddNew}
-                 handleSelectedObjectArrayDeleteElement={this.handleSelectedObjectArrayDeleteElement}
-                 handleSelectedObjectArrayArrayDeleteElement={this.handleSelectedObjectArrayArrayDeleteElement}
-                 handleSelectedObjectArrayArrayChange={this.handleSelectedObjectArrayArrayChange}
-                 handleSelectedObjectChange={this.handleSelectedObjectChange}
-                 handleImgAsThumb={this.handleImgAsThumb}
-                 toCanvas={this.toCanvas}
-                 handleFileSelection={this.handleFileSelection}
-                 handleImageUpload={this.handleImageUpload}
-                 handleThumbUpload={this.handleThumbUpload}
-                 getColorgroupsOptions={this.getColorgroupsOptions}
-                 getColorizableColorsOptions={this.getColorizableColorsOptions}
-                 getSelectedColorizableColorsOptions={this.getSelectedColorizableColorsOptions}
-                 getSelectedColorizableOptions={this.getSelectedColorizableOptions}
-                 getSelectedColorizableColorgroupOptions={this.getSelectedColorizableColorgroupOptions}
-                 onColorizableColorsSelectChange={this.onColorizableColorsSelectChange}
-                 onColorizableColorgroupSelectChange={this.onColorizableColorgroupSelectChange}
-                 handleColorActionOption={this.handleColorActionOption}
-                 addColorizableRow={this.addColorizableRow}
-                 deleteColorizableRow={this.deleteColorizableRow}
-                 handleImportJson={this.handleImportJson}
-                 getFileUrl={getFileUrl}
-                 getOptions={this.getOptions}
-                 getSelectedOptions={this.getSelectedOptions}
-                 onColorsSelectChange={this.onColorsSelectChange}
-                 saveColorizables={this.saveColorizables}/>;
+                 {...this}
+                 imgUrl={this.state.imgUrl}
+                 getFileUrl={getFileUrl}/>;
   }
 }

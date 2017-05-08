@@ -24,11 +24,9 @@
     "loopback-component-explorer": "^4.1.0",
     "loopback-component-storage": "^3.0.1",
     "loopback-connector-mongodb": "^3.0.1",
-    "loopback-connector-sqlite3": "^1.2.0",
     "loopback-datasource-juggler": "^3.2.0",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
-    "react-bootstrap": "^0.30.7",
     "react-color": "^2.11.4",
     "react-cropper": "^0.10.1",
     "react-dom": "^15.5.4",
@@ -69,7 +67,7 @@
     "react-notification-system": "^0.2.13",
     "style-loader": "^0.16.1",
     "webpack": "^2.4.0",
-    "webpack-dev-server": "^2.4.2"
+    "webpack-dev-server": "^2.4.5"
   },
   "engineStrict": true,
   "engines": {
