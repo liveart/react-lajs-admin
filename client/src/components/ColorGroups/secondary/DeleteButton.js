@@ -6,7 +6,7 @@ import {
 import * as ColorgroupModel from '../../../../../common/models/colorgroup.json';
 const Colorgroup = ColorgroupModel.properties;
 
-export default class DeleteButton extends Component {
+export default class ColorgroupDeleteButton extends Component {
   static propTypes = {
     newGroup: PropTypes.string,
     selectedValue: PropTypes.string,

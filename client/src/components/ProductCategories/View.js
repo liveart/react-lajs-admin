@@ -1,25 +1,40 @@
 import React, {Component} from 'react';
 import AbstractPage from '../AbstractPage/index';
 import DeleteConfirmation from './secondary/DeleteConfirmation';
-import * as GraphicsCategoryModel from '../../../../common/models/graphics-category.json';
-const GraphicsCategory = GraphicsCategoryModel.properties;
+import * as ProductsCategoryModel from '../../../../common/models/products-category.json';
+const ProductsCategory = ProductsCategoryModel.properties;
 import DeleteButton from './secondary/DeleteButton';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, GRAPHIC_CATEGORY_FOLDER} from '../../definitions';
+import {
+  ID_PROP,
+  STATUS_EDITING,
+  STATUS_CREATING,
+  STATUS_CONFIRM_DELETE,
+  PRODUCT_CATEGORIES_THUMB_FOLDER,
+  DELETE_CATEGORY,
+  MOVE_CATEGORY_TO_OTHER_CATEGORY,
+  DELETE_PRODUCTS,
+  MOVE_PRODUCTS_TO_OTHER_CATEGORY
+}  from
+  '../../definitions';
 
 export default class View extends Component {
   render() {
     return (
-      <AbstractPage {...this.props} objectSample={GraphicsCategory} sortingSupport={true}
+      <AbstractPage {...this.props} objectSample={ProductsCategory} sortingSupport={true}
                     representations={{
-                      thumb: {
-                        getElem: val => <a href={this.props.getFileUrl(val)} className='thumbnail' style={{width: 100}}>
-                          <img src={this.props.getFileUrl(val)} alt='thumb' style={{width: 100}}/></a>
+                      thumbUrl: {
+                        getElem: val =>
+                          val ? <a href={this.props.getFileUrl(val)} className='thumbnail'
+                                   style={{width: 100}}><img
+                            src={this.props.getFileUrl(val)} alt='thumb'
+                            style={{width: 100}}/></a> :
+                            null
                       },
                     }}
                     changedInputs={{
-                      thumb: {
+                      thumbUrl: {
                         saveF: () => this.props.handleFileUpload(this.refs.canvas),
-                        getName: obj => this.props.getName(obj, GRAPHIC_CATEGORY_FOLDER)
+                        getName: obj => this.props.getName(obj, PRODUCT_CATEGORIES_THUMB_FOLDER)
                       }
                     }
                     }
@@ -27,18 +42,19 @@ export default class View extends Component {
                       thumb: {
                         elem: <div>
                           <input type='file' className='form-control' accept='image/*'
-                                 onChange={e => this.props.handleFileChoose('thumb', e, this.refs.canvas)}/>
+                                 onChange={e => this.props.handleFileChoose('thumbUrl', e, this.refs.canvas)}/>
 
-                          {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
+                          {typeof (this.props.objectHolder['thumbUrl']) === 'string' && this.props.status === STATUS_EDITING ?
                             <div style={{float: 'left'}}><a
-                              href={this.props.getFileUrl(this.props.objectHolder['thumb'])}
+                              href={this.props.getFileUrl(this.props.objectHolder['thumbUrl'])}
                               className='thumbnail'
-                              style={{marginTop: 8, width: 100}}><img style={{width: 100}}
-                                                                      src={this.props.getFileUrl(this.props.objectHolder['thumb'])}/></a>
+                              style={{marginTop: 8, width: 100}}><img
+                              style={{width: 100}} src={this.props.getFileUrl(this.props.objectHolder['thumbUrl'])}/>
+                            </a>
                             </div>
                             : null}
                           <div style={{float: 'left'}}>
-                            {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumb'] ?
+                            {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumbUrl'] ?
                               <canvas style={{marginTop: 8}} ref='canvas' width='100'
                                       height='100' hidden/> :
                               <canvas style={{marginTop: 8}} ref='canvas' width='100'
@@ -49,12 +65,12 @@ export default class View extends Component {
                       },
                       category: {
                         elem: <select className='form-control'
-                                      onChange={e => this.props.handleSelectedObjectChange('graphicsCategoryId', e)}
-                                      value={this.props.objectHolder['graphicsCategoryId']}>
+                                      onChange={e => this.props.handleSelectedObjectChange('productsCategoryId', e)}
+                                      value={this.props.objectHolder['productsCategoryId']}>
                           <option key='rootCategory' value={''}>Root category</option>
                           {this.props.data.map(cg => (
                             this.props.objectHolder[ID_PROP] !== cg.id ?
-                              (this.props.objectHolder[ID_PROP] !== cg.graphicsCategoryId) || (cg.graphicsCategoryId === '') ?
+                              (this.props.objectHolder[ID_PROP] !== cg.productsCategoryId) || (cg.productsCategoryId === '') ?
                                 <option key={cg.id} value={cg.id}>{cg.name}</option> :
                                 <option disabled='disabled' key={cg.id} value={cg.id}>{cg.name} </option> : null
                           ))}
@@ -67,17 +83,17 @@ export default class View extends Component {
                     renderDeleteConfirmationDialog={
                       <DeleteConfirmation data={this.props.data}
                                           objectHolder={this.props.objectHolder}
-                                          newGraphic={this.props.newGraphic}
-                                          newGraphicsCategory={this.props.newGraphicsCategory}
+                                          newProduct={this.props.newProduct}
+                                          newProductsCategory={this.props.newProductsCategory}
                                           selectedValue={this.props.selectedValue}
                                           selectedSecondaryValue={this.props.selectedSecondaryValue}
                                           handleMoveToCategory={this.props.handleMoveToCategory}
                                           handleCategoryActionOption={this.props.handleCategoryActionOption}
-                                          handleGraphicActionOption={this.props.handleGraphicActionOption}
-                                          handleMoveGraphicToCategory={this.props.handleMoveGraphicToCategory}/>}
+                                          handleProductActionOption={this.props.handleProductActionOption}
+                                          handleMoveProductToCategory={this.props.handleMoveProductToCategory}/>}
 
                     renderDeleteConfirmationButtons={
-                      <DeleteButton newGraphic={this.props.newGraphic}
+                      <DeleteButton newProduct={this.props.newProduct}
                                     selectedValue={this.props.selectedSecondaryValue}
                                     enableDefaultStatus={this.props.enableDefaultStatus}
                                     restoreTableState={this.props.restoreTableState}

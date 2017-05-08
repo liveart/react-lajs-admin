@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
 import {
-  ID_PROP,
   STATUS_EDITING,
   STATUS_CREATING,
   STATUS_CONFIRM_DELETE,
-  GRAPHIC_CATEGORY_FOLDER,
-  RELATIVE_URL,
   DELETE_CATEGORY,
   MOVE_GRAPHICS_TO_OTHER_CATEGORY,
   MOVE_CATEGORY_TO_OTHER_CATEGORY,
@@ -16,8 +13,7 @@ import * as GraphicsCategoryModel from '../../../../common/models/graphics-categ
 const GraphicsCategory = GraphicsCategoryModel.properties;
 import View from './View';
 import filter from 'lodash/filter';
-import includes from 'lodash/includes';
-import {getFileUrl} from '../../utils';
+import {getFileUrl, getName} from '../../utils';
 
 
 export default class extends Component {
@@ -147,16 +143,6 @@ export default class extends Component {
     this.setState({...this.state, newGraphic: e.target.value});
   };
 
-  getFileUrl = url => includes(url, RELATIVE_URL) ? url.substring(RELATIVE_URL.length) : url;
-
-  getName = (obj, url) => {
-    if (typeof obj === 'object') {
-      return RELATIVE_URL + '/' + url + obj.name;
-    }
-
-    return undefined;
-  };
-
   render() {
     return (
       <View {...this.props} {...this}
@@ -166,6 +152,7 @@ export default class extends Component {
             selectedSecondaryValue={this.state.selectedSecondaryValue}
             imgUrl={this.state.imgUrl}
             getFileUrl={getFileUrl}
+            getName={getName}
       />
     );
   }
