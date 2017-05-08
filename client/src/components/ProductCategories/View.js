@@ -21,16 +21,6 @@ export default class ProductCategoriesView extends Component {
   render() {
     return (
       <AbstractPage {...this.props} objectSample={ProductsCategory} sortingSupport={true}
-                    representations={{
-                      thumbUrl: {
-                        getElem: val =>
-                          val ? <a href={this.props.getFileUrl(val)} className='thumbnail'
-                                   style={{width: 100}}><img
-                            src={this.props.getFileUrl(val)} alt='thumb'
-                            style={{width: 100}}/></a> :
-                            null
-                      },
-                    }}
                     changedInputs={{
                       thumbUrl: {
                         saveF: () => this.props.handleFileUpload(this.refs.canvas),

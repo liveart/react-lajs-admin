@@ -635,25 +635,11 @@ export default class ProductsComponent extends Component {
     return (
       <View {...this.props} objectSample={{...Product}}
             sortingSupport={true}
+            secondaryData={this.props.productsCategories}
             handleImportJson={this.handleImportJson}
             enableImportJson={this.props.enableImportJson}
             representations={{
-              thumbUrl: {
-                getElem: val =>
-                  val ? <a href={this.getFileUrl(val)} className='thumbnail'
-                           style={{width: 110}}><img
-                    src={this.getFileUrl(val)} alt='thumb'
-                    style={{width: 110}}/></a> :
-                    null
-              },
               categoryId: {
-                getElem: val => {
-                  let cat = this.props.productsCategories.find(c => String(c.id) === val);
-                  if (cat) {
-                    return cat.name;
-                  }
-                  return null;
-                },
                 sortElem: <Select value={this.props.objectHolder.categoryId}
                                   options={sortBy(this.props.productsCategories, 'name')}
                                   valueKey='id'

@@ -31,7 +31,9 @@
       "showInTable": true,
       "showInput": false,
       "sortable": true,
-      "header": "Category"
+      "header": "Category",
+      "textProperty": "name",
+      "representation": "TEXT"
     },
     "colors": {
       "type": "array",
@@ -75,13 +77,15 @@
       "type": "string",
       "showInTable": true,
       "showInput": false,
-      "sortable": false
+      "sortable": false,
+      "representation": "THUMBNAIL"
     },
     "image": {
       "type": "string",
       "required": true,
       "showInTable": false,
-      "showInput": false
+      "showInput": false,
+      "representation": "THUMBNAIL"
     }
   },
   "validations": [],

@@ -3,15 +3,9 @@ import {
   fetchGraphics, createGraphic, editGraphic, deleteGraphic,
   uploadGraphicImage, uploadGraphicThumb
 } from '../actions/graphics';
-import {
-  fetchGraphicsCategories, createGraphicsCategory, uploadThumbnail
-} from '../actions/graphicsCategories';
-import {
-  fetchColors
-} from '../actions/colors';
-import {
-  fetchColorgroups
-} from '../actions/colorgroups';
+import {fetchGraphicsCategories, createGraphicsCategory, uploadThumbnail} from '../actions/graphicsCategories';
+import {fetchColors} from '../actions/colors';
+import {fetchColorgroups} from '../actions/colorgroups';
 import {
   selectRow, setObjectHolderProperty, enableImportJson,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState

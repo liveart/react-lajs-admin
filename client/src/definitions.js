@@ -51,5 +51,7 @@ export const ElementTypes = {
 
 export const Representations = {
   TEXT: 'TEXT',
-  LINK: 'LINK'
+  LINK: 'LINK',
+  COLOR_VALUE: 'COLOR_VALUE',
+  THUMBNAIL: 'THUMBNAIL'
 };
