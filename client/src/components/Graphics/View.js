@@ -34,11 +34,11 @@ export default class GraphicsView extends Component {
                                           onChange={e =>
                                             this.props.handleFileSelection('image', e)}/>,
                              saveF: this.props.handleImageUpload,
-                             getName: obj => getName(obj, GRAPHIC_IMG_FOLDER)
+                             getName: obj => typeof obj === 'object' ? getName(obj, GRAPHIC_IMG_FOLDER) : obj
                            },
                            thumb: {
                              saveF: () => this.props.handleThumbUpload(this.refs.canvas),
-                             getName: obj => getName(obj, GRAPHIC_THUMB_FOLDER)
+                             getName: obj => typeof obj === 'object' ? getName(obj, GRAPHIC_THUMB_FOLDER) : obj
                            },
                            colors: {
                              elem: <Creatable
