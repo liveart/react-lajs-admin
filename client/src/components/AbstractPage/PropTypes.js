@@ -30,8 +30,8 @@ export const PTypes = {
   handleDelete: PropTypes.func,
   deleteConfirmation: PropTypes.bool,
   enableConfirmDelete: PropTypes.func,
-  renderDeleteConfirmationDialog: PropTypes.func,
-  renderDeleteConfirmationButtons: PropTypes.func,
+  renderDeleteConfirmationDialog: PropTypes.object,
+  renderDeleteConfirmationButtons: PropTypes.object,
   /**
    * Function to enable related state.
    * Defines if Json import is supported.

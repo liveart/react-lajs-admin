@@ -1,23 +1,27 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
-import {RadioGroup, Radio} from 'react-radio-group';
-import {STATUS_CONFIRM_DELETE, STATUS_DEFAULT, STATUS_CREATING, STATUS_EDITING} from '../../definitions';
+import {
+  STATUS_CONFIRM_DELETE,
+  STATUS_DEFAULT,
+  STATUS_CREATING,
+  STATUS_EDITING,
+  MOVE_COLORS_TO_OTHER_GROUP,
+  DELETE_COLORS,
+  LEAVE_COLORS_WITHOUT_GROUP
+} from '../../definitions';
 import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
-import View from '../AbstractPage/index';
-import * as _ from 'lodash';
+import DeleteConfirmation from './secondary/DeleteConfirmation';
+import DeleteButton from './secondary/DeleteButton';
+import AbstractPage from '../AbstractPage/index';
+import {getLinkedToGraphic, getLinkedToProduct} from './secondary/helpers';
 const Colorgroup = ColorgroupModel.properties;
-const DELETE_COLORS = 'DELETE_COLORS';
-const MOVE_COLORS_TO_OTHER_GROUP = 'MOVE_COLORS_TO_OTHER_GROUP';
-const LEAVE_COLORS_WITHOUT_GROUP = 'LEAVE_COLORS_WITHOUT_GROUP';
-let linkedProduct = [];
-let linkedGraphic = [];
 
 export default class ColorgroupsComponent extends Component {
   static propTypes = PTypes;
 
-  constructor() {
-    super();
-    this.state = {deleting: false, selectedValue: DELETE_COLORS, newGroup: ''};
+  constructor(props) {
+    super(props);
+    this.state = {deleting: false, selectedValue: DELETE_COLORS, newGroup: '', linkedProducts: [], linkedGraphics: []};
   }
 
   componentWillMount() {
@@ -27,120 +31,19 @@ export default class ColorgroupsComponent extends Component {
 
   componentWillReceiveProps(props) {
     if (this.props.status === STATUS_DEFAULT && (props.status === STATUS_CREATING || props.status === STATUS_EDITING)) {
-      this.props.fetchGraphics();
-      this.props.fetchProducts();
       this.props.fetchSecondaryData();
+      this.props.fetchProducts();
+      this.props.fetchGraphics();
     }
   }
 
-  handleSelectedObjectChange = (propertyName, event) => {
-    this.props.setEditingObjectProperty(propertyName, event.target.value);
-  };
-
-  isColorgroupLinkedProduct = () => {
-    linkedProduct = [];
-    this.props.products.forEach(p => {
-      p.colorizables.filter(c => c.assignColorgroup === true).forEach(c => {
-        if (c.colorgroup && c.colorgroup.id === this.props.objectHolder.id) {
-          linkedProduct.push(p.name);
-        }
-      });
-      p.colorizables.filter(c => c.assignColorgroup === false).forEach(c => {
-        let arr = _.intersectionBy(c._colors, this.props.secondaryData.filter(col =>
-        col.colorgroupId === this.props.objectHolder.id), 'name');
-        if (arr.length) {
-          linkedProduct.push(p.name);
-        }
-      });
-    });
-    linkedProduct = _.sortedUniq(linkedProduct);
-  };
-
-  isColorgroupLinkedGraphic = () => {
-    linkedGraphic = [];
-    this.props.graphics.forEach(g => {
-      g.colorizables.filter(c => c.assignColorgroup === true).forEach(c => {
-        if (c.colorgroup && c.colorgroup.id === this.props.objectHolder.id) {
-          linkedGraphic.push(g.name);
-        }
-      });
-      g.colorizables.filter(c => c.assignColorgroup === false).forEach(c => {
-        let arr = _.intersectionBy(c._colors, this.props.secondaryData.filter(col =>
-        col.colorgroupId === this.props.objectHolder.id), 'name');
-        if (arr.length) {
-          linkedGraphic.push(g.name);
-        }
-      });
-      let arr = _.intersectionBy(g.colors, this.props.secondaryData.filter(col =>
-      col.colorgroupId === this.props.objectHolder.id), 'name');
-      if (arr.length) {
-        linkedGraphic.push(g.name);
-      }
-    });
-    linkedGraphic = _.sortedUniq(linkedGraphic);
-  };
-
-  renderDelete = () => {
-    return (
-      <div className='form-group'>
-        <div className='col-md-9'>
-          {(!this.isColorgroupLinkedProduct() && linkedProduct.length) || (!this.isColorgroupLinkedGraphic() && linkedGraphic.length) ?
-            <div>
-              <h4>Group linked to:</h4>
-              {linkedProduct.length ? 'Products: ' + linkedProduct : null}
-              &nbsp;
-              {linkedGraphic.length ? 'Graphics: ' + linkedGraphic : null}
-            </div> :
-            <div className='col-md-6'>
-              <h1>Choose an action</h1>
-              <div className='form-group'>
-                <RadioGroup name='fruit' selectedValue={this.state.selectedValue}
-                            onChange={this.handleColorsActionOption}>
-                  <div>
-                    <Radio value={DELETE_COLORS}/>&nbsp; Delete all the colors linked to this group
-                  </div>
-                  <div>
-                    <Radio value={MOVE_COLORS_TO_OTHER_GROUP}/>&nbsp; Move colors to other group &nbsp;
-                    <select value={this.state.newGroup}
-                            onChange={this.handleMoveToGroup}>
-                      {this.props.data.map((cg, key) => (
-                        this.props.objectHolder.id !== cg.id ?
-                          <option key={key} value={cg.id}>{cg.name}</option> : null
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <Radio value={LEAVE_COLORS_WITHOUT_GROUP}/>&nbsp; Unlink and leave the colors without any group
-                  </div>
-                </RadioGroup>
-              </div>
-            </div>}
-          <div className='col-md-3'>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  renderDeleteBtn = () => (
-    <div>
-      <div className='pull-right'>
-        {this.state.newGraphic === '' && this.state.selectedSecondaryValue === MOVE_COLORS_TO_OTHER_GROUP ?
-          <button disabled type='button' className='btn btn-danger'
-                  onClick={() => this.handleDeleteBtnClick(true)}>Delete
-          </button> :
-          <button type='button' className='btn btn-danger'
-                  onClick={() => this.handleDeleteBtnClick(true)}>Delete
-          </button>}
-        <button type='button' className='btn btn-default'
-                onClick={() => {
-                  this.props.enableDefaultStatus();
-                  this.props.restoreTableState(Colorgroup);
-                }}>Cancel
-        </button>
-      </div>
-    </div>
-  );
+  componentDidUpdate(props) {
+    if (props.status === STATUS_EDITING && this.props.status === STATUS_CONFIRM_DELETE) {
+      let linkedG = getLinkedToGraphic(this.props.graphics, this.props.objectHolder.id, this.props.secondaryData);
+      let linkedP = getLinkedToProduct(this.props.products, this.props.objectHolder.id, this.props.secondaryData);
+      this.setState({...this.state, linkedGraphics: linkedG, linkedProducts: linkedP});
+    }
+  }
 
   handleDeleteBtnClick = confirmed => {
     if (this.props.status === STATUS_CONFIRM_DELETE && confirmed) {
@@ -182,10 +85,25 @@ export default class ColorgroupsComponent extends Component {
 
   render() {
     return (
-      <View {...this.props} objectSample={Colorgroup} sortingSupport={true}
-            deleteConfirmation={true}
-            renderDeleteConfirmationDialog={this.renderDelete}
-            renderDeleteConfirmationButtons={this.renderDeleteBtn}
+      <AbstractPage {...this.props} objectSample={Colorgroup} sortingSupport={true}
+                    deleteConfirmation={true}
+                    renderDeleteConfirmationDialog={
+                      <DeleteConfirmation data={this.props.data}
+                                          objectHolder={this.props.objectHolder}
+                                          newGroup={this.state.newGroup}
+                                          selectedValue={this.state.selectedValue}
+                                          linkedProducts={this.state.linkedProducts}
+                                          linkedGraphics={this.state.linkedGraphics}
+                                          handleMoveToGroup={this.handleMoveToGroup}
+                                          handleColorsActionOption={this.handleColorsActionOption}/>}
+                    renderDeleteConfirmationButtons={
+                      <DeleteButton linkedProducts={this.state.linkedProducts}
+                                    linkedGraphics={this.state.linkedGraphics}
+                                    newGroup={this.state.newGroup}
+                                    selectedValue={this.state.selectedValue}
+                                    enableDefaultStatus={this.props.enableDefaultStatus}
+                                    restoreTableState={this.props.restoreTableState}
+                                    handleDeleteBtnClick={this.handleDeleteBtnClick}/>}
       />
     );
   }
