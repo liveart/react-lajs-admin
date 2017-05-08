@@ -25,3 +25,4 @@
 /.vs/
 /.idea/
 !/client/public/files/graphicImages/.gitkeep
+!/client/public/files/vectors/.gitkeep
