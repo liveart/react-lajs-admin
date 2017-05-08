@@ -5,6 +5,7 @@ import sortBy from 'lodash/sortBy';
 import {Creatable} from 'react-select';
 import * as GraphicModel from '../../../../common/models/graphic.json';
 import {STATUS_EDITING, STATUS_CREATING, GRAPHIC_IMG_FOLDER, GRAPHIC_THUMB_FOLDER,} from '../../definitions';
+import {getName} from '../../utils';
 const Graphic = GraphicModel.properties;
 
 export default class GraphicsView extends Component {
@@ -52,13 +53,14 @@ export default class GraphicsView extends Component {
                          changedInputs={{
                            image: {
                              elem: <input type='file' className='form-control'
-                                          onChange={e => this.props.handleFileSelection('image', e)}/>,
+                                          onChange={e =>
+                                            this.props.handleFileSelection('image', e)}/>,
                              saveF: this.props.handleImageUpload,
-                             getName: obj => this.getName(obj, GRAPHIC_IMG_FOLDER)
+                             getName: obj => getName(obj, GRAPHIC_IMG_FOLDER)
                            },
                            thumb: {
-                             saveF: this.props.handleThumbUpload,
-                             getName: obj => this.getName(obj, GRAPHIC_THUMB_FOLDER)
+                             saveF: () => this.props.handleThumbUpload(this.refs.canvas),
+                             getName: obj => getName(obj, GRAPHIC_THUMB_FOLDER)
                            },
                            colors: {
                              elem: <Creatable
@@ -130,16 +132,16 @@ export default class GraphicsView extends Component {
                                  </a>
                                  : typeof (this.props.objectHolder['image']) === 'object' ?
                                    <div><a
-                                     href={this.state.imgUrl}
+                                     href={this.props.imgUrl}
                                      className='thumbnail'
                                      style={{
                                        marginTop: 8,
                                        width: 100
                                      }}>
-                                     <img src={this.state.imgUrl}/>
+                                     <img src={this.props.imgUrl}/>
                                    </a>
                                      <a className='btn btn-primary btn-xs' href='#'
-                                        onClick={this.props.handleImgAsThumb}>
+                                        onClick={() => this.props.handleImgAsThumb(this.refs.canvas)}>
                                        Use also as thumb</a>
                                    </div> : null }
                              </div>,
@@ -148,7 +150,7 @@ export default class GraphicsView extends Component {
                            thumb: {
                              elem: <div>
                                <input type='file' className='form-control' accept='image/*'
-                                      onChange={e => this.props.handleFileSelection('thumb', e)}/>
+                                      onChange={e => this.props.handleFileSelection('thumb', e, null, this.refs.canvas)}/>
 
                                {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
                                  <div style={{float: 'left'}}><a

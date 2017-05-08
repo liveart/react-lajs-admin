@@ -144,7 +144,8 @@ export default class AbstractPage extends Component {
                  handleCancelBtnClick={this.handleCancelBtnClick}
                  handleSaveBtnClick={this.handleSaveBtnClick}
                  handleDeleteBtnClick={this.handleDeleteBtnClick}
-                 handleFileChoose={this.handleFileSelection}
+                 handleFileSelection={this.handleFileSelection}
+                 json={this.state.json}
                  urlSelect={this.state.urlSelect}
                  baseUrl={this.state.baseUrl}
                  updateObject={this.updateObject}

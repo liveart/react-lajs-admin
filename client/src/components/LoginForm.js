@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {FormControl} from 'react-bootstrap';
 
 export default class LoginForm extends Component {
 
@@ -32,11 +31,13 @@ export default class LoginForm extends Component {
             <p className='login-box-msg'>Sign In</p>
             <div className='form-group has-feedback'>
               <p>Email:</p>
-              <FormControl type='email' value={this.state.email} onChange={this.handleEmailInputChange}/>
+              <input className='form-control' type='email' value={this.state.email}
+                     onChange={this.handleEmailInputChange}/>
             </div>
             <div className='form-group has-feedback'>
               <p>Password:</p>
-              <FormControl type='password' value={this.state.password} onChange={this.handlePasswordInputChange}/>
+              <input className='form-control' type='password' value={this.state.password}
+                     onChange={this.handlePasswordInputChange}/>
             </div>
             <div className='row'>
               <div className='col-xs-8'>
