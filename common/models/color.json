@@ -24,7 +24,8 @@
       "sortable": true,
       "header": "Color group",
       "textProperty": "name",
-      "representation": "TEXT"
+      "representation": "TEXT",
+      "sortElement": "SELECT"
     },
     "value": {
       "type": "string",

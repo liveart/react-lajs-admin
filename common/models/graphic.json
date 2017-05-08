@@ -33,7 +33,8 @@
       "sortable": true,
       "header": "Category",
       "textProperty": "name",
-      "representation": "TEXT"
+      "representation": "TEXT",
+      "sortElement": "SELECT"
     },
     "colors": {
       "type": "array",

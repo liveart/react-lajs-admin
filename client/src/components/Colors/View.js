@@ -11,24 +11,12 @@ export default class ColorsView extends Component {
   render() {
     return (
       <AbstractPage {...this.props} objectSample={Color} sortingSupport={true}
-                    representations={{
-                      colorgroupId: {
-                        sortElem: <select className='form-control'
-                                          value={this.props.objectHolder['colorgroupId']}
-                                          onChange={e => this.props.handleColorgroupChange('colorgroupId', e)}>
-                          <option key='defGroup' value={''}>...</option>
-                          {sortBy(this.props.secondaryData).map((cg, key) => (
-                            <option key={key} value={cg.id}>{cg.name}</option>
-                          ))}
-                        </select>
-                      }
-                    }}
                     changedInputs={{
                       colorgroupId: {
                         elem: <select className='form-control'
                                       value={this.props.objectHolder['colorgroupId']}
                                       onChange={e => this.props.handleColorgroupChange('colorgroupId', e)}>
-                          <option key='defGroup' value={''}>...</option>
+                          <option value={''}>...</option>
                           {sortBy(this.props.secondaryData).map(cg => <option key={cg.id}
                                                                               value={cg.id}>{cg.name}</option>)}
                         </select>

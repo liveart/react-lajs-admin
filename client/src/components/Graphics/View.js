@@ -17,17 +17,6 @@ export default class GraphicsView extends Component {
                          enableImportJson={this.props.enableImportJson}
                          handleImportJson={this.props.handleImportJson}
                          sortComparators={{categoryId: (data, id) => id === '' ? true : data === id}}
-                         representations={{
-                           categoryId: {
-                             sortElem: <select className='form-control'
-                                               value={this.props.objectHolder.categoryId}
-                                               onChange={e => this.props.handleSelectedObjectChange('categoryId', e)}>
-                               <option value=''>...</option>
-                               {sortBy(this.props.graphicsCategories, 'name').map(cat =>
-                                 <option key={cat.id} value={cat.id}>{cat.name}</option>)}
-                             </select>
-                           }
-                         }}
                          changedInputs={{
                            image: {
                              elem: <input type='file' className='form-control'

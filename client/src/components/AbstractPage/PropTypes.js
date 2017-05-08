@@ -46,7 +46,6 @@ export const PTypes = {
    * Label will be replaced with property's value if it exists.
    */
   changedLabels: PropTypes.object,
-  representations: PropTypes.object,
   /**
    * Custom comparator for sorting.
    */

@@ -10,20 +10,13 @@ export default class GraphicCategoriesView extends Component {
   render() {
     return (
       <AbstractPage {...this.props} objectSample={GraphicsCategory} sortingSupport={true}
-                    changedInputs={{
-                      thumb: {
-                        saveF: () => this.props.handleFileUpload(this.refs.canvas),
-                        getName: obj => this.props.getName(obj, GRAPHIC_CATEGORY_FOLDER)
-                      }
-                    }
-                    }
                     customInputs={{
                       thumb: {
                         elem: <div>
                           <input type='file' className='form-control' accept='image/*'
                                  onChange={e => this.props.handleFileChoose('thumb', e, this.refs.canvas)}/>
 
-                          {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
+                          /*{typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
                             <div style={{float: 'left'}}><a
                               href={this.props.getFileUrl(this.props.objectHolder['thumb'])}
                               className='thumbnail'
@@ -37,7 +30,7 @@ export default class GraphicCategoriesView extends Component {
                                       height='100' hidden/> :
                               <canvas style={{marginTop: 8}} ref='canvas' width='100'
                                       height='100'/>}
-                          </div>
+                          </div>*/
                         </div>,
                         required: true
                       },
@@ -81,4 +74,3 @@ export default class GraphicCategoriesView extends Component {
     );
   }
 }
-

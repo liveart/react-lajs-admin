@@ -2,15 +2,14 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import keys from 'lodash/keys';
 import find from 'lodash/find';
-import {getElement} from '../../../../representations';
+import {getElement} from '../../../../configurableElements/representations';
 
 export default class Row extends Component {
   static propTypes = {
     objectSample: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,
     secondaryData: PropTypes.array,
-    handleEdit: PropTypes.func.isRequired,
-    representations: PropTypes.object
+    handleEdit: PropTypes.func.isRequired
   };
 
   render() {
@@ -24,11 +23,6 @@ export default class Row extends Component {
             text = item[key];
             if (this.props.objectSample[key].showInTable === false) {
               return null;
-            }
-
-            if (this.props.representations && this.props.representations[key]
-              && this.props.representations[key].getElem) { //TODO Remove
-              return <td key={key}>{this.props.representations[key].getElem(item[key])}</td>;
             }
 
             if (typeof item[key] === 'object') {

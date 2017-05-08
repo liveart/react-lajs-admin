@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
-import {
-  STATUS_EDITING,
-  STATUS_CREATING
-} from '../../definitions';
+import {STATUS_EDITING, STATUS_CREATING} from '../../definitions';
 import View from './View';
 
 export default class extends Component {
@@ -14,6 +11,7 @@ export default class extends Component {
       this.props.uploadFontFile(this.props.objectHolder[prop]);
     }
   };
+
   handleVectorUpload = () => {
     if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
       this.props.uploadVector(this.props.objectHolder.vector);
@@ -28,9 +26,7 @@ export default class extends Component {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
 
-
   render() {
-    return <View {...this.props} {...this}
-    />;
+    return <View {...this.props} {...this}/>;
   }
 }
