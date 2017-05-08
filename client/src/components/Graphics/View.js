@@ -32,10 +32,10 @@ export default class GraphicsView extends Component {
                            colors: {
                              elem: <Creatable
                                name='colors'
-                               value={this.props.getSelectedOptions()}
+                               value={this.props.getSelectedOptions(this.props.objectHolder.colors)}
                                multi={true}
                                labelKey='name'
-                               options={this.props.getOptions()}
+                               options={this.props.getOptions(this.props.colors)}
                                onChange={this.props.onColorsSelectChange}
                                isLoading={this.props.colorsLoading}
                              />
@@ -77,7 +77,7 @@ export default class GraphicsView extends Component {
                                colorgroupOptions={this.props.getColorgroupsOptions(this.props.colorgroups)}
                                getColorValue={key => this.props.getColorsOptionsByColorizable(this.props.objectHolder.colorizables, key)}
                                colorHandler={(o, key) => this.props.onColorizableColorsSelectChange(o, key)}
-                               colorOptions={this.props.getOptions()}
+                               colorOptions={this.props.getOptions(this.props.colors)}
                                colorsLoading={this.props.colorsLoading}
                                colorgroupsLoading={this.props.colorgroupsLoading}
                                addColorizableRow={this.props.addColorizableRow}/>,

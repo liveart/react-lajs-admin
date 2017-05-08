@@ -193,23 +193,6 @@ export default class GraphicsComponent extends Component {
     }
   };
 
-  getOptions = () => { // TODO
-    if (!this.props.colors || !this.props.colors.length) {
-      return [];
-    }
-    return this.props.colors;
-  };
-
-  getSelectedOptions = () => {
-    if (!this.props.objectHolder.colors || !this.props.objectHolder.colors.length) {
-      return [];
-    }
-    if (typeof (this.props.objectHolder.colors)[0] === 'string') {
-      return map(this.props.objectHolder.colors, col => ({value: col, name: col}));
-    }
-    return this.props.objectHolder.colors;
-  };
-
   onColorsSelectChange = val => {
     const arr = [];
     if (val) {
@@ -232,6 +215,7 @@ export default class GraphicsComponent extends Component {
   };
 
   render() {
+    console.warn(this.props)
     return <View {...this.props}
                  {...this}
                  {...helpers}

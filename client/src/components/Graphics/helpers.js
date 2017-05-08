@@ -74,3 +74,20 @@ export function getSelectedColorizableColorgroupOptions(colorizables, key) {
     return {id: arr[key].colorgroup.id, name: arr[key].colorgroup.name};
   }
 }
+
+export function getOptions(colors) {
+  if (!colors || !colors.length) {
+    return [];
+  }
+  return colors;
+}
+
+export function getSelectedOptions(colors) {
+  if (!colors || !colors.length) {
+    return [];
+  }
+  if (typeof (colors)[0] === 'string') {
+    return map(colors, col => ({value: col, name: col}));
+  }
+  return colors;
+}
