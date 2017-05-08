@@ -10,11 +10,10 @@ import {
   LEAVE_COLORS_WITHOUT_GROUP
 } from '../../definitions';
 import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
-import intersectionBy from 'lodash/intersectionBy';
-import sortedUniq from 'lodash/sortedUniq';
 import DeleteConfirmation from './secondary/DeleteConfirmation';
 import DeleteButton from './secondary/DeleteButton';
 import AbstractPage from '../AbstractPage/index';
+import {getLinkedToGraphic, getLinkedToProduct} from './secondary/helpers';
 const Colorgroup = ColorgroupModel.properties;
 
 export default class ColorgroupsComponent extends Component {
@@ -40,57 +39,11 @@ export default class ColorgroupsComponent extends Component {
 
   componentDidUpdate(props) {
     if (props.status === STATUS_EDITING && this.props.status === STATUS_CONFIRM_DELETE) {
-      let linkedG = this.getLinkedToGraphic();
-      let linkedP = this.getLinkedToProduct();
+      let linkedG = getLinkedToGraphic(this.props.graphics, this.props.objectHolder.id, this.props.secondaryData);
+      let linkedP = getLinkedToProduct(this.props.products, this.props.objectHolder.id, this.props.secondaryData);
       this.setState({...this.state, linkedGraphics: linkedG, linkedProducts: linkedP});
     }
   }
-
-  getLinkedToProduct = () => {
-    let linked = [];
-    this.props.products.forEach(p => {
-      p.colorizables.filter(c => c.assignColorgroup === true).forEach(c => {
-        if (c.colorgroup && c.colorgroup.id === this.props.objectHolder.id) {
-          linked.push(p.name);
-        }
-      });
-      p.colorizables.filter(c => c.assignColorgroup === false).forEach(c => {
-        let arr = intersectionBy(c._colors, this.props.secondaryData.filter(col =>
-        col.colorgroupId === this.props.objectHolder.id), 'name');
-        if (arr.length) {
-          linked.push(p.name);
-        }
-      });
-    });
-    linked = sortedUniq(linked);
-    return linked;
-  };
-
-  getLinkedToGraphic = () => {
-    let linked = [];
-    this.props.graphics.forEach(g => {
-      g.colorizables.filter(c => c.assignColorgroup === true).forEach(c => {
-        if (c.colorgroup && c.colorgroup.id === this.props.objectHolder.id) {
-          linked.push(g.name);
-        }
-      });
-      g.colorizables.filter(c => c.assignColorgroup === false).forEach(c => {
-        let arr = intersectionBy(c._colors, this.props.secondaryData.filter(col =>
-        col.colorgroupId === this.props.objectHolder.id), 'name');
-        if (arr.length) {
-          linked.push(g.name);
-        }
-      });
-      let arr = intersectionBy(g.colors, this.props.secondaryData.filter(col =>
-      col.colorgroupId === this.props.objectHolder.id), 'name');
-      if (arr.length) {
-        linked.push(g.name);
-      }
-    });
-    linked = sortedUniq(linked);
-    return linked;
-  };
-
 
   handleDeleteBtnClick = confirmed => {
     if (this.props.status === STATUS_CONFIRM_DELETE && confirmed) {
