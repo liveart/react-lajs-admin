@@ -21,7 +21,9 @@
       "required": false,
       "showInTable": true,
       "showInput": true,
-      "sortable": true
+      "sortable": true,
+      "textProperty": "name",
+      "representation": "TEXT"
     },
     "value": {
       "type": "string",

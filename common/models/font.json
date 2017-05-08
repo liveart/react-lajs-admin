@@ -29,28 +29,32 @@
       "showInTable": true,
       "showInput": true,
       "sortable": false,
-      "header": "File Normal"
+      "header": "File Normal",
+      "representation": "LINK"
     },
     "fileBold": {
       "type": "string",
       "showInTable": true,
       "showInput": true,
       "sortable": false,
-      "header": "File Bold"
+      "header": "File Bold",
+      "representation": "LINK"
     },
     "fileItalic": {
       "type": "string",
       "showInTable": true,
       "showInput": true,
       "sortable": false,
-      "header": "File Italic"
+      "header": "File Italic",
+      "representation": "LINK"
     },
     "fileBoldItalic": {
       "type": "string",
       "showInTable": true,
       "showInput": true,
       "sortable": false,
-      "header": "File Bold&Italic"
+      "header": "File Bold&Italic",
+      "representation": "LINK"
     },
     "boldAllowed": {
       "type": "boolean",
@@ -69,7 +73,8 @@
       "showInTable": true,
       "showInput": true,
       "sortable": false,
-      "header": "Vector"
+      "header": "Vector",
+      "representation": "LINK"
     }
   },
   "validations": [],
