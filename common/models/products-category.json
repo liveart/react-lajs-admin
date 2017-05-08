@@ -26,7 +26,8 @@
       "showInTable": true,
       "showInput": false,
       "sortable": false,
-      "header": "Thumb"
+      "header": "Thumb",
+      "representation": "THUMBNAIL"
     },
     "productsCategoryId": {
       "type": "string",

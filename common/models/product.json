@@ -28,7 +28,9 @@
       "showInTable": true,
       "showInput": false,
       "sortable": true,
-      "header": "Category"
+      "header": "Category",
+      "textProperty": "name",
+      "representation": "TEXT"
     },
     "thumbUrl": {
       "type": "string",
@@ -37,7 +39,8 @@
       "showInTable": true,
       "showInput": false,
       "sortable": false,
-      "header": "Thumb"
+      "header": "Thumb",
+      "representation": "THUMBNAIL"
     },
     "description": {
       "type": "string",

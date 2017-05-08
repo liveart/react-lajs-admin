@@ -25,7 +25,8 @@
       "required": true,
       "showInTable": true,
       "showInput": false,
-      "sortable": false
+      "sortable": false,
+      "representation": "THUMBNAIL"
     },
     "graphicsCategoryId": {
       "type": "string",

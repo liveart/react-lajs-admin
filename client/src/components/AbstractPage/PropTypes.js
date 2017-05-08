@@ -51,5 +51,6 @@ export const PTypes = {
    * Custom comparator for sorting.
    */
   sortComparators: PropTypes.object,
-  customDefaultRender: PropTypes.object
+  customDefaultRender: PropTypes.object,
+  secondaryData: PropTypes.array
 };
