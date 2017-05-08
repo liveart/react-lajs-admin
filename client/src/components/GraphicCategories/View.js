@@ -16,7 +16,7 @@ export default class GraphicCategoriesView extends Component {
                           <input type='file' className='form-control' accept='image/*'
                                  onChange={e => this.props.handleFileChoose('thumb', e, this.refs.canvas)}/>
 
-                          /*{typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
+                          {typeof (this.props.objectHolder['thumb']) === 'string' && this.props.status === STATUS_EDITING ?
                             <div style={{float: 'left'}}><a
                               href={this.props.getFileUrl(this.props.objectHolder['thumb'])}
                               className='thumbnail'
@@ -30,7 +30,7 @@ export default class GraphicCategoriesView extends Component {
                                       height='100' hidden/> :
                               <canvas style={{marginTop: 8}} ref='canvas' width='100'
                                       height='100'/>}
-                          </div>*/
+                          </div>
                         </div>,
                         required: true
                       },

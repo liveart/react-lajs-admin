@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
-import find from 'lodash/find';
+import {Representations} from '../../../../configurableElements/config';
 import {capitalizeFirstLetter} from '../../../../utils';
 import {STATUS_EDITING} from '../../../../definitions';
 import {getElement} from '../../../../configurableElements/representations';
@@ -16,8 +16,11 @@ export default class DefaultInput extends Component {
   };
 
   getRepresentations = (item, key) => {
+    if (this.props.objectSample[key].representation &&
+      this.props.objectSample[key].representation !== Representations.TEXT) {
+      return <td>{getElement(this.props.objectSample[key].representation, this.props.objectHolder[key])}</td>;
+    }
     return null;
-    return <td>{getElement(this.props.objectSample[key].representation, this.props.objectHolder[key])}</td>;
   };
 
   render() {
