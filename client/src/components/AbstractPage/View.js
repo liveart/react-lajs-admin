@@ -6,14 +6,14 @@ import {
   STATUS_CONFIRM_DELETE,
   STATUS_IMPORT_JSON
 } from '../../definitions';
-import DefaultView from './dependent/ViewStates/DefaultView';
-import DeleteConfirmationView from './dependent/ViewStates/DeleteConfirmationView';
-import ImportView from './dependent/ViewStates/ImportView';
-import DefaultInput from './dependent/Inputs/DefaultInput';
-import CustomInput from './dependent/Inputs/CustomInput';
+import DefaultView from './secondary/ViewStates/DefaultView';
+import DeleteConfirmationView from './secondary/ViewStates/DeleteConfirmationView';
+import ImportView from './secondary/ViewStates/ImportView';
+import DefaultInput from './secondary/Inputs/DefaultInput';
+import CustomInput from './secondary/Inputs/CustomInput';
 import sortBy from 'lodash/sortBy';
 import keys from 'lodash/keys';
-import EditingView from './dependent/ViewStates/EditingView';
+import EditingView from './secondary/ViewStates/EditingView';
 
 export default class AbstractPageView extends Component {
 

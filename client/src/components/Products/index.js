@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
-import {capitalizeFirstLetter} from'../../utils';
+import {capitalizeFirstLetter} from '../../utils';
 import View from '../AbstractPage';
+import Select, {Creatable} from 'react-select';
 import * as ProductModel from '../../../../common/models/product.json';
 import {
   STATUS_EDITING,
@@ -19,8 +20,9 @@ import {
 } from '../../definitions';
 import {parseJson} from '../../ProductJsonParser';
 import Locations from './Locations';
-import * as _ from 'lodash';
-import Select, {Creatable} from 'react-select';
+import map from 'lodash/map';
+import forEach from 'lodash/forEach';
+import sortBy from 'lodash/sortBy';
 import '../../../public/assets/css/cropper.css';
 const LEAVE_URL_OPTION = 'Import';
 const Product = ProductModel.properties;
@@ -31,13 +33,6 @@ export default class ProductsComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {newColorizables: [], newColors: [], imgUrl: ''};
-    if (!Array.prototype.remove) {
-      Array.prototype.remove = function (from, to) {
-        const rest = this.slice((to || from) + 1 || this.length);
-        this.length = from < 0 ? this.length + from : from;
-        return this.push.apply(this, rest);
-      };
-    }
   }
 
   componentWillMount() {
@@ -73,7 +68,7 @@ export default class ProductsComponent extends Component {
 
   handleSelectedObjectArrayDeleteElement = (arrName, key) => {
     const arr = this.props.objectHolder[arrName];
-    arr.remove(key);
+    arr.splice(key, 1);
     this.props.setEditingObjectProperty(arrName, [...arr]);
   };
 
@@ -97,7 +92,7 @@ export default class ProductsComponent extends Component {
 
   handleSelectedObjectArrayArrayDeleteElement = (fArr, sArr, colorizableKey, key) => {
     const arr = (this.props.objectHolder[fArr]);
-    ((arr[colorizableKey])[sArr]).remove(key);
+    ((arr[colorizableKey])[sArr]).splice(key, 1);
     this.props.setEditingObjectProperty(fArr, [...arr]);
   };
 
@@ -201,7 +196,7 @@ export default class ProductsComponent extends Component {
     if (!this.props.objectHolder.locations || !this.props.objectHolder.locations.length) {
       return [];
     }
-    return _.map(this.props.objectHolder.locations, l => ({name: l.name, value: l.name}));
+    return map(this.props.objectHolder.locations, l => ({name: l.name, value: l.name}));
   };
 
   getSelectedOptions = key => {
@@ -220,7 +215,7 @@ export default class ProductsComponent extends Component {
     }
     let arr = this.props.objectHolder.colorizables;
     if (arr[key]._colors) {
-      return _.map(arr[key]._colors, col => ({value: col.value, name: col.name}));
+      return map(arr[key]._colors, col => ({value: col.value, name: col.name}));
     }
   };
   getSelectedColorizableOptions = key => {
@@ -264,7 +259,7 @@ export default class ProductsComponent extends Component {
     let colorizables = this.props.objectHolder.colorizables;
     let colors = [];
     if (val) {
-      _.forEach(val, v => colors.push({name: v.name, value: v.value}));
+      forEach(val, v => colors.push({name: v.name, value: v.value}));
       colorizables[key]._colors = colors;
       this.props.setEditingObjectProperty('colorizables', colorizables);
     }
@@ -496,7 +491,7 @@ export default class ProductsComponent extends Component {
     if (!SIZES || !SIZES.length) {
       return [];
     }
-    return _.map(SIZES, col => ({value: col, name: col}));
+    return map(SIZES, col => ({value: col, name: col}));
   };
 
   getSelectedSizeOptions = () => {
@@ -505,7 +500,7 @@ export default class ProductsComponent extends Component {
     }
 
     if (typeof (this.props.objectHolder.sizes)[0] === 'string') {
-      return _.map(this.props.objectHolder.sizes, col => ({value: col, name: col}));
+      return map(this.props.objectHolder.sizes, col => ({value: col, name: col}));
     }
 
     return this.props.objectHolder.sizes;
@@ -514,7 +509,7 @@ export default class ProductsComponent extends Component {
   onSizeSelectChange = val => {
     const arr = [];
     if (val) {
-      _.forEach(val, v => arr.push(v.name));
+      forEach(val, v => arr.push(v.name));
       this.props.setEditingObjectProperty('sizes', arr);
     }
   };
@@ -599,7 +594,7 @@ export default class ProductsComponent extends Component {
     if (this.props.objectHolder.multicolor === true) {
       this.props.setEditingObjectProperty('colors', []);
       let colorizables = this.props.objectHolder.colorizables;
-      _.forEach(colorizables, c => {
+      forEach(colorizables, c => {
         if (c.assignColorgroup) {
           c._colors = [];
           this.props.setEditingObjectProperty('colorizables', colorizables);
@@ -660,7 +655,7 @@ export default class ProductsComponent extends Component {
                   return null;
                 },
                 sortElem: <Select value={this.props.objectHolder.categoryId}
-                                  options={_.sortBy(this.props.productsCategories, 'name')}
+                                  options={sortBy(this.props.productsCategories, 'name')}
                                   valueKey='id'
                                   labelKey='name'
                                   onChange={el => {
@@ -680,7 +675,7 @@ export default class ProductsComponent extends Component {
               },
               locations: {
                 saveF: locs => {
-                  _.forEach(locs, loc => {
+                  forEach(locs, loc => {
                     if (loc.image && typeof loc.image === 'object') {
                       this.props.uploadProductLocationImage(loc.image);
                       loc.image = this.getName(loc.image, PRODUCT_LOCATION_IMAGE_FOLDER);
@@ -727,10 +722,10 @@ export default class ProductsComponent extends Component {
               colors: {
                 elem: this.renderColorsTable(),
                 saveF: this.saveMulticolor,
-                getName: color => _.forEach(color, clr => {
+                getName: color => forEach(color, clr => {
                   if (clr !== null && clr.location) {
                     if (clr.location.length) {
-                      _.forEach(clr.location, lc => {
+                      forEach(clr.location, lc => {
                         if (typeof (lc.image) === 'object') {
                           this.handleImageUpload(lc.image);
                           lc.image = this.getName(lc.image, PRODUCT_IMG_FOLDER);
