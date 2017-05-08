@@ -36,7 +36,7 @@ export default class GraphicCategoriesView extends Component {
                       },
                       category: {
                         elem: <select className='form-control'
-                                      onChange={e => this.props.handleSelectedObjectChange('graphicsCategoryId', e)}
+                                      onChange={e => this.props.updateObject('graphicsCategoryId', e)}
                                       value={this.props.objectHolder['graphicsCategoryId']}>
                           <option key='rootCategory' value={''}>Root category</option>
                           {this.props.data.map(cg => (

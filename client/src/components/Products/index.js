@@ -180,6 +180,7 @@ export default class ProductsComponent extends Component {
 
     return this.props.colorsList;
   };
+
   getColorgroupsOptions = () => {
     if (!this.props.colorgroups || !this.props.colorgroups.length) {
       return [];

@@ -55,7 +55,7 @@ export default class ProductCategoriesView extends Component {
                       },
                       category: {
                         elem: <select className='form-control'
-                                      onChange={e => this.props.handleSelectedObjectChange('productsCategoryId', e)}
+                                      onChange={e => this.props.updateObject('productsCategoryId', e)}
                                       value={this.props.objectHolder['productsCategoryId']}>
                           <option key='rootCategory' value={''}>Root category</option>
                           {this.props.data.map(cg => (

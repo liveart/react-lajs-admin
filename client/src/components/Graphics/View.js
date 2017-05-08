@@ -43,14 +43,14 @@ export default class GraphicsView extends Component {
                            description: {
                              elem: <textarea className='form-control' rows='3'
                                              value={this.props.objectHolder['description']}
-                                             onChange={e => this.props.handleSelectedObjectChange('description', e)}>
+                                             onChange={e => this.props.updateObject('description', e)}>
 
                                    </textarea>
                            },
                            colorize: {
                              elem: <select className='form-control'
                                            value={this.props.objectHolder['colorize']}
-                                           onChange={e => this.props.handleSelectedObjectChange('colorize', e)}>
+                                           onChange={e => this.props.updateObject('colorize', e)}>
                                <option value={false}>No</option>
                                <option value={true}>Yes</option>
                              </select>
@@ -58,24 +58,24 @@ export default class GraphicsView extends Component {
                            multicolor: {
                              elem: <select className='form-control'
                                            value={this.props.objectHolder['multicolor']}
-                                           onChange={e => this.props.handleSelectedObjectChange('multicolor', e)}>
+                                           onChange={e => this.props.updateObject('multicolor', e)}>
                                <option value={false}>No</option>
                                <option value={true}>Yes</option>
                              </select>
                            },
                            colorizables: {
                              elem: <ColorizableTable
-                               colorizables={this.props.objectHolder.colorizables ? this.props.objectHolder.colorizables : []}
-                               nameInputHandler={(e, key) => this.props.handleSelectedObjectArrayChange('colorizables', key, 'name', e)}
-                               idInputHandler={(e, key) => this.props.handleSelectedObjectArrayChange('colorizables', key, 'id', e)}
-                               getColorizableValue={key => this.props.getSelectedColorizableOptions(key)}
+                               colorizables={ this.props.objectHolder.colorizables || []}
+                               nameInputHandler={(e, key) => this.props.updateArray(this.props.updateNestedArray('colorizables', key, 'name', e))}
+                               idInputHandler={(e, key) => this.props.updateArray(this.props.updateNestedArray('colorizables', key, 'id', e))}
+                               getColorizableValue={key => this.props.getSelectedColorizableOptions(this.props.objectHolder.colorizables, key)}
                                colorizableHandler={(o, key) => this.props.handleColorActionOption(o, key)}
-                               colorizableOptions={this.props.getColorizableColorsOptions()}
+                               colorizableOptions={this.props.getColorizableColorsOptions}
                                deleteColorizableRow={key => this.props.deleteColorizableRow(key)}
-                               getColorgroupValue={key => this.props.getSelectedColorizableColorgroupOptions(key)}
+                               getColorgroupValue={key => this.props.getSelectedColorizableColorgroupOptions(this.props.objectHolder.colorizables, key)}
                                colorgroupHandler={(o, key) => this.props.onColorizableColorgroupSelectChange(o, key)}
-                               colorgroupOptions={this.props.getColorgroupsOptions()}
-                               getColorValue={key => this.props.getSelectedColorizableColorsOptions(key)}
+                               colorgroupOptions={this.props.getColorgroupsOptions(this.props.colorgroups)}
+                               getColorValue={key => this.props.getColorsOptionsByColorizable(this.props.objectHolder.colorizables, key)}
                                colorHandler={(o, key) => this.props.onColorizableColorsSelectChange(o, key)}
                                colorOptions={this.props.getOptions()}
                                colorsLoading={this.props.colorsLoading}
@@ -83,8 +83,7 @@ export default class GraphicsView extends Component {
                                addColorizableRow={this.props.addColorizableRow}/>,
                              saveF: this.props.saveColorizables
                            }
-                         }
-                         }
+                         }}
                          customInputs={{
                            image: {
                              elem: <div>
@@ -141,7 +140,7 @@ export default class GraphicsView extends Component {
                            category: {
                              elem: <select className='form-control'
                                            value={this.props.objectHolder['categoryId']}
-                                           onChange={e => this.props.handleSelectedObjectChange('categoryId', e)}>
+                                           onChange={e => this.props.updateObject('categoryId', e)}>
                                <option value={undefined}>Choose category...</option>
                                {this.props.graphicsCategories.map((gc, key) => (
                                  <option key={key} value={gc.id}>{gc.name}</option>
@@ -149,7 +148,6 @@ export default class GraphicsView extends Component {
                              </select>,
                              required: true
                            }
-                         }}
-    />;
+                         }}/>;
   }
 }
