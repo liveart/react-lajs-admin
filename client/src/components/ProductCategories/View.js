@@ -17,7 +17,7 @@ import {
 }  from
   '../../definitions';
 
-export default class View extends Component {
+export default class ProductCategoriesView extends Component {
   render() {
     return (
       <AbstractPage {...this.props} objectSample={ProductsCategory} sortingSupport={true}

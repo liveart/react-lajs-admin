@@ -6,7 +6,7 @@ const GraphicsCategory = GraphicsCategoryModel.properties;
 import DeleteButton from './secondary/DeleteButton';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, GRAPHIC_CATEGORY_FOLDER} from '../../definitions';
 
-export default class View extends Component {
+export default class GraphicCategoriesView extends Component {
   render() {
     return (
       <AbstractPage {...this.props} objectSample={GraphicsCategory} sortingSupport={true}
