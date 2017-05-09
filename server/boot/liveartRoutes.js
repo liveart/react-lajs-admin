@@ -114,7 +114,7 @@ module.exports = function (app) {
       .catch(() => res.status(500).send('Error occurred'));
   });
 
-  app.get('/api/' + LIVE_ART + '/fonts', function (req, res) {
+  app.get('/api/' + LIVE_ART + '/fontsNormal', function (req, res) {
     const Font = loopback.getModel('Font');
     const fonts = [];
     Font.find({

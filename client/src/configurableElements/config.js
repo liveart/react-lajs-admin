@@ -5,9 +5,11 @@ export const Representations = {
   THUMBNAIL: 'THUMBNAIL'
 };
 
-export const ElementTypes = {
+export const Elements = {
   BINARY_SELECT: 'BINARY_SELECT',
   SELECT: 'SELECT',
   CREATABLE_SELECT: 'CREATABLE_SELECT',
-  TEXTAREA: 'TEXTAREA'
+  TEXTAREA: 'TEXTAREA',
+  DEFAULT_INPUT: 'DEFAULT_INPUT',
+  FILE_INPUT: 'FILE_INPUT'
 };

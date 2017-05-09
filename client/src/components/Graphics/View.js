@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import AbstractPage from '../AbstractPage/index';
 import ColorizableTable from './secondary/ColorizableTable';
-import sortBy from 'lodash/sortBy';
 import {Creatable} from 'react-select';
 import * as GraphicModel from '../../../../common/models/graphic.json';
 import {STATUS_EDITING, STATUS_CREATING, GRAPHIC_IMG_FOLDER, GRAPHIC_THUMB_FOLDER,} from '../../definitions';
@@ -20,8 +19,7 @@ export default class GraphicsView extends Component {
                          changedInputs={{
                            image: {
                              elem: <input type='file' className='form-control'
-                                          onChange={e =>
-                                            this.props.handleFileSelection('image', e)}/>,
+                                          onChange={e => this.props.handleFileSelection('image', e)}/>,
                              saveF: this.props.handleImageUpload,
                              getName: obj => typeof obj === 'object' ? getName(obj, GRAPHIC_IMG_FOLDER) : obj
                            },
@@ -31,7 +29,6 @@ export default class GraphicsView extends Component {
                            },
                            colors: {
                              elem: <Creatable
-                               name='colors'
                                value={this.props.getSelectedOptions(this.props.objectHolder.colors)}
                                multi={true}
                                labelKey='name'

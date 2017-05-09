@@ -9,6 +9,7 @@ import * as graphicsCategoriesWatchers from './sagas/watchers/graphicsCategories
 import * as productsCategoriesWatchers from './sagas/watchers/productsCategories';
 import * as productsWatchers from './sagas/watchers/products';
 import * as configWatchers from './sagas/watchers/configurations';
+import * as fileWatchers from './sagas/watchers/files';
 
 export default function* root() {
   yield [
@@ -76,6 +77,7 @@ export default function* root() {
     fork(configWatchers.watchFetchConfigurationById),
     fork(configWatchers.watchCreateConfiguration),
     fork(configWatchers.watchEditConfiguration),
-    fork(configWatchers.watchDeleteConfiguration)
+    fork(configWatchers.watchDeleteConfiguration),
+    fork(fileWatchers.watchUploadFile)
   ];
 }

@@ -19,7 +19,7 @@ describe('Graphics categories Actions', () => {
     expect(FF.fetchGraphicsCategoryById(id)).toEqual(expectedAction);
   });
 
-  test('should create an action to graphicsCategories fonts number', () => {
+  test('should create an action to graphicsCategories fontsNormal number', () => {
     const expectedAction = {
       type: F.FETCH_GRAPHICS_CATEGORIES_NUMBER
     };

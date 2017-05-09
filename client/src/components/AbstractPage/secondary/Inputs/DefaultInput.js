@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
-import {Representations} from '../../../../configurableElements/config';
+import {Representations, Elements} from '../../../../configurableElements/config';
 import {capitalizeFirstLetter} from '../../../../utils';
 import {STATUS_EDITING} from '../../../../definitions';
-import {getElement} from '../../../../configurableElements/representations';
+import {getElement as getRepresentation} from '../../../../configurableElements/factories/representations';
+import {getElement as getInput} from '../../../../configurableElements/factories/elements';
 
 export default class DefaultInput extends Component {
   static propTypes = {
@@ -15,12 +16,36 @@ export default class DefaultInput extends Component {
     updateObject: PropTypes.func.isRequired
   };
 
-  getRepresentations = (item, key) => {
-    if (this.props.objectSample[key].representation &&
-      this.props.objectSample[key].representation !== Representations.TEXT) {
-      return <td>{getElement(this.props.objectSample[key].representation, this.props.objectHolder[key])}</td>;
+  getRepresentation = () => {
+    const {objectSample, objectHolder, property} = this.props;
+    const representation = objectSample[property].representation;
+
+    if (representation && representation !== Representations.TEXT) {
+      return getRepresentation(representation, objectHolder[property]);
     }
     return null;
+  };
+
+  getInput = () => {
+    const {objectSample, objectHolder, updateObject, property, setEditingObjectProperty} = this.props;
+    const inputElement = objectSample[property].inputElement;
+
+    let input = getInput(inputElement);
+
+    let value = objectHolder[property];
+    let onChangeHandler = updateObject;
+
+    if (input.props.onChangeReturnsValue === true) {
+      onChangeHandler = (p, e) => setEditingObjectProperty(p, e.value);
+    }
+
+    if (input.props.type === 'file') {
+      value = undefined;
+      onChangeHandler = (p, e) => setEditingObjectProperty(p, e.target.files[0]);
+    }
+
+    return React.cloneElement(getInput(inputElement),
+      {value: value, onChange: e => onChangeHandler(property, e)});
   };
 
   render() {
@@ -37,14 +62,8 @@ export default class DefaultInput extends Component {
         {item.hint ? <ReactTooltip effect='solid'/> : null}
       </div>
       <div className='col-md-10'>
-        {
-          this.props.changedInputs && this.props.changedInputs.hasOwnProperty(property) ?
-            this.props.changedInputs[property].elem :
-            <input type='text' className='form-control'
-                   value={this.props.objectHolder[property]}
-                   onChange={e => this.props.updateObject(property, e)}/>
-        }
-        {this.props.status === STATUS_EDITING ? this.getRepresentations(item, property) : null}
+        {this.getInput()}
+        {this.props.status === STATUS_EDITING ? this.getRepresentation() : null}
       </div>
     </div>;
   }

@@ -5,6 +5,7 @@ import View from './View';
 import {checkNotEmpty} from '../../FormValidation';
 import keys from 'lodash/keys';
 import forEach from 'lodash/forEach';
+import {getName} from '../../utils';
 
 export default class AbstractPage extends Component {
   static propTypes = PTypes;
@@ -83,19 +84,17 @@ export default class AbstractPage extends Component {
         if (this.props.status === STATUS_CREATING && this.props.objectHolder[prop] === '') {
           return;
         }
-        if (this.props.changedInputs && this.props.changedInputs[prop]
-          && typeof this.props.changedInputs[prop].saveF === 'function') {
-          if (this.props.objectHolder[prop]) {
-            this.props.changedInputs[prop].saveF(this.props.objectHolder[prop]);
-            if (typeof this.props.changedInputs[prop].getName === 'function') {
-              entity[prop] = this.props.changedInputs[prop].getName(this.props.objectHolder[prop]);
-            } else {
-              entity[prop] = this.props.objectHolder[prop];
-            }
+        const curr = this.props.objectHolder[prop];
+
+        if (typeof this.props.objectSample[prop].uploadParams === 'object') {
+          if (typeof curr === 'object' && curr) {
+            this.props.uploadFile(curr, this.props.objectSample[prop].uploadParams.endpoint);
+            entity[prop] = getName(curr, this.props.objectSample[prop].uploadParams.dir);
           }
         } else {
-          entity[prop] = this.props.objectHolder[prop];
+          entity[prop] = curr;
         }
+
       }
     });
     if (this.props.status === STATUS_EDITING) {

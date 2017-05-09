@@ -19,7 +19,7 @@ describe('Products categories Actions', () => {
     expect(FF.fetchProductsCategoryById(id)).toEqual(expectedAction);
   });
 
-  test('should create an action to productsCategories fonts number', () => {
+  test('should create an action to productsCategories fontsNormal number', () => {
     const expectedAction = {
       type: F.FETCH_PRODUCTS_CATEGORIES_NUMBER
     };

@@ -15,13 +15,6 @@ export default class Locations extends Component {
   constructor(props) {
     super(props);
     this.state = {mainImgUrl: '', location: -1};
-    if (!Array.prototype.remove) {
-      Array.prototype.remove = function (from, to) {
-        const rest = this.slice((to || from) + 1 || this.length);
-        this.length = from < 0 ? this.length + from : from;
-        return this.push.apply(this, rest);
-      };
-    }
   }
 
   componentWillReceiveProps(props) {
@@ -64,7 +57,7 @@ export default class Locations extends Component {
 
   deleteCurrentLocation = () => {
     const locs = this.props.objectHolder.locations;
-    locs.remove(this.state.location);
+    locs.splice(this.state.location, 1);
     this.props.setEditingObjectProperty('locations', [...locs]);
     this.setState({
       ...this.state, location: -1

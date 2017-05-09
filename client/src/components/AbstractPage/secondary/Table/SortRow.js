@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import keys from 'lodash/keys';
-import {ElementTypes} from '../../../../configurableElements/config';
+import {Elements} from '../../../../configurableElements/config';
 import Select from 'react-select';
 export default class SortRow extends Component {
   static propTypes = {
@@ -29,7 +29,7 @@ export default class SortRow extends Component {
           }
 
           if (this.props.objectSample[key].sortElement && this.props.secondaryData) {
-            if (this.props.objectSample[key].sortElement === ElementTypes.SELECT) {
+            if (this.props.objectSample[key].sortElement === Elements.SELECT) {
               return <td key={key}>
                 <Select value={this.props.objectHolder[key]}
                         options={this.props.secondaryData}

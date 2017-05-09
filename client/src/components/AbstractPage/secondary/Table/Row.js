@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import keys from 'lodash/keys';
 import find from 'lodash/find';
-import {getElement} from '../../../../configurableElements/representations';
+import {getElement} from '../../../../configurableElements/factories/representations';
 
 export default class Row extends Component {
   static propTypes = {

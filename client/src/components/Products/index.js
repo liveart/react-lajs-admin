@@ -177,7 +177,6 @@ export default class ProductsComponent extends Component {
     if (!this.props.colorsList || !this.props.colorsList.length) {
       return [];
     }
-
     return this.props.colorsList;
   };
 
@@ -185,7 +184,6 @@ export default class ProductsComponent extends Component {
     if (!this.props.colorgroups || !this.props.colorgroups.length) {
       return [];
     }
-
     return this.props.colorgroups;
   };
 
