@@ -9,6 +9,7 @@ import graphics from './graphics';
 import productsCategories from './productsCategories';
 import products from './products';
 import configurations from './configurations';
+import files from './files';
 import {routerReducer} from 'react-router-redux';
 
 const rootReducer = combineReducers({
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   productsCategories,
   products,
   configurations,
+  files,
   routing: routerReducer
 });
 

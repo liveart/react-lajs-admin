@@ -5,7 +5,7 @@ import {MESSAGE_ENTITY_CREATED, MESSAGE_ENTITY_UPDATED, MESSAGE_ENTITY_DELETED} 
 
 const entityName = 'Font';
 const endpoint = 'fonts';
-const endpointUpload = 'containers/fonts';
+const endpointUpload = 'containers/fontsNormal';
 const endpointVectors = 'containers/vectors';
 
 export function* fetchFonts() {

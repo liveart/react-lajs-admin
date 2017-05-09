@@ -18,7 +18,6 @@ export const PTypes = {
   deleteEntity: PropTypes.func.isRequired,
   setEditingObjectProperty: PropTypes.func.isRequired,
   restoreTableState: PropTypes.func.isRequired,
-  uploadFontFile: PropTypes.func.isRequired,
-  uploadVector: PropTypes.func.isRequired,
+  uploadFile: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired
 };

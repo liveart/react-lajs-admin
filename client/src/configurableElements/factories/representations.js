@@ -1,6 +1,6 @@
 import React from 'react';
-import {Representations} from './config';
-import {getNameFromUrl, getFileUrl} from '../utils';
+import {Representations} from '../config';
+import {getNameFromUrl, getFileUrl} from '../../utils';
 
 export function getElement(type = Representations.TEXT, value = '') {
   switch (type) {

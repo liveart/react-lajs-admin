@@ -91,3 +91,15 @@ export function getSelectedOptions(colors) {
   }
   return colors;
 }
+
+export function toCanvas(image, ref) {
+  const img = new Image();
+  let imageOut = new Image();
+  const reader = new FileReader();
+  reader.onload = e => img.src = e.target.result;
+  reader.readAsDataURL(image);
+  let c = ref;
+  let ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  img.onload = () => imageOut = ctx.drawImage(img, 0, 0, 100, 100);
+}

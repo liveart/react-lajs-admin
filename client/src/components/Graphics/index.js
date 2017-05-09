@@ -3,17 +3,15 @@ import {PTypes} from './PropTypes';
 import View from './View';
 import {Creatable} from 'react-select';
 import * as GraphicModel from '../../../../common/models/graphic.json';
-import {
-  STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, ASSIGN_GROUP, ADD_COLOR, LEAVE_URL_OPTION
-} from '../../definitions';
+import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, LEAVE_URL_OPTION} from '../../definitions';
 import {parseJson} from '../../GraphicJsonParser';
 import * as converter from '../../SvgConverter';
 import {getFileUrl} from '../../utils';
-import map from 'lodash/map';
 import forEach from 'lodash/forEach';
 import intersection from 'lodash/intersection';
 import * as helpers from './helpers';
 const Graphic = GraphicModel.properties;
+import {Elements} from '../../configurableElements/config';
 
 export default class GraphicsComponent extends Component {
   static propTypes = PTypes;
@@ -42,20 +40,7 @@ export default class GraphicsComponent extends Component {
 
   handleImgAsThumb = thumbRef => {
     this.props.setEditingObjectProperty('thumb', this.props.objectHolder.image);
-    this.toCanvas('thumb', thumbRef);
-  };
-
-  toCanvas = (prop, ref) => {
-    const image = this.props.objectHolder[prop];
-    const img = new Image();
-    let imageOut = new Image();
-    const reader = new FileReader();
-    reader.onload = e => img.src = e.target.result;
-    reader.readAsDataURL(image);
-    let c = ref;
-    let ctx = c.getContext('2d');
-    ctx.clearRect(0, 0, c.width, c.height);
-    img.onload = () => imageOut = ctx.drawImage(img, 0, 0, 100, 100);
+    helpers.toCanvas(this.props.objectHolder.thumb, thumbRef);
   };
 
   handleFileSelection = (prop, e, overwrite, thumbRef) => {
@@ -98,7 +83,7 @@ export default class GraphicsComponent extends Component {
       }
       if (prop === 'thumb') {
         this.props.setEditingObjectProperty(prop, e.target.files[0]);
-        this.toCanvas(prop, thumbRef);
+        helpers.toCanvas(this.props.objectHolder[prop], thumbRef);
       }
     }
   };
@@ -215,7 +200,6 @@ export default class GraphicsComponent extends Component {
   };
 
   render() {
-    console.warn(this.props)
     return <View {...this.props}
                  {...this}
                  {...helpers}

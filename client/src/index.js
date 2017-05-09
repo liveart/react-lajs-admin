@@ -7,7 +7,7 @@ import createSagaMiddleware from 'redux-saga';
 import sagaWatchers from './sagas';
 import AppContainer from './containers/AppContainer';
 import OverviewContainer from './containers/OverviewContainer';
-import FontsContainer from './containers/FontsTableContainer';
+import FontsContainer from './containers/FontsContainer';
 import ColorsContainer from './containers/colors/ColorsTableContainer';
 import ColorgroupsContainer from './containers/colors/ColorgroupsTableContainer';
 import GraphicsContainer from './containers/GraphicsContainer';
