@@ -14,7 +14,7 @@ export default class ConfigurationOptions extends Component {
             </div>
             <div className='col-md-9'>
               <select className='form-control'
-                      value={getOptionsInputValue('deleteOnDoubleClick', this.props.objectHolder.options)}
+                      value={getOptionsInputValue('deleteOnDoubleClick', this.props.options)}
                       onChange={e => this.props.changeOptionsNestedHolderValue('deleteOnDoubleClick', e.target.value)}>
                 <option value={false}>No</option>
                 <option value={true}>Yes</option>
@@ -27,7 +27,7 @@ export default class ConfigurationOptions extends Component {
             </div>
             <div className='col-md-9'>
               <select className='form-control'
-                      value={getOptionsInputValue('includeProductInDesign', this.props.objectHolder.options)}
+                      value={getOptionsInputValue('includeProductInDesign', this.props.options)}
                       onChange={e => this.props.changeOptionsNestedHolderValue('includeProductInDesign', e.target.value)}>
                 <option value={false}>No</option>
                 <option value={true}>Yes</option>
@@ -40,7 +40,7 @@ export default class ConfigurationOptions extends Component {
             </div>
             <div className='col-md-9'>
               <select className='form-control'
-                      value={getOptionsInputValue('includePrintingAreaInDesign', this.props.objectHolder.options)}
+                      value={getOptionsInputValue('includePrintingAreaInDesign', this.props.options)}
                       onChange={e => this.props.changeOptionsNestedHolderValue('includePrintingAreaInDesign', e.target.value)}>
                 <option value={false}>No</option>
                 <option value={true}>Yes</option>
@@ -53,7 +53,7 @@ export default class ConfigurationOptions extends Component {
             </div>
             <div className='col-md-9'>
               <select className='form-control'
-                      value={getOptionsInputValue('includeMaskInDesign', this.props.objectHolder.options)}
+                      value={getOptionsInputValue('includeMaskInDesign', this.props.options)}
                       onChange={e => this.props.changeOptionsNestedHolderValue('includeMaskInDesign', e.target.value)}>
                 <option value={false}>No</option>
                 <option value={true}>Yes</option>
@@ -67,7 +67,7 @@ export default class ConfigurationOptions extends Component {
             <div className='col-md-9'>
               <input type='text' className='form-control'
                      onChange={e => this.props.changeOptionsNestedHolderValue('fontsCSSUrl', e.target.value)}
-                     value={getOptionsInputValue('fontsCSSUrl', this.props.objectHolder.options)}/>
+                     value={getOptionsInputValue('fontsCSSUrl', this.props.options)}/>
             </div>
           </div>
           <div className='form-group'>
@@ -76,7 +76,7 @@ export default class ConfigurationOptions extends Component {
             </div>
             <div className='col-md-9'>
               <select className='form-control'
-                      value={getOptionsInputValue('zoomEnabled', this.props.objectHolder.options)}
+                      value={getOptionsInputValue('zoomEnabled', this.props.options)}
                       onChange={e => this.props.changeOptionsNestedHolderValue('zoomEnabled', e.target.value)}>
                 <option value={false}>No</option>
                 <option value={true}>Yes</option>
@@ -90,7 +90,7 @@ export default class ConfigurationOptions extends Component {
             <div className='col-md-9'>
               <input type='text' className='form-control'
                      onChange={e => this.props.changeOptionsNestedHolderValue('minZoom', Number(e.target.value))}
-                     value={getOptionsInputValue('minZoom', this.props.objectHolder.options)}/>
+                     value={getOptionsInputValue('minZoom', this.props.options)}/>
             </div>
           </div>
           <div className='form-group'>
@@ -100,7 +100,7 @@ export default class ConfigurationOptions extends Component {
             <div className='col-md-9'>
               <input type='text' className='form-control'
                      onChange={e => this.props.changeOptionsNestedHolderValue('maxZoom', Number(e.target.value))}
-                     value={getOptionsInputValue('maxZoom', this.props.objectHolder.options)}/>
+                     value={getOptionsInputValue('maxZoom', this.props.options)}/>
             </div>
           </div>
           <div className='form-group'>
@@ -110,7 +110,7 @@ export default class ConfigurationOptions extends Component {
             <div className='col-md-9'>
               <input type='text' className='form-control'
                      onChange={e => this.props.changeOptionsNestedHolderValue('zoomStep', Number(e.target.value))}
-                     value={getOptionsInputValue('zoomStep', this.props.objectHolder.options)}/>
+                     value={getOptionsInputValue('zoomStep', this.props.options)}/>
             </div>
           </div>
           <div className='form-group'>
@@ -119,7 +119,7 @@ export default class ConfigurationOptions extends Component {
             </div>
             <div className='col-md-9'>
               <select className='form-control'
-                      value={getOptionsInputValue('checkeredBackground', this.props.objectHolder.options)}
+                      value={getOptionsInputValue('checkeredBackground', this.props.options)}
                       onChange={e => this.props.changeOptionsNestedHolderValue('checkeredBackground', e.target.value)}>
                 <option value={false}>No</option>
                 <option value={true}>Yes</option>
@@ -132,7 +132,7 @@ export default class ConfigurationOptions extends Component {
             </div>
             <div className='col-md-9'>
               <select className='form-control'
-                      value={getOptionsInputValue('unitConversionMult', this.props.objectHolder.options)}
+                      value={getOptionsInputValue('unitConversionMult', this.props.options)}
                       onChange={e => this.props.changeOptionsUnitValue(Number(e.target.value))}>
                 <option value={IN_FT}>in, ft</option>
                 <option value={CM_M}>cm, m</option>
@@ -145,7 +145,7 @@ export default class ConfigurationOptions extends Component {
             </div>
             <div className='col-md-9'>
               <select className='form-control'
-                      value={getOptionsInputValue('showProductSelector', this.props.objectHolder.options)}
+                      value={getOptionsInputValue('showProductSelector', this.props.options)}
                       onChange={e => this.props.changeOptionsNestedHolderValue('showProductSelector', e.target.value)}>
                 <option value={false}>No</option>
                 <option value={true}>Yes</option>
@@ -159,7 +159,7 @@ export default class ConfigurationOptions extends Component {
             <div className='col-md-9'>
               <input type='text' className='form-control'
                      onChange={e => this.props.changeOptionsNestedHolderValue('checkTextFXThrottle', Number(e.target.value))}
-                     value={getOptionsInputValue('checkTextFXThrottle', this.props.objectHolder.options)}/>
+                     value={getOptionsInputValue('checkTextFXThrottle', this.props.options)}/>
             </div>
           </div>
           <div className='form-group'>
@@ -169,7 +169,7 @@ export default class ConfigurationOptions extends Component {
             <div className='col-md-9'>
               <input type='text' className='form-control'
                      onChange={e => this.props.changeOptionsNestedHolderValue('minDPU', Number(e.target.value))}
-                     value={getOptionsInputValue('minDPU', this.props.objectHolder.options)}/>
+                     value={getOptionsInputValue('minDPU', this.props.options)}/>
             </div>
           </div>
           <div className='form-group'>
@@ -178,7 +178,7 @@ export default class ConfigurationOptions extends Component {
             </div>
             <div className='col-md-9'>
               <select className='form-control'
-                      value={getOptionsInputValue('showUploadedColorsDialog', this.props.objectHolder.options)}
+                      value={getOptionsInputValue('showUploadedColorsDialog', this.props.options)}
                       onChange={e => this.props.changeOptionsNestedHolderValue('showUploadedColorsDialog', e.target.value)}>
                 <option value={false}>No</option>
                 <option value={true}>Yes</option>
@@ -191,7 +191,7 @@ export default class ConfigurationOptions extends Component {
             </div>
             <div className='col-md-9'>
               <select className='form-control'
-                      value={getOptionsInputValue('fitProductImage', this.props.objectHolder.options)}
+                      value={getOptionsInputValue('fitProductImage', this.props.options)}
                       onChange={e => this.props.changeOptionsNestedHolderValue('fitProductImage', e.target.value)}>
                 <option value={false}>No</option>
                 <option value={true}>Yes</option>
@@ -204,7 +204,7 @@ export default class ConfigurationOptions extends Component {
             </div>
             <div className='col-md-9'>
               <select className='form-control'
-                      value={getOptionsInputValue('enableSnapGuides', this.props.objectHolder.options)}
+                      value={getOptionsInputValue('enableSnapGuides', this.props.options)}
                       onChange={e => this.props.changeOptionsNestedHolderValue('enableSnapGuides', e.target.value)}>
                 <option value={false}>No</option>
                 <option value={true}>Yes</option>

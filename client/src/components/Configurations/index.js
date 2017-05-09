@@ -15,9 +15,10 @@ export default class extends Component {
     this.props.fetchProducts();
   }
 
-  handleSelectedObjectChange = (propertyName, event) => {
-    this.props.setEditingObjectProperty(propertyName, event.target.value);
+  handleSelectedObjectChange = (propertyName, value) => {
+    this.props.setEditingObjectProperty(propertyName, value);
   };
+
 
   handleSelectedObjectAddNewArray = (fArr, sArr, key, obj) => {
     let arr = (this.props.objectHolder[fArr]);
