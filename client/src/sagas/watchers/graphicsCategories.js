@@ -18,14 +18,6 @@ export function* watchCreateGraphicsCategory() {
   yield takeLatest(actionTypes.CREATE_GRAPHICS_CATEGORIES, graphicsCategoriesSagas.createGraphicsCategory);
 }
 
-export function* watchUploadThumbnail() {
-  yield takeLatest(actionTypes.UPLOAD_THUMBNAIL, graphicsCategoriesSagas.uploadThumbnail);
-}
-
-export function* watchDeleteThumbnail() {
-  yield takeLatest(actionTypes.DELETE_THUMBNAIL, graphicsCategoriesSagas.deleteThumbnail);
-}
-
 export function* watchEditGraphicsCategory() {
   yield takeLatest(actionTypes.EDIT_GRAPHICS_CATEGORY, graphicsCategoriesSagas.editGraphicsCategory);
 }

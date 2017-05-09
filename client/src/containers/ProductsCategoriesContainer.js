@@ -3,10 +3,9 @@ import {
   fetchProductsCategories,
   createProductsCategory,
   deleteProductsCategory,
-  editProductsCategory,
-  uploadThumbnail,
-  deleteThumbnail
+  editProductsCategory
 } from '../actions/productsCategories';
+import {uploadFile} from '../actions/files';
 import {
   selectRow,
   enableEditing,
@@ -29,6 +28,7 @@ const mapStateToProps = state => {
     title: 'Product Category',
     pluralTitle: 'Product Categories',
     data: productsCategories,
+    productsCategories,
     secondaryData: products,
     message: productsCategoriesMessage,
     errors,
@@ -68,12 +68,6 @@ const mapDispatchToProps = dispatch => {
     editEntity(id, newProductsCategory, token) {
       dispatch(editProductsCategory(id, newProductsCategory, token));
     },
-    uploadThumbnail(thumbnail) {
-      dispatch(uploadThumbnail(thumbnail));
-    },
-    deleteThumbnail(name) {
-      dispatch(deleteThumbnail(name));
-    },
     deleteEntity(id, token) {
       dispatch(deleteProductsCategory(id, token));
     },
@@ -88,8 +82,10 @@ const mapDispatchToProps = dispatch => {
     },
     editSecondaryEntity(id, newProduct, token) {
       dispatch(editProduct(id, newProduct, token));
+    },
+    uploadFile(file, endpoint) {
+      dispatch(uploadFile(file, endpoint));
     }
-
   };
 };
 

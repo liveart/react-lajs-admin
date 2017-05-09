@@ -5,8 +5,6 @@ import {MESSAGE_ENTITY_CREATED, MESSAGE_ENTITY_UPDATED, MESSAGE_ENTITY_DELETED} 
 
 const entityName = 'Graphic';
 const endpoint = 'graphics';
-const imagesEndpoint = 'containers/graphicImages';
-const thumbsEndpoint = 'containers/graphicThumbs';
 
 export function* fetchGraphics() {
   try {
@@ -53,29 +51,5 @@ export function* deleteGraphic(action) {
     yield dispatch({type: actionTypes.FETCH_GRAPHICS});
   } catch (e) {
     yield dispatch({type: actionTypes.GRAPHIC_OPERATION_FAILURE, message: e.message});
-  }
-}
-
-export function* uploadGraphicImage(action) {
-  try {
-    const data = new FormData();
-    data.append('file', action.imageFile);
-    yield* api.upload(imagesEndpoint, data);
-    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS});
-    yield dispatch({type: actionTypes.FETCH_GRAPHICS});
-  } catch (e) {
-    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_FAILURE, message: e});
-  }
-}
-
-export function* uploadGraphicThumb(action) {
-  try {
-    const data = new FormData();
-    data.append('blob', action.thumbFile, action.thumbFile.name);
-    yield* api.upload(thumbsEndpoint, data);
-    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_SUCCESS, message: ''});
-    yield dispatch({type: actionTypes.FETCH_GRAPHICS});
-  } catch (e) {
-    yield dispatch({type: actionTypes.GRAPHIC_OPERATION_FAILURE, message: e});
   }
 }

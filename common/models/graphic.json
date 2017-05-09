@@ -23,23 +23,29 @@
     "description": {
       "type": "string",
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "inputElement": "TEXTAREA"
     },
     "categoryId": {
       "type": "string",
       "required": true,
       "showInTable": true,
-      "showInput": false,
+      "showInput": true,
       "sortable": true,
       "header": "Category",
       "textProperty": "name",
       "representation": "TEXT",
-      "sortElement": "SELECT"
+      "sortElement": "SELECT",
+      "inputElement": "DATA_SELECT",
+      "secondaryData": "graphicsCategories"
     },
     "colors": {
       "type": "array",
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "inputElement": "DATA_MULTISELECT",
+      "secondaryData": "colors",
+      "secondaryDataId": "value"
     },
     "colorizables": {
       "type": [
@@ -66,27 +72,39 @@
       "type": "boolean",
       "default": false,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "inputElement": "BINARY_SELECT"
     },
     "multicolor": {
       "type": "boolean",
       "default": false,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "inputElement": "BINARY_SELECT"
     },
     "thumb": {
       "type": "string",
       "showInTable": true,
-      "showInput": false,
+      "showInput": true,
       "sortable": false,
-      "representation": "THUMBNAIL"
+      "representation": "THUMBNAIL",
+      "inputElement": "FILE_INPUT",
+      "uploadParams": {
+        "dir": "files/graphicThumbs/",
+        "endpoint": "containers/graphicThumbs"
+      }
     },
     "image": {
       "type": "string",
       "required": true,
       "showInTable": false,
-      "showInput": false,
-      "representation": "THUMBNAIL"
+      "showInput": true,
+      "representation": "THUMBNAIL",
+      "inputElement": "FILE_INPUT",
+      "uploadParams": {
+        "dir": "files/graphicImages/",
+        "endpoint": "containers/graphicImages"
+      }
     }
   },
   "validations": [],

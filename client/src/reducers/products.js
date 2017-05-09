@@ -25,16 +25,6 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, productsNumber: 0, productsMessage: null, productsError: null, productsLoading: true};
     case actionTypes.CREATE_PRODUCT:
       return {...state, productsError: null, productsMessage: null, productsLoading: true};
-    case actionTypes.UPLOAD_PRODUCT_IMAGE:
-      return {...state, productsError: null, productsMessage: null, productsLoading: true};
-    case actionTypes.UPLOAD_PRODUCT_THUMB:
-      return {...state, productsError: null, productsMessage: null, productsLoading: true};
-    case actionTypes.UPLOAD_PRODUCT_LOCATION_IMAGE:
-      return {...state, productsError: null, productsMessage: null, productsLoading: true};
-    case actionTypes.UPLOAD_PRODUCT_LOCATION_MASK:
-      return {...state, productsError: null, productsMessage: null, productsLoading: true};
-    case actionTypes.UPLOAD_PRODUCT_LOCATION_OVERLAY:
-      return {...state, productsError: null, productsMessage: null, productsLoading: true};
     case actionTypes.EDIT_PRODUCT:
       return {...state, productsError: null, productsMessage: null, productsLoading: true};
     case actionTypes.DELETE_PRODUCT:

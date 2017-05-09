@@ -1,32 +1,12 @@
 import React, {Component} from 'react';
-import {STATUS_DEFAULT} from '../../definitions';
-import {SketchPicker} from 'react-color';
 import * as ColorModel from '../../../../common/models/color.json';
-import sortBy from 'lodash/sortBy';
 const Color = ColorModel.properties;
 import AbstractPage from '../AbstractPage/index';
-import {getGroupById} from './secondary/helpers';
 
 export default class ColorsView extends Component {
   render() {
     return (
-      <AbstractPage {...this.props} objectSample={Color} sortingSupport={true}
-                    changedInputs={{
-                      colorgroupId: {
-                        elem: <select className='form-control'
-                                      value={this.props.objectHolder['colorgroupId']}
-                                      onChange={e => this.props.handleColorgroupChange('colorgroupId', e)}>
-                          <option value={''}>...</option>
-                          {sortBy(this.props.secondaryData).map(cg => <option key={cg.id}
-                                                                              value={cg.id}>{cg.name}</option>)}
-                        </select>
-                      },
-                      value: {
-                        elem: <SketchPicker color={this.props.objectHolder.value}
-                                            onChange={this.props.handleColorChange}/>
-                      }
-                    }}
-      />
+      <AbstractPage {...this.props} objectSample={Color} sortingSupport={true}/>
     );
   }
 }

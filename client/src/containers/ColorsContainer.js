@@ -1,12 +1,12 @@
 import {connect} from 'react-redux';
-import {fetchColors, createColor, editColor, deleteColor} from '../../actions/colors';
-import {fetchColorgroups, createColorgroup} from '../../actions/colorgroups';
+import {fetchColors, createColor, editColor, deleteColor} from '../actions/colors';
+import {fetchColorgroups, createColorgroup} from '../actions/colorgroups';
 
 import {
   selectRow, setObjectHolderProperty,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
-} from '../../actions/table';
-import Table from '../../components/Colors/index';
+} from '../actions/table';
+import Table from '../components/Colors/index';
 
 const mapStateToProps = state => {
   const {token} = state.user;
@@ -20,6 +20,7 @@ const mapStateToProps = state => {
     title: 'Color',
     data: colors,
     secondaryData: colorgroups,
+    colorgroups,
     message: colorsMessage,
     errors,
     loading,

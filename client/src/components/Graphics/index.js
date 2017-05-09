@@ -88,28 +88,6 @@ export default class GraphicsComponent extends Component {
     }
   };
 
-  handleImageUpload = img => {
-    this.props.uploadGraphicImage(img);
-  };
-
-  handleThumbUpload = ref => {
-    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      const image = this.props.objectHolder.thumb;
-      const uploadThumbnail = thumb => {
-        this.props.uploadGraphicThumb(thumb);
-      };
-      if (image.type !== 'image/svg+xml') {
-        const c = ref;
-        c.toBlob(function (blob) {
-          blob.name = image.name;
-          uploadThumbnail(blob);
-        }, 'image/*', 0.95);
-      } else {
-        uploadThumbnail(image);
-      }
-    }
-  };
-
   onColorizableColorsSelectChange = (val, key) => {
     let colorizables = this.props.objectHolder.colorizables;
     let colors = [];
@@ -186,7 +164,7 @@ export default class GraphicsComponent extends Component {
     }
   };
 
-  saveColorizables = () => {
+  saveColorizables = () => { // TODO notify Vlad
     let colorizables = this.props.objectHolder.colorizables;
     forEach(colorizables, c => {
       if (c.assignColorgroup) {

@@ -60,12 +60,4 @@ describe('Graphics categories Actions', () => {
     };
     expect(FF.deleteGraphicsCategory(id, token)).toEqual(expectedAction);
   });
-  test('should create an action to upload a file', () => {
-    const thumb = "thumb";
-    const expectedAction = {
-      type: F.UPLOAD_THUMBNAIL,
-      thumbnail: thumb
-    };
-    expect(FF.uploadThumbnail(thumb)).toEqual(expectedAction);
-  });
 });

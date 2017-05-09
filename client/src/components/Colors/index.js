@@ -16,6 +16,7 @@ export default class ColorsComponent extends Component {
   handleColorgroupChange = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
+
   handleColorChange = color => {
     this.props.setEditingObjectProperty('value', color.hex);
   };

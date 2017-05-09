@@ -1,12 +1,10 @@
 import * as actionTypes from '../actionTypes/productsCategories';
 import {dispatch} from './sagaFuncs';
 import * as api from './api';
-
 import {MESSAGE_ENTITY_CREATED, MESSAGE_ENTITY_UPDATED, MESSAGE_ENTITY_DELETED} from '../definitions';
 
 const entityName = 'Product category';
 const endpoint = 'productsCategories';
-const endpointUpload = 'containers/productCategoriesThumbs';
 
 export function* fetchProductsCategories() {
   try {
@@ -64,29 +62,3 @@ export function* deleteProductsCategory(action) {
     yield dispatch({type: actionTypes.PRODUCTS_CATEGORY_FAILURE, message: e});
   }
 }
-
-export function* uploadThumbnail(action) {
-  try {
-    const data = new FormData();
-    data.append('blob', action.thumbnail, action.thumbnail.name);
-    yield* api.upload(endpointUpload, data);
-    yield dispatch({type: actionTypes.PRODUCTS_CATEGORY_SUCCESS});
-  } catch (e) {
-    yield dispatch({type: actionTypes.PRODUCTS_CATEGORY_FAILURE, message: e});
-  }
-}
-
-export function* deleteThumbnail(action) {
-  try {
-    yield* api.deleteFile(endpointUpload + '/files/' + action.name);
-    yield dispatch({type: actionTypes.PRODUCTS_CATEGORY_SUCCESS});
-  } catch (e) {
-    yield dispatch({type: actionTypes.PRODUCTS_CATEGORY_FAILURE, message: e});
-  }
-}
-
-
-
-
-
-

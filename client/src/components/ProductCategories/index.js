@@ -32,45 +32,6 @@ export default class extends Component {
     };
   }
 
-  handleFileUpload = ref => {
-    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      const image = this.props.objectHolder.thumbUrl;
-      if (typeof image === 'string') {
-        return;
-      }
-      const uploadThumbnail = file => this.props.uploadThumbnail(file);
-      if (image.type !== 'image/svg+xml') {
-        const c = ref;
-        c.toBlob(function (blob) {
-          blob.name = image.name;
-          uploadThumbnail(blob);
-        }, 'image/*', 0.95);
-      } else {
-        uploadThumbnail(image);
-      }
-    }
-  };
-
-  handleFileChoose = (prop, e, ref) => {
-    this.props.setEditingObjectProperty(prop, e.target.files[0]);
-    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      const image = this.props.objectHolder.thumbUrl;
-      const img = new Image();
-      let imageOut = new Image();
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(image);
-      const c = ref;
-      const ctx = c.getContext('2d');
-      ctx.clearRect(0, 0, 100, 100);
-      img.onload = function () {
-        imageOut = ctx.drawImage(img, 0, 0, 100, 100);
-      };
-    }
-  };
-
   handleSelectedObjectChange = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };

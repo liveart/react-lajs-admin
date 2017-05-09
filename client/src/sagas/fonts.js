@@ -5,8 +5,6 @@ import {MESSAGE_ENTITY_CREATED, MESSAGE_ENTITY_UPDATED, MESSAGE_ENTITY_DELETED} 
 
 const entityName = 'Font';
 const endpoint = 'fonts';
-const endpointUpload = 'containers/fontsNormal';
-const endpointVectors = 'containers/vectors';
 
 export function* fetchFonts() {
   try {
@@ -60,27 +58,5 @@ export function* deleteFont(action) {
     yield dispatch({type: actionTypes.FETCH_FONTS});
   } catch (e) {
     yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e.message});
-  }
-}
-
-export function* uploadFontFile(action) {
-  try {
-    const data = new FormData();
-    data.append('file', action.fontFile);
-    yield* api.upload(endpointUpload, data);
-    yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
-  } catch (e) {
-    yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
-  }
-}
-
-export function* uploadVectors(action) {
-  try {
-    const data = new FormData();
-    data.append('file', action.vectorFile);
-    yield* api.upload(endpointVectors, data);
-    yield dispatch({type: actionTypes.FONTS_OPERATION_SUCCESS});
-  } catch (e) {
-    yield dispatch({type: actionTypes.FONTS_OPERATION_FAILURE, message: e});
   }
 }

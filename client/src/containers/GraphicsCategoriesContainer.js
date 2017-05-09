@@ -3,10 +3,9 @@ import {
   fetchGraphicsCategories,
   createGraphicsCategory,
   deleteGraphicsCategory,
-  editGraphicsCategory,
-  uploadThumbnail,
-  deleteThumbnail
+  editGraphicsCategory
 } from '../actions/graphicsCategories';
+import {uploadFile} from '../actions/files';
 import {
   selectRow,
   enableEditing,
@@ -34,6 +33,7 @@ const mapStateToProps = state => {
     title: 'Graphic Category',
     pluralTitle: 'Graphic Categories',
     data: graphicsCategories,
+    graphicsCategories,
     secondaryData: graphics,
     message: graphicsCategoriesMessage,
     errors,
@@ -70,12 +70,6 @@ const mapDispatchToProps = dispatch => {
     editEntity(id, newGraphicsCategory, token) {
       dispatch(editGraphicsCategory(id, newGraphicsCategory, token));
     },
-    uploadThumbnail(thumbnail) {
-      dispatch(uploadThumbnail(thumbnail));
-    },
-    deleteThumbnail(name) {
-      dispatch(deleteThumbnail(name));
-    },
     deleteEntity(id, token) {
       dispatch(deleteGraphicsCategory(id, token));
     },
@@ -94,7 +88,9 @@ const mapDispatchToProps = dispatch => {
     deleteSecondaryEntity(id, token) {
       dispatch(deleteGraphic(id, token));
     },
-
+    uploadFile(file, endpoint) {
+      dispatch(uploadFile(file, endpoint));
+    }
   };
 };
 

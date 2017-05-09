@@ -1,12 +1,10 @@
 import * as actionTypes from '../actionTypes/graphicsCategories';
 import {dispatch} from './sagaFuncs';
 import * as api from './api';
-
 import {MESSAGE_ENTITY_CREATED, MESSAGE_ENTITY_UPDATED, MESSAGE_ENTITY_DELETED} from '../definitions';
 
 const entityName = 'Graphic category';
 const endpoint = 'graphicsCategories';
-const endpointUpload = 'containers/thumb';
 
 export function* fetchGraphicsCategories() {
   try {
@@ -62,28 +60,4 @@ export function* deleteGraphicsCategory(action) {
     yield dispatch({type: actionTypes.GRAPHICS_CATEGORY_FAILURE, message: e});
   }
 }
-
-export function* uploadThumbnail(action) {
-  try {
-    const data = new FormData();
-    data.append('blob', action.thumbnail, action.thumbnail.name);
-    yield* api.upload(endpointUpload, data);
-    yield dispatch({type: actionTypes.GRAPHICS_CATEGORY_SUCCESS});
-  } catch (e) {
-    yield dispatch({type: actionTypes.GRAPHICS_CATEGORY_FAILURE, message: e});
-  }
-}
-
-export function* deleteThumbnail(action) {
-  try {
-    yield* api.deleteFile(endpointUpload + '/files/' + action.name);
-    yield dispatch({type: actionTypes.GRAPHICS_CATEGORY_SUCCESS});
-  } catch (e) {
-    yield dispatch({type: actionTypes.GRAPHICS_CATEGORY_FAILURE, message: e});
-  }
-}
-
-
-
-
 

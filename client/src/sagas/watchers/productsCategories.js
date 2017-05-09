@@ -18,14 +18,6 @@ export function* watchCreateProductsCategory() {
   yield takeLatest(actionTypes.CREATE_PRODUCTS_CATEGORIES, productsCategoriesSagas.createProductsCategory);
 }
 
-export function* watchUploadThumbnail() {
-  yield takeLatest(actionTypes.UPLOAD_THUMBNAIL, productsCategoriesSagas.uploadThumbnail);
-}
-
-export function* watchDeleteThumbnail() {
-  yield takeLatest(actionTypes.DELETE_THUMBNAIL, productsCategoriesSagas.deleteThumbnail);
-}
-
 export function* watchEditProductsCategory() {
   yield takeLatest(actionTypes.EDIT_PRODUCTS_CATEGORY, productsCategoriesSagas.editProductsCategory);
 }

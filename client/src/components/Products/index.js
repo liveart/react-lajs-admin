@@ -9,11 +9,6 @@ import {
   STATUS_CREATING,
   STATUS_DEFAULT,
   RELATIVE_URL,
-  PRODUCT_THUMB_FOLDER,
-  PRODUCT_IMG_FOLDER,
-  PRODUCT_LOCATION_IMAGE_FOLDER,
-  PRODUCT_LOCATION_MASK_FOLDER,
-  PRODUCT_LOCATION_OVERLAY_FOLDER,
   SIZES,
   ASSIGN_GROUP,
   ADD_COLOR
@@ -22,7 +17,6 @@ import {parseJson} from '../../ProductJsonParser';
 import Locations from './Locations';
 import map from 'lodash/map';
 import forEach from 'lodash/forEach';
-import sortBy from 'lodash/sortBy';
 import '../../../public/assets/css/cropper.css';
 const LEAVE_URL_OPTION = 'Import';
 const Product = ProductModel.properties;
@@ -155,24 +149,6 @@ export default class ProductsComponent extends Component {
     this.props.uploadProductImage(file);
   };
 
-  handleThumbUpload = () => {
-    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      const image = this.props.objectHolder.thumbUrl;
-      const uploadThumbnail = file => {
-        this.props.uploadProductThumb(file);
-      };
-      if (image.type !== 'image/svg+xml') {
-        const c = this.refs.canvas;
-        c.toBlob(function (blob) {
-          blob.name = image.name;
-          uploadThumbnail(blob);
-        }, 'image/*', 0.95);
-      } else {
-        uploadThumbnail(image);
-      }
-    }
-  };
-
   getOptions = () => {
     if (!this.props.colorsList || !this.props.colorsList.length) {
       return [];
@@ -217,6 +193,7 @@ export default class ProductsComponent extends Component {
       return map(arr[key]._colors, col => ({value: col.value, name: col.name}));
     }
   };
+
   getSelectedColorizableOptions = key => {
     let arr = this.props.objectHolder.colorizables;
     if (!arr[key].assignColorgroup) {
@@ -245,7 +222,6 @@ export default class ProductsComponent extends Component {
 
   };
 
-
   onColorsSelectChange = (val, key) => {
     const arr = this.props.objectHolder.colors;
     if (val) {
@@ -254,6 +230,7 @@ export default class ProductsComponent extends Component {
       this.props.setEditingObjectProperty('colors', [...arr]);
     }
   };
+
   onColorizableColorsSelectChange = (val, key) => {
     let colorizables = this.props.objectHolder.colorizables;
     let colors = [];
@@ -263,6 +240,7 @@ export default class ProductsComponent extends Component {
       this.props.setEditingObjectProperty('colorizables', colorizables);
     }
   };
+
   onColorizableColorgroupSelectChange = (val, key) => {
     let colorizables = this.props.objectHolder.colorizables;
     if (val) {
@@ -295,7 +273,6 @@ export default class ProductsComponent extends Component {
                 <Select
                   name='colors'
                   value={this.getSelectedOptions(key)}
-                  multi={false}
                   labelKey='name'
                   options={this.getOptions()}
                   onChange={os => this.onColorsSelectChange(os, key)}
@@ -363,6 +340,7 @@ export default class ProductsComponent extends Component {
     colorizables[key].assignColorgroup = option.value;
     this.props.setEditingObjectProperty('colorizables', colorizables);
   };
+
   handleColorLocationActionOption = (option, key, k) => {
     let colors = this.props.objectHolder.colors;
     colors[key].location[k].name = option.value;
@@ -394,9 +372,7 @@ export default class ProductsComponent extends Component {
               </td>
               <td className='col-md-4'>
                 <Select style={{marginBottom: 6}}
-                        name='colors'
                         value={this.getSelectedColorizableOptions(key)}
-                        multi={false}
                         labelKey='name'
                         options={this.getColorizableColorsOptions()}
                         onChange={os => this.handleColorActionOption(os, key)}
@@ -414,7 +390,6 @@ export default class ProductsComponent extends Component {
                   /> : <Select
                     name='colorgroup'
                     value={this.getSelectedColorizableColorgroupOptions(key)}
-                    multi={false}
                     labelKey='name'
                     options={this.getColorgroupsOptions()}
                     onChange={os => this.onColorizableColorgroupSelectChange(os, key)}
@@ -637,115 +612,29 @@ export default class ProductsComponent extends Component {
             secondaryData={this.props.productsCategories}
             handleImportJson={this.handleImportJson}
             enableImportJson={this.props.enableImportJson}
-            changedInputs={{
-              thumbUrl: {
-                saveF: this.handleThumbUpload,
-                getName: obj => this.getName(obj, PRODUCT_THUMB_FOLDER)
-              },
-              locations: {
-                saveF: locs => {
-                  forEach(locs, loc => {
-                    if (loc.image && typeof loc.image === 'object') {
-                      this.props.uploadProductLocationImage(loc.image);
-                      loc.image = this.getName(loc.image, PRODUCT_LOCATION_IMAGE_FOLDER);
-                    }
-
-                    if (loc.mask && typeof loc.mask === 'object') {
-                      this.props.uploadProductLocationMask(loc.mask);
-                      loc.mask = this.getName(loc.mask, PRODUCT_LOCATION_MASK_FOLDER);
-                    }
-
-                    if (loc.overlayInfo && typeof loc.overlayInfo === 'object') {
-                      this.props.uploadProductLocationOverlay(loc.overlayInfo);
-                      loc.overlayInfo = this.getName(loc.overlayInfo, PRODUCT_LOCATION_OVERLAY_FOLDER);
-                    }
-                  });
-
-                },
-                elem: <Locations {...this.props} getFileUrl={this.getFileUrl}
-                                 handleSelectedObjectAddNewArray={this.handleSelectedObjectAddNewArray}
-                                 handleSelectedObjectArrayArrayChange={this.handleSelectedObjectArrayArrayChange}
-                                 handleSelectedObjectArrayArrayDeleteElement={this.handleSelectedObjectArrayArrayDeleteElement}/>
-              },
-              description: {
-                elem: <textarea className='form-control' rows='3'
-                                value={this.props.objectHolder.description}
-                                onChange={e => this.handleSelectedObjectChange('description', e)}>
-              </textarea>
-              },
-              sizes: {
-                elem: <Creatable
-                  name='sizes'
-                  className='onTop1'
-                  value={this.getSelectedSizeOptions()}
-                  multi={true}
-                  labelKey='name'
-                  options={this.getSizeOptions()}
-                  onChange={this.onSizeSelectChange}
-                />
-              },
-              colorizables: {
-                elem: this.renderColorizableTable(),
-                saveF: this.saveMulticolor
-              },
-              colors: {
-                elem: this.renderColorsTable(),
-                saveF: this.saveMulticolor,
-                getName: color => forEach(color, clr => {
-                  if (clr !== null && clr.location) {
-                    if (clr.location.length) {
-                      forEach(clr.location, lc => {
-                        if (typeof (lc.image) === 'object') {
-                          this.handleImageUpload(lc.image);
-                          lc.image = this.getName(lc.image, PRODUCT_IMG_FOLDER);
-                        }
-                      });
-                    }
-                  }
-                })
-              },
-              editableAreaSizes: {
-                elem: this.renderEditableAreaSizesTable()
-              }
-            }
-            }
+            nested={{
+              colorizables: this.renderColorizableTable(),
+              /*
+               colors: {
+               elem: this.renderColorsTable(),
+               saveF: this.saveMulticolor,
+               getName: color => forEach(color, clr => {
+               if (clr !== null && clr.location) {
+               if (clr.location.length) {
+               forEach(clr.location, lc => {
+               if (typeof (lc.image) === 'object') {
+               this.handleImageUpload(lc.image);
+               lc.image = this.getName(lc.image, PRODUCT_IMG_FOLDER);
+               }
+               });
+               }
+               }
+               })
+               },
+               */
+              editableAreaSizes: this.renderEditableAreaSizesTable()
+            }}
             customInputs={{
-              thumb: {
-                elem: <div>
-                  <input type='file' className='form-control' accept='image/*'
-                         onChange={e => this.handleFileChoose('thumbUrl', e)}/>
-
-                  {typeof (this.props.objectHolder.thumbUrl) === 'string' && this.props.status === STATUS_EDITING ?
-                    <div style={{float: 'left'}}><a href={this.getFileUrl(this.props.objectHolder.thumbUrl)}
-                                                    className='thumbnail'
-                                                    style={{marginTop: 8, width: 110}}><img
-                      style={{width: 110}} src={this.getFileUrl(this.props.objectHolder.thumbUrl)}/>
-                    </a>
-                    </div>
-                    : null}
-                  <div style={{float: 'left'}}>
-                    {this.props.status === STATUS_CREATING && !this.props.objectHolder.thumbUrl ?
-                      <canvas style={{marginTop: 8}} ref='canvas' width='110'
-                              height='110' hidden/> :
-                      <canvas style={{marginTop: 8}} ref='canvas' width='110'
-                              height='110'/>}
-                  </div>
-                </div>,
-                required: true,
-                viewIndex: Product.thumbUrl.viewIndex
-              },
-              category: {
-                elem: <select className='form-control'
-                              value={this.props.objectHolder.categoryId}
-                              onChange={e => this.handleSelectedObjectChange('categoryId', e)}>
-                  <option value={undefined}>Choose category...</option>
-                  {this.props.productsCategories.map((gc, key) => (
-                    <option key={key} value={gc.id}>{gc.name}</option>
-                  ))}
-                </select>,
-                required: true,
-                viewIndex: Product.categoryId.viewIndex
-              },
               pantones: {
                 elem: <div className='panel panel-default'>
                   <div className='panel-body'>

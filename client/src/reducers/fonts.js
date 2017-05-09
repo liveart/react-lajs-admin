@@ -30,8 +30,6 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, fontsMessage: null, fontsError: null, fontsLoading: true};
     case actionType.UPLOAD_FONT_FILE:
       return {...state, fontsMessage: null, fontsError: null, fontsLoading: true};
-    case actionType.UPLOAD_VECTOR_FILE:
-      return {...state, fontsMessage: null, fontsError: null, fontsLoading: true};
     case actionType.EDIT_FONT:
       return {...state, fontsMessage: null, fontsError: null, fontsLoading: true};
     case actionType.DELETE_FONT:

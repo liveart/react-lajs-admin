@@ -15,14 +15,14 @@
 /client/public/files/productLocationImage/*
 /client/public/files/productLocationMask/*
 /client/public/files/productLocationOverlay/*
-/client/public/files/productCategoriesThumbs/*
+/client/public/files/productCategoryThumbs/*
 !/client/public/files/productThumbs/.gitkeep
 !/client/public/files/thumb/.gitkeep
 /client/public/files/productLocationOverlay/.gitkeep
 !/client/public/files/productLocationMask/.gitkeep
 !/client/public/files/productLocationImage/.gitkeep
 !/client/public/files/productImages/.gitkeep
-!/client/public/files/productCategoriesThumbs/.gitkeep
+!/client/public/files/productCategoryThumbs/.gitkeep
 !/client/public/files/fontsNormal/.gitkeep
 !/client/public/files/graphicImages/.gitkeep
 !/client/public/files/fontVectors/.gitkeep
@@ -33,3 +33,5 @@
 /client/public/files/fontsItalic/*
 !/client/public/files/fontsItalic/.gitkeep
 !/client/public/files/fontsBoldItalic/.gitkeep
+/client/public/files/graphicCategoryThumbs/*
+!/client/public/files/graphicCategoryThumbs/.gitkeep

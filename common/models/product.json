@@ -26,7 +26,7 @@
       "required": true,
       "viewIndex": 3,
       "showInTable": true,
-      "showInput": false,
+      "showInput": true,
       "sortable": true,
       "header": "Category",
       "textProperty": "name",
@@ -38,7 +38,7 @@
       "required": true,
       "viewIndex": 2,
       "showInTable": true,
-      "showInput": false,
+      "showInput": true,
       "sortable": false,
       "header": "Thumb",
       "representation": "THUMBNAIL"

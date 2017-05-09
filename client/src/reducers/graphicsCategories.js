@@ -45,10 +45,6 @@ export default function (state = INITIAL_STATE, action) {
       };
     case actionType.CREATE_GRAPHICS_CATEGORIES:
       return {...state, graphicsCategoriesMessage: null, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
-    case actionType.UPLOAD_THUMBNAIL:
-      return {...state, graphicsCategoriesMessage: null, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
-    case actionType.DELETE_THUMBNAIL:
-      return {...state, graphicsCategoriesMessage: null, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     case actionType.EDIT_GRAPHICS_CATEGORY:
       return {...state, graphicsCategoriesMessage: null, graphicsCategoriesError: null, graphicsCategoriesLoading: true};
     case actionType.DELETE_GRAPHICS_CATEGORY:

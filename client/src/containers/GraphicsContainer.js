@@ -1,9 +1,7 @@
 import {connect} from 'react-redux';
-import {
-  fetchGraphics, createGraphic, editGraphic, deleteGraphic,
-  uploadGraphicImage, uploadGraphicThumb
-} from '../actions/graphics';
-import {fetchGraphicsCategories, createGraphicsCategory, uploadThumbnail} from '../actions/graphicsCategories';
+import {fetchGraphics, createGraphic, editGraphic, deleteGraphic} from '../actions/graphics';
+import {uploadFile} from '../actions/files';
+import {fetchGraphicsCategories, createGraphicsCategory} from '../actions/graphicsCategories';
 import {fetchColors} from '../actions/colors';
 import {fetchColorgroups} from '../actions/colorgroups';
 import {
@@ -69,12 +67,6 @@ const mapDispatchToProps = dispatch => {
     restoreTableState(object) {
       dispatch(setInitialState(object));
     },
-    uploadGraphicImage(file) {
-      dispatch(uploadGraphicImage(file));
-    },
-    uploadGraphicThumb(file) {
-      dispatch(uploadGraphicThumb(file));
-    },
     fetchGraphicsCategories() {
       dispatch(fetchGraphicsCategories());
     },
@@ -84,14 +76,14 @@ const mapDispatchToProps = dispatch => {
     createGraphicsCategory(category, token) {
       dispatch(createGraphicsCategory(category, token));
     },
-    uploadThumbnail(thumbnail) {
-      dispatch(uploadThumbnail(thumbnail));
-    },
     fetchColors() {
       dispatch(fetchColors());
     },
     fetchColorgroups() {
       dispatch(fetchColorgroups());
+    },
+    uploadFile(file, endpoint) {
+      dispatch(uploadFile(file, endpoint));
     }
   };
 };

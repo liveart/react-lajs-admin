@@ -34,13 +34,6 @@ export const uploadFontFile = fontFile => {
   };
 };
 
-export const uploadVectors = vectorFile => {
-  return {
-    type: actionTypes.UPLOAD_VECTOR_FILE,
-    vectorFile
-  };
-};
-
 export const editFont = (id, font, token) => {
   return {
     type: actionTypes.EDIT_FONT,

@@ -14,8 +14,13 @@ export function getElement(type = Representations.TEXT, value = '') {
         {value}
         <span className='label label-default pull-right' style={{background: value}}>&nbsp;</span>
       </div>;
-    case Representations.THUMBNAIL:
-      return <a href={getFileUrl(value)} className='thumbnail' style={{width: 100}}>
-        <img src={getFileUrl(value)} style={{width: 100}}/></a>;
+    case Representations.THUMBNAIL: {
+      let src = getFileUrl(value);
+      if (value instanceof File) {
+        return null;
+      }
+      return <a href={src} className='thumbnail' style={{width: 100, marginTop: 4}}>
+        <img src={src} style={{width: 100}}/></a>;
+    }
   }
 }

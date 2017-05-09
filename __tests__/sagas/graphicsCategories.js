@@ -40,9 +40,6 @@ describe('graphicsCategories saga', () => {
   test('should process deleting with error', () => {
     expect([...sagas.deleteGraphicsCategory()].pop().type).toEqual(actionTypes.GRAPHICS_CATEGORY_FAILURE);
   });
-  test('should process uploading', () => {
-    expect([...sagas.uploadThumbnail({thumbnail: {}})].pop().type).toEqual(actionTypes.GRAPHICS_CATEGORY_SUCCESS);
-  });
 
   test('should process uploading with error', () => {
     expect([...sagas.uploadThumbnail()].pop().type).toEqual(actionTypes.GRAPHICS_CATEGORY_FAILURE);

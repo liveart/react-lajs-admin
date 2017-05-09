@@ -4,71 +4,11 @@ import DeleteConfirmation from './secondary/DeleteConfirmation';
 import * as ProductsCategoryModel from '../../../../common/models/products-category.json';
 const ProductsCategory = ProductsCategoryModel.properties;
 import DeleteButton from './secondary/DeleteButton';
-import {
-  ID_PROP,
-  STATUS_EDITING,
-  STATUS_CREATING,
-  STATUS_CONFIRM_DELETE,
-  PRODUCT_CATEGORIES_THUMB_FOLDER,
-  DELETE_CATEGORY,
-  MOVE_CATEGORY_TO_OTHER_CATEGORY,
-  DELETE_PRODUCTS,
-  MOVE_PRODUCTS_TO_OTHER_CATEGORY
-}  from
-  '../../definitions';
 
 export default class ProductCategoriesView extends Component {
   render() {
     return (
       <AbstractPage {...this.props} objectSample={ProductsCategory} sortingSupport={true}
-                    changedInputs={{
-                      thumbUrl: {
-                        saveF: () => this.props.handleFileUpload(this.refs.canvas),
-                        getName: obj => this.props.getName(obj, PRODUCT_CATEGORIES_THUMB_FOLDER)
-                      }
-                    }
-                    }
-                    customInputs={{
-                      thumb: {
-                        elem: <div>
-                          <input type='file' className='form-control' accept='image/*'
-                                 onChange={e => this.props.handleFileChoose('thumbUrl', e, this.refs.canvas)}/>
-
-                          {typeof (this.props.objectHolder['thumbUrl']) === 'string' && this.props.status === STATUS_EDITING ?
-                            <div style={{float: 'left'}}><a
-                              href={this.props.getFileUrl(this.props.objectHolder['thumbUrl'])}
-                              className='thumbnail'
-                              style={{marginTop: 8, width: 100}}><img
-                              style={{width: 100}} src={this.props.getFileUrl(this.props.objectHolder['thumbUrl'])}/>
-                            </a>
-                            </div>
-                            : null}
-                          <div style={{float: 'left'}}>
-                            {this.props.status === STATUS_CREATING && !this.props.objectHolder['thumbUrl'] ?
-                              <canvas style={{marginTop: 8}} ref='canvas' width='100'
-                                      height='100' hidden/> :
-                              <canvas style={{marginTop: 8}} ref='canvas' width='100'
-                                      height='100'/>}
-                          </div>
-                        </div>,
-                        required: true
-                      },
-                      category: {
-                        elem: <select className='form-control'
-                                      onChange={e => this.props.updateObject('productsCategoryId', e)}
-                                      value={this.props.objectHolder['productsCategoryId']}>
-                          <option key='rootCategory' value={''}>Root category</option>
-                          {this.props.data.map(cg => (
-                            this.props.objectHolder[ID_PROP] !== cg.id ?
-                              (this.props.objectHolder[ID_PROP] !== cg.productsCategoryId) || (cg.productsCategoryId === '') ?
-                                <option key={cg.id} value={cg.id}>{cg.name}</option> :
-                                <option disabled='disabled' key={cg.id} value={cg.id}>{cg.name} </option> : null
-                          ))}
-                        </select>
-                      }
-                    }
-
-                    }
                     deleteConfirmation={true}
                     renderDeleteConfirmationDialog={
                       <DeleteConfirmation data={this.props.data}
@@ -93,4 +33,3 @@ export default class ProductCategoriesView extends Component {
     );
   }
 }
-

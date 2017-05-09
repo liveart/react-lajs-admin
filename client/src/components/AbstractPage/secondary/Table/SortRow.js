@@ -29,7 +29,7 @@ export default class SortRow extends Component {
           }
 
           if (this.props.objectSample[key].sortElement && this.props.secondaryData) {
-            if (this.props.objectSample[key].sortElement === Elements.SELECT) {
+            if (this.props.objectSample[key].sortElement === 'SELECT') {
               return <td key={key}>
                 <Select value={this.props.objectHolder[key]}
                         options={this.props.secondaryData}

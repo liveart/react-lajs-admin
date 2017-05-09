@@ -25,7 +25,9 @@
       "header": "Color group",
       "textProperty": "name",
       "representation": "TEXT",
-      "sortElement": "SELECT"
+      "sortElement": "SELECT",
+      "inputElement": "DATA_SELECT",
+      "secondaryData": "colorgroups"
     },
     "value": {
       "type": "string",
@@ -34,7 +36,8 @@
       "showInTable": true,
       "showInput": true,
       "sortable": false,
-      "representation": "COLOR_VALUE"
+      "representation": "COLOR_VALUE",
+      "inputElement": "COLOR_PICKER"
     }
   },
   "validations": [],

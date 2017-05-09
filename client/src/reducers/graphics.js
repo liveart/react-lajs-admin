@@ -25,10 +25,6 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, graphicsMessage: null, graphicsNumber: 0, graphicsError: null, graphicsLoading: true};
     case actionTypes.CREATE_GRAPHIC:
       return {...state, graphicsMessage: null, graphicsError: null, graphicsLoading: true};
-    case actionTypes.UPLOAD_GRAPHIC_IMAGE:
-      return {...state, graphicsMessage: null, graphicsError: null, graphicsLoading: true};
-    case actionTypes.UPLOAD_GRAPHIC_THUMB:
-      return {...state, graphicsMessage: null, graphicsError: null, graphicsLoading: true};
     case actionTypes.EDIT_GRAPHIC:
       return {...state, graphicsMessage: null, graphicsError: null, graphicsLoading: true};
     case actionTypes.DELETE_GRAPHIC:

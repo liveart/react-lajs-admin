@@ -18,7 +18,7 @@ export default class extends Component {
     this.props.fetchProducts();
   }
 
-  handleSelectedObjectChange = (propertyName, event) => {
+  handleSelectedObjectChange = (propertyName, event) => { // TODO use existing helper functions
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
 
@@ -49,7 +49,6 @@ export default class extends Component {
     this.props.setEditingObjectProperty(fArrName, [...colorizables]);
   };
 
-
   getSelectedSizeOptions = () => {
     if (!this.props.objectHolder.defaultProductSize || !this.props.objectHolder.defaultProductSize.length) {
       return [];
@@ -70,11 +69,7 @@ export default class extends Component {
     }
   };
 
-  arrowRenderer = () => {
-    return (
-      <span>+</span>
-    );
-  };
+  arrowRenderer = () => <span>+</span>;
 
   getMainConfigValue = () => {
     const i = findIndex(this.props.data, c => c.isMain === true);
@@ -99,86 +94,80 @@ export default class extends Component {
   render() {
     return (
       <View {...this.props} objectSample={Configuration} sortingSupport={true}
-            changedInputs={{
-              colors: {
-                elem: <div className='panel panel-default'>
-                  <div className='panel-body'>
-                    <div className='form-group'>
-                      <div className='col-md-3'>
-                        <p>Url: </p>
-                      </div>
-                      <div className='col-md-9'>
-                        <input type='text' className='form-control'
-                               value={this.props.objectHolder.colors ? this.props.objectHolder.colors.url : ''}
-                               onChange={e => this.props.setEditingObjectProperty('colors', {
-                                 ...this.props.objectHolder.colors,
-                                 url: e.target.value
-                               })}/>
-                      </div>
+            nested={{
+              colors: <div className='panel panel-default'>
+                <div className='panel-body'>
+                  <div className='form-group'>
+                    <div className='col-md-3'>
+                      <p>Url: </p>
                     </div>
-                    <div className='form-group'>
-                      <div className='col-md-3'>
-                        <p>Pantones Url: </p>
-                      </div>
-                      <div className='col-md-9'>
-                        <input type='text' className='form-control'
-                               value={this.props.objectHolder.colors ? this.props.objectHolder.colors.colorsPantonesUrl : ''}
-                               onChange={e => this.props.setEditingObjectProperty('colors', {
-                                 ...this.props.objectHolder.colors,
-                                 pantones_url: e.target.value
-                               })}/>
-                      </div>
+                    <div className='col-md-9'>
+                      <input type='text' className='form-control'
+                             value={this.props.objectHolder.colors ? this.props.objectHolder.colors.url : ''}
+                             onChange={e => this.props.setEditingObjectProperty('colors', {
+                               ...this.props.objectHolder.colors,
+                               url: e.target.value
+                             })}/>
+                    </div>
+                  </div>
+                  <div className='form-group'>
+                    <div className='col-md-3'>
+                      <p>Pantones Url: </p>
+                    </div>
+                    <div className='col-md-9'>
+                      <input type='text' className='form-control'
+                             value={this.props.objectHolder.colors ? this.props.objectHolder.colors.colorsPantonesUrl : ''}
+                             onChange={e => this.props.setEditingObjectProperty('colors', {
+                               ...this.props.objectHolder.colors,
+                               pantones_url: e.target.value
+                             })}/>
                     </div>
                   </div>
                 </div>
-              },
-              textEffects: {
-                elem: <div className='panel panel-default'>
-                  <div className='panel-body'>
-                    <div className='form-group'>
-                      <div className='col-md-3'>
-                        <p>Config: </p>
-                      </div>
-                      <div className='col-md-9'>
-                        <input type='text' className='form-control'
-                               value={this.props.objectHolder.textEffects ? this.props.objectHolder.textEffects.config : ''}
-                               onChange={e => this.props.setEditingObjectProperty('textEffects', {
-                                 ...this.props.objectHolder.textEffects,
-                                 config: e.target.value
-                               })}/>
-                      </div>
+              </div>,
+              textEffects: <div className='panel panel-default'>
+                <div className='panel-body'>
+                  <div className='form-group'>
+                    <div className='col-md-3'>
+                      <p>Config: </p>
                     </div>
-                    <div className='form-group'>
-                      <div className='col-md-3'>
-                        <p>Url: </p>
-                      </div>
-                      <div className='col-md-9'>
-                        <input type='text' className='form-control'
-                               value={this.props.objectHolder.textEffects ? this.props.objectHolder.textEffects.url : ''}
-                               onChange={e => this.props.setEditingObjectProperty('textEffects', {
-                                 ...this.props.objectHolder.textEffects,
-                                 url: e.target.value
-                               })}/>
-                      </div>
+                    <div className='col-md-9'>
+                      <input type='text' className='form-control'
+                             value={this.props.objectHolder.textEffects ? this.props.objectHolder.textEffects.config : ''}
+                             onChange={e => this.props.setEditingObjectProperty('textEffects', {
+                               ...this.props.objectHolder.textEffects,
+                               config: e.target.value
+                             })}/>
+                    </div>
+                  </div>
+                  <div className='form-group'>
+                    <div className='col-md-3'>
+                      <p>Url: </p>
+                    </div>
+                    <div className='col-md-9'>
+                      <input type='text' className='form-control'
+                             value={this.props.objectHolder.textEffects ? this.props.objectHolder.textEffects.url : ''}
+                             onChange={e => this.props.setEditingObjectProperty('textEffects', {
+                               ...this.props.objectHolder.textEffects,
+                               url: e.target.value
+                             })}/>
                     </div>
                   </div>
                 </div>
-              },
-              redirectWindow: {
-                elem: <Select
-                  value={this.props.objectHolder.redirectWindow}
-                  options={this.redirectWindowOptions}
-                  onChange={option => this.props.setEditingObjectProperty('redirectWindow', option.value)}
-                  isLoading={this.props.loading}
-                  clearable={false}
-                />
-              },
-              options: {
-                elem: <ConfigurationOptions {...this.props}
-                                            handleSelectedObjectAddNewArray={this.handleSelectedObjectAddNewArray}
-                                            handleSelectedObjectArrayArrayChange={this.handleSelectedObjectArrayArrayChange}
-                                            handleSelectedObjectArrayArrayDeleteElement={this.handleSelectedObjectArrayArrayDeleteElement}/>
-              }
+              </div>,
+              redirectWindow: <Select
+                value={this.props.objectHolder.redirectWindow}
+                options={this.redirectWindowOptions}
+                onChange={option => this.props.setEditingObjectProperty('redirectWindow', option.value)}
+                isLoading={this.props.loading}
+                clearable={false}
+              />
+              ,
+              options: <ConfigurationOptions {...this.props}
+                                             handleSelectedObjectAddNewArray={this.handleSelectedObjectAddNewArray}
+                                             handleSelectedObjectArrayArrayChange={this.handleSelectedObjectArrayArrayChange}
+                                             handleSelectedObjectArrayArrayDeleteElement={this.handleSelectedObjectArrayArrayDeleteElement}/>
+
             }}
             customInputs={{
               defaults: {

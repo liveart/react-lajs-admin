@@ -24,15 +24,23 @@
       "type": "string",
       "required": true,
       "showInTable": true,
-      "showInput": false,
+      "showInput": true,
       "sortable": false,
-      "representation": "THUMBNAIL"
+      "representation": "THUMBNAIL",
+      "inputElement": "FILE_INPUT",
+      "uploadParams": {
+        "dir": "files/graphicCategoryThumbs/",
+        "endpoint": "containers/graphicCategoryThumbs"
+      }
     },
     "graphicsCategoryId": {
       "type": "string",
       "required": false,
       "showInTable": false,
-      "showInput": false
+      "showInput": true,
+      "header": "Parent category",
+      "inputElement": "DATA_SELECT",
+      "secondaryData": "graphicsCategories"
     }
   },
   "validations": [],
