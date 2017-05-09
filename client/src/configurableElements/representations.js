@@ -1,6 +1,6 @@
 import React from 'react';
-import {Representations} from './definitions';
-import {getNameFromUrl, getFileUrl} from './utils';
+import {Representations} from './config';
+import {getNameFromUrl, getFileUrl} from '../utils';
 
 export function getElement(type = Representations.TEXT, value = '') {
   switch (type) {
@@ -12,9 +12,7 @@ export function getElement(type = Representations.TEXT, value = '') {
     case Representations.COLOR_VALUE:
       return <div>
         {value}
-        <span className='label label-default pull-right'
-              style={{background: value}}>&nbsp;
-        </span>
+        <span className='label label-default pull-right' style={{background: value}}>&nbsp;</span>
       </div>;
     case Representations.THUMBNAIL:
       return <a href={getFileUrl(value)} className='thumbnail' style={{width: 100}}>

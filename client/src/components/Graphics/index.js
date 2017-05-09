@@ -8,11 +8,12 @@ import {
 } from '../../definitions';
 import {parseJson} from '../../GraphicJsonParser';
 import * as converter from '../../SvgConverter';
-const Graphic = GraphicModel.properties;
 import {getFileUrl} from '../../utils';
 import map from 'lodash/map';
 import forEach from 'lodash/forEach';
 import intersection from 'lodash/intersection';
+import * as helpers from './helpers';
+const Graphic = GraphicModel.properties;
 
 export default class GraphicsComponent extends Component {
   static propTypes = PTypes;
@@ -33,42 +34,11 @@ export default class GraphicsComponent extends Component {
     }
   }
 
-  handleSelectedObjectArrayChange = (arrName, ind, propName, event) => {
-    const arr = this.props.objectHolder[arrName];
-    (arr[ind])[propName] = event.target.value;
-    this.props.setEditingObjectProperty(arrName, [...arr]);
-  };
-
-  handleSelectedObjectArrayAddNew = (arrName, obj) => {
-    let arr = this.props.objectHolder[arrName];
-    if (typeof arr !== 'object') {
-      arr = [];
-    }
-    arr[arr.length] = {...obj};
-    this.props.setEditingObjectProperty(arrName, [...arr]);
-  };
-
-  handleSelectedObjectArrayDeleteElement = (arrName, key) => {
-    let arr = this.props.objectHolder[arrName];
-    arr.splice(key, 1);
-    this.props.setEditingObjectProperty(arrName, [...arr]);
-  };
-
-  handleSelectedObjectArrayArrayDeleteElement = (fArr, sArr, colorizableKey, key) => {
-    let arr = (this.props.objectHolder[fArr]);
-    arr[colorizableKey][sArr].splice(key, 1);
-    this.props.setEditingObjectProperty(fArr, [...arr]);
-  };
-
-  handleSelectedObjectArrayArrayChange = (fArrName, sArrName, fInd, sInd, propName, event) => {
-    const arr = this.props.objectHolder[fArrName];
-    arr[fInd][sArrName][sInd][propName] = event.target.value;
-    this.props.setEditingObjectProperty(fArrName, [...arr]);
-  };
-
-  handleSelectedObjectChange = (propertyName, event) => {
+  updateObject = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
+
+  updateArray = resObj => this.props.setEditingObjectProperty(resObj.name, [...resObj.array]);
 
   handleImgAsThumb = thumbRef => {
     this.props.setEditingObjectProperty('thumb', this.props.objectHolder.image);
@@ -155,47 +125,6 @@ export default class GraphicsComponent extends Component {
     }
   };
 
-  getColorgroupsOptions = () => {
-    if (!this.props.colorgroups || !this.props.colorgroups.length) {
-      return [];
-    }
-    return this.props.colorgroups;
-  };
-
-  getColorizableColorsOptions = () => {
-    return [{value: false, name: ADD_COLOR}, {value: true, name: ASSIGN_GROUP}];
-  };
-
-  getSelectedColorizableColorsOptions = key => {
-    if (!this.props.objectHolder.colorizables[key]._colors ||
-      !this.props.objectHolder.colorizables[key]._colors.length) {
-      return [];
-    }
-    let arr = this.props.objectHolder.colorizables;
-    if (arr[key]._colors) {
-      return map(arr[key]._colors, col => ({value: col.value, name: col.name}));
-    }
-  };
-
-  getSelectedColorizableOptions = key => {
-    let arr = this.props.objectHolder.colorizables;
-    if (!arr[key].assignColorgroup) {
-      return {value: arr[key].assignColorgroup, name: ADD_COLOR};
-    } else {
-      return {value: arr[key].assignColorgroup, name: ASSIGN_GROUP};
-    }
-  };
-
-  getSelectedColorizableColorgroupOptions = key => {
-    if (!this.props.objectHolder.colorizables[key].colorgroup) {
-      return {};
-    }
-    let arr = this.props.objectHolder.colorizables;
-    if (arr[key].colorgroup) {
-      return {id: arr[key].colorgroup.id, name: arr[key].colorgroup.name};
-    }
-  };
-
   onColorizableColorsSelectChange = (val, key) => {
     let colorizables = this.props.objectHolder.colorizables;
     let colors = [];
@@ -221,10 +150,14 @@ export default class GraphicsComponent extends Component {
   };
 
   addColorizableRow = () =>
-    this.handleSelectedObjectArrayAddNew('colorizables', {name: '', id: '', _colors: []});
+    this.updateArray(helpers.addToNestedArray(this.props.objectHolder, 'colorizables', {
+      name: '',
+      id: '',
+      _colors: []
+    }));
 
   deleteColorizableRow = key =>
-    this.handleSelectedObjectArrayDeleteElement('colorizables', key);
+    this.updateArray(helpers.deleteFromNestedArray(this.props.objectHolder, 'colorizables', key));
 
   handleImportJson = (json, baseUrl, urlOption, forceNoBase) => {
     if (!baseUrl.length && !forceNoBase && urlOption !== LEAVE_URL_OPTION) {
@@ -260,23 +193,6 @@ export default class GraphicsComponent extends Component {
     }
   };
 
-  getOptions = () => {
-    if (!this.props.colors || !this.props.colors.length) {
-      return [];
-    }
-    return this.props.colors;
-  };
-
-  getSelectedOptions = () => {
-    if (!this.props.objectHolder.colors || !this.props.objectHolder.colors.length) {
-      return [];
-    }
-    if (typeof (this.props.objectHolder.colors)[0] === 'string') {
-      return map(this.props.objectHolder.colors, col => ({value: col, name: col}));
-    }
-    return this.props.objectHolder.colors;
-  };
-
   onColorsSelectChange = val => {
     const arr = [];
     if (val) {
@@ -299,8 +215,10 @@ export default class GraphicsComponent extends Component {
   };
 
   render() {
+    console.warn(this.props)
     return <View {...this.props}
                  {...this}
+                 {...helpers}
                  imgUrl={this.state.imgUrl}
                  getFileUrl={getFileUrl}/>;
   }

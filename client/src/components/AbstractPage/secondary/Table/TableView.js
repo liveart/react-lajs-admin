@@ -22,8 +22,9 @@ export default class TableView extends Component {
             <SortRow objectSample={this.props.objectSample}
                      objectHolder={this.props.objectHolder}
                      updateObject={this.props.updateObject}
+                     setEditingObjectProperty={this.props.setEditingObjectProperty}
+                     secondaryData={this.props.secondaryData}
                      count={this.props.data.length}
-                     representations={this.props.representations}
                      sortingSupport={this.props.sortingSupport}/>
             {sortRows(this.props.data, this.props.objectSample,
               this.props.objectHolder, this.props.sortComparators).map(item =>
@@ -31,7 +32,6 @@ export default class TableView extends Component {
                    objectSample={this.props.objectSample}
                    secondaryData={this.props.secondaryData}
                    handleEdit={this.props.handleEdit}
-                   representations={this.props.representations}
                    item={item}/>)}
             </tbody>
           </table>

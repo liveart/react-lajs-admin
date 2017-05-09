@@ -1,0 +1,13 @@
+export const Representations = {
+  TEXT: 'TEXT',
+  LINK: 'LINK',
+  COLOR_VALUE: 'COLOR_VALUE',
+  THUMBNAIL: 'THUMBNAIL'
+};
+
+export const ElementTypes = {
+  BINARY_SELECT: 'BINARY_SELECT',
+  SELECT: 'SELECT',
+  CREATABLE_SELECT: 'CREATABLE_SELECT',
+  TEXTAREA: 'TEXTAREA'
+};

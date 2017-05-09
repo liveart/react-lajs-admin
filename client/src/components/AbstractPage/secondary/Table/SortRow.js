@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import keys from 'lodash/keys';
-
+import {ElementTypes} from '../../../../configurableElements/config';
+import Select from 'react-select';
 export default class SortRow extends Component {
   static propTypes = {
     sortingSupport: PropTypes.bool,
     objectSample: PropTypes.object.isRequired,
     objectHolder: PropTypes.object.isRequired,
     updateObject: PropTypes.func.isRequired,
-    count: PropTypes.number,
-    representations: PropTypes.object
+    count: PropTypes.number
   };
 
   render() {
@@ -24,11 +24,25 @@ export default class SortRow extends Component {
             return null;
           }
 
-          if (this.props.representations && this.props.representations.hasOwnProperty(key)) {
-            if (this.props.objectSample[key].sortable === false) {
-              return <td key={key}/>;
-            } else if (this.props.representations[key].sortElem) {
-              return <td key={key}>{this.props.representations[key].sortElem}</td>;
+          if (this.props.objectSample[key].sortable === false) {
+            return <td key={key}/>;
+          }
+
+          if (this.props.objectSample[key].sortElement && this.props.secondaryData) {
+            if (this.props.objectSample[key].sortElement === ElementTypes.SELECT) {
+              return <td key={key}>
+                <Select value={this.props.objectHolder[key]}
+                        options={this.props.secondaryData}
+                        valueKey='id'
+                        labelKey='name'
+                        onChange={el => {
+                          if (el) {
+                            this.props.setEditingObjectProperty(key, el.id);
+                          } else {
+                            this.props.setEditingObjectProperty(key, '');
+                          }
+                        }}/>
+              </td>;
             }
           }
 

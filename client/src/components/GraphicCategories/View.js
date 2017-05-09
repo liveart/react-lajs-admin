@@ -10,13 +10,6 @@ export default class GraphicCategoriesView extends Component {
   render() {
     return (
       <AbstractPage {...this.props} objectSample={GraphicsCategory} sortingSupport={true}
-                    changedInputs={{
-                      thumb: {
-                        saveF: () => this.props.handleFileUpload(this.refs.canvas),
-                        getName: obj => this.props.getName(obj, GRAPHIC_CATEGORY_FOLDER)
-                      }
-                    }
-                    }
                     customInputs={{
                       thumb: {
                         elem: <div>
@@ -43,7 +36,7 @@ export default class GraphicCategoriesView extends Component {
                       },
                       category: {
                         elem: <select className='form-control'
-                                      onChange={e => this.props.handleSelectedObjectChange('graphicsCategoryId', e)}
+                                      onChange={e => this.props.updateObject('graphicsCategoryId', e)}
                                       value={this.props.objectHolder['graphicsCategoryId']}>
                           <option key='rootCategory' value={''}>Root category</option>
                           {this.props.data.map(cg => (
@@ -81,4 +74,3 @@ export default class GraphicCategoriesView extends Component {
     );
   }
 }
-

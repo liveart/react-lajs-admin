@@ -180,6 +180,7 @@ export default class ProductsComponent extends Component {
 
     return this.props.colorsList;
   };
+
   getColorgroupsOptions = () => {
     if (!this.props.colorgroups || !this.props.colorgroups.length) {
       return [];
@@ -638,22 +639,6 @@ export default class ProductsComponent extends Component {
             secondaryData={this.props.productsCategories}
             handleImportJson={this.handleImportJson}
             enableImportJson={this.props.enableImportJson}
-            representations={{
-              categoryId: {
-                sortElem: <Select value={this.props.objectHolder.categoryId}
-                                  options={sortBy(this.props.productsCategories, 'name')}
-                                  valueKey='id'
-                                  labelKey='name'
-                                  onChange={el => {
-                                    if (el) {
-                                      this.props.setEditingObjectProperty('categoryId', el.id);
-                                    } else {
-                                      this.props.setEditingObjectProperty('categoryId', '');
-                                    }
-                                  }}
-                />
-              }
-            }}
             changedInputs={{
               thumbUrl: {
                 saveF: this.handleThumbUpload,

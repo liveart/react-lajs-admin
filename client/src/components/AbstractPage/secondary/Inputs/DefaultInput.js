@@ -1,24 +1,33 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
+import {Representations} from '../../../../configurableElements/config';
 import {capitalizeFirstLetter} from '../../../../utils';
 import {STATUS_EDITING} from '../../../../definitions';
+import {getElement} from '../../../../configurableElements/representations';
 
 export default class DefaultInput extends Component {
   static propTypes = {
     objectHolder: PropTypes.object.isRequired,
     property: PropTypes.string.isRequired,
     item: PropTypes.object.isRequired,
-    representations: PropTypes.object,
     changedInputs: PropTypes.object,
     updateObject: PropTypes.func.isRequired
+  };
+
+  getRepresentations = (item, key) => {
+    if (this.props.objectSample[key].representation &&
+      this.props.objectSample[key].representation !== Representations.TEXT) {
+      return <td>{getElement(this.props.objectSample[key].representation, this.props.objectHolder[key])}</td>;
+    }
+    return null;
   };
 
   render() {
     const {item, property} = this.props;
     return <div className='form-group'>
       <div className='col-md-2'>
-        <p className={'' + (item.required ? 'req' : '')}>
+        <p className={item.required ? 'req' : ''}>
           {item.header ?
             item.header : capitalizeFirstLetter(property)}
           {item.hint ? <small>&nbsp;<i className='fa fa-question'
@@ -35,15 +44,7 @@ export default class DefaultInput extends Component {
                    value={this.props.objectHolder[property]}
                    onChange={e => this.props.updateObject(property, e)}/>
         }
-        {
-          this.props.status === STATUS_EDITING &&
-          this.props.representations && this.props.representations.hasOwnProperty(property) ?
-            <div
-              style={{marginTop: 3}}>
-              {this.props.representations[property].getElem(this.props.objectHolder[property])}
-            </div> :
-            null
-        }
+        {this.props.status === STATUS_EDITING ? this.getRepresentations(item, property) : null}
       </div>
     </div>;
   }

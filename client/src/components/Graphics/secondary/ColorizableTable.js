@@ -8,7 +8,7 @@ export default class ColorizableTable extends Component {
     nameInputHandler: PropTypes.func.isRequired,
     idInputHandler: PropTypes.func.isRequired,
     getColorizableValue: PropTypes.func.isRequired,
-    colorizableOptions: PropTypes.arrayOf(PropTypes.any),
+    colorizableOptions: PropTypes.func.isRequired,
     colorizableHandler: PropTypes.func.isRequired,
     deleteColorizableRow: PropTypes.func.isRequired,
     getColorgroupValue: PropTypes.func.isRequired,
@@ -48,7 +48,7 @@ export default class ColorizableTable extends Component {
                             colorgroupHandler={o => this.props.colorgroupHandler(o, key)}
                             colorValue={this.props.getColorValue(key)}
                             colorHandler={o => this.props.colorHandler(o, key)}
-                            colorizableOptions={this.props.colorizableOptions}
+                            colorizableOptions={this.props.colorizableOptions(key)}
                             colorOptions={this.props.colorOptions}
                             colorgroupOptions={this.props.colorgroupOptions}/>) : null}
         </tbody>

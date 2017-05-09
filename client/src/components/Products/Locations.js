@@ -75,9 +75,8 @@ export default class Locations extends Component {
     this.props.handleSelectedObjectAddNewArray('locations', 'editableAreaUnitsRange', key, [])
   );
 
-  deleteUnitsRangeRow = (locationId, key) => (
-    this.props.handleSelectedObjectArrayArrayDeleteElement('locations', 'editableAreaUnitsRange', locationId, key)
-  );
+  deleteUnitsRangeRow = (locationId, key) =>
+    this.props.updateArray(this.props.deleteFromDblNestedArray(this.props.objectHolder, 'locations', 'editableAreaUnitsRange', locationId, key));
 
   renderUnitsRangeTable = () => (
     <div className='panel panel-default'>
@@ -97,18 +96,22 @@ export default class Locations extends Component {
               <td><input type='text' className='form-control'
                          value={col[0]}
                          onChange={e =>
-                           this.props.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange',
-                             this.state.location, k, 0, e)}/>
+                           this.props.updateArray(this.props.updateDblNestedArray(this.props.objectHolder, 'locations', 'editableAreaUnitsRange',
+                             this.state.location, k, 0, e))}/>
               </td>
               <td><input type='text' className='form-control'
                          value={col[1]}
                          onChange={e =>
-                           this.props.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', this.state.location, k, 1, e)}/>
+                           this.props.updateArray(
+                             this.props.updateDblNestedArray('locations', 'editableAreaUnitsRange',
+                               this.state.location, k, 1, e))}/>
               </td>
               <td><input type='text' className='form-control'
                          value={col[2]}
                          onChange={e =>
-                           this.props.handleSelectedObjectArrayArrayChange('locations', 'editableAreaUnitsRange', this.state.location, k, 2, e)}/>
+                           this.props.updateArray(
+                             this.props.updateDblNestedArray('locations', 'editableAreaUnitsRange',
+                               this.state.location, k, 2, e))}/>
               </td>
               <td><a className='btn btn-danger btn-xs' href='#'
                      onClick={() => this.deleteUnitsRangeRow(this.state.location, k)}>

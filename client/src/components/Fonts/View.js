@@ -43,7 +43,7 @@ export default class FontsView extends Component {
                       boldAllowed: {
                         elem: <select type='text' className='form-control'
                                       value={this.props.objectHolder.boldAllowed}
-                                      onChange={e => this.props.handleSelectedObjectChange('boldAllowed', e)}>
+                                      onChange={e => this.props.updateObject('boldAllowed', e)}>
                           <option value=''>...</option>
                           <option value='true'>Yes</option>
                           <option value='false'>No</option>
@@ -52,7 +52,7 @@ export default class FontsView extends Component {
                       italicAllowed: {
                         elem: <select type='text' className='form-control'
                                       value={this.props.objectHolder.italicAllowed}
-                                      onChange={e => this.props.handleSelectedObjectChange('italicAllowed', e)}>
+                                      onChange={e => this.props.updateObject('italicAllowed', e)}>
                           <option value=''>...</option>
                           <option value='true'>Yes</option>
                           <option value='false'>No</option>
