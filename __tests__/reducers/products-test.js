@@ -34,36 +34,7 @@ describe('products reducer', () => {
         type: types.CREATE_PRODUCT
       })).toEqual({...INITIAL_STATE, productsLoading: true});
   });
-  test('should handle ' + types.UPLOAD_PRODUCT_THUMB, () => {
-    expect(
-      reducer(INITIAL_STATE, {
-        type: types.UPLOAD_PRODUCT_THUMB
-      })).toEqual({...INITIAL_STATE, productsLoading: true});
-  });
-  test('should handle ' + types.UPLOAD_PRODUCT_LOCATION_OVERLAY, () => {
-    expect(
-      reducer(INITIAL_STATE, {
-        type: types.UPLOAD_PRODUCT_LOCATION_OVERLAY
-      })).toEqual({...INITIAL_STATE, productsLoading: true});
-  });
-  test('should handle ' + types.UPLOAD_PRODUCT_LOCATION_MASK, () => {
-    expect(
-      reducer(INITIAL_STATE, {
-        type: types.UPLOAD_PRODUCT_LOCATION_MASK
-      })).toEqual({...INITIAL_STATE, productsLoading: true});
-  });
-  test('should handle ' + types.UPLOAD_PRODUCT_LOCATION_IMAGE, () => {
-    expect(
-      reducer(INITIAL_STATE, {
-        type: types.UPLOAD_PRODUCT_LOCATION_IMAGE
-      })).toEqual({...INITIAL_STATE, productsLoading: true});
-  });
-  test('should handle ' + types.UPLOAD_PRODUCT_IMAGE, () => {
-    expect(
-      reducer(INITIAL_STATE, {
-        type: types.UPLOAD_PRODUCT_IMAGE
-      })).toEqual({...INITIAL_STATE, productsLoading: true});
-  });
+
   test('should handle ' + types.EDIT_PRODUCT, () => {
     expect(
       reducer(INITIAL_STATE, {

@@ -10,6 +10,7 @@ describe('Products categories Actions', () => {
     };
     expect(FF.fetchProductsCategories()).toEqual(expectedAction);
   });
+
   test('should create an action to fetch productsCategory by id', () => {
     const id = '15';
     const expectedAction = {
@@ -59,13 +60,5 @@ describe('Products categories Actions', () => {
       token
     };
     expect(FF.deleteProductsCategory(id, token)).toEqual(expectedAction);
-  });
-  test('should create an action to upload a file', () => {
-    const thumb = "thumb";
-    const expectedAction = {
-      type: F.UPLOAD_THUMBNAIL,
-      thumbnail: thumb
-    };
-    expect(FF.uploadThumbnail(thumb)).toEqual(expectedAction);
   });
 });

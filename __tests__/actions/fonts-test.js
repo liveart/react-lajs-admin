@@ -60,12 +60,4 @@ describe('Font Actions', () => {
     };
     expect(FF.deleteFont(id, token)).toEqual(expectedAction);
   });
-  test('should create an action to upload a file', () => {
-    const fontFile = "fontFile";
-    const expectedAction = {
-      type: F.UPLOAD_FONT_FILE,
-      fontFile
-    };
-    expect(FF.uploadFontFile(fontFile)).toEqual(expectedAction);
-  });
 });

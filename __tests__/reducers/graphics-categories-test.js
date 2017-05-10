@@ -47,14 +47,6 @@ describe('graphicsCategories reducer', () => {
       })).toEqual({...INITIAL_STATE, graphicsCategoriesLoading: true});
   });
 
-  test('should handle ' + types.UPLOAD_THUMBNAIL, () => {
-    expect(
-      reducer(INITIAL_STATE, {
-        type: types.UPLOAD_THUMBNAIL
-      })).toEqual({...INITIAL_STATE, graphicsCategoriesLoading: true});
-  });
-
-
   test('should handle ' + types.EDIT_GRAPHICS_CATEGORY, () => {
     expect(
       reducer(INITIAL_STATE, {

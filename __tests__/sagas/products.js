@@ -22,51 +22,19 @@ describe('products saga', () => {
   test('should process fetching number', () => {
     expect([...sagas.fetchProductsNumber()].pop().type).toEqual(actionTypes.PRODUCT_OPERATION_SUCCESS);
   });
+
   test('should process editing', () => {
     expect([...sagas.editProduct({
       id: '',
       newProduct: {}
     })].pop().type).not.toEqual(actionTypes.PRODUCT_OPERATION_FAILURE);
   });
+
   test('should process editing with error', () => {
     expect([...sagas.editProduct()].pop().type).toEqual(actionTypes.PRODUCT_OPERATION_FAILURE);
   });
 
   test('should process deleting with error', () => {
     expect([...sagas.deleteProduct()].pop().type).toEqual(actionTypes.PRODUCT_OPERATION_FAILURE);
-  });
-  test('should process uploading', () => {
-    expect([...sagas.uploadProductImage({imageFile: ''})].pop().type).not.toEqual(actionTypes.PRODUCT_OPERATION_FAILURE);
-  });
-
-  test('should process uploading with error', () => {
-    expect([...sagas.uploadProductImage()].pop().type).toEqual(actionTypes.PRODUCT_OPERATION_FAILURE);
-  });
-  test('should process uploading', () => {
-    expect([...sagas.uploadProductLocationImage({imageFile: ''})].pop().type).not.toEqual(actionTypes.PRODUCT_OPERATION_FAILURE);
-  });
-
-  test('should process uploading with error', () => {
-    expect([...sagas.uploadProductLocationImage()].pop().type).toEqual(actionTypes.PRODUCT_OPERATION_FAILURE);
-  });
-  test('should process uploading', () => {
-    expect([...sagas.uploadProductLocationMask({imageFile: ''})].pop().type).not.toEqual(actionTypes.PRODUCT_OPERATION_FAILURE);
-  });
-
-  test('should process uploading with error', () => {
-    expect([...sagas.uploadProductLocationMask()].pop().type).toEqual(actionTypes.PRODUCT_OPERATION_FAILURE);
-  });
-  test('should process uploading', () => {
-    expect([...sagas.uploadProductLocationOverlay({imageFile: ''})].pop().type).not.toEqual(actionTypes.PRODUCT_OPERATION_FAILURE);
-  });
-
-  test('should process uploading with error', () => {
-    expect([...sagas.uploadProductLocationOverlay()].pop().type).toEqual(actionTypes.PRODUCT_OPERATION_FAILURE);
-  });
-  test('should process uploading', () => {
-    expect([...sagas.uploadProductThumb({thumbFile: ''})].pop().type).not.toEqual(actionTypes.PRODUCT_OPERATION_FAILURE);
-  });
-  test('should process uploading with error', () => {
-    expect([...sagas.uploadProductThumb()].pop().type).toEqual(actionTypes.PRODUCT_OPERATION_FAILURE);
   });
 });

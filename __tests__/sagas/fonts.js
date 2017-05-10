@@ -30,28 +30,16 @@ describe('fonts saga', () => {
   test('should process fetching number', () => {
     expect([...sagas.fetchFontsNumber()].pop().type).toEqual(actionTypes.FONTS_OPERATION_SUCCESS);
   });
+
   test('should process editing', () => {
     expect([...sagas.editFont({id: '', newFont: {}})].pop().type).not.toEqual(actionTypes.FONTS_OPERATION_FAILURE);
   });
+
   test('should process editing with error', () => {
     expect([...sagas.editFont()].pop().type).toEqual(actionTypes.FONTS_OPERATION_FAILURE);
   });
 
   test('should process deleting with error', () => {
     expect([...sagas.deleteFont()].pop().type).toEqual(actionTypes.FONTS_OPERATION_FAILURE);
-  });
-  test('should process uploading', () => {
-    expect([...sagas.uploadFontFile({fileWOFF: {}})].pop().type).toEqual(actionTypes.FONTS_OPERATION_SUCCESS);
-  });
-
-  test('should process uploading with error', () => {
-    expect([...sagas.uploadFontFile()].pop().type).toEqual(actionTypes.FONTS_OPERATION_FAILURE);
-  });
-  test('should process uploading', () => {
-    expect([...sagas.uploadVectors({vector: {}})].pop().type).toEqual(actionTypes.FONTS_OPERATION_SUCCESS);
-  });
-
-  test('should process uploading with error', () => {
-    expect([...sagas.uploadVectors()].pop().type).toEqual(actionTypes.FONTS_OPERATION_FAILURE);
   });
 });

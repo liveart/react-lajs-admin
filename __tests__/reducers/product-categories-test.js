@@ -46,14 +46,6 @@ describe('productsCategories reducer', () => {
       })).toEqual({...INITIAL_STATE, productsCategoriesLoading: true});
   });
 
-  test('should handle ' + types.UPLOAD_THUMBNAIL, () => {
-    expect(
-      reducer(INITIAL_STATE, {
-        type: types.UPLOAD_THUMBNAIL
-      })).toEqual({...INITIAL_STATE, productsCategoriesLoading: true});
-  });
-
-
   test('should handle ' + types.EDIT_PRODUCTS_CATEGORY, () => {
     expect(
       reducer(INITIAL_STATE, {

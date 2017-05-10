@@ -10,6 +10,7 @@ describe('Graphics categories Actions', () => {
     };
     expect(FF.fetchGraphicsCategories()).toEqual(expectedAction);
   });
+
   test('should create an action to fetch graphicsCategory by id', () => {
     const id = '15';
     const expectedAction = {

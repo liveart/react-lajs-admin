@@ -35,21 +35,6 @@ describe('graphics reducer', () => {
       })).toEqual({...INITIAL_STATE, graphicsLoading: true});
   });
 
-  test('should handle ' + types.UPLOAD_GRAPHIC_THUMB, () => {
-    expect(
-      reducer(INITIAL_STATE, {
-        type: types.UPLOAD_GRAPHIC_THUMB
-      })).toEqual({...INITIAL_STATE, graphicsLoading: true});
-  });
-
-  test('should handle ' + types.UPLOAD_GRAPHIC_IMAGE, () => {
-    expect(
-      reducer(INITIAL_STATE, {
-        type: types.UPLOAD_GRAPHIC_IMAGE
-      })).toEqual({...INITIAL_STATE, graphicsLoading: true});
-  });
-
-
   test('should handle ' + types.EDIT_GRAPHIC, () => {
     expect(
       reducer(INITIAL_STATE, {
