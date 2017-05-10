@@ -12,7 +12,7 @@ export default class extends Component {
     this.props.validateUserToken(this.props.token);
   }
 
-  handleSelectedObjectChange = (propertyName, event) => {
+  updateObject = (propertyName, event) => {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
 
@@ -155,7 +155,7 @@ export default class extends Component {
         <div className='col-md-10'>
           <input type='email' className='form-control'
                  value={this.props.objectHolder['email']}
-                 onChange={e => this.handleSelectedObjectChange('email', e)}
+                 onChange={e => this.updateObject('email', e)}
           />
         </div>
       </div>
@@ -166,7 +166,7 @@ export default class extends Component {
         <div className='col-md-10'>
           <input type='password' className='form-control'
                  value={this.props.objectHolder['password']}
-                 onChange={e => this.handleSelectedObjectChange('password', e)}/>
+                 onChange={e => this.updateObject('password', e)}/>
         </div>
       </div>
     </div>
@@ -181,7 +181,7 @@ export default class extends Component {
         <div className='col-md-10'>
           <input type='text' className='form-control'
                  value={this.props.objectHolder['email']}
-                 onChange={e => this.handleSelectedObjectChange('email', e)}
+                 onChange={e => this.updateObject('email', e)}
                  disabled/>
         </div>
       </div>
