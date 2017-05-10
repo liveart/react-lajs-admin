@@ -1,3 +1,3 @@
 import React from 'react';
 
-export default  <input type='file' className='form-control' accept='image/*'/>;
+export default  <input type='file' className='form-control'/>;

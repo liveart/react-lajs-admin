@@ -22,7 +22,7 @@ const mapStateToProps = state => {
   return {
     title: 'Product',
     data: products,
-    colorsList: colors,
+    colors,
     colorgroups,
     colorsLoading,
     colorgroupsLoading,

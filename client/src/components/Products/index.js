@@ -1,32 +1,28 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
-import {capitalizeFirstLetter} from '../../utils';
-import View from '../AbstractPage';
-import Select, {Creatable} from 'react-select';
+import View from './View';
 import * as ProductModel from '../../../../common/models/product.json';
 import {
   STATUS_EDITING,
   STATUS_CREATING,
   STATUS_DEFAULT,
-  RELATIVE_URL,
-  SIZES,
-  ASSIGN_GROUP,
-  ADD_COLOR
+  SIZES
 } from '../../definitions';
 import {parseJson} from '../../ProductJsonParser';
-import Locations from './Locations';
 import map from 'lodash/map';
 import forEach from 'lodash/forEach';
+import forOwn from 'lodash/forOwn';
+import findIndex from 'lodash/findIndex';
 import '../../../public/assets/css/cropper.css';
 const LEAVE_URL_OPTION = 'Import';
 const Product = ProductModel.properties;
-
+const Location = ProductModel.properties.locations.type[0];
 export default class ProductsComponent extends Component {
   static propTypes = PTypes;
 
   constructor(props) {
     super(props);
-    this.state = {newColorizables: [], newColors: [], imgUrl: ''};
+    this.state = {newColorizables: [], newColors: [], imgUrl: '', mainImgUrl: '', location: -1};
   }
 
   componentWillMount() {
@@ -149,79 +145,6 @@ export default class ProductsComponent extends Component {
     this.props.uploadProductImage(file);
   };
 
-  getOptions = () => {
-    if (!this.props.colorsList || !this.props.colorsList.length) {
-      return [];
-    }
-    return this.props.colorsList;
-  };
-
-  getColorgroupsOptions = () => {
-    if (!this.props.colorgroups || !this.props.colorgroups.length) {
-      return [];
-    }
-    return this.props.colorgroups;
-  };
-
-  getColorizableColorsOptions = () => {
-    return [{value: false, name: ADD_COLOR}, {value: true, name: ASSIGN_GROUP}];
-  };
-
-  getColorsLocationsOptions = () => {
-    if (!this.props.objectHolder.locations || !this.props.objectHolder.locations.length) {
-      return [];
-    }
-    return map(this.props.objectHolder.locations, l => ({name: l.name, value: l.name}));
-  };
-
-  getSelectedOptions = key => {
-    if (!this.props.objectHolder.colors || !this.props.objectHolder.colors.length) {
-      return [];
-    }
-
-    if (this.props.objectHolder.colors[key]) {
-      return {name: this.props.objectHolder.colors[key].name, value: this.props.objectHolder.colors[key].value};
-    }
-  };
-
-  getSelectedColorizableColorsOptions = key => {
-    if (!this.props.objectHolder.colorizables[key]._colors || !this.props.objectHolder.colorizables[key]._colors.length) {
-      return [];
-    }
-    let arr = this.props.objectHolder.colorizables;
-    if (arr[key]._colors) {
-      return map(arr[key]._colors, col => ({value: col.value, name: col.name}));
-    }
-  };
-
-  getSelectedColorizableOptions = key => {
-    let arr = this.props.objectHolder.colorizables;
-    if (!arr[key].assignColorgroup) {
-      return {value: arr[key].assignColorgroup, name: ADD_COLOR};
-    } else {
-      return {value: arr[key].assignColorgroup, name: ASSIGN_GROUP};
-    }
-  };
-
-  getSelectedColorizableColorgroupOptions = key => {
-    if (!this.props.objectHolder.colorizables[key].colorgroup) {
-      return {};
-    }
-    let arr = this.props.objectHolder.colorizables;
-    if (arr[key].colorgroup) {
-      return {id: arr[key].colorgroup.id, name: arr[key].colorgroup.name};
-    }
-  };
-
-  getSelectedColorLocationsOptions = (key, k) => {
-    if (!this.props.objectHolder.colors[key].location[k]) {
-      return {};
-    }
-    let arr = this.props.objectHolder.colors;
-    return {name: arr[key].location[k].name};
-
-  };
-
   onColorsSelectChange = (val, key) => {
     const arr = this.props.objectHolder.colors;
     if (val) {
@@ -249,92 +172,6 @@ export default class ProductsComponent extends Component {
     }
   };
 
-  getNameFromUrl = name => {
-    if (typeof name === 'string') {
-      return name.substring(name.lastIndexOf('/') + 1);
-    }
-  };
-
-  renderColorsTable = () => (
-    <div className='panel panel-default'>
-      <table className='table table-bordered'>
-        <thead>
-        <tr>
-          <th>Color</th>
-          <th>Locations</th>
-          <th/>
-        </tr>
-        </thead>
-        <tbody>
-        {this.props.objectHolder.colors ?
-          this.props.objectHolder.colors.map((c, key) =>
-            <tr key={key}>
-              <td className='col-md-4'>
-                <Select
-                  name='colors'
-                  value={this.getSelectedOptions(key)}
-                  labelKey='name'
-                  options={this.getOptions()}
-                  onChange={os => this.onColorsSelectChange(os, key)}
-                  isLoading={this.props.colorsLoading}
-                />
-              </td>
-              <td className='col-md-8'>
-                <div className='panel panel-default'>
-                  <table className='table'>
-                    <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Image</th>
-                      <th/>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {c.location ? c.location.map((col, k) => (
-                      <tr key={k}>
-                        <td>
-                          <Select style={{marginBottom: 6}}
-                                  name='locations'
-                                  value={this.getSelectedColorLocationsOptions(key, k)}
-                                  multi={false}
-                                  labelKey='name'
-                                  options={this.getColorsLocationsOptions()}
-                                  onChange={os => this.handleColorLocationActionOption(os, key, k)}
-                                  clearable={false}
-                          />
-                        </td>
-                        <td>
-                          <input type='file' className='form-control' accept='image/*'
-                                 onChange={e =>
-                                   this.handleSelectedObjectArrayArrayChange('colors', 'location', key, k, 'image', e)}/>
-                          {typeof (col.image) === 'string' ?
-                            <a href={this.getFileUrl(col.image)}>{this.getNameFromUrl(col.image)}</a> : null
-                          }  </td>
-                        <td><a className='btn btn-danger btn-xs' href='#'
-                               onClick={() => this.deleteLocationRow(key, k)}>
-                          <i className='fa fa-ban'/></a></td>
-                      </tr>
-                    )) : null}
-                    </tbody>
-                  </table>
-                  <div className='panel-footer'>
-                    <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addLocationRow(key)}>
-                      <i className='fa fa-plus'/> Add location</a>
-                  </div>
-                </div>
-              </td>
-              <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteColorsRow(key)}>
-                <i className='fa fa-ban'/></a></td>
-            </tr>) : null}
-        </tbody>
-      </table>
-      <div className='panel-footer'>
-        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addColorsRow()}>
-          <i className='fa fa-plus'/> Add color</a>
-      </div>
-    </div>
-  );
-
   handleColorActionOption = (option, key) => {
     let colorizables = this.props.objectHolder.colorizables;
     colorizables[key].assignColorgroup = option.value;
@@ -346,67 +183,6 @@ export default class ProductsComponent extends Component {
     colors[key].location[k].name = option.value;
     this.props.setEditingObjectProperty('colors', colors);
   };
-
-  renderColorizableTable = () => (
-    <div className='panel panel-default'>
-      <table className='table table-bordered'>
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Id</th>
-          <th>Colors</th>
-          <th/>
-        </tr>
-        </thead>
-        <tbody>
-        {this.props.objectHolder.colorizables ?
-          this.props.objectHolder.colorizables.map((c, key) =>
-            <tr key={key}>
-              <td className='col-md-4'><input type='text' className='form-control'
-                                              value={c.name}
-                                              onChange={e => this.handleSelectedObjectArrayChange('colorizables', key, 'name', e)}/>
-              </td>
-              <td className='col-md-4'><input type='text' className='form-control'
-                                              value={c.id}
-                                              onChange={e => this.handleSelectedObjectArrayChange('colorizables', key, 'id', e)}/>
-              </td>
-              <td className='col-md-4'>
-                <Select style={{marginBottom: 6}}
-                        value={this.getSelectedColorizableOptions(key)}
-                        labelKey='name'
-                        options={this.getColorizableColorsOptions()}
-                        onChange={os => this.handleColorActionOption(os, key)}
-                        clearable={false}
-                />
-                {!c.assignColorgroup ?
-                  <Creatable
-                    name='colors'
-                    value={this.getSelectedColorizableColorsOptions(key)}
-                    multi={true}
-                    labelKey='name'
-                    options={this.getOptions()}
-                    onChange={os => this.onColorizableColorsSelectChange(os, key)}
-                    isLoading={this.props.colorsLoading}
-                  /> : <Select
-                    name='colorgroup'
-                    value={this.getSelectedColorizableColorgroupOptions(key)}
-                    labelKey='name'
-                    options={this.getColorgroupsOptions()}
-                    onChange={os => this.onColorizableColorgroupSelectChange(os, key)}
-                    isLoading={this.props.colorgroupsLoading}
-                  /> }
-              </td>
-              <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteColorizableRow(key)}>
-                <i className='fa fa-ban'/></a></td>
-            </tr>) : null}
-        </tbody>
-      </table>
-      <div className='panel-footer'>
-        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addColorizableRow()}>
-          <i className='fa fa-plus'/> Add element</a>
-      </div>
-    </div>
-  );
 
   addColorsRow = () => (
     this.handleSelectedObjectArrayAddNew('colors', {name: '', value: '', location: []})
@@ -445,21 +221,6 @@ export default class ProductsComponent extends Component {
   deleteColorizableRow = key => (
     this.handleSelectedObjectArrayDeleteElement('colorizables', key)
   );
-
-  getFileUrl = url => {
-    if (url.substring(0, RELATIVE_URL.length) === RELATIVE_URL) {
-      return url.substring(RELATIVE_URL.length);
-    }
-    return url;
-  };
-
-  getName = (obj, url) => {
-    if (typeof obj === 'object') {
-      return RELATIVE_URL + '/' + url + obj.name;
-    }
-
-    return undefined;
-  };
 
   getSizeOptions = () => {
     if (!SIZES || !SIZES.length) {
@@ -522,48 +283,6 @@ export default class ProductsComponent extends Component {
     }
   };
 
-  renderEditableAreaSizesTable = () => (
-    <div className='panel panel-default'>
-      <table className='table table-bordered'>
-        <thead>
-        <tr>
-          <th>Label</th>
-          <th>Width</th>
-          <th>Height</th>
-          <th/>
-        </tr>
-        </thead>
-        <tbody>
-        {this.props.objectHolder.editableAreaSizes ?
-          this.props.objectHolder.editableAreaSizes.map((c, key) =>
-            <tr key={key}>
-              <td><input type='text' className='form-control'
-                         value={c.label}
-                         onChange={e =>
-                           this.handleSelectedObjectArrayChange('editableAreaSizes', key, 'label', e)}/>
-              </td>
-              <td><input type='text' className='form-control'
-                         value={c.width}
-                         onChange={e =>
-                           this.handleSelectedObjectArrayChange('editableAreaSizes', key, 'width', e)}/>
-              </td>
-              <td><input type='text' className='form-control'
-                         value={c.height}
-                         onChange={e =>
-                           this.handleSelectedObjectArrayChange('editableAreaSizes', key, 'height', e)}/>
-              </td>
-              <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.deleteEditableAreaSizeRow(key)}>
-                <i className='fa fa-ban'/></a></td>
-            </tr>) : null}
-        </tbody>
-      </table>
-      <div className='panel-footer'>
-        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.addEditableAreaSizeRow()}>
-          <i className='fa fa-plus'/> Add size</a>
-      </div>
-    </div>
-  );
-
   saveMulticolor = () => {
     if (this.props.objectHolder.multicolor === true) {
       this.props.setEditingObjectProperty('colors', []);
@@ -605,72 +324,148 @@ export default class ProductsComponent extends Component {
     this.props.setEditingObjectProperty('data', {...data});
   };
 
+  getLocationsInputValue = propertyName => {
+    if (this.state.location < 0 || !this.props.objectHolder.locations ||
+      !this.props.objectHolder.locations.length) {
+      return '';
+    }
+    return ((this.props.objectHolder.locations)[this.state.location])[propertyName];
+  };
+
+  getImageUrl = image => {
+    if (!image) {
+      return;
+    }
+    if (typeof image === 'string') {
+      return this.props.getFileUrl(image);
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      this.setState({
+        ...this.state,
+        mainImgUrl: reader.result
+      });
+    };
+    reader.readAsDataURL(image);
+    return this.state.mainImgUrl;
+  };
+
+  deleteCurrentLocation = () => {
+    const locs = this.props.objectHolder.locations;
+    locs.splice(this.state.location, 1);
+    this.props.setEditingObjectProperty('locations', [...locs]);
+    this.setState({
+      ...this.state, location: -1
+    });
+  };
+
+  addUnitsRangeRow = key => (
+    this.props.handleSelectedObjectAddNewArray('locations', 'editableAreaUnitsRange', key, [])
+  );
+
+  deleteUnitsRangeRow = (locationId, key) =>
+    this.props.updateArray(this.props.deleteFromDblNestedArray(this.props.objectHolder, 'locations', 'editableAreaUnitsRange', locationId, key));
+
+  handleLocationsNestedFileChoose = (prop, e) => {
+    const locs = [...this.props.objectHolder.locations];
+    (locs[this.state.location])[prop] = e.target.files[0];
+    this.props.setEditingObjectProperty('locations', locs);
+  };
+
+  changeNestedHolderArrValue = (topArrPropName, topInd, changingArrPropName, changingArrInd, value) => {
+    const topArr = [...this.props.objectHolder[topArrPropName]];
+    ((topArr[topInd])[changingArrPropName])[changingArrInd] = value;
+    this.props.setEditingObjectProperty(topArrPropName, [...topArr]);
+  };
+
+  changeLocationsNestedArrValue = (changingArrPropName, changingArrInd, value) =>
+    this.changeNestedHolderArrValue('locations', this.state.location, changingArrPropName, changingArrInd, value);
+
+  changeNestedHolderValue = (topArrPropName, topInd, changingPropName, value) => {
+    const topArr = this.props.objectHolder[topArrPropName];
+    ((topArr[topInd])[changingPropName]) = value;
+    this.props.setEditingObjectProperty(topArrPropName, [...topArr]);
+  };
+
+  changeLocationsNestedHolderValue = (changingPropName, value) =>
+    this.changeNestedHolderValue('locations', this.state.location, changingPropName, value);
+
+  crop = () => {
+    if (!this.cropper) {
+      return;
+    }
+    const data = this.cropper.getData();
+    forOwn(data, (value, key) => {
+      if (value === '-0.00') {
+        data[key] = '0.00';
+      }
+    });
+    this.changeLocationsNestedArrValue('editableArea', 0, Number(data.x.toFixed(2)));
+    this.changeLocationsNestedArrValue('editableArea', 1, Number(data.y.toFixed(2)));
+    this.changeLocationsNestedArrValue('editableArea', 2, Number((data.width + data.x).toFixed(2)));
+    this.changeLocationsNestedArrValue('editableArea', 3, Number((data.height + data.y).toFixed(2)));
+  };
+
+  handleNewOption = val => {
+    let obj = {};
+    forEach(Object.getOwnPropertyNames(Location), p => {
+      if (Location[p].type === 'array' || Array.isArray(Location[p].type)) {
+        obj[p] = [];
+      } else {
+        if (typeof Location[p].default === 'boolean') {
+          obj[p] = Location[p].default;
+        } else {
+          obj[p] = '';
+        }
+      }
+    });
+    this.props.setEditingObjectProperty('locations', [...this.props.locations,
+      {...obj, name: val.name}]);
+    this.setState({
+      ...this.state, location: findIndex(this.objectHolder.locations,
+        loc => loc.name === val.name)
+    });
+  };
+
+  handleOptionChange = val => {
+    if (!val) {
+      this.setState({
+        ...this.state, location: -1
+      });
+      return;
+    }
+    this.setState({
+      ...this.state, location: findIndex(this.props.locations,
+        loc => loc.name === val.name)
+    });
+  };
+
+  handleNewLocation = () => {
+    const val = 'New location';
+    let obj = {};
+    forEach(Object.getOwnPropertyNames(Location), p => {
+      if (Location[p].type === 'array' || Array.isArray(Location[p].type)) {
+        obj[p] = [];
+      } else {
+        if (typeof Location[p].default === 'boolean') {
+          obj[p] = Location[p].default;
+        } else {
+          obj[p] = '';
+        }
+      }
+    });
+    this.props.setEditingObjectProperty('locations', [...this.props.locations,
+      {...obj, name: val.name}]);
+    this.setState({
+      ...this.state, location: findIndex(this.props.locations,
+        loc => loc.name === val.name)
+    });
+  };
+
   render() {
     return (
-      <View {...this.props} objectSample={{...Product}}
-            sortingSupport={true}
-            secondaryData={this.props.productsCategories}
-            handleImportJson={this.handleImportJson}
-            enableImportJson={this.props.enableImportJson}
-            nested={{
-              colorizables: this.renderColorizableTable(),
-              /*
-               colors: {
-               elem: this.renderColorsTable(),
-               saveF: this.saveMulticolor,
-               getName: color => forEach(color, clr => {
-               if (clr !== null && clr.location) {
-               if (clr.location.length) {
-               forEach(clr.location, lc => {
-               if (typeof (lc.image) === 'object') {
-               this.handleImageUpload(lc.image);
-               lc.image = this.getName(lc.image, PRODUCT_IMG_FOLDER);
-               }
-               });
-               }
-               }
-               })
-               },
-               */
-              editableAreaSizes: this.renderEditableAreaSizesTable()
-            }}
-            customInputs={{
-              customOptions: {
-                elem: <div className='panel panel-default'>
-                  <div className='panel-body'>
-                    {this.props.objectHolder.data ? Object.getOwnPropertyNames(this.props.objectHolder.data).map(prop =>
-                      <div key={prop} className='form-group'>
-                        <div className='col-md-2'>
-                          <p>{capitalizeFirstLetter(prop)}: </p>
-                        </div>
-                        <div className='col-md-9'>
-                          <input type='text' className='form-control'
-                                 value={this.props.objectHolder.data[prop]}
-                                 onChange={e => this.handleSelectedObjectDataChange('data', prop, e)}/>
-                        </div>
-                        <div className='col-md-1'>
-                          <a className='btn btn-default' href='#' aria-label='Remove'
-                             onClick={() => this.removeCustomOption(prop)}>
-                            <i className='fa fa-times' aria-hidden='true'/>
-                          </a>
-                        </div>
-                      </div>
-                    ) : null}
-                  </div>
-                  <div className='panel-footer'>
-                    <div className='input-group'>
-                      <input type='text' className='form-control' ref={r => this.customOptionInput = r}
-                             placeholder='New option name'/>
-                      <span className='input-group-btn'>
-                      <button type='button' className='btn btn-primary btn-n'
-                              onClick={this.createCustomOption}>Create
-                      </button>
-                    </span>
-                    </div>
-                  </div>
-                </div>
-              }
-            }}
+      <View {...this.props} {...this}
       />
     );
   }
