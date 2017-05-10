@@ -465,7 +465,7 @@ export default class ProductsComponent extends Component {
 
   render() {
     return (
-      <View {...this.props} {...this}
+      <View {...this.props} {...this.state} {...this}
       />
     );
   }

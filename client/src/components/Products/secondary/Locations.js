@@ -50,7 +50,7 @@ export default class Locations extends Component {
         </div>
         <div className='col-md-1'>
           <a className='btn btn-default' href='#' aria-label='Add'
-             onClick={() => this.props.handleNewLocation}>
+             onClick={() => this.props.handleNewLocation()}>
             <i className='fa fa-plus' aria-hidden='true'></i>
           </a>
         </div>
