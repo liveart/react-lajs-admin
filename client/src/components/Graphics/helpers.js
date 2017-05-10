@@ -2,13 +2,13 @@ import {ASSIGN_GROUP, ADD_COLOR} from '../../definitions';
 import map from 'lodash/map';
 
 export function updateNestedArray(arrName, ind, propName, event) {
-  const arr = this.props.objectHolder[arrName];
+  const arr = [...this.props.objectHolder[arrName]];
   (arr[ind])[propName] = event.target.value;
   this.props.setEditingObjectProperty(arrName, [...arr]);
 }
 
 export function addToNestedArray(objectHolder, arrName, obj) {
-  let arr = objectHolder[arrName];
+  let arr = [...objectHolder[arrName]];
   if (typeof arr !== 'object') {
     arr = [];
   }
@@ -17,19 +17,19 @@ export function addToNestedArray(objectHolder, arrName, obj) {
 }
 
 export function deleteFromNestedArray(objectHolder, arrName, key) {
-  let arr = objectHolder[arrName];
+  let arr = [...objectHolder[arrName]];
   arr.splice(key, 1);
   return {name: arrName, array: arr};
 }
 
 export function deleteFromDblNestedArray(objectHolder, fArr, sArr, colorizableKey, key) {
-  let arr = objectHolder[fArr];
+  let arr = [...objectHolder[fArr]];
   arr[colorizableKey][sArr].splice(key, 1);
   return {name: fArr, array: arr};
 }
 
 export function updateDblNestedArray(objectHolder, fArrName, sArrName, fInd, sInd, propName, event) {
-  const arr = objectHolder[fArrName];
+  const arr = [...objectHolder[fArrName]];
   arr[fInd][sArrName][sInd][propName] = event.target.value;
   return {name: fArrName, array: arr};
 }

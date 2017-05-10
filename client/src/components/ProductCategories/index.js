@@ -1,18 +1,13 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
 import {
-  ID_PROP,
-  STATUS_EDITING,
-  STATUS_CREATING,
   STATUS_CONFIRM_DELETE,
-  PRODUCT_CATEGORIES_THUMB_FOLDER,
   DELETE_CATEGORY,
   MOVE_CATEGORY_TO_OTHER_CATEGORY,
   DELETE_PRODUCTS,
   MOVE_PRODUCTS_TO_OTHER_CATEGORY
 } from '../../definitions';
 import * as ProductsCategoryModel from '../../../../common/models/products-category.json';
-import {RadioGroup, Radio} from 'react-radio-group';
 const ProductsCategory = ProductsCategoryModel.properties;
 import View from './View';
 import filter from 'lodash/filter';
