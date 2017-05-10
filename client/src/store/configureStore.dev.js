@@ -7,7 +7,7 @@ module.exports = function configureStore(sagaMiddleware) {
   const middleware = [];
 
   middleware.push(sagaMiddleware);
-  middleware.push(createLogger()); // only for debug
+  middleware.push(createLogger());
 
   const finalCreateStore = compose(
     applyMiddleware(...middleware),

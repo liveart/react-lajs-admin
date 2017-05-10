@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
-import {forEach, filter} from 'lodash';
+import forEach from 'lodash/forEach';
+import filter from 'lodash/filter';
 import View from './View';
 import {IN_FT, CM_M} from './secondary/helpers.js';
 
@@ -19,19 +20,18 @@ export default class extends Component {
     this.props.setEditingObjectProperty(propertyName, value);
   };
 
-
   handleSelectedObjectAddNewArray = (fArr, sArr, key, obj) => {
     let arr = (this.props.objectHolder[fArr]);
-    if (typeof (arr[key])[sArr] !== 'object') {
-      (arr[key])[sArr] = [];
+    if (typeof arr[key][sArr] !== 'object') {
+      arr[key][sArr] = [];
     }
-    ((arr[key])[sArr])[(arr[key])[sArr].length] = [...obj];
+    arr[key][sArr][arr[key][sArr].length] = [...obj];
     this.props.setEditingObjectProperty(fArr, [...arr]);
   };
 
   handleSelectedObjectArrayArrayDeleteElement = (fArr, sArr, colorizableKey, key) => {
-    const arr = (this.props.objectHolder[fArr]);
-    ((arr[colorizableKey])[sArr]).remove(key);
+    const arr = this.props.objectHolder[fArr];
+    arr[colorizableKey][sArr].remove(key);
     this.props.setEditingObjectProperty(fArr, [...arr]);
   };
 

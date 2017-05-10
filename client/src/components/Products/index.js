@@ -109,6 +109,12 @@ export default class ProductsComponent extends Component {
     this.props.setEditingObjectProperty(prop, object);
   };
 
+  updateObjectData = (prop, propertyName, value) => {
+    const object = {...this.props.objectHolder[prop]};
+    object[propertyName] = value;
+    this.props.setEditingObjectProperty(prop, {...object});
+  };
+
   toCanvas = prop => {
     const image = this.props.objectHolder[prop];
     const img = new Image();
@@ -302,15 +308,15 @@ export default class ProductsComponent extends Component {
     }
   };
 
-  createCustomOption = () => {
-    if (!this.customOptionInput || !this.customOptionInput.value || !this.customOptionInput.value.length) {
+  createCustomOption = customOptionInput => {
+    if (!customOptionInput || !customOptionInput.value || !customOptionInput.value.length) {
       this.props.addNotification('error', 'Incorrect custom property name.');
       return;
     }
-    let data = this.props.objectHolder.data;
-    data[this.customOptionInput.value] = '';
-    this.customOptionInput.value = '';
-    this.props.setEditingObjectProperty('data', {...data});
+    let data = {...this.props.objectHolder.data};
+    data[customOptionInput.value] = '';
+    customOptionInput.value = '';
+    this.props.setEditingObjectProperty('data', data);
   };
 
   removeCustomOption = (prop, accepted) => {
