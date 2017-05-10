@@ -9,7 +9,6 @@ import '../../../../public/assets/css/cropper.css';
 
 export default class Locations extends Component {
   static propTypes = {
-    location: PropTypes.number,
     objectHolder: PropTypes.object,
     getImageUrl: PropTypes.func,
     getLocationsInputValue: PropTypes.func,
@@ -32,7 +31,6 @@ export default class Locations extends Component {
         <div className='col-md-11'>
           <Creatable
             name='location'
-            className='onTop'
             placeholder={this.props.objectHolder.locations && this.props.objectHolder.locations.length ?
               map(this.props.objectHolder.locations, 'name').join(', ') :
               'No locations linked. Type a name to add location...'}

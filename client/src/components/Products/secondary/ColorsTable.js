@@ -6,9 +6,6 @@ import {getNameFromUrl, getFileUrl} from '../../../utils';
 
 export default class ColorsTable extends Component {
   static propTypes = {
-    colorList: PropTypes.array,
-    colors: PropTypes.object,
-    locations: PropTypes.object,
     onColorsSelectChange: PropTypes.func,
     handleColorLocationActionOption: PropTypes.func,
     handleSelectedObjectArrayArrayChange: PropTypes.func,
