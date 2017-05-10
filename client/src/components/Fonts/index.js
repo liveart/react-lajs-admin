@@ -27,6 +27,11 @@ export default class extends Component {
   };
 
   render() {
-    return <View {...this.props} {...this}/>;
+    return <View {...this.props}
+                 handleFileChoose={this.handleFileChoose}
+                 handleVectorUpload={this.handleVectorUpload}
+                 handleFontUpload={this.handleFontUpload}
+                 handleSelectedObjectChange={this.handleSelectedObjectChange}
+    />;
   }
 }
