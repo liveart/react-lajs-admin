@@ -31,7 +31,9 @@
       "header": "Category",
       "textProperty": "name",
       "representation": "TEXT",
-      "sortElement": "SELECT"
+      "sortElement": "SELECT",
+      "inputElement": "DATA_SELECT",
+      "secondaryData": "productsCategories"
     },
     "thumbUrl": {
       "type": "string",
@@ -161,7 +163,16 @@
       ],
       "required": false,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "inputElement": "CREATABLE_MULTISELECT",
+      "selectOptions": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ]
     },
     "locations": {
       "type": [

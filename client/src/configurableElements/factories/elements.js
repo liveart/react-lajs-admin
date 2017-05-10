@@ -7,6 +7,7 @@ import BinarySelect from '../elements/BinarySelect';
 import DataSelect from '../elements/DataSelect';
 import DataMultiselect from '../elements/DataMultiselect';
 import ColorPicker from '../elements/ColorPicker';
+import CreatableMultiselect from '../elements/CreatableMultiselect';
 
 export function getElement(type = Elements.DEFAULT_INPUT) {
   switch (type) {
@@ -22,6 +23,8 @@ export function getElement(type = Elements.DEFAULT_INPUT) {
       return DataSelect;
     case Elements.DATA_MULTISELECT:
       return DataMultiselect;
+    case Elements.CREATABLE_MULTISELECT:
+      return CreatableMultiselect;
     case Elements.COLOR_PICKER:
       return ColorPicker;
   }

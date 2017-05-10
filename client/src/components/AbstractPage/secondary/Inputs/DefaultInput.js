@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
-import {Representations, Elements} from '../../../../configurableElements/config';
+import {Representations} from '../../../../configurableElements/config';
+import map from 'lodash/map';
 import {capitalizeFirstLetter} from '../../../../utils';
 import {STATUS_EDITING} from '../../../../definitions';
 import {getElement as getRepresentationElement} from '../../../../configurableElements/factories/representations';
@@ -57,12 +58,18 @@ export default class DefaultInput extends Component {
       props.value = value;
     }
 
-    if (inputElement === Elements.DATA_SELECT || inputElement === Elements.DATA_MULTISELECT &&
-      typeof currSample.secondaryData === 'string') {
+    if (input.props.acceptsOptions && input.props.acceptsOptions === true) {
       if (typeof currSample.secondaryDataId === 'string') {
         props.valueKey = currSample.secondaryDataId;
       }
-      props.options = this.props[currSample.secondaryData];
+
+      if (typeof currSample.secondaryData === 'string') {
+        props.options = [...this.props[currSample.secondaryData]];
+      }
+
+      if (typeof currSample.selectOptions === 'object') {
+        props.options = map(currSample.selectOptions, col => ({id: col, name: col}));
+      }
     }
 
     return React.cloneElement(input, {...props});
