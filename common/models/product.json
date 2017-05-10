@@ -19,7 +19,8 @@
       "viewIndex": 1,
       "showInTable": true,
       "showInput": true,
-      "sortable": true
+      "sortable": true,
+      "viewGroup": "options"
     },
     "categoryId": {
       "type": "string",

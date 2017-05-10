@@ -10,10 +10,12 @@ import DefaultView from './secondary/ViewStates/DefaultView';
 import DeleteConfirmationView from './secondary/ViewStates/DeleteConfirmationView';
 import ImportView from './secondary/ViewStates/ImportView';
 import DefaultInput from './secondary/Inputs/DefaultInput';
-import CustomInput from './secondary/Inputs/CustomInput';
 import sortBy from 'lodash/sortBy';
 import keys from 'lodash/keys';
+import groupBy from 'lodash/groupBy';
 import EditingView from './secondary/ViewStates/EditingView';
+import InputRow from './secondary/InputRow';
+import Panel from './secondary/Panel';
 
 export default class AbstractPageView extends Component {
 
@@ -32,18 +34,35 @@ export default class AbstractPageView extends Component {
     });
 
   getCustomInputs = () => {
-    if (!this.props.customInputs) {
-      return [];
-    }
-    return keys(this.props.customInputs).map(prop => {
-      return {
-        element: <CustomInput key={prop}
-                              property={prop}
-                              item={this.props.customInputs[prop]}
-                              changedInputs={this.props.changedInputs}/>,
-        viewIndex: this.props.customInputs[prop].viewIndex || keys(this.props.objectSample).length
-      };
-    });
+    const {objectHolder, updateObject} = this.props;
+    const groups = keys(this.props.objectSample)
+      .filter(prop => typeof this.props.objectSample[prop].viewGroup === 'string');
+
+    const groupsMap = groupBy(groups.map(key => ({key, ...this.props.objectSample[key]})), 'viewGroup');
+
+    return keys(groupsMap).map(key => ({
+      element: <InputRow key={key}
+                         title={key}
+                         element={
+                           <Panel inputRows={groupsMap[key].map(i =>
+                             <DefaultInput key={i.key}
+                                           {...this.props}
+                                           property={i.key}
+                                           item={i}
+                                           shouldGroupRender={true}/>)}/>}
+      />
+    }));
+    /*
+     return keys(this.props.customInputs).map(prop => {
+     return {
+     element: <CustomInput key={prop}
+     property={prop}
+     item={this.props.customInputs[prop]}
+     changedInputs={this.props.changedInputs}/>,
+     viewIndex: this.props.customInputs[prop].viewIndex || keys(this.props.objectSample).length
+     };
+     });
+     */
   };
 
   renderInputs = () =>

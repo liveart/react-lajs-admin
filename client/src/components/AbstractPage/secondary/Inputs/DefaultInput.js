@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import ReactTooltip from 'react-tooltip';
 import {Representations} from '../../../../configurableElements/config';
+import InputRow from '../InputRow';
 import map from 'lodash/map';
 import {capitalizeFirstLetter} from '../../../../utils';
 import {STATUS_EDITING} from '../../../../definitions';
@@ -14,7 +14,8 @@ export default class DefaultInput extends Component {
     property: PropTypes.string.isRequired,
     item: PropTypes.object.isRequired,
     changedInputs: PropTypes.object,
-    updateObject: PropTypes.func.isRequired
+    updateObject: PropTypes.func.isRequired,
+    shouldGroupRender: PropTypes.bool
   };
 
   getRepresentation = () => {
@@ -29,12 +30,12 @@ export default class DefaultInput extends Component {
   };
 
   getInput = () => {
-    const {objectSample, objectHolder, updateObject, property, setEditingObjectProperty} = this.props;
+    const {objectSample, objectHolder, updateObject, property, setEditingObjectProperty, item} = this.props;
     if (this.props.nested && typeof this.props.nested[property] === 'object') {
       return this.props.nested[property];
     }
 
-    const currSample = objectSample[property];
+    const currSample = item;
     const inputElement = currSample.inputElement;
     let input = getInputElement(inputElement);
     let value = objectHolder[property];
@@ -64,6 +65,7 @@ export default class DefaultInput extends Component {
       }
 
       if (typeof currSample.secondaryData === 'string') {
+        console.warn('kewl')
         props.options = [...this.props[currSample.secondaryData]];
       }
 
@@ -76,22 +78,14 @@ export default class DefaultInput extends Component {
   };
 
   render() {
-    const {item, property} = this.props;
-    return <div className='form-group'>
-      <div className='col-md-2'>
-        <p className={item.required ? 'req' : ''}>
-          {item.header ?
-            item.header : capitalizeFirstLetter(property)}
-          {item.hint ? <small>&nbsp;<i className='fa fa-question'
-                                       data-tip={item.hint}/>
-          </small> : null}
-        </p>
-        {item.hint ? <ReactTooltip effect='solid'/> : null}
-      </div>
-      <div className='col-md-10'>
-        {this.getInput()}
-        {this.props.status === STATUS_EDITING ? this.getRepresentation() : null}
-      </div>
-    </div>;
+    const {item, property, shouldGroupRender} = this.props;
+    if (!shouldGroupRender && typeof item.viewGroup === 'string') {
+      return null;
+    }
+
+    return <InputRow required={item.required}
+                     title={item.header ? item.header : capitalizeFirstLetter(property)}
+                     element={<div> {this.getInput()}
+                       {this.props.status === STATUS_EDITING ? this.getRepresentation() : null}</div>}/>;
   }
 }

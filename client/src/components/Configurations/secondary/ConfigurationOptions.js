@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {IN_FT, CM_M, getOptionsInputValue} from './helpers.js';
 
-
 export default class ConfigurationOptions extends Component {
 
   render() {
