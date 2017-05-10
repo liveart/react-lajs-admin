@@ -55,7 +55,7 @@
       "type": "object",
       "default": {},
       "showInTable": false,
-      "showInput": false
+      "showInput": true
     },
     "minDPU": {
       "type": "number",
@@ -138,7 +138,7 @@
         "useForProduct": "boolean"
       },
       "showInTable": false,
-      "showInput": false
+      "showInput": true
     },
     "resizable": {
       "type": "boolean",
