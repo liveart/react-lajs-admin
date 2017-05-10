@@ -18,9 +18,10 @@ export default class DefaultInput extends Component {
 
   getRepresentation = () => {
     const {objectSample, objectHolder, property} = this.props;
-    const representation = objectSample[property].representation;
+    const {representation, hideInputRepresentation} = objectSample[property];
 
-    if (representation && representation !== Representations.TEXT) {
+    if (representation && representation !== Representations.TEXT &&
+      (typeof hideInputRepresentation === 'boolean' ? !hideInputRepresentation : true)) {
       return getRepresentationElement(representation, objectHolder[property]);
     }
     return null;

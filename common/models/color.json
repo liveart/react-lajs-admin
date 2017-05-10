@@ -37,7 +37,8 @@
       "showInput": true,
       "sortable": false,
       "representation": "COLOR_VALUE",
-      "inputElement": "COLOR_PICKER"
+      "inputElement": "COLOR_PICKER",
+      "hideInputRepresentation": true
     }
   },
   "validations": [],
