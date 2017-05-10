@@ -17,8 +17,8 @@ export default class GraphicsView extends Component {
                          nested={{
                            colorizables: <ColorizableTable
                              colorizables={ this.props.objectHolder.colorizables || []}
-                             nameInputHandler={(e, key) => this.props.updateArray(this.props.updateNestedArray('colorizables', key, 'name', e))}
-                             idInputHandler={(e, key) => this.props.updateArray(this.props.updateNestedArray('colorizables', key, 'id', e))}
+                             nameInputHandler={(e, key) => this.props.updateNestedArray('colorizables', key, 'name', e)}
+                             idInputHandler={(e, key) => this.props.updateNestedArray('colorizables', key, 'id', e)}
                              getColorizableValue={key => this.props.getSelectedColorizableOptions(this.props.objectHolder.colorizables, key)}
                              colorizableHandler={(o, key) => this.props.handleColorActionOption(o, key)}
                              colorizableOptions={this.props.getColorizableColorsOptions}
