@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {
   MOVE_GRAPHICS_TO_OTHER_CATEGORY
 } from '../../../definitions';

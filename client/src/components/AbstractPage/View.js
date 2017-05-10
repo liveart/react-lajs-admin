@@ -16,6 +16,7 @@ import groupBy from 'lodash/groupBy';
 import EditingView from './secondary/ViewStates/EditingView';
 import InputRow from './secondary/InputRow';
 import Panel from './secondary/Panel';
+import CustomInput from './secondary/Inputs/CustomInput';
 
 export default class AbstractPageView extends Component {
 
@@ -33,8 +34,7 @@ export default class AbstractPageView extends Component {
       };
     });
 
-  getCustomInputs = () => {
-    const {objectHolder, updateObject} = this.props;
+  getGroupedInputs = () => {
     const groups = keys(this.props.objectSample)
       .filter(prop => typeof this.props.objectSample[prop].viewGroup === 'string');
 
@@ -49,24 +49,27 @@ export default class AbstractPageView extends Component {
                                            {...this.props}
                                            property={i.key}
                                            item={i}
-                                           shouldGroupRender={true}/>)}/>}
+                                           shouldGroupRender={true}
+                                           titleCol={3}
+                                           elementCol={9}
+                             />)}/>}
       />
     }));
-    /*
-     return keys(this.props.customInputs).map(prop => {
-     return {
-     element: <CustomInput key={prop}
-     property={prop}
-     item={this.props.customInputs[prop]}
-     changedInputs={this.props.changedInputs}/>,
-     viewIndex: this.props.customInputs[prop].viewIndex || keys(this.props.objectSample).length
-     };
-     });
-     */
+  };
+
+  getNestedInputs = () => {
+    return keys(this.props.nested).map(prop => {
+      return {
+        element: <CustomInput key={prop}
+                              property={prop}
+                              item={this.props.customInputs[prop]}/>
+      };
+    });
   };
 
   renderInputs = () =>
-    (sortBy([...this.getDefaultInputs(), ...this.getCustomInputs()], 'viewIndex')).map(obj => obj.element);
+    (sortBy([...this.getDefaultInputs(), ...this.getGroupedInputs(), ...this.getNestedInputs()], 'viewIndex'))
+      .map(obj => obj.element);
 
   renderPage = () => {
     if (this.props.status === STATUS_DEFAULT) {

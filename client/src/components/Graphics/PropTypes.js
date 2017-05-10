@@ -24,7 +24,6 @@ export const PTypes = {
   editEntity: PropTypes.func.isRequired,
   deleteEntity: PropTypes.func.isRequired,
   setEditingObjectProperty: PropTypes.func.isRequired,
-  uploadFile: PropTypes.func.isRequired,
   restoreTableState: PropTypes.func.isRequired,
   graphicsCategories: PropTypes.array.isRequired,
   uploadFile: PropTypes.func.isRequired,

@@ -30,9 +30,9 @@ export default class DefaultInput extends Component {
   };
 
   getInput = () => {
-    const {objectSample, objectHolder, updateObject, property, setEditingObjectProperty, item} = this.props;
-    if (this.props.nested && typeof this.props.nested[property] === 'object') {
-      return this.props.nested[property];
+    const {nested, objectHolder, updateObject, property, setEditingObjectProperty, item} = this.props;
+    if (nested && typeof nested[property] === 'object') {
+      return nested[property];
     }
 
     const currSample = item;
@@ -85,6 +85,8 @@ export default class DefaultInput extends Component {
     return <InputRow required={item.required}
                      title={item.header ? item.header : capitalizeFirstLetter(property)}
                      element={<div> {this.getInput()}
-                       {this.props.status === STATUS_EDITING ? this.getRepresentation() : null}</div>}/>;
+                       {this.props.status === STATUS_EDITING ? this.getRepresentation() : null}</div>}
+                     titleCol={this.props.titleCol}
+                     elementCol={this.props.elementCol}/>;
   }
 }

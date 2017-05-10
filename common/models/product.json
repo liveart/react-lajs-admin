@@ -159,7 +159,7 @@
       "required": false,
       "showInTable": false,
       "showInput": true,
-      "header": ""
+      "header": "Editable area sizes"
     },
     "showRuler": {
       "type": "boolean",

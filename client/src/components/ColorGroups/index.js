@@ -11,7 +11,7 @@ import {
 } from '../../definitions';
 import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
 import DeleteConfirmation from './secondary/DeleteConfirmation';
-import DeleteButton from './secondary/DeleteButton';
+import DeleteButton from './secondary/DeleteButtonGroup';
 import AbstractPage from '../AbstractPage/index';
 import {getLinkedToGraphic, getLinkedToProduct} from './secondary/helpers';
 const Colorgroup = ColorgroupModel.properties;

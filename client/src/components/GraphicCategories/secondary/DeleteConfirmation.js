@@ -1,16 +1,10 @@
 import React, {Component} from 'react';
 import {RadioGroup, Radio} from 'react-radio-group';
-import PropTypes from 'prop-types';
 import {
-  ID_PROP,
-  DELETE_CATEGORY,
-  MOVE_GRAPHICS_TO_OTHER_CATEGORY,
-  MOVE_CATEGORY_TO_OTHER_CATEGORY,
-  DELETE_GRAPHICS
+  ID_PROP, DELETE_CATEGORY, MOVE_GRAPHICS_TO_OTHER_CATEGORY, MOVE_CATEGORY_TO_OTHER_CATEGORY, DELETE_GRAPHICS
 } from '../../../definitions';
 
 export default class DeleteConfirmation extends Component {
-
   render() {
     return <div className='form-group'>
       <div className='col-md-3'>
@@ -49,7 +43,7 @@ export default class DeleteConfirmation extends Component {
             </div>
             <div>
               <Radio value={MOVE_GRAPHICS_TO_OTHER_CATEGORY}/>&nbsp; Move graphics of this category to other
-              category &nbsp;
+              category&nbsp;
               <select
                 value={this.props.newGraphic}
                 onChange={this.props.handleMoveGraphicToCategory}>
@@ -70,4 +64,3 @@ export default class DeleteConfirmation extends Component {
     </div>;
   }
 }
-

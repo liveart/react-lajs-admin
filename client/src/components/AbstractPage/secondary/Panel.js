@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import InputRow from './InputRow';
 
 export default class Panel extends Component {
   static propTypes = {

@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
 import {
-  STATUS_EDITING,
-  STATUS_CREATING,
   STATUS_CONFIRM_DELETE,
   DELETE_CATEGORY,
   MOVE_GRAPHICS_TO_OTHER_CATEGORY,
@@ -10,11 +8,10 @@ import {
   DELETE_GRAPHICS
 } from '../../definitions';
 import * as GraphicsCategoryModel from '../../../../common/models/graphics-category.json';
-const GraphicsCategory = GraphicsCategoryModel.properties;
 import View from './View';
 import filter from 'lodash/filter';
 import {getFileUrl, getName} from '../../utils';
-
+const GraphicsCategory = GraphicsCategoryModel.properties;
 
 export default class extends Component {
   static propTypes = PTypes;
@@ -37,7 +34,6 @@ export default class extends Component {
 
   deleteRelatedCats = (catId, cats, graphicsAction) => {
     this.props.deleteEntity(catId, this.props.token);
-
     if (graphicsAction !== MOVE_GRAPHICS_TO_OTHER_CATEGORY || catId !== this.props.objectHolder.id) {
       this.props.secondaryData.forEach(g => {
         if (g.categoryId === catId) {

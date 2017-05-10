@@ -36,14 +36,8 @@ export default class GraphicsComponent extends Component {
     this.props.setEditingObjectProperty(propertyName, event.target.value);
   };
 
-  updateArray = resObj => {
-    console.warn(resObj)
-    this.props.setEditingObjectProperty(resObj.name, [...resObj.array]);
-  }
-
-
-
-
+  updateArray = resObj => this.props.setEditingObjectProperty(resObj.name, [...resObj.array]);
+  
   handleImgAsThumb = thumbRef => {
     this.props.setEditingObjectProperty('thumb', this.props.objectHolder.image);
     helpers.toCanvas(this.props.objectHolder.thumb, thumbRef);
