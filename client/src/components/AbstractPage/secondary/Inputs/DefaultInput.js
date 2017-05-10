@@ -65,7 +65,6 @@ export default class DefaultInput extends Component {
       }
 
       if (typeof currSample.secondaryData === 'string') {
-        console.warn('kewl')
         props.options = [...this.props[currSample.secondaryData]];
       }
 
