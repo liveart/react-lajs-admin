@@ -410,7 +410,7 @@ export default class Locations extends Component {
                     autoCropArea={1}
                   />
                   <button type='button' className='btn btn-block btn-primary'
-                          onClick={this.crop}>Save Editable Area
+                          onClick={() => this.props.crop(this.cropper)}>Save Editable Area
                   </button>
                 </div>
               </div>

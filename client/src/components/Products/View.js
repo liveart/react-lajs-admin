@@ -48,6 +48,7 @@ export default class ProductView extends Component {
                            />,
                            locations: <Locations
                              location={this.props.location}
+                             crop={ref => this.props.crop(ref)}
                              objectHolder={this.props.objectHolder}
                              getImageUrl={this.props.getImageUrl}
                              getLocationsInputValue={this.props.getLocationsInputValue}
@@ -62,24 +63,6 @@ export default class ProductView extends Component {
                              deleteUnitsRangeRow={this.props.deleteUnitsRangeRow}
                              updateDblNestedArray={this.props.updateDblNestedArray}
                              updateArray={this.props.updateArray}/>
-                           /*
-                            colors: {
-                            elem: this.renderColorsTable(),
-                            saveF: this.saveMulticolor,
-                            getName: color => forEach(color, clr => {
-                            if (clr !== null && clr.location) {
-                            if (clr.location.length) {
-                            forEach(clr.location, lc => {
-                            if (typeof (lc.image) === 'object') {
-                            this.handleImageUpload(lc.image);
-                            lc.image = this.getName(lc.image, PRODUCT_IMG_FOLDER);
-                            }
-                            });
-                            }
-                            }
-                            })
-                            },
-                            */
                          }}
                          customInputs={{
                            pantones: {

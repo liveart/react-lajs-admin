@@ -362,7 +362,7 @@ export default class ProductsComponent extends Component {
   };
 
   addUnitsRangeRow = key => (
-   this.handleSelectedObjectAddNewArray('locations', 'editableAreaUnitsRange', key, [])
+    this.handleSelectedObjectAddNewArray('locations', 'editableAreaUnitsRange', key, [])
   );
 
   deleteUnitsRangeRow = (locationId, key) =>
@@ -392,11 +392,11 @@ export default class ProductsComponent extends Component {
   changeLocationsNestedHolderValue = (changingPropName, value) =>
     this.changeNestedHolderValue('locations', this.state.location, changingPropName, value);
 
-  crop = () => {
-    if (!this.cropper) {
+  crop = cropper => {
+    if (!cropper) {
       return;
     }
-    const data = this.cropper.getData();
+    const data = cropper.getData();
     forOwn(data, (value, key) => {
       if (value === '-0.00') {
         data[key] = '0.00';

@@ -57,18 +57,8 @@ export default class AbstractPageView extends Component {
     }));
   };
 
-  getNestedInputs = () => {
-    return keys(this.props.nested).map(prop => {
-      return {
-        element: <CustomInput key={prop}
-                              property={prop}
-                              item={this.props.customInputs[prop]}/>
-      };
-    });
-  };
-
   renderInputs = () =>
-    (sortBy([...this.getDefaultInputs(), ...this.getGroupedInputs(), ...this.getNestedInputs()], 'viewIndex'))
+    (sortBy([...this.getDefaultInputs(), ...this.getGroupedInputs()], 'viewIndex'))
       .map(obj => obj.element);
 
   renderPage = () => {
