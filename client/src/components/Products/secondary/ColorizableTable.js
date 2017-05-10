@@ -13,7 +13,6 @@ import {
 export default class ProductColorizableTable extends Component {
 
   static propTypes = {
-    colorizables: PropTypes.object,
     handleSelectedObjectArrayChange: PropTypes.func,
     handleColorActionOption: PropTypes.func,
     onColorizableColorsSelectChange: PropTypes.func,

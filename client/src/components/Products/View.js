@@ -17,6 +17,10 @@ export default class ProductView extends Component {
                          enableImportJson={this.props.enableImportJson}
                          nested={{
                            colorizables: <ColorizableTable
+                             colors={this.props.colors}
+                             colorsLoading={this.props.colorsLoading}
+                             colorgroupsLoading={this.props.colorgroupsLoading}
+                             colorgroups={this.props.colorgroups}
                              colorizables={this.props.objectHolder.colorizables}
                              handleSelectedObjectArrayChange={this.props.handleSelectedObjectArrayChange}
                              handleColorActionOption={this.props.handleColorActionOption}
@@ -28,7 +32,7 @@ export default class ProductView extends Component {
                            colors: <ColorsTable
                              colorList={this.props.colors}
                              colors={this.props.objectHolder.colors}
-                             locations={this.props.locations}
+                             locations={this.props.objectHolder.locations}
                              onColorsSelectChange={this.props.onColorsSelectChange}
                              handleColorLocationActionOption={this.props.handleColorLocationActionOption}
                              handleSelectedObjectArrayArrayChange={this.props.handleSelectedObjectArrayArrayChange}

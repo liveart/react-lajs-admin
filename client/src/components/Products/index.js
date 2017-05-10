@@ -13,6 +13,7 @@ import map from 'lodash/map';
 import forEach from 'lodash/forEach';
 import forOwn from 'lodash/forOwn';
 import findIndex from 'lodash/findIndex';
+import {getFileUrl} from '../../utils';
 import '../../../public/assets/css/cropper.css';
 const LEAVE_URL_OPTION = 'Import';
 const Product = ProductModel.properties;
@@ -337,7 +338,7 @@ export default class ProductsComponent extends Component {
       return;
     }
     if (typeof image === 'string') {
-      return this.props.getFileUrl(image);
+      return getFileUrl(image);
     }
 
     const reader = new FileReader();
@@ -361,7 +362,7 @@ export default class ProductsComponent extends Component {
   };
 
   addUnitsRangeRow = key => (
-    this.props.handleSelectedObjectAddNewArray('locations', 'editableAreaUnitsRange', key, [])
+   this.handleSelectedObjectAddNewArray('locations', 'editableAreaUnitsRange', key, [])
   );
 
   deleteUnitsRangeRow = (locationId, key) =>
@@ -410,20 +411,20 @@ export default class ProductsComponent extends Component {
   handleNewOption = val => {
     let obj = {};
     forEach(Object.getOwnPropertyNames(Location), p => {
-      if (Location[p].type === 'array' || Array.isArray(Location[p].type)) {
+      if (Location[p] && (Location[p].type === 'array' || Array.isArray(Location[p].type))) {
         obj[p] = [];
       } else {
-        if (typeof Location[p].default === 'boolean') {
+        if (Location[p] && typeof Location[p].default === 'boolean') {
           obj[p] = Location[p].default;
         } else {
           obj[p] = '';
         }
       }
     });
-    this.props.setEditingObjectProperty('locations', [...this.props.locations,
+    this.props.setEditingObjectProperty('locations', [...this.props.objectHolder.locations,
       {...obj, name: val.name}]);
     this.setState({
-      ...this.state, location: findIndex(this.objectHolder.locations,
+      ...this.state, location: findIndex(this.props.objectHolder.locations,
         loc => loc.name === val.name)
     });
   };
@@ -436,7 +437,7 @@ export default class ProductsComponent extends Component {
       return;
     }
     this.setState({
-      ...this.state, location: findIndex(this.props.locations,
+      ...this.state, location: findIndex(this.props.objectHolder.locations,
         loc => loc.name === val.name)
     });
   };
@@ -445,21 +446,21 @@ export default class ProductsComponent extends Component {
     const val = 'New location';
     let obj = {};
     forEach(Object.getOwnPropertyNames(Location), p => {
-      if (Location[p].type === 'array' || Array.isArray(Location[p].type)) {
+      if (Location[p] && (Location[p].type === 'array' || Array.isArray(Location[p].type))) {
         obj[p] = [];
       } else {
-        if (typeof Location[p].default === 'boolean') {
+        if (Location[p] && typeof Location[p].default === 'boolean') {
           obj[p] = Location[p].default;
         } else {
           obj[p] = '';
         }
       }
     });
-    this.props.setEditingObjectProperty('locations', [...this.props.locations,
-      {...obj, name: val.name}]);
+    this.props.setEditingObjectProperty('locations', [...this.props.objectHolder.locations,
+      {...obj, name: val}]);
     this.setState({
       ...this.state, location: findIndex(this.props.locations,
-        loc => loc.name === val.name)
+        loc => loc.name === val)
     });
   };
 

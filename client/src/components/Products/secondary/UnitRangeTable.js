@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 export default class UnitRangeTable extends Component {
   static propTypes = {
-    location: PropTypes.number,
     objectHolder: PropTypes.object,
     addUnitsRangeRow: PropTypes.func,
     deleteUnitsRangeRow: PropTypes.func,

@@ -5,7 +5,6 @@ import {} from '../../../definitions';
 
 export default class EditableAreaSizesTable extends Component {
   static propTypes = {
-    editableAreaSizes: PropTypes.object,
     handleSelectedObjectArrayChange: PropTypes.func,
     deleteEditableAreaSizeRow: PropTypes.func,
     addEditableAreaSizeRow: PropTypes.func
