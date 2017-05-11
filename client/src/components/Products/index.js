@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
 import View from './View';
+import * as helpers from '../Graphics/helpers';
 import * as ProductModel from '../../../../common/models/product.json';
 import {
   STATUS_EDITING,
@@ -372,7 +373,9 @@ export default class ProductsComponent extends Component {
   );
 
   deleteUnitsRangeRow = (locationId, key) =>
-    this.props.updateArray(this.props.deleteFromDblNestedArray(this.props.objectHolder, 'locations', 'editableAreaUnitsRange', locationId, key));
+    this.updateArray(
+      helpers.deleteFromDblNestedArray(this.props.objectHolder, 'locations',
+        'editableAreaUnitsRange', locationId, key));
 
   handleLocationsNestedFileChoose = (prop, e) => {
     const locs = [...this.props.objectHolder.locations];
@@ -413,6 +416,8 @@ export default class ProductsComponent extends Component {
     this.changeLocationsNestedArrValue('editableArea', 2, Number((data.width + data.x).toFixed(2)));
     this.changeLocationsNestedArrValue('editableArea', 3, Number((data.height + data.y).toFixed(2)));
   };
+  
+  updateArray = resObj => this.props.setEditingObjectProperty(resObj.name, [...resObj.array]);
 
   handleNewOption = val => {
     let obj = {};
@@ -472,7 +477,7 @@ export default class ProductsComponent extends Component {
 
   render() {
     return (
-      <View {...this.props} {...this.state} {...this}
+      <View {...this.props} {...this.state} {...this} {...helpers}
       />
     );
   }

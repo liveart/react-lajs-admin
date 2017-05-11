@@ -23,28 +23,29 @@ export default class UnitRangeTable extends Component {
         </tr>
         </thead>
         <tbody>
-        { this.props.getLocationsInputValue('editableAreaUnitsRange') ?
+        {this.props.getLocationsInputValue('editableAreaUnitsRange') ?
           this.props.getLocationsInputValue('editableAreaUnitsRange').map((col, k) =>
             <tr key={k}>
               <td><input type='text' className='form-control'
                          value={col[0]}
                          onChange={e =>
-                           this.props.updateArray(this.props.updateDblNestedArray(this.props.objectHolder, 'locations', 'editableAreaUnitsRange',
-                             this.props.location, k, 0, e))}/>
+                           this.props.updateArray(
+                             this.props.updateDblNestedArray(this.props.objectHolder, 'locations',
+                               'editableAreaUnitsRange', this.props.location, k, 0, e))}/>
               </td>
               <td><input type='text' className='form-control'
                          value={col[1]}
                          onChange={e =>
                            this.props.updateArray(
-                             this.props.updateDblNestedArray('locations', 'editableAreaUnitsRange',
-                               this.props.location, k, 1, e))}/>
+                             this.props.updateDblNestedArray(this.props.objectHolder, 'locations',
+                               'editableAreaUnitsRange', this.props.location, k, 1, e))}/>
               </td>
               <td><input type='text' className='form-control'
                          value={col[2]}
                          onChange={e =>
                            this.props.updateArray(
-                             this.props.updateDblNestedArray('locations', 'editableAreaUnitsRange',
-                               this.props.location, k, 2, e))}/>
+                             this.props.updateDblNestedArray(this.props.objectHolder, 'locations',
+                               'editableAreaUnitsRange', this.props.location, k, 2, e))}/>
               </td>
               <td><a className='btn btn-danger btn-xs' href='#'
                      onClick={() => this.props.deleteUnitsRangeRow(this.props.location, k)}>

@@ -251,15 +251,7 @@ export default class Locations extends Component {
 
                 <div className='row' style={{marginBottom: 6}}>
                   <div className='col-lg-12'>
-                    <UnitRangeTable
-                      objectHolder={this.props.objectHolder}
-                      location={this.props.objectHolder}
-                      addUnitsRangeRow={this.props.addUnitsRangeRow}
-                      deleteUnitsRangeRow={this.props.deleteUnitsRangeRow}
-                      updateDblNestedArray={this.props.updateDblNestedArray}
-                      getLocationsInputValue={this.props.getLocationsInputValue}
-                      updateArray={this.props.updateArray}
-                    />
+                    <UnitRangeTable {...this.props}/>
                   </div>
                 </div>
 

@@ -43,9 +43,7 @@ export default class ProductView extends Component {
                              addColorsRow={this.props.addColorsRow}/>,
                            editableAreaSizes: <EditableAreaSizes
                              editableAreaSizes={this.props.objectHolder.editableAreaSizes}
-                             handleSelectedObjectArrayChange={this.props.handleSelectedObjectArrayChange}
-                             deleteEditableAreaSizeRow={this.props.deleteEditableAreaSizeRow}
-                             addEditableAreaSizeRow={this.props.addEditableAreaSizeRow}
+                             {...this.props}
                            />,
                            locations: <Locations
                              location={this.props.location}
