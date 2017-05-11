@@ -22,7 +22,7 @@ Each property accepts a number of options that configure view representation.
 
 ##### Constants representing input elements
 Properties may optionally be configured to be represented by a number of existing or custom html elements.
-###### Available constants
+##### Available constants
 
 
 |        Element        | Description                                                                                                                                                              | Supported property type |
@@ -35,7 +35,7 @@ Properties may optionally be configured to be represented by a number of existin
 | DEFAULT_INPUT         | Text input. Is used if `inputElement` is not specified explicitly.                                                                                                       | string                  |
 | FILE_INPUT            | File input. Uploads file to the specified endpoint and sets the file's name as property value. Needs specifying uploadParams option so as to process the file correctly. | string                  |
 
-###### Adding custom element
+##### Adding custom element
 Custom elements can also be used as inputs.
 
 1. Pass a string constant representing the custom element name as a new property to the object `Elements` in the file `config.js` under `client/src/configurableElements`.
