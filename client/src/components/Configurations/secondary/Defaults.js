@@ -53,9 +53,7 @@ export default class Defaults extends Component {
               </div>
               <div className='col-md-9'>
                 <Creatable
-                  arrowRenderer={function () {
-                    return <span>+</span>;
-                  }}
+                  arrowRenderer={() => <span>+</span>}
                   name='sizes'
                   value={getSelectedSizeOptions(this.props.defaultProductSize)}
                   multi={true}

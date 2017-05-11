@@ -16,8 +16,6 @@
       "type": "string",
       "required": true,
       "viewIndex": 1,
-      "showInTable": true,
-      "showInput": true,
       "sortable": true
     },
     "isMain": {
@@ -31,20 +29,22 @@
       "required": true,
       "viewIndex": 2,
       "showInTable": false,
-      "showInput": true,
       "header": "Products Url"
     },
     "defaultProductId": {
       "type": "string",
       "showInTable": false,
-      "showInput": false
+      "header": "Product id",
+      "viewGroup": "Defaults"
     },
     "defaultProductSize": {
       "type": [
         "number"
       ],
       "showInTable": false,
-      "showInput": false
+      "inputElement": "CREATABLE_MULTISELECT",
+      "header": "Product size",
+      "viewGroup": "Defaults"
     },
     "fonts": {
       "type": "string",
@@ -52,7 +52,6 @@
       "viewIndex": 3,
       "hint": "Indicates URL to get Fonts JSON structure",
       "showInTable": false,
-      "showInput": true,
       "header": "Fonts Url"
     },
     "colors": {
@@ -65,8 +64,7 @@
       },
       "required": true,
       "viewIndex": 4,
-      "showInTable": false,
-      "showInput": true
+      "showInTable": false
     },
     "colorsPantonesUrl": {
       "type": "string",
@@ -78,7 +76,6 @@
       "required": true,
       "viewIndex": 5,
       "showInTable": false,
-      "showInput": true,
       "header": "Graphics Url"
     },
     "social": {
@@ -86,7 +83,6 @@
       "required": true,
       "viewIndex": 7,
       "showInTable": false,
-      "showInput": true,
       "header": "Social Url"
     },
     "options": {
@@ -133,8 +129,7 @@
         "enableSnapGuides": true
       },
       "required": true,
-      "showInTable": false,
-      "showInput": true
+      "showInTable": false
     },
     "textEffects": {
       "type": {
@@ -148,28 +143,26 @@
     },
     "defaultNameObjectText": {
       "type": "string",
-      "required": true,
       "showInTable": false,
-      "showInput": false
+      "header": "Name object text",
+      "viewGroup": "Defaults"
     },
     "defaultNumberObjectText": {
       "type": "string",
-      "required": true,
       "showInTable": false,
-      "showInput": false
+      "header": "Number object text",
+      "viewGroup": "Defaults"
     },
     "assetsUrl": {
       "type": "string",
       "required": true,
       "viewIndex": 6,
       "showInTable": false,
-      "showInput": true,
       "header": "Assets Url"
     },
     "galleryBaseUrl": {
       "type": "string",
       "showInTable": false,
-      "showInput": true,
       "header": "Gallery Base Url"
     },
     "getQuoteUrl": {
@@ -177,14 +170,12 @@
       "required": true,
       "viewIndex": 8,
       "showInTable": false,
-      "showInput": true,
       "header": "Quotes Url"
     },
     "getDesignsUrl": {
       "type": "string",
       "required": true,
       "showInTable": false,
-      "showInput": true,
       "header": "Get Designs Url",
       "viewGroup": "Designs"
     },
@@ -192,7 +183,6 @@
       "type": "string",
       "required": true,
       "showInTable": false,
-      "showInput": true,
       "header": "Save Design Url",
       "viewGroup": "Designs"
     },
@@ -200,7 +190,6 @@
       "type": "string",
       "required": true,
       "showInTable": false,
-      "showInput": true,
       "header": "Load Design Url",
       "viewGroup": "Designs"
     },
@@ -225,14 +214,12 @@
       "required": true,
       "viewIndex": 11,
       "showInTable": false,
-      "showInput": true,
       "header": "Share Link Url"
     },
     "redirectWindow": {
       "type": "string",
       "default": "(default)",
       "showInTable": false,
-      "showInput": true,
       "header": "Redirect Window"
     }
   },
