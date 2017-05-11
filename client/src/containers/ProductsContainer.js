@@ -1,12 +1,6 @@
 import {connect} from 'react-redux';
-import {
-  fetchProducts, createProduct, editProduct, deleteProduct, uploadProductLocationImage,
-  uploadProductLocationMask, uploadProductLocationOverlay,
-  uploadProductImage, uploadProductThumb
-} from '../actions/products';
-import {
-  fetchProductsCategories, createProductsCategory
-} from '../actions/productsCategories';
+import {fetchProducts, createProduct, editProduct, deleteProduct} from '../actions/products';
+import {fetchProductsCategories, createProductsCategory} from '../actions/productsCategories';
 import {
   selectRow, setObjectHolderProperty,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
@@ -28,7 +22,7 @@ const mapStateToProps = state => {
   return {
     title: 'Product',
     data: products,
-    colorsList: colors,
+    colors,
     colorgroups,
     colorsLoading,
     colorgroupsLoading,
@@ -74,12 +68,6 @@ const mapDispatchToProps = dispatch => {
     restoreTableState(object) {
       dispatch(setInitialState(object));
     },
-    uploadProductImage(file) {
-      dispatch(uploadProductImage(file));
-    },
-    uploadProductThumb(file) {
-      dispatch(uploadProductThumb(file));
-    },
     fetchProductsCategories() {
       dispatch(fetchProductsCategories());
     },
@@ -92,17 +80,11 @@ const mapDispatchToProps = dispatch => {
     enableImportJson() {
       dispatch(enableImportJson());
     },
-    uploadProductLocationImage(file) {
-      dispatch(uploadProductLocationImage(file));
-    },
-    uploadProductLocationMask(file) {
-      dispatch(uploadProductLocationMask(file));
-    },
-    uploadProductLocationOverlay(file) {
-      dispatch(uploadProductLocationOverlay(file));
-    },
     createProductsCategory(cat, token) {
       dispatch(createProductsCategory(cat, token));
+    },
+    uploadFile(file, endpoint) {
+      dispatch(uploadFile(file, endpoint));
     }
   };
 };

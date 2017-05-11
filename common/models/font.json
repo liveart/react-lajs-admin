@@ -29,47 +29,79 @@
       "showInTable": true,
       "showInput": true,
       "sortable": false,
-      "header": "File Normal"
+      "header": "File Normal",
+      "representation": "LINK",
+      "inputElement": "FILE_INPUT",
+      "uploadParams": {
+        "dir": "files/fontsNormal/",
+        "endpoint": "containers/fontsNormal"
+      }
     },
     "fileBold": {
       "type": "string",
       "showInTable": true,
       "showInput": true,
       "sortable": false,
-      "header": "File Bold"
+      "header": "File Bold",
+      "representation": "LINK",
+      "inputElement": "FILE_INPUT",
+      "uploadParams": {
+        "dir": "files/fontsBold/",
+        "endpoint": "containers/fontsBold"
+      }
     },
     "fileItalic": {
       "type": "string",
       "showInTable": true,
       "showInput": true,
       "sortable": false,
-      "header": "File Italic"
+      "header": "File Italic",
+      "representation": "LINK",
+      "inputElement": "FILE_INPUT",
+      "uploadParams": {
+        "dir": "files/fontsItalic/",
+        "endpoint": "containers/fontsItalic"
+      }
     },
     "fileBoldItalic": {
       "type": "string",
       "showInTable": true,
       "showInput": true,
       "sortable": false,
-      "header": "File Bold&Italic"
+      "header": "File Bold & Italic",
+      "representation": "LINK",
+      "inputElement": "FILE_INPUT",
+      "uploadParams": {
+        "dir": "files/fontsBoldItalic/",
+        "endpoint": "containers/fontsBoldItalic"
+      }
     },
     "boldAllowed": {
       "type": "boolean",
       "showInTable": false,
       "showInput": true,
-      "header": "Bold Allowed"
+      "header": "Bold Allowed",
+      "inputElement": "BINARY_SELECT"
     },
     "italicAllowed": {
       "type": "boolean",
       "showInTable": false,
       "showInput": true,
-      "header": "Italic Allowed"
+      "header": "Italic Allowed",
+      "inputElement": "BINARY_SELECT"
     },
     "vector": {
       "type": "string",
       "showInTable": true,
       "showInput": true,
       "sortable": false,
-      "header": "Vector"
+      "header": "Vector",
+      "representation": "LINK",
+      "inputElement": "FILE_INPUT",
+      "uploadParams": {
+        "dir": "files/fontVectors/",
+        "endpoint": "containers/fontVectors"
+      }
     }
   },
   "validations": [],

@@ -42,14 +42,6 @@ describe('fonts reducer', () => {
       })).toEqual({...INITIAL_STATE, fontsLoading: true});
   });
 
-  test('should handle ' + types.UPLOAD_FONT_FILE, () => {
-    expect(
-      reducer(INITIAL_STATE, {
-        type: types.UPLOAD_FONT_FILE
-      })).toEqual({...INITIAL_STATE, fontsLoading: true});
-  });
-
-
   test('should handle ' + types.EDIT_FONT, () => {
     expect(
       reducer(INITIAL_STATE, {
@@ -77,7 +69,7 @@ describe('fonts reducer', () => {
       ...INITIAL_STATE,
       font: {a: 1},
       fonts: [{a: 1, b: 2}],
-      fontsNumber: 5,fontsError: null,
+      fontsNumber: 5, fontsError: null,
       fontsLoading: false
     });
   });

@@ -85,44 +85,4 @@ describe('Product Actions', () => {
     };
     expect(FF.deleteProduct(id, token)).toEqual(expectedAction);
   });
-  test('should create an action to upload a image', () => {
-    const imageFile = 'imageFile';
-    const expectedAction = {
-      type: F.UPLOAD_PRODUCT_IMAGE,
-      imageFile
-    };
-    expect(FF.uploadProductImage(imageFile)).toEqual(expectedAction);
-  });
-  test('should create an action to upload a image', () => {
-    const imageFile = 'imageFile';
-    const expectedAction = {
-      type: F.UPLOAD_PRODUCT_LOCATION_IMAGE,
-      imageFile
-    };
-    expect(FF.uploadProductLocationImage(imageFile)).toEqual(expectedAction);
-  });
-  test('should create an action to upload a image', () => {
-    const imageFile = 'imageFile';
-    const expectedAction = {
-      type: F.UPLOAD_PRODUCT_LOCATION_MASK,
-      imageFile
-    };
-    expect(FF.uploadProductLocationMask(imageFile)).toEqual(expectedAction);
-  });
-  test('should create an action to upload a image', () => {
-    const imageFile = 'imageFile';
-    const expectedAction = {
-      type: F.UPLOAD_PRODUCT_LOCATION_OVERLAY,
-      imageFile
-    };
-    expect(FF.uploadProductLocationOverlay(imageFile)).toEqual(expectedAction);
-  });
-  test('should create an action to upload a thumb', () => {
-    const thumbFile = 'thumbFile';
-    const expectedAction = {
-      type: F.UPLOAD_PRODUCT_THUMB,
-      thumbFile
-    };
-    expect(FF.uploadProductThumb(thumbFile)).toEqual(expectedAction);
-  });
 });

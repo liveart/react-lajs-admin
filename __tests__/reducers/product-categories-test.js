@@ -8,7 +8,8 @@ const INITIAL_STATE = {
   productsCategories: [],
   productsCategoriesNumber: 0,
   productsCategoriesError: null,
-  productsCategoriesLoading: false
+  productsCategoriesLoading: false,
+  productsCategoriesMessage: null
 };
 
 describe('productsCategories reducer', () => {
@@ -45,14 +46,6 @@ describe('productsCategories reducer', () => {
         type: types.CREATE_PRODUCTS_CATEGORIES
       })).toEqual({...INITIAL_STATE, productsCategoriesLoading: true});
   });
-
-  test('should handle ' + types.UPLOAD_THUMBNAIL, () => {
-    expect(
-      reducer(INITIAL_STATE, {
-        type: types.UPLOAD_THUMBNAIL
-      })).toEqual({...INITIAL_STATE, productsCategoriesLoading: true});
-  });
-
 
   test('should handle ' + types.EDIT_PRODUCTS_CATEGORY, () => {
     expect(

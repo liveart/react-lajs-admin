@@ -1,13 +1,9 @@
 import {
-  SELECT_ROW, ENABLE_EDITING, ENABLE_CREATING,
-  ENABLE_DEFAULT_STATUS, SET_OBJECT_HOLDER_PROPERTY, SET_INITIAL_STATE, ENABLE_CONFIRM_DELETE, ENABLE_IMPORT_JSON_STATUS
+  SELECT_ROW, ENABLE_EDITING, ENABLE_CREATING, ENABLE_DEFAULT_STATUS,
+  SET_OBJECT_HOLDER_PROPERTY, SET_INITIAL_STATE, ENABLE_CONFIRM_DELETE, ENABLE_IMPORT_JSON_STATUS
 } from '../actionTypes/table';
 import {
-  STATUS_EDITING,
-  STATUS_CREATING,
-  STATUS_DEFAULT,
-  STATUS_CONFIRM_DELETE,
-  STATUS_IMPORT_JSON
+  STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, STATUS_CONFIRM_DELETE, STATUS_IMPORT_JSON
 } from '../definitions';
 
 const INITIAL_STATE = {
@@ -16,13 +12,11 @@ const INITIAL_STATE = {
 };
 
 export default function (state = INITIAL_STATE, action) {
-
   switch (action.type) {
-    case SELECT_ROW: {
+    case SELECT_ROW:
       return {
-        ...state, objectHolder: Object.assign({}, action.objectHolder)
+        ...state, objectHolder: {...action.objectHolder}
       };
-    }
     case SET_OBJECT_HOLDER_PROPERTY: {
       let newObj = state.objectHolder;
       if (!action.propertyName && typeof action.propertyName === 'object') {
@@ -31,7 +25,7 @@ export default function (state = INITIAL_STATE, action) {
         newObj[action.propertyName] = action.value;
       }
       return {
-        ...state, objectHolder: Object.assign({}, newObj)
+        ...state, objectHolder: {...newObj}
       };
     }
     case ENABLE_EDITING: {
@@ -68,7 +62,7 @@ export default function (state = INITIAL_STATE, action) {
     case SET_INITIAL_STATE: {
       let holder = {};
       Object.getOwnPropertyNames(action.object).forEach(prop => holder[prop] = '');
-      return {...INITIAL_STATE, objectHolder: Object.assign({}, holder)};
+      return {...INITIAL_STATE, objectHolder: {...holder}};
     }
     default:
       return state;

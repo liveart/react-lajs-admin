@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import InfoWidget from './InfoWidget';
 import {Link} from 'react-router';
-import {Row, Col, Grid} from 'react-bootstrap';
 
 export default class Overview extends Component {
   static propTypes = {
@@ -43,16 +42,19 @@ export default class Overview extends Component {
           <h1>Overview</h1>
         </section>
         <section className='content'>
-          <Grid>
-            <Row>
-              <Col md={3}>{this.renderDataNumber('Fonts', 'fa-font', 'fonts', fontsNumber)}</Col>
-              <Col md={3}>{this.renderDataNumber('Colors', 'fa-paint-brush', 'colors', colorsNumber)}</Col>
-              <Col md={3}>{this.renderDataNumber('Graphics', 'fa-picture-o', 'graphics', graphicsNumber)}</Col>
-            </Row>
-            <Row>
-              <Col md={3}>{this.renderDataNumber('Products', ' fa-shopping-cart', 'products', productsNumber)}</Col>
-            </Row>
-          </Grid>
+          <div className='row'>
+            <div className='col-md-3'>{this.renderDataNumber('Fonts', 'fa-font', 'fonts', fontsNumber)}</div>
+            <div className='col-md-3'>{this.renderDataNumber('Colors', 'fa-paint-brush', 'colors', colorsNumber)}
+            </div>
+            <div
+              className='col-md-3'>{this.renderDataNumber('Graphics', 'fa-picture-o', 'graphics', graphicsNumber)}
+            </div>
+          </div>
+          <div className='row'>
+            <div
+              className='col-md-3'>{this.renderDataNumber('Products', ' fa-shopping-cart', 'products', productsNumber)}
+            </div>
+          </div>
         </section>
       </main>
     );

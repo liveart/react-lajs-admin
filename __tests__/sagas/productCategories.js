@@ -30,21 +30,16 @@ describe('productsCategories saga', () => {
   test('should process fetching number', () => {
     expect([...sagas.fetchProductsCategoriesNumber()].pop().type).toEqual(actionTypes.PRODUCTS_CATEGORY_SUCCESS);
   });
+
   test('should process editing with error', () => {
     expect([...sagas.editProductsCategory()].pop().type).toEqual(actionTypes.PRODUCTS_CATEGORY_FAILURE);
   });
+
   test('should process editing', () => {
     expect([...sagas.editProductsCategory({id: '', newProductsCategory: {}})].pop().type).not.toEqual(actionTypes.PRODUCTS_CATEGORY_FAILURE);
   });
 
   test('should process deleting with error', () => {
     expect([...sagas.deleteProductsCategory()].pop().type).toEqual(actionTypes.PRODUCTS_CATEGORY_FAILURE);
-  });
-  test('should process uploading', () => {
-    expect([...sagas.uploadThumbnail({thumbnail: {}})].pop().type).toEqual(actionTypes.PRODUCTS_CATEGORY_SUCCESS);
-  });
-
-  test('should process uploading with error', () => {
-    expect([...sagas.uploadThumbnail()].pop().type).toEqual(actionTypes.PRODUCTS_CATEGORY_FAILURE);
   });
 });

@@ -9,6 +9,7 @@ import * as graphicsCategoriesWatchers from './sagas/watchers/graphicsCategories
 import * as productsCategoriesWatchers from './sagas/watchers/productsCategories';
 import * as productsWatchers from './sagas/watchers/products';
 import * as configWatchers from './sagas/watchers/configurations';
+import * as fileWatchers from './sagas/watchers/files';
 
 export default function* root() {
   yield [
@@ -28,9 +29,6 @@ export default function* root() {
     fork(fontsWatchers.watchFetchFonts),
     fork(fontsWatchers.watchFetchFontById),
     fork(fontsWatchers.watchFetchFontsNumber),
-    fork(fontsWatchers.watchCreateFont),
-    fork(fontsWatchers.watchUploadFontFile),
-    fork(fontsWatchers.watchUploadVectors),
     fork(fontsWatchers.watchEditFont),
     fork(fontsWatchers.watchDeleteFont),
     fork(usersWatchers.watchFetchUsers),
@@ -42,24 +40,18 @@ export default function* root() {
     fork(graphicsWatchers.watchCreateGraphic),
     fork(graphicsWatchers.watchDeleteGraphic),
     fork(graphicsWatchers.watchEditGraphic),
-    fork(graphicsWatchers.watchUploadGraphicImage),
-    fork(graphicsWatchers.watchUploadGraphicThumb),
     fork(usersWatchers.watchDeleteUser),
     fork(usersWatchers.watchValidateToken),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategories),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategoryById),
     fork(graphicsCategoriesWatchers.watchFetchGraphicsCategoriesNumber),
     fork(graphicsCategoriesWatchers.watchCreateGraphicsCategory),
-    fork(graphicsCategoriesWatchers.watchUploadThumbnail),
-    fork(graphicsCategoriesWatchers.watchDeleteThumbnail),
     fork(graphicsCategoriesWatchers.watchEditGraphicsCategory),
     fork(graphicsCategoriesWatchers.watchDeleteGraphicsCategory),
     fork(productsCategoriesWatchers.watchFetchProductsCategories),
     fork(productsCategoriesWatchers.watchFetchProductsCategoryById),
     fork(productsCategoriesWatchers.watchFetchProductsCategoriesNumber),
     fork(productsCategoriesWatchers.watchCreateProductsCategory),
-    fork(productsCategoriesWatchers.watchUploadThumbnail),
-    fork(productsCategoriesWatchers.watchDeleteThumbnail),
     fork(productsCategoriesWatchers.watchEditProductsCategory),
     fork(productsCategoriesWatchers.watchDeleteProductsCategory),
     fork(productsWatchers.watchFetchProducts),
@@ -67,15 +59,11 @@ export default function* root() {
     fork(productsWatchers.watchCreateProduct),
     fork(productsWatchers.watchDeleteProduct),
     fork(productsWatchers.watchEditProduct),
-    fork(productsWatchers.watchUploadProductImage),
-    fork(productsWatchers.watchUploadProductThumb),
-    fork(productsWatchers.watchUploadProductLocationImage),
-    fork(productsWatchers.watchUploadProductLocationMask),
-    fork(productsWatchers.watchUploadProductLocationOverlay),
     fork(configWatchers.watchFetchConfigurations),
     fork(configWatchers.watchFetchConfigurationById),
     fork(configWatchers.watchCreateConfiguration),
     fork(configWatchers.watchEditConfiguration),
-    fork(configWatchers.watchDeleteConfiguration)
+    fork(configWatchers.watchDeleteConfiguration),
+    fork(fileWatchers.watchUploadFile)
   ];
 }

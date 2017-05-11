@@ -20,41 +20,6 @@ export const createProduct = (product, token) => {
   };
 };
 
-export const uploadProductImage = imageFile => {
-  return {
-    type: actionTypes.UPLOAD_PRODUCT_IMAGE,
-    imageFile
-  };
-};
-
-export const uploadProductLocationImage = imageFile => {
-  return {
-    type: actionTypes.UPLOAD_PRODUCT_LOCATION_IMAGE,
-    imageFile
-  };
-};
-
-export const uploadProductLocationMask = imageFile => {
-  return {
-    type: actionTypes.UPLOAD_PRODUCT_LOCATION_MASK,
-    imageFile
-  };
-};
-
-export const uploadProductLocationOverlay = imageFile => {
-  return {
-    type: actionTypes.UPLOAD_PRODUCT_LOCATION_OVERLAY,
-    imageFile
-  };
-};
-
-export const uploadProductThumb = thumbFile => {
-  return {
-    type: actionTypes.UPLOAD_PRODUCT_THUMB,
-    thumbFile
-  };
-};
-
 export const editProduct = (id, product, token) => {
   return {
     type: actionTypes.EDIT_PRODUCT,

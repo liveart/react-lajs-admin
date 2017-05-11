@@ -27,20 +27,6 @@ export const createProductsCategory = (productsCategory, token) => {
   };
 };
 
-export const uploadThumbnail = thumbnail => {
-  return {
-    type: actionTypes.UPLOAD_THUMBNAIL,
-    thumbnail
-  };
-};
-
-export const deleteThumbnail = name => {
-  return {
-    type: actionTypes.DELETE_THUMBNAIL,
-    name
-  };
-};
-
 export const editProductsCategory = (id, productsCategory, token) => {
   return {
     type: actionTypes.EDIT_PRODUCTS_CATEGORY,

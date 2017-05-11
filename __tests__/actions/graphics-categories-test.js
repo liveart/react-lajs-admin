@@ -10,6 +10,7 @@ describe('Graphics categories Actions', () => {
     };
     expect(FF.fetchGraphicsCategories()).toEqual(expectedAction);
   });
+
   test('should create an action to fetch graphicsCategory by id', () => {
     const id = '15';
     const expectedAction = {
@@ -19,7 +20,7 @@ describe('Graphics categories Actions', () => {
     expect(FF.fetchGraphicsCategoryById(id)).toEqual(expectedAction);
   });
 
-  test('should create an action to graphicsCategories fonts number', () => {
+  test('should create an action to graphicsCategories fontsNormal number', () => {
     const expectedAction = {
       type: F.FETCH_GRAPHICS_CATEGORIES_NUMBER
     };
@@ -59,13 +60,5 @@ describe('Graphics categories Actions', () => {
       token
     };
     expect(FF.deleteGraphicsCategory(id, token)).toEqual(expectedAction);
-  });
-  test('should create an action to upload a file', () => {
-    const thumb = "thumb";
-    const expectedAction = {
-      type: F.UPLOAD_THUMBNAIL,
-      thumbnail: thumb
-    };
-    expect(FF.uploadThumbnail(thumb)).toEqual(expectedAction);
   });
 });

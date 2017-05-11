@@ -24,15 +24,24 @@
       "type": "string",
       "required": true,
       "showInTable": true,
-      "showInput": false,
+      "showInput": true,
       "sortable": false,
-      "header": "Thumb"
+      "header": "Thumb",
+      "representation": "THUMBNAIL",
+      "inputElement": "FILE_INPUT",
+      "uploadParams": {
+        "dir": "files/productCategoryThumbs/",
+        "endpoint": "containers/productCategoryThumbs"
+      }
     },
     "productsCategoryId": {
       "type": "string",
       "required": false,
       "showInTable": false,
-      "showInput": false
+      "showInput": true,
+      "header": "Parent category",
+      "inputElement": "DATA_SELECT",
+      "secondaryData": "productsCategories"
     }
   },
   "validations": [],

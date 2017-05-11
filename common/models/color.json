@@ -21,7 +21,13 @@
       "required": false,
       "showInTable": true,
       "showInput": true,
-      "sortable": true
+      "sortable": true,
+      "header": "Color group",
+      "textProperty": "name",
+      "representation": "TEXT",
+      "sortElement": "SELECT",
+      "inputElement": "DATA_SELECT",
+      "secondaryData": "colorgroups"
     },
     "value": {
       "type": "string",
@@ -29,7 +35,10 @@
       "default": "#000000",
       "showInTable": true,
       "showInput": true,
-      "sortable": false
+      "sortable": false,
+      "representation": "COLOR_VALUE",
+      "inputElement": "COLOR_PICKER",
+      "hideInputRepresentation": true
     }
   },
   "validations": [],

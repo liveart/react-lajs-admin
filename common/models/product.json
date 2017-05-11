@@ -26,30 +26,37 @@
       "required": true,
       "viewIndex": 3,
       "showInTable": true,
-      "showInput": false,
+      "showInput": true,
       "sortable": true,
-      "header": "Category"
+      "header": "Category",
+      "textProperty": "name",
+      "representation": "TEXT",
+      "sortElement": "SELECT",
+      "inputElement": "DATA_SELECT",
+      "secondaryData": "productsCategories"
     },
     "thumbUrl": {
       "type": "string",
       "required": true,
       "viewIndex": 2,
       "showInTable": true,
-      "showInput": false,
+      "showInput": true,
       "sortable": false,
-      "header": "Thumb"
+      "header": "Thumb",
+      "representation": "THUMBNAIL"
     },
     "description": {
       "type": "string",
       "viewIndex": 4,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "inputElement": "TEXTAREA"
     },
     "data": {
       "type": "object",
       "default": {},
       "showInTable": false,
-      "showInput": false
+      "showInput": true
     },
     "minDPU": {
       "type": "number",
@@ -67,7 +74,9 @@
       "type": "boolean",
       "default": false,
       "showInTable": false,
-      "showInput": false
+      "showInput": true,
+      "inputElement": "BINARY_SELECT",
+      "viewGroup": "Options"
     },
     "colorizables": {
       "type": [
@@ -110,13 +119,19 @@
       "type": "boolean",
       "default": false,
       "showInTable": false,
-      "showInput": false
+      "showInput": true,
+      "header": "Hide editable area border",
+      "inputElement": "BINARY_SELECT",
+      "viewGroup": "Options"
     },
     "namesNumbersEnabled": {
       "type": "boolean",
       "default": false,
       "showInTable": false,
-      "showInput": false
+      "showInput": true,
+      "header": "Names / numbers enabled",
+      "inputElement": "BINARY_SELECT",
+      "viewGroup": "Options"
     },
     "pantones": {
       "type": {
@@ -124,13 +139,15 @@
         "useForProduct": "boolean"
       },
       "showInTable": false,
-      "showInput": false
+      "showInput": true
     },
     "resizable": {
       "type": "boolean",
       "default": false,
       "showInTable": false,
-      "showInput": false
+      "showInput": true,
+      "inputElement": "BINARY_SELECT",
+      "viewGroup": "Options"
     },
     "editableAreaSizes": {
       "type": [
@@ -143,13 +160,16 @@
       "required": false,
       "showInTable": false,
       "showInput": true,
-      "header": ""
+      "header": "Editable area sizes"
     },
     "showRuler": {
       "type": "boolean",
       "default": false,
       "showInTable": false,
-      "showInput": false
+      "showInput": true,
+      "header": "Show ruler",
+      "inputElement": "BINARY_SELECT",
+      "viewGroup": "Options"
     },
     "sizes": {
       "type": [
@@ -157,7 +177,16 @@
       ],
       "required": false,
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "inputElement": "CREATABLE_MULTISELECT",
+      "selectOptions": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ]
     },
     "locations": {
       "type": [

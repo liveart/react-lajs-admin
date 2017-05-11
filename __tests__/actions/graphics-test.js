@@ -72,20 +72,4 @@ describe('Graphic Actions', () => {
     };
     expect(FF.deleteGraphic(id, token)).toEqual(expectedAction);
   });
-  test('should create an action to upload a image', () => {
-    const imageFile = 'imageFile';
-    const expectedAction = {
-      type: F.UPLOAD_GRAPHIC_IMAGE,
-      imageFile
-    };
-    expect(FF.uploadGraphicImage(imageFile)).toEqual(expectedAction);
-  });
-  test('should create an action to upload a thumb', () => {
-    const thumbFile = 'thumbFile';
-    const expectedAction = {
-      type: F.UPLOAD_GRAPHIC_THUMB,
-      thumbFile
-    };
-    expect(FF.uploadGraphicThumb(thumbFile)).toEqual(expectedAction);
-  });
 });

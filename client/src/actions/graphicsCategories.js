@@ -27,20 +27,6 @@ export const createGraphicsCategory = (graphicsCategory, token) => {
   };
 };
 
-export const uploadThumbnail = thumbnail => {
-  return {
-    type: actionTypes.UPLOAD_THUMBNAIL,
-    thumbnail
-  };
-};
-
-export const deleteThumbnail = name => {
-  return {
-    type: actionTypes.DELETE_THUMBNAIL,
-    name
-  };
-};
-
 export const editGraphicsCategory = (id, graphicsCategory, token) => {
   return {
     type: actionTypes.EDIT_GRAPHICS_CATEGORY,

@@ -21,11 +21,3 @@ export function* watchEditGraphic() {
 export function* watchDeleteGraphic() {
   yield takeLatest(actionTypes.DELETE_GRAPHIC, graphicsSagas.deleteGraphic);
 }
-
-export function* watchUploadGraphicImage() {
-  yield takeLatest(actionTypes.UPLOAD_GRAPHIC_IMAGE, graphicsSagas.uploadGraphicImage);
-}
-
-export function* watchUploadGraphicThumb() {
-  yield takeLatest(actionTypes.UPLOAD_GRAPHIC_THUMB, graphicsSagas.uploadGraphicThumb);
-}

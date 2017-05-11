@@ -4,7 +4,7 @@ import * as F from '../../client/src/actionTypes/fonts';
 import * as FF from '../../client/src/actions/fonts';
 
 describe('Font Actions', () => {
-  test('should create an action to fetch fonts', () => {
+  test('should create an action to fetch fontsNormal', () => {
     const expectedAction = {
       type: F.FETCH_FONTS
     };
@@ -19,7 +19,7 @@ describe('Font Actions', () => {
     expect(FF.fetchFontById(id)).toEqual(expectedAction);
   });
 
-  test('should create an action to fetch fonts number', () => {
+  test('should create an action to fetch fontsNormal number', () => {
     const expectedAction = {
       type: F.FETCH_FONTS_NUMBER
     };
@@ -59,13 +59,5 @@ describe('Font Actions', () => {
       token
     };
     expect(FF.deleteFont(id, token)).toEqual(expectedAction);
-  });
-  test('should create an action to upload a file', () => {
-    const fontFile = "fontFile";
-    const expectedAction = {
-      type: F.UPLOAD_FONT_FILE,
-      fontFile
-    };
-    expect(FF.uploadFontFile(fontFile)).toEqual(expectedAction);
   });
 });

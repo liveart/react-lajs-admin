@@ -11,7 +11,7 @@ const mapStateToProps = state => {
   const {objectHolder, status} = state.table;
   const errors = error ? [error] : [];
   return {
-    title: 'Admins',
+    title: 'Admin',
     email,
     token,
     data: users,
@@ -42,13 +42,13 @@ const mapDispatchToProps = dispatch => {
     enableDefaultStatus() {
       dispatch(enableDefaultStatus());
     },
-    registerUser(usr, token) {
+    createEntity(usr, token) {
       dispatch(registerUser(usr, token));
     },
-    editUser(usr, token) {
+    editEntity(usr, token) {
       dispatch(editUser(usr, token));
     },
-    deleteUser(usr, token) {
+    deleteEntity(usr, token) {
       dispatch(deleteUser(usr, token));
     },
     restoreTableState(object) {

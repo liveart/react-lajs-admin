@@ -26,11 +26,7 @@ export const PTypes = {
   setEditingObjectProperty: PropTypes.func.isRequired,
   restoreTableState: PropTypes.func.isRequired,
   productsCategories: PropTypes.array.isRequired,
-  uploadProductImage: PropTypes.func.isRequired,
-  uploadProductThumb: PropTypes.func.isRequired,
-  uploadProductLocationMask: PropTypes.func.isRequired,
-  uploadProductLocationOverlay: PropTypes.func.isRequired,
-  uploadProductLocationImage: PropTypes.func.isRequired,
+  uploadFile: PropTypes.func.isRequired,
   fetchProductsCategories: PropTypes.func.isRequired,
   token: PropTypes.string
 };

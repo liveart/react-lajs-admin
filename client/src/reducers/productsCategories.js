@@ -24,7 +24,7 @@ export default function (state = INITIAL_STATE, action) {
       };
     case actionType.PRODUCTS_CATEGORY_FAILURE:
       productsCategoriesError = action.message;
-      return {...state,   productsCategoriesMessage: null, productsCategoriesError, productsCategoriesLoading: false};
+      return {...state, productsCategoriesMessage: null, productsCategoriesError, productsCategoriesLoading: false};
     case actionType.FETCH_PRODUCTS_CATEGORIES_BY_ID:
       return {
         ...state,
@@ -34,21 +34,42 @@ export default function (state = INITIAL_STATE, action) {
         productsCategoriesMessage: null
       };
     case actionType.FETCH_PRODUCTS_CATEGORIES:
-      return {...state,  productsCategoriesMessage: null, productsCategoriesError: null, productsCategoriesLoading: true};
+      return {
+        ...state,
+        productsCategoriesMessage: null,
+        productsCategoriesError: null,
+        productsCategoriesLoading: true
+      };
     case actionType.FETCH_PRODUCTS_CATEGORIES_NUMBER:
-      return {...state,  productsCategoriesMessage: null, productsCategoriesNumber: 0, productsCategoriesError: null, productsCategoriesLoading: true};
+      return {
+        ...state,
+        productsCategoriesMessage: null,
+        productsCategoriesNumber: 0,
+        productsCategoriesError: null,
+        productsCategoriesLoading: true
+      };
     case actionType.CREATE_PRODUCTS_CATEGORIES:
-      return {...state,  productsCategoriesMessage: null, productsCategoriesError: null, productsCategoriesLoading: true};
-    case actionType.UPLOAD_THUMBNAIL:
-      return {...state,  productsCategoriesMessage: null, productsCategoriesError: null, productsCategoriesLoading: true};
-    case actionType.DELETE_THUMBNAIL:
-      return {...state,  productsCategoriesMessage: null, productsCategoriesError: null, productsCategoriesLoading: true};
+      return {
+        ...state,
+        productsCategoriesMessage: null,
+        productsCategoriesError: null,
+        productsCategoriesLoading: true
+      };
     case actionType.EDIT_PRODUCTS_CATEGORY:
-      return {...state,  productsCategoriesMessage: null, productsCategoriesError: null, productsCategoriesLoading: true};
+      return {
+        ...state,
+        productsCategoriesMessage: null,
+        productsCategoriesError: null,
+        productsCategoriesLoading: true
+      };
     case actionType.DELETE_PRODUCTS_CATEGORY:
-      return {...state,  productsCategoriesMessage: null, productsCategoriesError: null, productsCategoriesLoading: true};
+      return {
+        ...state,
+        productsCategoriesMessage: null,
+        productsCategoriesError: null,
+        productsCategoriesLoading: true
+      };
     default:
       return state;
   }
 }
-
