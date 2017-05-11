@@ -13,7 +13,6 @@ export const PTypes = {
   enableEditing: PropTypes.func.isRequired,
   enableCreating: PropTypes.func.isRequired,
   enableDefaultStatus: PropTypes.func.isRequired,
-  registerUser: PropTypes.func.isRequired,
   setEditingObjectProperty: PropTypes.func.isRequired,
   restoreTableState: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,

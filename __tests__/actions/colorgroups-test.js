@@ -10,6 +10,7 @@ describe('Colorgroups Actions', () => {
     };
     expect(C.fetchColorgroups()).toEqual(expectedAction);
   });
+
   test('should create an action to fetch colorgroup by id', () => {
     const id = 15;
     const expectedAction = {

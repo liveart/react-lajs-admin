@@ -1,273 +1,47 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
+import {STATUS_EDITING} from '../../definitions';
+import {Elements} from '../../configurableElements/config';
 import AbstractPage from '../AbstractPage';
-const User = {email: '', password: ''};
-
-import * as AdminModel from '../../../../common/models/client.json';
-const Admin = AdminModel.properties;
 
 export default class extends Component {
   static propTypes = PTypes;
 
+  constructor(props) {
+    super(props);
+    // admin model needs to be set manually
+    this.state = {
+      admin: {
+        email: {},
+        password: {
+          showInTable: false
+        }
+      }
+    };
+  }
+
   componentWillMount() {
-    this.props.restoreTableState(User);
+    this.props.restoreTableState(this.state.admin);
     this.props.fetchUsers(this.props.token);
     this.props.validateUserToken(this.props.token);
   }
 
-  updateObject = (propertyName, event) => {
-    this.props.setEditingObjectProperty(propertyName, event.target.value);
-  };
-
-  renderTableData = data => {
-    if (!data.length) {
-      return null;
-    }
-    return data.map((item, k) => {
-
-      return (
-        <tr key={k} onClick={() => this.handleEdit(item)}>
-          <td>{item.email}{this.props.email === item.email ?
-            <span className='label label-primary pull-right'>you</span> : null}</td>
-        </tr>
-      );
-    });
-  };
-
-  renderTable = (data, object) => (
-    <div className='panel panel-default'>
-      <tb className='table-responsive'>
-        <table className='table no-margin table-hover table-bordered'>
-          <thead>
-          <tr key='trhead'>
-            <th>Email</th>
-          </tr>
-          </thead>
-          <tbody>
-          {this.renderTableData(data, object)}
-          </tbody>
-        </table>
-      </tb>
-    </div>
-  );
-
-  renderDefButtons = () => (
-    <div className='pull-right'>
-      <button type='button' className='btn btn-primary' style={{marginBottom: 6}}
-              onClick={this.handleAddNew}>Add new admin
-      </button>
-    </div>
-  );
-
-  renderEditingButtons = () => (
-    <div>
-      <div className='pull-left'>
-        <button type='button' className='btn btn-default'
-                onClick={this.handleCancelBtnClick}>Cancel
-        </button>
-      </div>
-
-      <div className='pull-right'>
-        { this.props.data.length > 1 ? (
-          <button type='button' className='btn btn-danger'
-                  onClick={this.handleDeleteBtnClick}>Delete
-          </button>
-        ) : null
-        }
-      </div>
-    </div>
-  );
-
-  renderCreatingButtons = () => (
-    <div>
-      <div className='pull-left'>
-        <button type='button' className='btn btn-default'
-                onClick={this.handleCancelBtnClick}>Cancel
-        </button>
-      </div>
-      <div className='pull-right'>
-        <button type='button' className='btn btn-primary'
-                onClick={() => this.handleSaveBtnClick(true)}>Save
-        </button>
-      </div>
-    </div>
-  );
-
-  handleEdit = object => {
-    if (this.props.status === STATUS_DEFAULT) {
-      this.props.enableEditing(User);
-      this.props.selectRow(object);
-    }
-  };
-
-  handleAddNew = () => {
-    if (this.props.status === STATUS_DEFAULT) {
-      this.props.enableCreating(User);
-    }
-  };
-
-  handleDeleteBtnClick = () => {
-    if (this.props.status === STATUS_EDITING) {
-      this.props.deleteUser(this.props.objectHolder.id, this.props.token);
-      this.props.enableDefaultStatus();
-      this.props.restoreTableState(User);
-    }
-  };
-
-  handleSaveBtnClick = redirect => {
-    if (this.props.status === STATUS_EDITING) {
-      const properties = Object.getOwnPropertyNames(User);
-      const entity = {};
-      properties.forEach(prop => {
-        if (prop !== ID_PROP) {
-          entity[prop] = this.props.objectHolder[prop] || undefined;
-        }
-      });
-      this.props.editEntity(this.props.objectHolder.id, entity);
-      if (redirect) {
-        this.props.enableDefaultStatus();
-        this.props.restoreTableState(User);
-      }
-    } else if (this.props.status === STATUS_CREATING) {
-      const properties = Object.getOwnPropertyNames(User);
-      const entity = {};
-      properties.forEach(prop => {
-        if (prop !== ID_PROP) {
-          entity[prop] = this.props.objectHolder[prop] || undefined;
-        }
-      });
-      this.props.registerUser(entity, this.props.token);
-      this.props.enableDefaultStatus();
-      this.props.restoreTableState(User);
-    }
-  };
-
-  handleCancelBtnClick = () => {
-    if (this.props.status !== STATUS_DEFAULT) {
-      this.props.enableDefaultStatus();
-      this.props.restoreTableState(User);
-    }
-  };
-
-  renderCreatingInputs = () => (
-    <div>
-      <div className='form-group'>
-        <div className='col-md-2'>
-          Email
-        </div>
-        <div className='col-md-10'>
-          <input type='email' className='form-control'
-                 value={this.props.objectHolder['email']}
-                 onChange={e => this.updateObject('email', e)}
-          />
-        </div>
-      </div>
-      <div className='form-group'>
-        <div className='col-md-2'>
-          Password
-        </div>
-        <div className='col-md-10'>
-          <input type='password' className='form-control'
-                 value={this.props.objectHolder['password']}
-                 onChange={e => this.updateObject('password', e)}/>
-        </div>
-      </div>
-    </div>
-  );
-
-  renderEditingInputs = () => (
-    <div>
-      <div className='form-group'>
-        <div className='col-md-2'>
-          Email
-        </div>
-        <div className='col-md-10'>
-          <input type='text' className='form-control'
-                 value={this.props.objectHolder['email']}
-                 onChange={e => this.updateObject('email', e)}
-                 disabled/>
-        </div>
-      </div>
-    </div>
-  );
-
-  renderPage = () => {
-    if (this.props.status === STATUS_DEFAULT) {
-      return this.renderDefault();
-    } else if (this.props.status === STATUS_CREATING) {
-      return this.renderCreating();
-    } else if (this.props.status === STATUS_EDITING) {
-      return this.renderEditing();
-    }
-  };
-
-  renderDefault = () => (
-    <section className='content'>
-      <div className='row'>
-        <div className='col-md-6'>
-        </div>
-        <div className='col-md-6'>
-          {this.renderDefButtons()}
-        </div>
-      </div>
-      <div className='row'>
-        <div className='col-md-12'>
-          {this.renderTable(this.props.data, User)}
-        </div>
-      </div>
-    </section>
-  );
-
-  renderCreating = () => (
-    <section className='content'>
-      <div className='row'>
-        <div className='col-md-12'>
-          <div className='box box-info'>
-            <div className='box-header with-border'>
-              <h3 className='box-title'>Admins</h3>
-            </div>
-            <form className='form-horizontal'>
-              <div className='box-body'>
-                {this.renderCreatingInputs()}
-              </div>
-              <div className='box-footer'>
-                {this.renderCreatingButtons()}
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-
-  renderEditing = () => (
-    <section>
-      <div className='row'>
-        <div className='col-md-12'>
-          <section className='content'>
-            <div className='box box-info'>
-              <div className='box-header with-border'>
-                <h3 className='box-title'>User information</h3>
-              </div>
-              <form className='form-horizontal'>
-                <div className='box-body'>
-                  {this.renderEditingInputs()}
-                </div>
-                <div className='box-footer'>
-                  {this.renderEditingButtons()}
-                </div>
-              </form>
-            </div>
-          </section>
-        </div>
-      </div>
-    </section>
-  );
-
   render() {
     return <AbstractPage {...this.props}
+                         sortingSupport={true}
                          fetchData={() => this.props.fetchUsers(this.props.token)}
-                         objectSample={Admin}/>;
+                         objectSample={{
+                           email: {
+                             required: true,
+                             inputElement: this.props.status === STATUS_EDITING ? Elements.DISABLED_INPUT :
+                               Elements.DEFAULT_INPUT
+                           },
+                           password: {
+                             required: true,
+                             showInTable: false,
+                             inputElement: Elements.PASSWORD_INPUT,
+                             showInput: this.props.status !== STATUS_EDITING
+                           }
+                         }}/>;
   }
 }

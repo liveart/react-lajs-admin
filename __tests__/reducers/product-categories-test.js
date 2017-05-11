@@ -8,7 +8,8 @@ const INITIAL_STATE = {
   productsCategories: [],
   productsCategoriesNumber: 0,
   productsCategoriesError: null,
-  productsCategoriesLoading: false
+  productsCategoriesLoading: false,
+  productsCategoriesMessage: null
 };
 
 describe('productsCategories reducer', () => {
