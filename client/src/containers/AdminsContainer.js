@@ -45,10 +45,10 @@ const mapDispatchToProps = dispatch => {
     registerUser(usr, token) {
       dispatch(registerUser(usr, token));
     },
-    editUser(usr, token) {
+    editEntity(usr, token) {
       dispatch(editUser(usr, token));
     },
-    deleteUser(usr, token) {
+    deleteEntity(usr, token) {
       dispatch(deleteUser(usr, token));
     },
     restoreTableState(object) {

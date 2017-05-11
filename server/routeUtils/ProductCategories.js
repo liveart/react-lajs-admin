@@ -1,6 +1,6 @@
 'use strict';
-const getFullUrl = require('../routesUtils/FullUrl');
-const getProducts = require('../routesUtils/Products');
+const getFullUrl = require('.//FullUrl');
+const getProducts = require('.//Products');
 const forEach = require('lodash/forEach');
 
 module.exports = function getProductCategories(category, categories, products, req, colorsArr) {

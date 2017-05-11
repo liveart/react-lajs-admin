@@ -1,6 +1,6 @@
 'use strict';
-const getFullUrl = require('../routesUtils/FullUrl');
-const getGraphics = require('../routesUtils/Graphics');
+const getFullUrl = require('.//FullUrl');
+const getGraphics = require('.//Graphics');
 const forEach = require('lodash/forEach');
 
 module.exports = function getCategories(category, categories, graphics, req, colorsArr) {

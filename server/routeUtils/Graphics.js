@@ -1,5 +1,5 @@
 'use strict';
-const getFullUrl = require('../routesUtils/FullUrl');
+const getFullUrl = require('./FullUrl');
 const map = require('lodash/map');
 const forEach = require('lodash/forEach');
 

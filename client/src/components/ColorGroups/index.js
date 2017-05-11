@@ -12,7 +12,7 @@ import {
 import * as ColorgroupModel from '../../../../common/models/colorgroup.json';
 import DeleteConfirmation from './secondary/DeleteConfirmation';
 import DeleteButton from './secondary/DeleteButtonGroup';
-import AbstractPage from '../AbstractPage/index';
+import AbstractPage from '../AbstractPage';
 import {getLinkedToGraphic, getLinkedToProduct} from './secondary/helpers';
 const Colorgroup = ColorgroupModel.properties;
 
@@ -90,17 +90,12 @@ export default class ColorgroupsComponent extends Component {
                     renderDeleteConfirmationDialog={
                       <DeleteConfirmation data={this.props.data}
                                           objectHolder={this.props.objectHolder}
-                                          newGroup={this.state.newGroup}
-                                          selectedValue={this.state.selectedValue}
-                                          linkedProducts={this.state.linkedProducts}
-                                          linkedGraphics={this.state.linkedGraphics}
+                                          {...this.state}
                                           handleMoveToGroup={this.handleMoveToGroup}
                                           handleColorsActionOption={this.handleColorsActionOption}/>}
                     renderDeleteConfirmationButtons={
-                      <DeleteButton linkedProducts={this.state.linkedProducts}
-                                    linkedGraphics={this.state.linkedGraphics}
+                      <DeleteButton {...this.state}
                                     newGroup={this.state.newGroup}
-                                    selectedValue={this.state.selectedValue}
                                     enableDefaultStatus={this.props.enableDefaultStatus}
                                     restoreTableState={this.props.restoreTableState}
                                     handleDeleteBtnClick={this.handleDeleteBtnClick}/>}

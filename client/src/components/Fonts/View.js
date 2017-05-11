@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import AbstractPage from '../AbstractPage/index';
+import AbstractPage from '../AbstractPage';
 import * as FontModel from '../../../../common/models/font.json';
 const Font = FontModel.properties;
 

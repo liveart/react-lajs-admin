@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import AbstractPage from '../AbstractPage/index';
+import AbstractPage from '../AbstractPage';
 import Select, {Creatable} from 'react-select';
 import {getMainConfigValue} from './secondary/helpers.js';
 import Defaults from './secondary/Defaults';

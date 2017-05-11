@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import AbstractPage from '../AbstractPage/index';
+import AbstractPage from '../AbstractPage';
 import DeleteConfirmation from './secondary/DeleteConfirmation';
 import * as GraphicsCategoryModel from '../../../../common/models/graphics-category.json';
 const GraphicsCategory = GraphicsCategoryModel.properties;

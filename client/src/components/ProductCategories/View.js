@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import AbstractPage from '../AbstractPage/index';
+import AbstractPage from '../AbstractPage';
 import DeleteConfirmation from './secondary/DeleteConfirmation';
 import * as ProductsCategoryModel from '../../../../common/models/products-category.json';
 const ProductsCategory = ProductsCategoryModel.properties;

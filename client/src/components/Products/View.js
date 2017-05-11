@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import AbstractPage from '../AbstractPage/index';
+import AbstractPage from '../AbstractPage';
 import CustomOptions from './secondary/CustomOptions';
 import ColorizableTable from './secondary/ColorizableTable';
 import ColorsTable from './secondary/ColorsTable';

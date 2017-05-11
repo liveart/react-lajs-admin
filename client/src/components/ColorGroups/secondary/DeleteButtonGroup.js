@@ -35,4 +35,3 @@ export default class ColorgroupDeleteButton extends Component {
     </div>;
   }
 }
-

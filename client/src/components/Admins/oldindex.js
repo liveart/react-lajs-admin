@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
-import AbstractPage from '../AbstractPage';
 const User = {email: '', password: ''};
-
-import * as AdminModel from '../../../../common/models/client.json';
-const Admin = AdminModel.properties;
 
 export default class extends Component {
   static propTypes = PTypes;
@@ -266,8 +262,18 @@ export default class extends Component {
   );
 
   render() {
-    return <AbstractPage {...this.props}
-                         fetchData={() => this.props.fetchUsers(this.props.token)}
-                         objectSample={Admin}/>;
+    const {loading, errors} = this.props;
+
+    return (
+      <main>
+        {loading ? <div className='loader'/> : <div className='loaderDone'/>}
+        <div className='content-header'>
+          <h1>Admins</h1>
+        </div>
+        {errors.length === 0 ? null : errors.map(err =>
+          <div key={err} className='alert alert-danger'>Error: {err}</div>)}
+        {this.renderPage()}
+      </main>
+    );
   }
 }

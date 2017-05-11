@@ -1,4 +1,4 @@
-const getFullUrl = require('../routesUtils/FullUrl');
+const getFullUrl = require('./FullUrl');
 const forEach = require('lodash/forEach');
 const map = require('lodash/map');
 

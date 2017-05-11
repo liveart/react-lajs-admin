@@ -5,7 +5,13 @@
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "email": {
+      "type": "string",
+      "inputElement": "DISABLED_INPUT",
+      "required": true
+    }
+  },
   "validations": [],
   "relations": {},
   "acls": [

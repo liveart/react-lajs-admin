@@ -1,10 +1,10 @@
 ﻿'use strict';
-const getFullUrl = require('../routesUtils/FullUrl');
-const getProducts = require('../routesUtils/Products');
-const getProductCategories = require('../routesUtils/ProductCategories');
-const getGraphics = require('../routesUtils/Graphics');
-const getCategories = require('../routesUtils/GraphicCategories');
-const getFontFaceRule = require('../routesUtils/Fonts');
+const getFullUrl = require('../routeUtils/FullUrl');
+const getProducts = require('../routeUtils/Products');
+const getProductCategories = require('../routeUtils/ProductCategories');
+const getGraphics = require('../routeUtils/Graphics');
+const getCategories = require('../routeUtils/GraphicCategories');
+const getFontFaceRule = require('../routeUtils/Fonts');
 const forEach = require('lodash/forEach');
 const assignIn = require('lodash/assignIn');
 
@@ -162,13 +162,11 @@ module.exports = function (app) {
               getFontFaceRule(font.fontFamily, font.fileBold, BOLD, NORMAL, req)
             );
           }
-
           if (font.fileItalic) {
             cssJS.stylesheet.rules.push(
               getFontFaceRule(font.fontFamily, font.fileItalic, NORMAL, ITALIC, req)
             );
           }
-
           if (font.fileBoldItalic) {
             cssJS.stylesheet.rules.push(
               getFontFaceRule(font.fontFamily, font.fileBoldItalic, BOLD, ITALIC, req)
@@ -180,7 +178,5 @@ module.exports = function (app) {
         res.send(css.stringify(cssJS));
       });
     }
-  )
-  ;
-}
-;
+  );
+};

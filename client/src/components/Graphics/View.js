@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import AbstractPage from '../AbstractPage/index';
+import AbstractPage from '../AbstractPage';
 import ColorizableTable from './secondary/ColorizableTable';
 import {Creatable} from 'react-select';
 import * as GraphicModel from '../../../../common/models/graphic.json';
