@@ -1,0 +1,42 @@
+# Model configuration
+
+Model configuration files folder: `common/model`.
+
+Model json files serve two purposes – server model configuration and customization of the basic view representation.
+
+## View representation
+Each property accepts a number of options that configure its view representation.
+
+| Option         | Default value                               | Description                                                                                                                                                                                                                                                                                                                                                                                                  |
+|----------------|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| required       | false                                       | Defines if the property is required. The indicating sign will be rendered.                                                                                                                                                                                                                                                                                                                                   |
+| showInTable    | true                                        | Defines if the property is shown in the table.                                                                                                                                                                                                                                                                                                                                                               |
+| showInput      | true                                        | Defines if the property can be edited. The input will be rendered.                                                                                                                                                                                                                                                                                                                                           |
+| header         | property name with capitalized first letter | Defines the name of the input.                                                                                                                                                                                                                                                                                                                                                                               |
+| representation | TEXT                                        | The options is needed if the value of a property needs some element to display it, say image or file link. Accepted values: "TEXT", "LINK", "COLOR_VALUE", "THUMBNAIL". By default the value is represented as text.                                                                                                                                                                                          |
+| sortElement    | undefined                                   | Defines element to be used for a sorting input in the table. Accepts only "SELECT" to get the select element with the list of the related model specified in plural in the _secondaryData_ option.                                                                                                                                                                                                           |
+| inputElement   | DEFAULT_INPUT                               | Defines a constant string value that indicates an element to be used as the input. Standard constants are described in the next section.                                                                                                                                                                                                                                                                     |
+| secondaryData  | string (plural of the related model)        | The model entries will be used as options for one of SELECT elements                                                                                                                                                                                                                                                                                                                                         |
+| uploadParams   | undefined                                   | This options is only needed if a property is holding the name of the file that should be uploaded to the server and then get be retrieved by this value. Object consists of 2 properties which specify rest api endpoint to upload a file to and directory name to get the file from. Usually the option is used for file input elements. Example: uploadParam: {dir: 'files/', endpoint: 'container/files'} |
+
+##### Constants representing input elements
+Properties may optionally be configured to be represented by a number of existing or custom html elements.
+###### Available constants
+
+
+|        Element        | Description                                                                                                                                                              | Supported property type |
+|:---------------------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
+| BINARY_SELECT         | Select element: false or true.                                                                                                                                   | boolean                 |
+| DATA_SELECT           | Select element: a single value from a set of data.                                                                                                                       | any primitive           |
+| DATA_MULTISELECT      | Select element: multiple values from a set of data.                                                                                                                      | array                   |
+| CREATABLE_MULTISELECT | Select element: multiple values from a set of data with ability to create new values.                                                                                    | array                   |
+| TEXTAREA              | Textarea element.                                                                                                                                                        | string                  |
+| DEFAULT_INPUT         | Text input. Is used if `inputElement` is not specified explicitly.                                                                                                       | string                  |
+| FILE_INPUT            | File input. Uploads file to the specified endpoint and sets the file's name as property value. Needs specifying uploadParams option so as to process the file correctly. | string                  |
+
+###### Adding custom element
+Custom elements can also be used as inputs.
+
+1. Pass a string constant representing the custom element name as a new property to the object `Elements` in the file `config.js` under `client/src/configurableElements`.
+2. Import the element into `elements.js` under `client/src/configurableElements/factories` and create a new option for the factory method that will return your element on the defined constant.
+3. Use this constant as a value for `inputValue` property option.
