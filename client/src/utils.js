@@ -12,4 +12,3 @@ export const getFileUrl = url => {
 export const getName = (obj, url) => typeof obj === 'object' ? RELATIVE_URL + '/' + url + obj.name : null;
 
 export const getNameFromUrl = name => typeof name === 'string' ? name.substring(name.lastIndexOf('/') + 1) : null;
-
