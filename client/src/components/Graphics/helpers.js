@@ -1,8 +1,14 @@
 import {ASSIGN_GROUP, ADD_COLOR} from '../../definitions';
 import map from 'lodash/map';
+import forEach from 'lodash/forEach';
 
-export function updateNestedArray(arrName, ind, propName, event) {
-  const arr = [...this.props.objectHolder[arrName]];
+export function updateArray(resObj) {
+  this.props.setEditingObjectProperty(resObj.name, [...resObj.array]);
+}
+
+export function updateNestedArray(objectHolder, arrName, ind, propName, event) {
+  console.warn(objectHolder, arrName, ind, propName, event)
+  const arr = [...objectHolder[arrName]];
   (arr[ind])[propName] = event.target.value;
   this.props.setEditingObjectProperty(arrName, [...arr]);
 }
@@ -34,11 +40,28 @@ export function updateDblNestedArray(objectHolder, fArrName, sArrName, fInd, sIn
   return {name: fArrName, array: arr};
 }
 
-export function getColorgroupsOptions(colorgroups) {
-  if (!colorgroups || !colorgroups.length) {
-    return [];
+export function onColorizableChange(objectHolder, option, key) {
+  let colorizables = [...objectHolder['colorizables']];
+  colorizables[key].assignColorgroup = option.value;
+  this.props.setEditingObjectProperty('colorizables', colorizables);
+}
+
+export function onColorizableColorsSelectChange(objectHolder, val, key) {
+  let colorizables = [...objectHolder['colorizables']];
+  let colors = [];
+  if (val) {
+    forEach(val, v => colors.push({name: v.name, value: v.value}));
+    colorizables[key]._colors = colors;
+    this.props.setEditingObjectProperty('colorizables', colorizables);
   }
-  return colorgroups;
+}
+
+export function onColorizableColorgroupSelectChange(objectHolder, val, key) {
+  let colorizables = [...objectHolder['colorizables']];
+  if (val) {
+    colorizables[key].colorgroup = {name: val.name, id: val.id};
+    this.props.setEditingObjectProperty('colorizables', colorizables);
+  }
 }
 
 export function getColorizableColorsOptions() {
@@ -75,21 +98,21 @@ export function getSelectedColorizableColorgroupOptions(colorizables, key) {
   }
 }
 
-export function getOptions(colors) {
-  if (!colors || !colors.length) {
+export function getOptions(prop) {
+  if (!prop || !prop.length) {
     return [];
   }
-  return colors;
+  return prop;
 }
 
-export function getSelectedOptions(colors) {
-  if (!colors || !colors.length) {
+export function getSelectedOptions(prop) {
+  if (!prop || !prop.length) {
     return [];
   }
-  if (typeof (colors)[0] === 'string') {
-    return map(colors, col => ({value: col, name: col}));
+  if (typeof (prop)[0] === 'string') {
+    return map(prop, col => ({value: col, name: col}));
   }
-  return colors;
+  return prop;
 }
 
 export function toCanvas(image, ref) {

@@ -10,7 +10,7 @@ import '../../../../public/assets/css/cropper.css';
 export default class Locations extends Component {
   static propTypes = {
     objectHolder: PropTypes.object,
-    getImageUrl: PropTypes.func,
+    getImageUrl: PropTypes.func.isRequired,
     getLocationsInputValue: PropTypes.func,
     changeLocationsNestedArrValue: PropTypes.func,
     changeLocationsNestedHolderValue: PropTypes.func,

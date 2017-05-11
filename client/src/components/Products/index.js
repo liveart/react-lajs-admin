@@ -9,14 +9,12 @@ import {
   STATUS_DEFAULT,
   SIZES
 } from '../../definitions';
-import {parseJson} from '../../ProductJsonParser';
 import map from 'lodash/map';
 import forEach from 'lodash/forEach';
 import forOwn from 'lodash/forOwn';
 import findIndex from 'lodash/findIndex';
 import {getFileUrl} from '../../utils';
 import '../../../public/assets/css/cropper.css';
-const LEAVE_URL_OPTION = 'Import';
 const Product = ProductModel.properties;
 const Location = ProductModel.properties.locations.type[0];
 export default class ProductsComponent extends Component {
@@ -116,42 +114,6 @@ export default class ProductsComponent extends Component {
     this.props.setEditingObjectProperty(prop, {...object});
   };
 
-  toCanvas = prop => {
-    const image = this.props.objectHolder[prop];
-    const img = new Image();
-    let imageOut = new Image();
-    const reader = new FileReader();
-    reader.onload = (e) => img.src = e.target.result;
-    reader.readAsDataURL(image);
-    const c = this.refs.canvas;
-    const ctx = c.getContext('2d');
-    ctx.clearRect(0, 0, c.width, c.height);
-    img.onload = () => imageOut = ctx.drawImage(img, 0, 0, 110, 110);
-  };
-
-  handleFileChoose = (prop, e) => {
-    this.props.setEditingObjectProperty(prop, e.target.files[0]);
-    if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-      if (prop === 'image') {
-        const image = this.props.objectHolder.image;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          this.setState({
-            ...this.state,
-            imgUrl: reader.result
-          });
-        };
-        reader.readAsDataURL(image);
-      }
-      if (prop === 'thumbUrl') {
-        this.toCanvas(prop);
-      }
-    }
-  };
-
-  handleImageUpload = file => {
-    this.props.uploadProductImage(file);
-  };
 
   onColorsSelectChange = (val, key) => {
     const arr = this.props.objectHolder.colors;
@@ -160,30 +122,6 @@ export default class ProductsComponent extends Component {
       arr[key].value = val.value;
       this.props.setEditingObjectProperty('colors', [...arr]);
     }
-  };
-
-  onColorizableColorsSelectChange = (val, key) => {
-    let colorizables = this.props.objectHolder.colorizables;
-    let colors = [];
-    if (val) {
-      forEach(val, v => colors.push({name: v.name, value: v.value}));
-      colorizables[key]._colors = colors;
-      this.props.setEditingObjectProperty('colorizables', colorizables);
-    }
-  };
-
-  onColorizableColorgroupSelectChange = (val, key) => {
-    let colorizables = this.props.objectHolder.colorizables;
-    if (val) {
-      colorizables[key].colorgroup = {name: val.name, id: val.id};
-      this.props.setEditingObjectProperty('colorizables', colorizables);
-    }
-  };
-
-  handleColorActionOption = (option, key) => {
-    let colorizables = this.props.objectHolder.colorizables;
-    colorizables[key].assignColorgroup = option.value;
-    this.props.setEditingObjectProperty('colorizables', colorizables);
   };
 
   handleColorLocationActionOption = (option, key, k) => {
@@ -201,7 +139,7 @@ export default class ProductsComponent extends Component {
   );
 
   addEditableAreaSizeRow = () => (
-    this.handleSelectedObjectArrayAddNew('editableAreaSizes', {label: '', width: 0, height: 0})
+    this.handleSelectedObjectArrayAddNew('editableAreaSizes', )
   );
 
   deleteEditableAreaSizeRow = key => (
@@ -214,20 +152,6 @@ export default class ProductsComponent extends Component {
 
   deleteLocationRow = (colorId, key) => (
     this.handleSelectedObjectArrayArrayDeleteElement('colors', 'location', colorId, key)
-  );
-
-  addColorizableRow = () => (
-    this.handleSelectedObjectArrayAddNew('colorizables', {
-      name: '',
-      id: '',
-      assignColorgroup: false,
-      _colors: [],
-      colorgroup: {}
-    })
-  );
-
-  deleteColorizableRow = key => (
-    this.handleSelectedObjectArrayDeleteElement('colorizables', key)
   );
 
   getSizeOptions = () => {
@@ -256,58 +180,63 @@ export default class ProductsComponent extends Component {
       this.props.setEditingObjectProperty('sizes', arr);
     }
   };
+  //TODO
+  /*
 
-  handleImportJson = (json, baseUrl, urlOption, forceNoBase) => {
-    if (!baseUrl.length && !forceNoBase && urlOption !== LEAVE_URL_OPTION) {
-      this.props.addNotification('warning', 'Base url is not set',
-        'Not setting correct base url will result in broken links.',
-        15, f => this.handleImportJson(json, baseUrl, urlOption, true));
-      return;
-    }
-    if (!forceNoBase && urlOption !== LEAVE_URL_OPTION) {
-      const r = new RegExp('^(?:[a-z]+:)?//', 'i');
-      if (!r.test(baseUrl)) {
-        this.props.addNotification('warning', 'The specified base url seems not to have a protocol',
-          'Not setting correct base url will result in broken links.',
-          15, f => this.handleImportJson(json, baseUrl, urlOption, true));
-        return;
-      }
-    }
-    let parsed = parseJson(json, baseUrl);
-    try {
-      const categories = [...parsed.categories];
-      if (categories && categories.length) {
-        this.props.createProductsCategory(categories, this.props.token);
-      }
-      const products = [...parsed.products];
-      if (products && products.length) {
-        this.props.createEntity(products, this.props.token);
-      }
-      this.props.enableDefaultStatus();
-      this.props.restoreTableState({...Product});
-      this.setState({...this.state, json: '', baseUrl: ''});
-    } catch (e) {
-      this.props.addNotification('error', 'Json structure is invalid.');
-    }
-  };
+   toCanvas = prop => {
+   const image = this.props.objectHolder[prop];
+   const img = new Image();
+   let imageOut = new Image();
+   const reader = new FileReader();
+   reader.onload = (e) => img.src = e.target.result;
+   reader.readAsDataURL(image);
+   const c = this.refs.canvas;
+   const ctx = c.getContext('2d');
+   ctx.clearRect(0, 0, c.width, c.height);
+   img.onload = () => imageOut = ctx.drawImage(img, 0, 0, 110, 110);
+   };
 
-  saveMulticolor = () => {
-    if (this.props.objectHolder.multicolor === true) {
-      this.props.setEditingObjectProperty('colors', []);
-      let colorizables = this.props.objectHolder.colorizables;
-      forEach(colorizables, c => {
-        if (c.assignColorgroup) {
-          c._colors = [];
-          this.props.setEditingObjectProperty('colorizables', colorizables);
-        } else {
-          c.colorgroup = {};
-          this.props.setEditingObjectProperty('colorizables', colorizables);
-        }
-      });
-    } else if (this.props.objectHolder.multicolor === false) {
-      this.props.setEditingObjectProperty('colorizables', []);
-    }
-  };
+   handleFileChoose = (prop, e) => {
+   this.props.setEditingObjectProperty(prop, e.target.files[0]);
+   if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
+   if (prop === 'image') {
+   const image = this.props.objectHolder.image;
+   const reader = new FileReader();
+   reader.onloadend = () => {
+   this.setState({
+   ...this.state,
+   imgUrl: reader.result
+   });
+   };
+   reader.readAsDataURL(image);
+   }
+   if (prop === 'thumbUrl') {
+   this.toCanvas(prop);
+   }
+   }
+   };
+
+   handleImageUpload = file => {
+   this.props.uploadProductImage(file);
+   };
+   saveMulticolor = () => {
+   if (this.props.objectHolder.multicolor === true) {
+   this.props.setEditingObjectProperty('colors', []);
+   let colorizables = this.props.objectHolder.colorizables;
+   forEach(colorizables, c => {
+   if (c.assignColorgroup) {
+   c._colors = [];
+   this.props.setEditingObjectProperty('colorizables', colorizables);
+   } else {
+   c.colorgroup = {};
+   this.props.setEditingObjectProperty('colorizables', colorizables);
+   }
+   });
+   } else if (this.props.objectHolder.multicolor === false) {
+   this.props.setEditingObjectProperty('colorizables', []);
+   }
+   };
+   */
 
   createCustomOption = customOptionInput => {
     if (!customOptionInput || !customOptionInput.value || !customOptionInput.value.length) {
@@ -373,7 +302,7 @@ export default class ProductsComponent extends Component {
   );
 
   deleteUnitsRangeRow = (locationId, key) =>
-    this.updateArray(
+    helpers.updateArray(
       helpers.deleteFromDblNestedArray(this.props.objectHolder, 'locations',
         'editableAreaUnitsRange', locationId, key));
 
@@ -416,8 +345,7 @@ export default class ProductsComponent extends Component {
     this.changeLocationsNestedArrValue('editableArea', 2, Number((data.width + data.x).toFixed(2)));
     this.changeLocationsNestedArrValue('editableArea', 3, Number((data.height + data.y).toFixed(2)));
   };
-  
-  updateArray = resObj => this.props.setEditingObjectProperty(resObj.name, [...resObj.array]);
+
 
   handleNewOption = val => {
     let obj = {};
