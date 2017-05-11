@@ -5,6 +5,8 @@ import View from './View';
 import {checkNotEmpty} from '../../FormValidation';
 import keys from 'lodash/keys';
 import forEach from 'lodash/forEach';
+import difference from 'lodash/difference';
+import eq from 'lodash/eq';
 import {getName} from '../../utils';
 
 export default class AbstractPage extends Component {
@@ -26,13 +28,18 @@ export default class AbstractPage extends Component {
     this.props.fetchData();
   }
 
+  componentWillReceiveProps(props) {
+    if (props.errors && props.errors.length) {
+      forEach(difference(props.errors, this.props.errors), prop => this.props.addNotification('error', prop));
+    }
+    if (props.message) {
+      if (!eq(props.message, this.props.message)) {
+        this.props.addNotification('success', props.message);
+      }
+    }
+  }
+
   componentDidUpdate() {
-    if (this.props.errors && this.props.errors.length) {
-      forEach(this.props.errors, prop => this.props.addNotification('error', prop));
-    }
-    if (this.props.message) {
-      this.props.addNotification('success', this.props.message);
-    }
     if (this.state.empty.length) {
       this.props.addNotification('error', 'Please, fill all the required fields',
         'Check ' + this.state.empty.join(', ') + '.');

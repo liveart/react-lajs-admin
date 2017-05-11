@@ -62,7 +62,7 @@ export default function (state = INITIAL_STATE, action) {
     case SET_INITIAL_STATE: {
       let holder = {};
       Object.getOwnPropertyNames(action.object).forEach(prop => holder[prop] = '');
-      return {...INITIAL_STATE, objectHolder: Object.assign({}, holder)};
+      return {...INITIAL_STATE, objectHolder: {...holder}};
     }
     default:
       return state;
