@@ -184,22 +184,25 @@
       "type": "string",
       "required": true,
       "showInTable": false,
-      "showInput": false,
-      "header": "Designs Url"
+      "showInput": true,
+      "header": "Get Designs Url",
+      "viewGroup": "Designs"
     },
     "saveDesignUrl": {
       "type": "string",
       "required": true,
       "showInTable": false,
-      "showInput": false,
-      "header": "Save Design Url"
+      "showInput": true,
+      "header": "Save Design Url",
+      "viewGroup": "Designs"
     },
     "loadDesignUrl": {
       "type": "string",
       "required": true,
       "showInTable": false,
-      "showInput": false,
-      "header": "Load Design Url"
+      "showInput": true,
+      "header": "Load Design Url",
+      "viewGroup": "Designs"
     },
     "redirectUrl": {
       "type": "string",

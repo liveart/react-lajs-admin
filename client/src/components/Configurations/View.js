@@ -14,35 +14,24 @@ export default class ConfigurationsView extends Component {
   render() {
     return (
       <AbstractPage{...this.props} objectSample={Configuration} sortingSupport={true}
-                   changedInputs={{
-                     colors: {
-                       elem: <Colors
-                         colors={this.props.objectHolder.colors}
-                         handleSelectedObjectChange={this.props.handleSelectedObjectChange}/>
-                     },
-                     textEffects: {
-                       elem: <TextEffects
-                         textEffects={this.props.objectHolder.textEffects}
-                         handleSelectedObjectChange={this.props.handleSelectedObjectChange}/>
-                     },
-                     redirectWindow: {
-                       elem: <Select
-                         value={this.props.objectHolder.redirectWindow}
-                         options={this.props.redirectWindowOptions}
-                         onChange={option => this.props.setEditingObjectProperty('redirectWindow', option.value)}
-                         isLoading={this.props.loading}
-                         clearable={false}
-                       />
-                     },
-                     options: {
-                       elem: <ConfigurationOptions
-                         options={this.props.objectHolder.options}
-                         changeOptionsNestedHolderValue={this.props.changeOptionsNestedHolderValue}
-                         handleSelectedObjectAddNewArray={this.props.handleSelectedObjectAddNewArray}
-                         handleSelectedObjectArrayArrayChange={this.props.handleSelectedObjectArrayArrayChange}
-                         handleSelectedObjectArrayArrayDeleteElement={this.props.handleSelectedObjectArrayArrayDeleteElement}
-                       />
-                     }
+                   nested={{
+                     colors: <Colors
+                       colors={this.props.objectHolder.colors}
+                       handleSelectedObjectChange={this.props.handleSelectedObjectChange}/>,
+                     textEffects: <TextEffects
+                       textEffects={this.props.objectHolder.textEffects}
+                       handleSelectedObjectChange={this.props.handleSelectedObjectChange}/>,
+                     redirectWindow: <Select
+                       value={this.props.objectHolder.redirectWindow}
+                       options={this.props.redirectWindowOptions}
+                       onChange={option => this.props.setEditingObjectProperty('redirectWindow', option.value)}
+                       isLoading={this.props.loading}
+                       clearable={false}
+                     />,
+                     options: <ConfigurationOptions
+                       options={this.props.objectHolder.options}
+                       {...this.props}
+                     />
                    }}
                    customInputs={{
                      defaults: {
