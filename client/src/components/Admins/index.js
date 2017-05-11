@@ -12,9 +12,13 @@ export default class extends Component {
     // admin model needs to be set manually
     this.state = {
       admin: {
-        email: {},
+        email: {
+          required: true
+        },
         password: {
-          showInTable: false
+          required: true,
+          showInTable: false,
+          inputElement: Elements.PASSWORD_INPUT
         }
       }
     };

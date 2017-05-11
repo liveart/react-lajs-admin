@@ -33,7 +33,7 @@ export const PTypes = {
   renderDeleteConfirmationDialog: PropTypes.object,
   renderDeleteConfirmationButtons: PropTypes.object,
   /**
-   * Function to enable related state.
+   * Function to enable import json state.
    * Defines if Json import is supported.
    */
   enableImportJson: PropTypes.func,
@@ -42,10 +42,6 @@ export const PTypes = {
   hiddenInputs: PropTypes.array,
   changedInputs: PropTypes.object,
   customInputs: PropTypes.object,
-  /**
-   * Label will be replaced with property's value if it exists.
-   */
-  changedLabels: PropTypes.object,
   /**
    * Custom comparator for sorting.
    */

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
 import View from './View';
-import {Creatable} from 'react-select';
 import * as GraphicModel from '../../../../common/models/graphic.json';
 import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, LEAVE_URL_OPTION} from '../../definitions';
 import {parseJson} from '../../GraphicJsonParser';
@@ -11,7 +10,6 @@ import forEach from 'lodash/forEach';
 import intersection from 'lodash/intersection';
 import * as helpers from './helpers';
 const Graphic = GraphicModel.properties;
-import {Elements} from '../../configurableElements/config';
 
 export default class GraphicsComponent extends Component {
   static propTypes = PTypes;

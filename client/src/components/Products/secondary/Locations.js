@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {forEach, map, findIndex} from 'lodash';
+import map from 'lodash/map';
 import Select, {Creatable} from 'react-select';
 import {getFileUrl} from '../../../utils';
 import Cropper from 'react-cropper';
@@ -26,23 +26,24 @@ export default class Locations extends Component {
   };
 
   render() {
+    const {objectHolder} = this.props;
+
     return <div>
       <div className='row' style={{marginBottom: 6}}>
         <div className='col-md-11'>
           <Creatable
             name='location'
             className='onTop'
-            placeholder={this.props.objectHolder.locations && this.props.objectHolder.locations.length ?
-              map(this.props.objectHolder.locations, 'name').join(', ') :
+            placeholder={objectHolder.locations && objectHolder.locations.length ?
+              map(objectHolder.locations, 'name').join(', ') :
               'No locations linked. Type a name to add location...'}
             noResultsText='No locations currently linked...'
             labelKey='name'
             valueKey='name'
-            value={this.props.location > -1 && this.props.objectHolder.locations &&
-            this.props.objectHolder.locations.length ?
-              (this.props.objectHolder.locations)[this.props.location] : null}
-            options={this.props.objectHolder.locations && this.props.objectHolder.locations.length ?
-              this.props.objectHolder.locations : []}
+            value={this.props.location > -1 && objectHolder.locations &&
+            objectHolder.locations.length ?
+              (objectHolder.locations)[this.props.location] : null}
+            options={objectHolder.locations && objectHolder.locations.length ? objectHolder.locations : []}
             onNewOptionClick={val => this.props.handleNewOption(val)}
             onChange={val => this.props.handleOptionChange(val)}
           />
@@ -50,12 +51,11 @@ export default class Locations extends Component {
         <div className='col-md-1'>
           <a className='btn btn-default' href='#' aria-label='Add'
              onClick={() => this.props.handleNewLocation()}>
-            <i className='fa fa-plus' aria-hidden='true'></i>
+            <i className='fa fa-plus' aria-hidden='true'/>
           </a>
         </div>
       </div>
-      {this.props.location < 0 ||
-      !this.props.objectHolder.locations || !this.props.objectHolder.locations.length ? null :
+      {this.props.location < 0 || !objectHolder.locations || !objectHolder.locations.length ? null :
         <div className='panel panel-default'>
           <div className='panel-body'>
             <div className='row'>
