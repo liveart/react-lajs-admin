@@ -5,7 +5,7 @@ Model configuration files folder: `common/model`.
 Model json files serve two purposes – server model configuration and customization of the basic view representation.
 
 ## View representation
-Each property accepts a number of options that configure its view representation.
+Each property accepts a number of options that configure view representation.
 
 | Option         | Default value                               | Description                                                                                                                                                                                                                                                                                                                                                                                                  |
 |----------------|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
