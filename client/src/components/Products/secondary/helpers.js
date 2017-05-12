@@ -73,5 +73,4 @@ export function getSelectedColorLocationsOptions(key, k, colors) {
     return {};
   }
   return {name: colors[key].location[k].name};
-
 }

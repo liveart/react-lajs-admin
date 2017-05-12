@@ -8,7 +8,7 @@ import keys from 'lodash/keys';
 import forEach from 'lodash/forEach';
 import difference from 'lodash/difference';
 import eq from 'lodash/eq';
-import {getName} from '../../utils';
+import {getHeader, getName} from '../../utils';
 
 export default class AbstractPage extends Component {
   static propTypes = PTypes;
@@ -44,7 +44,7 @@ export default class AbstractPage extends Component {
   componentDidUpdate() {
     if (this.state.empty.length) {
       this.props.addNotification(NotificationTypes.ERR, NotificationMessages.FILL_REQUIRED,
-        'Check ' + this.state.empty.join(', ') + '.');
+        'Check ' + this.state.empty.map(p => getHeader(p, this.props.objectSample)).join(', ') + '.');
       this.setState({...this.state, empty: []});
     }
   }
