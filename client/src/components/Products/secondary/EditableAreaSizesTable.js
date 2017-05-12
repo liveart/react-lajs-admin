@@ -5,8 +5,8 @@ import {} from '../../../definitions';
 
 export default class EditableAreaSizesTable extends Component {
   static propTypes = {
-    deleteEditableAreaSizeRow: PropTypes.func,
-    addEditableAreaSizeRow: PropTypes.func
+    deleteEditableAreaSizeRow: PropTypes.func.isRequired,
+    addEditableAreaSizeRow: PropTypes.func.isRequired
   };
 
   render() {

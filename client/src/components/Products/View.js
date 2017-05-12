@@ -10,6 +10,7 @@ import ColorizableTable from '../Colorizable/ColorizableTable';
 const Product = ProductModel.properties;
 
 export default class ProductView extends Component {
+
   render() {
     return <AbstractPage {...this.props} objectSample={{...Product}}
                          sortingSupport={true}

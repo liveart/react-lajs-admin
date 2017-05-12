@@ -37,12 +37,6 @@ export default class ProductsComponent extends Component {
     }
   }
 
-  handleSelectedObjectArrayChange = (arrName, ind, propName, event) => {
-    const arr = this.props.objectHolder[arrName];
-    (arr[ind])[propName] = event.target.value;
-    this.props.setEditingObjectProperty(arrName, [...arr]);
-  };
-
   handleSelectedObjectArrayAddNew = (arrName, obj) => {
     let arr = this.props.objectHolder[arrName];
     if (typeof arr !== 'object') {

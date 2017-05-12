@@ -7,14 +7,13 @@ export function updateArray(resObj) {
 }
 
 export function updateNestedArray(objectHolder, arrName, ind, propName, event) {
-  console.warn(objectHolder, arrName, ind, propName, event)
   const arr = [...objectHolder[arrName]];
   (arr[ind])[propName] = event.target.value;
   this.props.setEditingObjectProperty(arrName, [...arr]);
 }
 
 export function addToNestedArray(objectHolder, arrName, obj) {
-  let arr = [...objectHolder[arrName]];
+  let arr = Array.isArray(objectHolder[arrName]) ? [...objectHolder[arrName]] : [];
   if (typeof arr !== 'object') {
     arr = [];
   }

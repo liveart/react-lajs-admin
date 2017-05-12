@@ -75,10 +75,7 @@ export default class DefaultInput extends Component {
       }
     }
 
-    //console.warn(property, input.type.options)
-
     if (input.type.options && input.type.options.acceptsProps === true) {
-      console.warn('TRUE')
       props = {...props, ...this.props, property};
     }
 
