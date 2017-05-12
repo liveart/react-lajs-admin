@@ -18,7 +18,7 @@
 /client/public/files/productCategoryThumbs/*
 !/client/public/files/productThumbs/.gitkeep
 !/client/public/files/thumb/.gitkeep
-/client/public/files/productLocationOverlay/.gitkeep
+!/client/public/files/productLocationOverlay/.gitkeep
 !/client/public/files/productLocationMask/.gitkeep
 !/client/public/files/productLocationImage/.gitkeep
 !/client/public/files/productImages/.gitkeep

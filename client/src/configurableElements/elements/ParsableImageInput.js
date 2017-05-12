@@ -23,15 +23,16 @@ export default class ParsableImageInput extends React.Component {
     const image = e.target.files[0];
     this.props.setEditingObjectProperty(this.props.property, image);
     const reader = new FileReader();
-    reader.onloadend = e => {
+    reader.onloadend = event => {
       this.setState({
-        ...this.state, url: e.target.result
+        ...this.state, url: event.target.result
       });
       if (image.type === 'image/svg+xml') {
         if (overwrite) {
+          console.warn('HERE')
           const r = new FileReader();
-          r.onload = e => {
-            const contents = e.target.result;
+          r.onload = ev => {
+            const contents = ev.target.result;
             const {graphicObject, newDom, colors} = processSVGContent(contents);
             const blob = new Blob([newDom], {type: 'application/octet-binary'});
             const file = new File([blob], image.name, {type: image.type});
