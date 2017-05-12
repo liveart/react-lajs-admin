@@ -2,21 +2,17 @@ import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
 import View from './View';
 import * as helpers from '../Graphics/helpers';
-import * as ProductModel from '../../../../common/models/product.json';
-import {
-  STATUS_EDITING,
-  STATUS_CREATING,
-  STATUS_DEFAULT,
-  SIZES
-} from '../../definitions';
+import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, SIZES} from '../../definitions';
+import {NotificationTypes, NotificationMessages} from '../../strings';
 import map from 'lodash/map';
 import forEach from 'lodash/forEach';
 import forOwn from 'lodash/forOwn';
 import findIndex from 'lodash/findIndex';
 import {getFileUrl} from '../../utils';
 import '../../../public/assets/css/cropper.css';
-const Product = ProductModel.properties;
+import * as ProductModel from '../../../../common/models/product.json';
 const Location = ProductModel.properties.locations.type[0];
+
 export default class ProductsComponent extends Component {
   static propTypes = PTypes;
 
@@ -139,7 +135,7 @@ export default class ProductsComponent extends Component {
   );
 
   addEditableAreaSizeRow = () => (
-    this.handleSelectedObjectArrayAddNew('editableAreaSizes', )
+    this.handleSelectedObjectArrayAddNew('editableAreaSizes',)
   );
 
   deleteEditableAreaSizeRow = key => (
@@ -180,67 +176,10 @@ export default class ProductsComponent extends Component {
       this.props.setEditingObjectProperty('sizes', arr);
     }
   };
-  //TODO
-  /*
-
-   toCanvas = prop => {
-   const image = this.props.objectHolder[prop];
-   const img = new Image();
-   let imageOut = new Image();
-   const reader = new FileReader();
-   reader.onload = (e) => img.src = e.target.result;
-   reader.readAsDataURL(image);
-   const c = this.refs.canvas;
-   const ctx = c.getContext('2d');
-   ctx.clearRect(0, 0, c.width, c.height);
-   img.onload = () => imageOut = ctx.drawImage(img, 0, 0, 110, 110);
-   };
-
-   handleFileChoose = (prop, e) => {
-   this.props.setEditingObjectProperty(prop, e.target.files[0]);
-   if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
-   if (prop === 'image') {
-   const image = this.props.objectHolder.image;
-   const reader = new FileReader();
-   reader.onloadend = () => {
-   this.setState({
-   ...this.state,
-   imgUrl: reader.result
-   });
-   };
-   reader.readAsDataURL(image);
-   }
-   if (prop === 'thumbUrl') {
-   this.toCanvas(prop);
-   }
-   }
-   };
-
-   handleImageUpload = file => {
-   this.props.uploadProductImage(file);
-   };
-   saveMulticolor = () => {
-   if (this.props.objectHolder.multicolor === true) {
-   this.props.setEditingObjectProperty('colors', []);
-   let colorizables = this.props.objectHolder.colorizables;
-   forEach(colorizables, c => {
-   if (c.assignColorgroup) {
-   c._colors = [];
-   this.props.setEditingObjectProperty('colorizables', colorizables);
-   } else {
-   c.colorgroup = {};
-   this.props.setEditingObjectProperty('colorizables', colorizables);
-   }
-   });
-   } else if (this.props.objectHolder.multicolor === false) {
-   this.props.setEditingObjectProperty('colorizables', []);
-   }
-   };
-   */
 
   createCustomOption = customOptionInput => {
     if (!customOptionInput || !customOptionInput.value || !customOptionInput.value.length) {
-      this.props.addNotification('error', 'Incorrect custom property name.');
+      this.props.addNotification(NotificationTypes.ERR, NotificationMessages.INCORRECT_PROPERTY_NAME);
       return;
     }
     let data = {...this.props.objectHolder.data};
@@ -251,7 +190,7 @@ export default class ProductsComponent extends Component {
 
   removeCustomOption = (prop, accepted) => {
     if (!accepted) {
-      this.props.addNotification('info', 'Are you sure?',
+      this.props.addNotification(NotificationTypes.INFO, NotificationMessages.ARE_YOU_SURE,
         `Option ${prop} will be deleted.`,
         15, f => this.removeCustomOption(prop, true));
       return;
@@ -345,7 +284,6 @@ export default class ProductsComponent extends Component {
     this.changeLocationsNestedArrValue('editableArea', 2, Number((data.width + data.x).toFixed(2)));
     this.changeLocationsNestedArrValue('editableArea', 3, Number((data.height + data.y).toFixed(2)));
   };
-
 
   handleNewOption = val => {
     let obj = {};

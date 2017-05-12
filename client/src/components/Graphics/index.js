@@ -35,60 +35,6 @@ export default class GraphicsComponent extends Component {
 }
 
 /*
- updateObject = (propertyName, event) => {
- this.props.setEditingObjectProperty(propertyName, event.target.value);
- };
-
- handleImgAsThumb = thumbRef => {
- this.props.setEditingObjectProperty('thumb', this.props.objectHolder.image);
- helpers.toCanvas(this.props.objectHolder.thumb, thumbRef);
- };
-
- handleFileSelection = (prop, e, overwrite, thumbRef) => {
- e.persist();
- if (this.props.status === STATUS_CREATING || this.props.status === STATUS_EDITING) {
- if (prop === 'image') {
- const image = e.target.files[0];
- this.props.setEditingObjectProperty(prop, image);
- const reader = new FileReader();
- reader.onloadend = () => {
- this.setState({
- ...this.state,
- imgUrl: reader.result
- });
- if (image.type === 'image/svg+xml') {
- if (overwrite) {
- const r = new FileReader();
- r.onload = e => {
- const contents = e.target.result;
- const {graphicObject, newDom, colors} = converter.processSVGContent(contents);
- const blob = new Blob([newDom], {type: 'application/octet-binary'});
- const file = new File([blob], image.name, {type: image.type});
- this.props.setEditingObjectProperty(prop, file);
- this.props.setEditingObjectProperty(null, {...this.props.objectHolder, ...graphicObject});
- const foundColors = intersection(this.props.colors.map(c => c.value), colors);
- if (foundColors.length < colors.length) {
- this.props.addNotification('warning', 'Some of the colors from the selected image are not present' +
- ' in the color list.');
- }
- };
- r.readAsText(image);
- } else {
- this.props.addNotification('info', 'Some options might be parsed from the selected svg image',
- 'Try parsing multicolor option and colorizable elements from the image?',
- 15, f => this.handleFileSelection(prop, e, true));
- }
- }
- };
- reader.readAsDataURL(image);
- }
- if (prop === 'thumb') {
- this.props.setEditingObjectProperty(prop, e.target.files[0]);
- helpers.toCanvas(this.props.objectHolder[prop], thumbRef);
- }
- }
- };
-
  saveColorizables = () => { // TODO notify Vlad
  let colorizables = this.props.objectHolder.colorizables;
  forEach(colorizables, c => {
@@ -101,5 +47,4 @@ export default class GraphicsComponent extends Component {
  }
  });
  };
-
  */

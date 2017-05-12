@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {NotificationMessages, NotificationTypes} from '../../strings';
 import {processSVGContent}  from '../../SvgConverter';
 import intersection from 'lodash/intersection';
 
@@ -34,15 +35,13 @@ export default class ParsableImageInput extends React.Component {
             this.props.setEditingObjectProperty(null, {...this.props.objectHolder, ...graphicObject});
             const foundColors = intersection(this.props.colors.map(c => c.value), colors);
             if (foundColors.length < colors.length) {
-              this.props.addNotification('warning', 'Some of the colors from the selected image are not present' +
-                ' in the color list.');
+              this.props.addNotification(NotificationTypes.WARN, NotificationMessages.SVG_COLORS_MISSED);
             }
           };
           r.readAsText(image);
         } else {
-          this.props.addNotification('info', 'Some options might be parsed from the selected svg image',
-            'Try parsing multicolor option and colorizable elements from the image?',
-            15, f => this.onChange(e, true));
+          this.props.addNotification(NotificationTypes.INFO, NotificationMessages.SVG_CAN_BE_PARSED,
+            NotificationMessages.SVG_IF_PARSE, 15, f => this.onChange(e, true));
         }
       }
     };

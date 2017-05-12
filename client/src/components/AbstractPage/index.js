@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
 import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, LEAVE_URL_OPTION} from '../../definitions';
+import {NotificationMessages, NotificationTypes} from '../../strings';
 import View from './View';
 import {checkNotEmpty} from '../../FormValidation';
 import keys from 'lodash/keys';
@@ -30,18 +31,19 @@ export default class AbstractPage extends Component {
 
   componentWillReceiveProps(props) {
     if (props.errors && props.errors.length) {
-      forEach(difference(props.errors, this.props.errors), prop => this.props.addNotification('error', prop));
+      forEach(difference(props.errors, this.props.errors),
+        prop => this.props.addNotification(NotificationTypes.ERR, prop));
     }
     if (props.message) {
       if (!eq(props.message, this.props.message)) {
-        this.props.addNotification('success', props.message);
+        this.props.addNotification(NotificationTypes.SUCCESS, props.message);
       }
     }
   }
 
   componentDidUpdate() {
     if (this.state.empty.length) {
-      this.props.addNotification('error', 'Please, fill all the required fields',
+      this.props.addNotification(NotificationTypes.ERR, NotificationMessages.FILL_REQUIRED,
         'Check ' + this.state.empty.join(', ') + '.');
       this.setState({...this.state, empty: []});
     }
@@ -145,15 +147,13 @@ export default class AbstractPage extends Component {
 
   render() {
     return <View {...this.props}
+                 {...this.state}
                  handleAddNew={this.handleAddNew}
                  handleImportFromJson={this.handleImportFromJson}
                  handleCancelBtnClick={this.handleCancelBtnClick}
                  handleSaveBtnClick={this.handleSaveBtnClick}
                  handleDeleteBtnClick={this.handleDeleteBtnClick}
                  handleFileSelection={this.handleFileSelection}
-                 json={this.state.json}
-                 urlSelect={this.state.urlSelect}
-                 baseUrl={this.state.baseUrl}
                  updateObject={this.updateObject}
                  onBaseUrlChange={this.handleBaseUrlChange}
                  onJsonChange={this.handleJsonChange}
