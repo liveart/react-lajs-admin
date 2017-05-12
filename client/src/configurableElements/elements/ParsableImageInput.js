@@ -24,12 +24,8 @@ export default class ParsableImageInput extends React.Component {
     this.props.setEditingObjectProperty(this.props.property, image);
     const reader = new FileReader();
     reader.onloadend = event => {
-      this.setState({
-        ...this.state, url: event.target.result
-      });
       if (image.type === 'image/svg+xml') {
         if (overwrite) {
-          console.warn('HERE')
           const r = new FileReader();
           r.onload = ev => {
             const contents = ev.target.result;
@@ -49,6 +45,9 @@ export default class ParsableImageInput extends React.Component {
             NotificationMessages.SVG_IF_PARSE, 15, f => this.onChange(e, true));
         }
       }
+      this.setState({
+        ...this.state, url: event.target.result
+      });
     };
     reader.readAsDataURL(image);
   };
