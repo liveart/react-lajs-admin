@@ -50,8 +50,10 @@ export default class DefaultInput extends Component {
       onChangeHandler = (p, e) => setEditingObjectProperty(p, e.target.files[0]);
     }
 
-    const props = {};
-    props.onChange = e => onChangeHandler(property, e);
+    let props = {};
+    if (typeof props.onChange !== 'function') {
+      props.onChange = e => onChangeHandler(property, e);
+    }
 
     if (typeof input.props.valueProp === 'string') {
       props[input.props.valueProp] = value;
@@ -73,8 +75,16 @@ export default class DefaultInput extends Component {
       }
     }
 
+    //console.warn(property, input.type.options)
+
+    if (input.type.options && input.type.options.acceptsProps === true) {
+      console.warn('TRUE')
+      props = {...props, ...this.props, property};
+    }
+
     return React.cloneElement(input, {...props});
-  };
+  }
+  ;
 
   render() {
     const {item, property, shouldGroupRender} = this.props;

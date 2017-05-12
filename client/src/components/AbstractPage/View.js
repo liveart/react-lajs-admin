@@ -16,7 +16,6 @@ import groupBy from 'lodash/groupBy';
 import EditingView from './secondary/ViewStates/EditingView';
 import InputRow from './secondary/InputRow';
 import Panel from './secondary/Panel';
-import CustomInput from './secondary/Inputs/CustomInput';
 
 export default class AbstractPageView extends Component {
 

@@ -10,6 +10,7 @@ import ColorPicker from '../elements/ColorPicker';
 import CreatableMultiselect from '../elements/CreatableMultiselect';
 import DisabledInput from '../elements/DisabledInput';
 import PasswordInput from '../elements/PasswordInput';
+import ParsableImageInput from '../elements/ParsableImageInput';
 
 export function getElement(type = Elements.DEFAULT_INPUT) {
   switch (type) {
@@ -33,5 +34,7 @@ export function getElement(type = Elements.DEFAULT_INPUT) {
       return CreatableMultiselect;
     case Elements.COLOR_PICKER:
       return ColorPicker;
+    case Elements.PARSABLE_IMAGE_INPUT:
+      return <ParsableImageInput />;
   }
 }

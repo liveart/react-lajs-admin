@@ -100,7 +100,7 @@
       "showInTable": false,
       "showInput": true,
       "representation": "THUMBNAIL",
-      "inputElement": "FILE_INPUT",
+      "inputElement": "PARSABLE_IMAGE_INPUT",
       "uploadParams": {
         "dir": "files/graphicImages/",
         "endpoint": "containers/graphicImages"
