@@ -14,6 +14,10 @@ export function* watchFetchFontsNumber() {
   yield takeLatest(actionTypes.FETCH_FONTS_NUMBER, fontsSagas.fetchFontsNumber);
 }
 
+export function* watchCreateFont() {
+  yield takeLatest(actionTypes.CREATE_FONT, fontsSagas.createFont);
+}
+
 export function* watchEditFont() {
   yield takeLatest(actionTypes.EDIT_FONT, fontsSagas.editFont);
 }

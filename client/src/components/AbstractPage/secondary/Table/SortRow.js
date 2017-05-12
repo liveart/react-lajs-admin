@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import keys from 'lodash/keys';
-import {Elements} from '../../../../configurableElements/config';
 import Select from 'react-select';
-export default class SortRow extends Component {
+export default class fSortRow extends Component {
   static propTypes = {
     sortingSupport: PropTypes.bool,
     objectSample: PropTypes.object.isRequired,
@@ -35,13 +34,7 @@ export default class SortRow extends Component {
                         options={this.props.secondaryData}
                         valueKey='id'
                         labelKey='name'
-                        onChange={el => {
-                          if (el) {
-                            this.props.setEditingObjectProperty(key, el.id);
-                          } else {
-                            this.props.setEditingObjectProperty(key, '');
-                          }
-                        }}/>
+                        onChange={el => this.props.setEditingObjectProperty(key, el ? el.id : '')}/>
               </td>;
             }
           }

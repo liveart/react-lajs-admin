@@ -29,6 +29,7 @@ export default function* root() {
     fork(fontsWatchers.watchFetchFonts),
     fork(fontsWatchers.watchFetchFontById),
     fork(fontsWatchers.watchFetchFontsNumber),
+    fork(fontsWatchers.watchCreateFont),
     fork(fontsWatchers.watchEditFont),
     fork(fontsWatchers.watchDeleteFont),
     fork(usersWatchers.watchFetchUsers),
