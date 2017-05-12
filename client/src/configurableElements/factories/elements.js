@@ -11,6 +11,8 @@ import CreatableMultiselect from '../elements/CreatableMultiselect';
 import DisabledInput from '../elements/DisabledInput';
 import PasswordInput from '../elements/PasswordInput';
 import ParsableImageInput from '../elements/ParsableImageInput';
+import ThumbResizeInput from '../elements/ThumbResizeInput';
+import ImageInput from '../elements/ImageInput';
 
 export function getElement(type = Elements.DEFAULT_INPUT) {
   switch (type) {
@@ -36,5 +38,9 @@ export function getElement(type = Elements.DEFAULT_INPUT) {
       return ColorPicker;
     case Elements.PARSABLE_IMAGE_INPUT:
       return <ParsableImageInput />;
+    case Elements.THUMB_RESIZE_INPUT:
+      return <ThumbResizeInput />;
+    case Elements.IMAGE_INPUT:
+      return <ImageInput />;
   }
 }

@@ -82,9 +82,6 @@ const mapDispatchToProps = dispatch => {
     },
     createProductsCategory(cat, token) {
       dispatch(createProductsCategory(cat, token));
-    },
-    uploadFile(file, endpoint) {
-      dispatch(uploadFile(file, endpoint));
     }
   };
 };

@@ -42,6 +42,7 @@
       "showInTable": true,
       "showInput": true,
       "sortable": false,
+      "inputElement": "THUMB_RESIZE_INPUT",
       "header": "Thumb",
       "representation": "THUMBNAIL"
     },

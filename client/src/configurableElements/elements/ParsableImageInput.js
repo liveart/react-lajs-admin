@@ -11,6 +11,11 @@ export default class ParsableImageInput extends React.Component {
     setEditingObjectProperty: PropTypes.func
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {url: ''};
+  }
+
   static options = {acceptsProps: true};
 
   onChange = (e, overwrite) => {
@@ -18,10 +23,9 @@ export default class ParsableImageInput extends React.Component {
     const image = e.target.files[0];
     this.props.setEditingObjectProperty(this.props.property, image);
     const reader = new FileReader();
-    reader.onloadend = () => {
+    reader.onloadend = e => {
       this.setState({
-        ...this.state,
-        imgUrl: reader.result
+        ...this.state, url: e.target.result
       });
       if (image.type === 'image/svg+xml') {
         if (overwrite) {
@@ -49,9 +53,12 @@ export default class ParsableImageInput extends React.Component {
   };
 
   render() {
-    return <input type='file'
-                  className='form-control'
-                  onChange={this.onChange}
-                  accept='image/*'/>;
+    return <div>
+      <input type='file'
+             className='form-control'
+             onChange={this.onChange}
+             accept='image/*'/>
+      {this.state.url.length ? <img src={this.state.url} style={{marginTop: 4, height: 100}}/> : null}
+    </div>;
   }
 }

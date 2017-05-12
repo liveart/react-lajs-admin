@@ -28,7 +28,7 @@
       "sortable": false,
       "header": "Thumb",
       "representation": "THUMBNAIL",
-      "inputElement": "FILE_INPUT",
+      "inputElement": "THUMB_RESIZE_INPUT",
       "uploadParams": {
         "dir": "files/productCategoryThumbs/",
         "endpoint": "containers/productCategoryThumbs"

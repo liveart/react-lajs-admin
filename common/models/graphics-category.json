@@ -27,7 +27,7 @@
       "showInput": true,
       "sortable": false,
       "representation": "THUMBNAIL",
-      "inputElement": "FILE_INPUT",
+      "inputElement": "THUMB_RESIZE_INPUT",
       "uploadParams": {
         "dir": "files/graphicCategoryThumbs/",
         "endpoint": "containers/graphicCategoryThumbs"

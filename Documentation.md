@@ -35,6 +35,8 @@ Properties may optionally be configured to be represented by a number of existin
 | TEXTAREA              | Textarea element.                                                                                                                                                        | string                  |
 | DEFAULT_INPUT         | Text input. Is used if `inputElement` is not specified explicitly.                                                                                                       | string                  |
 | FILE_INPUT            | File input. Uploads file to the specified endpoint and sets the file's name as property value. Needs specifying uploadParams option so as to process the file correctly. | string                  |
+| IMAGE_INPUT           | Same as FILE_INPUT, additionally renders preview of the selected image.                                                     |
+| THUMB_RESIZE_INPUT    | Same as IMAGE_INPUT, additionally automatically resizes image to configured dimensions. |
 
 ##### Adding custom element
 Custom elements can also be used as inputs.
