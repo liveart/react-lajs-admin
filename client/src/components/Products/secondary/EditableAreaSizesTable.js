@@ -21,8 +21,8 @@ export default class EditableAreaSizesTable extends Component {
         </tr>
         </thead>
         <tbody>
-        {this.props.objectHolder.editableAreaSizes ?
-          this.props.objectHolder.editableAreaSizes.map((c, key) =>
+        {this.props.editableAreaSizes ?
+          this.props.editableAreaSizes.map((c, key) =>
             <tr key={key}>
               <td><input type='text' className='form-control'
                          value={c.label}

@@ -4,18 +4,17 @@ import {capitalizeFirstLetter} from '../../../utils';
 
 export default class CustomOptions extends Component {
   render() {
-    const {objectHolder} = this.props;
 
     return <div className='panel panel-default'>
       <div className='panel-body'>
-        {objectHolder.data ? keys(objectHolder.data).map(prop =>
+        {this.props.data ? keys(this.props.data).map(prop =>
           <div key={prop} className='form-group'>
             <div className='col-md-2'>
               <p>{capitalizeFirstLetter(prop)}: </p>
             </div>
             <div className='col-md-9'>
               <input type='text' className='form-control'
-                     value={objectHolder.data[prop]}
+                     value={this.props.data[prop]}
                      onChange={e => this.props.handleSelectedObjectDataChange('data', prop, e)}/>
             </div>
             <div className='col-md-1'>

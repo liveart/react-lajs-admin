@@ -252,7 +252,21 @@ export default class Locations extends Component {
 
                 <div className='row' style={{marginBottom: 6}}>
                   <div className='col-lg-12'>
-                    <UnitRangeTable {...this.props}/>
+                    <UnitRangeTable
+                      getLocationsInputValue={this.props.getLocationsInputValue('editableAreaUnitsRange')}
+                      onMinChange={(k, e) => this.props.updateArray(
+                        this.props.updateDblNestedArray(this.props.objectHolder, 'locations',
+                          'editableAreaUnitsRange', this.props.location, k, 0, e))}
+                      onMaxChange={(k, e) => this.props.updateArray(
+                        this.props.updateDblNestedArray(this.props.objectHolder, 'locations',
+                          'editableAreaUnitsRange', this.props.location, k, 1, e))}
+                      onStepChange={(k, e) => this.props.updateArray(
+                        this.props.updateDblNestedArray(this.props.objectHolder, 'locations',
+                          'editableAreaUnitsRange', this.props.location, k, 2, e))}
+                      deleteUnitsRangeRow={k => this.props.updateArray(this.props.deleteFromDblNestedArray(
+                        this.props.objectHolder, 'locations', 'editableAreaUnitsRange', this.props.location, k))}
+                      addUnitsRangeRow={() => this.props.updateArray(this.props.addToDblNestedArray(
+                        this.props.objectHolder, 'locations', 'editableAreaUnitsRange', this.props.location, []))}/>
                   </div>
                 </div>
 

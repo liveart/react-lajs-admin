@@ -23,7 +23,7 @@ export default class ProductView extends Component {
                              nameInputHandler={(e, key) => this.props.updateNestedArray(this.props.objectHolder, 'colorizables', key, 'name', e)}
                              idInputHandler={(e, key) => this.props.updateNestedArray(this.props.objectHolder, 'colorizables', key, 'id', e)}
                              getColorizableValue={key => this.props.getSelectedColorizableOptions(this.props.objectHolder.colorizables, key)}
-                             colorizableHandler={(o, key) => this.props.onColorizableChange(this.props.objectHolder, o, key)}
+                             colorizableHandler={(o, key) => this.props.onAssignColorgroupChange(this.props.objectHolder, o, key)}
                              colorizableOptions={this.props.getColorizableColorsOptions}
                              deleteColorizableRow={key => this.props.updateArray(
                                this.props.deleteFromNestedArray(this.props.objectHolder, 'colorizables', key))}
@@ -44,17 +44,24 @@ export default class ProductView extends Component {
                              }))}/>,
                            colors: <ColorsTable
                              colorList={this.props.colors}
-                             colors={this.props.objectHolder.colors}
-                             locations={this.props.objectHolder.locations}
-                             onColorsSelectChange={this.props.onColorsSelectChange}
-                             handleColorLocationActionOption={this.props.handleColorLocationActionOption}
-                             handleSelectedObjectArrayArrayChange={this.props.handleSelectedObjectArrayArrayChange}
-                             deleteLocationRow={this.props.deleteLocationRow}
-                             addLocationRow={this.props.addLocationRow}
-                             deleteColorsRow={this.props.deleteColorsRow}
-                             addColorsRow={this.props.addColorsRow}/>,
-                           editableAreaSizes: <EditableAreaSizes
                              objectHolder={this.props.objectHolder}
+                             getOptions={this.props.getOptions}
+                             onColorsSelectChange={this.props.onColorsSelectChange}
+                             onColorLocationChange={this.props.onColorLocationChange}
+                             onImageChange={(key, k, e) =>
+                               this.props.onImageUpload(this.props.objectHolder, 'colors', 'location', key, k, 'image', e)}
+                             deleteLocationRow={(key, k) => this.props.updateArray(this.props.deleteFromDblNestedArray(
+                               this.props.objectHolder, 'colors', 'location', key, k))}
+                             addLocationRow={key => this.props.updateArray(this.props.addToDblNestedArray(
+                               this.props.objectHolder, 'colors', 'location', key, {name: '', image: ''}))}
+                             deleteColorsRow={key => this.props.updateArray(
+                               this.props.deleteFromNestedArray(this.props.objectHolder, 'colors', key))}
+                             addColorsRow={() => this.props.updateArray(
+                               this.props.addToNestedArray(this.props.objectHolder, 'colors', {
+                                 name: '', value: '', location: []
+                               }))}/>,
+                           editableAreaSizes: <EditableAreaSizes
+                             editableAreaSizes={this.props.objectHolder.editableAreaSizes}
                              labelHandler={(e, key) =>
                                this.props.updateNestedArray(this.props.objectHolder, 'editableAreaSizes', key, 'label', e)}
                              widthHandler={(e, key) =>
@@ -64,21 +71,23 @@ export default class ProductView extends Component {
                              deleteEditableAreaSizeRow={key => this.props.updateArray(
                                this.props.deleteFromNestedArray(this.props.objectHolder, 'editableAreaSizes', key))}
                              addEditableAreaSizeRow={() => this.props.updateArray(
-                               this.props.addToNestedArray(this.props.objectHolder, 'editableAreaSizes', {
-                                 label: '',
-                                 width: 0,
-                                 height: 0
-                               }))}
+                               this.props.addToNestedArray(
+                                 this.props.objectHolder, 'editableAreaSizes', {label: '', width: 0, height: 0}))}
                            />,
                            locations: <Locations
                              location={this.props.location}
                              crop={ref => this.props.crop(ref)}
                              {...this.props}/>,
-                           data: <CustomOptions {...this.props}
-                                                {...this}
+                           data: <CustomOptions
+                             data={this.props.objectHolder.data}
+                             handleSelectedObjectDataChange={this.props.handleSelectedObjectDataChange}
+                             removeCustomOption={this.props.removeCustomOption}
+                             createCustomOption={this.props.createCustomOption}
                            />,
-                           pantones: <Pantones {...this.props}
-                                               {...this}/>
+                           pantones: <Pantones
+                             pantones={this.props.objectHolder.pantones}
+                             updateObjectData={this.props.updateObjectData}
+                           />
                          }}/>;
   }
 }

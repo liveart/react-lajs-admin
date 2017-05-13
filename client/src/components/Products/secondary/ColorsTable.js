@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import {getColorsLocationsOptions, getOptions, getSelectedColorLocationsOptions, getSelectedOptions} from './helpers';
-import {getNameFromUrl, getFileUrl} from '../../../utils';
+import {Elements} from '../../../configurableElements/config';
+import {getElement} from '../../../configurableElements/factories/elements';
 
 export default class ColorsTable extends Component {
   static propTypes = {
     onColorsSelectChange: PropTypes.func,
-    handleColorLocationActionOption: PropTypes.func,
-    handleSelectedObjectArrayArrayChange: PropTypes.func,
+    onColorLocationChange: PropTypes.func,
     deleteLocationRow: PropTypes.func,
     addLocationRow: PropTypes.func,
     deleteColorsRow: PropTypes.func,
@@ -26,15 +26,15 @@ export default class ColorsTable extends Component {
         </tr>
         </thead>
         <tbody>
-        {this.props.colors ?
-          this.props.colors.map((c, key) =>
+        {this.props.objectHolder.colors ?
+          this.props.objectHolder.colors.map((c, key) =>
             <tr key={key}>
               <td className='col-md-4'>
                 <Select
                   name='colors'
-                  value={getSelectedOptions(key, this.props.colors)}
+                  value={getSelectedOptions(key, this.props.objectHolder.colors)}
                   labelKey='name'
-                  options={getOptions(this.props.colorList)}
+                  options={this.props.getOptions(this.props.colorList)}
                   onChange={os => this.props.onColorsSelectChange(os, key)}
                   isLoading={this.props.colorsLoading}
                 />
@@ -50,26 +50,24 @@ export default class ColorsTable extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {c.location ? c.location.map((col, k) => (
+                    {c.location ? c.location.map((loc, k) => (
                       <tr key={k}>
                         <td>
                           <Select style={{marginBottom: 6}}
                                   name='locations'
-                                  value={getSelectedColorLocationsOptions(key, k, this.props.colors)}
+                                  value={getSelectedColorLocationsOptions(key, k, this.props.objectHolder.colors)}
                                   multi={false}
                                   labelKey='name'
-                                  options={getColorsLocationsOptions(this.props.locations)}
-                                  onChange={os => this.props.handleColorLocationActionOption(os, key, k)}
+                                  options={getColorsLocationsOptions(this.props.objectHolder.locations)}
+                                  onChange={os => this.props.onColorLocationChange(os, key, k)}
                                   clearable={false}
                           />
                         </td>
                         <td>
                           <input type='file' className='form-control' accept='image/*'
                                  onChange={e =>
-                                   this.props.handleSelectedObjectArrayArrayChange('colors', 'location', key, k, 'image', e)}/>
-                          {typeof (col.image) === 'string' ?
-                            <a href={getFileUrl(col.image)}>{getNameFromUrl(col.image)}</a> : null
-                          }  </td>
+                                   this.props.onImageChange(key, k, e)}/>
+                        </td>
                         <td><a className='btn btn-danger btn-xs' href='#'
                                onClick={() => this.props.deleteLocationRow(key, k)}>
                           <i className='fa fa-ban'/></a></td>
@@ -89,7 +87,7 @@ export default class ColorsTable extends Component {
         </tbody>
       </table>
       <div className='panel-footer'>
-        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.props.addColorsRow()}>
+        <a className='btn btn-primary btn-xs' href='#' onClick={this.props.addColorsRow}>
           <i className='fa fa-plus'/> Add color</a>
       </div>
     </div>;

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
 import View from './View';
-import * as helpers from '../Graphics/helpers';
+import * as helpers from '../AbstractPage/secondary/Inputs/helpers';
 import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, SIZES} from '../../definitions';
 import {NotificationTypes, NotificationMessages} from '../../strings';
 import map from 'lodash/map';
@@ -37,21 +37,6 @@ export default class ProductsComponent extends Component {
     }
   }
 
-  handleSelectedObjectArrayAddNew = (arrName, obj) => {
-    let arr = this.props.objectHolder[arrName];
-    if (typeof arr !== 'object') {
-      arr = [];
-    }
-    arr[arr.length] = {...obj};
-    this.props.setEditingObjectProperty(arrName, [...arr]);
-  };
-
-  handleSelectedObjectArrayDeleteElement = (arrName, key) => {
-    const arr = this.props.objectHolder[arrName];
-    arr.splice(key, 1);
-    this.props.setEditingObjectProperty(arrName, [...arr]);
-  };
-
   handleSelectedObjectArrayArrayAddNew = (fArr, sArr, colorizableKey, obj) => {
     let arr = (this.props.objectHolder[fArr]);
     if (typeof (arr[colorizableKey])[sArr] !== 'object') {
@@ -74,18 +59,6 @@ export default class ProductsComponent extends Component {
     const arr = (this.props.objectHolder[fArr]);
     ((arr[colorizableKey])[sArr]).splice(key, 1);
     this.props.setEditingObjectProperty(fArr, [...arr]);
-  };
-
-  handleSelectedObjectArrayArrayChange = (fArrName, sArrName, fInd, sInd, propName, event) => {
-    const colorizables = this.props.objectHolder[fArrName];
-    if (propName === 'image') {
-      colorizables[fInd][sArrName][sInd][propName] = event.target.files[0];
-    } else if (sArrName === 'editableAreaUnitsRange') {
-      colorizables[fInd][sArrName][sInd][propName] = Number(event.target.value);
-    } else {
-      colorizables[fInd][sArrName][sInd][propName] = event.target.value;
-    }
-    this.props.setEditingObjectProperty(fArrName, [...colorizables]);
   };
 
   handleSelectedObjectChange = (propertyName, event) => {
@@ -114,61 +87,10 @@ export default class ProductsComponent extends Component {
     }
   };
 
-  handleColorLocationActionOption = (option, key, k) => {
+  onColorLocationChange = (option, key, k) => {
     let colors = this.props.objectHolder.colors;
     colors[key].location[k].name = option.value;
     this.props.setEditingObjectProperty('colors', colors);
-  };
-
-  addColorsRow = () => (
-    this.handleSelectedObjectArrayAddNew('colors', {name: '', value: '', location: []})
-  );
-
-  deleteColorsRow = key => (
-    this.handleSelectedObjectArrayDeleteElement('colors', key)
-  );
-
-  addEditableAreaSizeRow = () => (
-    this.handleSelectedObjectArrayAddNew('editableAreaSizes',)
-  );
-
-  deleteEditableAreaSizeRow = key => (
-    this.handleSelectedObjectArrayDeleteElement('editableAreaSizes', key)
-  );
-
-  addLocationRow = colorId => (
-    this.handleSelectedObjectArrayArrayAddNew('colors', 'location', colorId, {name: '', image: ''})
-  );
-
-  deleteLocationRow = (colorId, key) => (
-    this.handleSelectedObjectArrayArrayDeleteElement('colors', 'location', colorId, key)
-  );
-
-  getSizeOptions = () => {
-    if (!SIZES || !SIZES.length) {
-      return [];
-    }
-    return map(SIZES, col => ({value: col, name: col}));
-  };
-
-  getSelectedSizeOptions = () => {
-    if (!this.props.objectHolder.sizes || !this.props.objectHolder.sizes.length) {
-      return [];
-    }
-
-    if (typeof (this.props.objectHolder.sizes)[0] === 'string') {
-      return map(this.props.objectHolder.sizes, col => ({value: col, name: col}));
-    }
-
-    return this.props.objectHolder.sizes;
-  };
-
-  onSizeSelectChange = val => {
-    const arr = [];
-    if (val) {
-      forEach(val, v => arr.push(v.name));
-      this.props.setEditingObjectProperty('sizes', arr);
-    }
   };
 
   createCustomOption = customOptionInput => {

@@ -19,7 +19,7 @@ export default class GraphicsView extends Component {
                              nameInputHandler={(e, key) => this.props.updateNestedArray(this.props.objectHolder, 'colorizables', key, 'name', e)}
                              idInputHandler={(e, key) => this.props.updateNestedArray(this.props.objectHolder, 'colorizables', key, 'id', e)}
                              getColorizableValue={key => this.props.getSelectedColorizableOptions(this.props.objectHolder.colorizables, key)}
-                             colorizableHandler={(o, key) => this.props.onColorizableChange(this.props.objectHolder, o, key)}
+                             colorizableHandler={(o, key) => this.props.onAssignColorgroupChange(this.props.objectHolder, o, key)}
                              colorizableOptions={this.props.getColorizableColorsOptions}
                              deleteColorizableRow={key => this.props.updateArray(
                                this.props.deleteFromNestedArray(this.props.objectHolder, 'colorizables', key))}

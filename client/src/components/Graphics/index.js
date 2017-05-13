@@ -4,7 +4,7 @@ import View from './View';
 import {Creatable} from 'react-select';
 import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT} from '../../definitions';
 import {getFileUrl} from '../../utils';
-import * as helpers from './helpers';
+import * as helpers from '../AbstractPage/secondary/Inputs/helpers';
 
 export default class GraphicsComponent extends Component {
   static propTypes = PTypes;

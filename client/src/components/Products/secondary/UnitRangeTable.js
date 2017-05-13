@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 
 export default class UnitRangeTable extends Component {
   static propTypes = {
-    objectHolder: PropTypes.object,
     addUnitsRangeRow: PropTypes.func,
     deleteUnitsRangeRow: PropTypes.func,
-    updateDblNestedArray: PropTypes.func,
-    getLocationsInputValue: PropTypes.func,
+    onMinChange: PropTypes.func,
+    onMaxChange: PropTypes.func,
+    onStepChange: PropTypes.func,
+    getLocationsInputValue: PropTypes.array,
     updateArray: PropTypes.func,
   };
 
@@ -23,32 +24,23 @@ export default class UnitRangeTable extends Component {
         </tr>
         </thead>
         <tbody>
-        {this.props.getLocationsInputValue('editableAreaUnitsRange') ?
-          this.props.getLocationsInputValue('editableAreaUnitsRange').map((col, k) =>
+        {this.props.getLocationsInputValue ?
+          this.props.getLocationsInputValue.map((col, k) =>
             <tr key={k}>
               <td><input type='text' className='form-control'
                          value={col[0]}
-                         onChange={e =>
-                           this.props.updateArray(
-                             this.props.updateDblNestedArray(this.props.objectHolder, 'locations',
-                               'editableAreaUnitsRange', this.props.location, k, 0, e))}/>
+                         onChange={e => this.props.onMinChange(k, e)}/>
               </td>
               <td><input type='text' className='form-control'
                          value={col[1]}
-                         onChange={e =>
-                           this.props.updateArray(
-                             this.props.updateDblNestedArray(this.props.objectHolder, 'locations',
-                               'editableAreaUnitsRange', this.props.location, k, 1, e))}/>
+                         onChange={e => this.props.onMaxChange(k, e)}/>
               </td>
               <td><input type='text' className='form-control'
                          value={col[2]}
-                         onChange={e =>
-                           this.props.updateArray(
-                             this.props.updateDblNestedArray(this.props.objectHolder, 'locations',
-                               'editableAreaUnitsRange', this.props.location, k, 2, e))}/>
+                         onChange={e => this.props.onStepChange(k, e)}/>
               </td>
               <td><a className='btn btn-danger btn-xs' href='#'
-                     onClick={() => this.props.deleteUnitsRangeRow(this.props.location, k)}>
+                     onClick={() => this.props.deleteUnitsRangeRow(k)}>
                 <i className='fa fa-ban'/></a></td>
             </tr>
           ) : null}
@@ -56,7 +48,8 @@ export default class UnitRangeTable extends Component {
       </table>
 
       <div className='panel-footer'>
-        <a className='btn btn-primary btn-xs' href='#' onClick={() => this.props.addUnitsRangeRow(this.props.location)}>
+        <a className='btn btn-primary btn-xs' href='#'
+           onClick={this.props.addUnitsRangeRow}>
           <i className='fa fa-plus'/> Add units range</a>
       </div>
     </div>;
