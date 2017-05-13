@@ -53,12 +53,6 @@
       "showInput": true,
       "inputElement": "TEXTAREA"
     },
-    "data": {
-      "type": "object",
-      "default": {},
-      "showInTable": false,
-      "showInput": true
-    },
     "minDPU": {
       "type": "number",
       "showInTable": false,
@@ -98,7 +92,8 @@
         }
       ],
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "viewIndex": 6
     },
     "colors": {
       "type": [
@@ -114,7 +109,8 @@
         }
       ],
       "showInTable": false,
-      "showInput": true
+      "showInput": true,
+      "viewIndex": 7
     },
     "hideEditableAreaBorder": {
       "type": "boolean",
@@ -232,6 +228,12 @@
     },
     "template": {
       "type": "string",
+      "showInTable": false,
+      "showInput": true
+    },
+    "data": {
+      "type": "object",
+      "default": {},
       "showInTable": false,
       "showInput": true
     }

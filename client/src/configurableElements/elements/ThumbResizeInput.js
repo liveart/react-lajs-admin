@@ -23,6 +23,7 @@ export default class ThumbResizeInput extends React.Component {
       return img;
     }
     const ctx = this.canvas.getContext('2d');
+    ctx.clearRect(0, 0, width, height);
     this.canvas.width = width;
     this.canvas.height = height;
     ctx.drawImage(img, 0, 0, width, height);
