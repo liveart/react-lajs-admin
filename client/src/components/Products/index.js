@@ -37,34 +37,6 @@ export default class ProductsComponent extends Component {
     }
   }
 
-  handleSelectedObjectArrayArrayAddNew = (fArr, sArr, colorizableKey, obj) => {
-    let arr = (this.props.objectHolder[fArr]);
-    if (typeof (arr[colorizableKey])[sArr] !== 'object') {
-      (arr[colorizableKey])[sArr] = [];
-    }
-    ((arr[colorizableKey])[sArr])[(arr[colorizableKey])[sArr].length] = {...obj};
-    this.props.setEditingObjectProperty(fArr, [...arr]);
-  };
-
-  handleSelectedObjectAddNewArray = (fArr, sArr, key, obj) => {
-    let arr = (this.props.objectHolder[fArr]);
-    if (typeof (arr[key])[sArr] !== 'object') {
-      (arr[key])[sArr] = [];
-    }
-    ((arr[key])[sArr])[(arr[key])[sArr].length] = [...obj];
-    this.props.setEditingObjectProperty(fArr, [...arr]);
-  };
-
-  handleSelectedObjectArrayArrayDeleteElement = (fArr, sArr, colorizableKey, key) => {
-    const arr = (this.props.objectHolder[fArr]);
-    ((arr[colorizableKey])[sArr]).splice(key, 1);
-    this.props.setEditingObjectProperty(fArr, [...arr]);
-  };
-
-  handleSelectedObjectChange = (propertyName, event) => {
-    this.props.setEditingObjectProperty(propertyName, event.target.value);
-  };
-
   handleSelectedObjectDataChange = (prop, propertyName, event) => {
     const object = this.props.objectHolder[prop];
     object[propertyName] = event.target.value;
@@ -151,15 +123,6 @@ export default class ProductsComponent extends Component {
       ...this.state, location: -1
     });
   };
-
-  addUnitsRangeRow = key => (
-    this.handleSelectedObjectAddNewArray('locations', 'editableAreaUnitsRange', key, [])
-  );
-
-  deleteUnitsRangeRow = (locationId, key) =>
-    helpers.updateArray(
-      helpers.deleteFromDblNestedArray(this.props.objectHolder, 'locations',
-        'editableAreaUnitsRange', locationId, key));
 
   handleLocationsNestedFileChoose = (prop, e) => {
     const locs = [...this.props.objectHolder.locations];
