@@ -7,6 +7,7 @@ import {capitalizeFirstLetter} from '../../../../utils';
 import {STATUS_EDITING} from '../../../../definitions';
 import {getElement as getRepresentationElement} from '../../../../configurableElements/factories/representations';
 import {getElement as getInputElement} from '../../../../configurableElements/factories/elements';
+import {Elements} from '../../../../configurableElements/config';
 
 export default class DefaultInput extends Component {
   static propTypes = {
@@ -41,8 +42,18 @@ export default class DefaultInput extends Component {
     let value = objectHolder[property];
     let onChangeHandler = updateObject;
 
+    let props = {};
+
     if (typeof input.props.getValue === 'function') {
-      onChangeHandler = (p, e) => setEditingObjectProperty(p, input.props.getValue(e));
+      if (Array.isArray(currSample.type) && currSample.type.length) {
+        if (typeof currSample.type[0] === 'object') {
+          onChangeHandler = (p, e) => setEditingObjectProperty(p, input.props.getValue(e));
+          props.valueKey = 'value';
+          props.labelKey = 'name';
+        } else {
+          onChangeHandler = (p, e) => setEditingObjectProperty(p, input.props.getValue(e).map(v => v.label));
+        }
+      }
     }
 
     if (input.props.type === 'file') {
@@ -50,7 +61,6 @@ export default class DefaultInput extends Component {
       onChangeHandler = (p, e) => setEditingObjectProperty(p, e.target.files[0]);
     }
 
-    let props = {};
     if (typeof props.onChange !== 'function') {
       props.onChange = e => onChangeHandler(property, e);
     }
@@ -80,8 +90,7 @@ export default class DefaultInput extends Component {
     }
 
     return React.cloneElement(input, {...props});
-  }
-  ;
+  };
 
   render() {
     const {item, property, shouldGroupRender} = this.props;

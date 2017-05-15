@@ -103,7 +103,6 @@ export default class AbstractPage extends Component {
         } else {
           entity[prop] = curr;
         }
-
       }
     });
     if (this.props.status === STATUS_EDITING) {

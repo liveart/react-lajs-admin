@@ -40,6 +40,8 @@ export function* createConfiguration(action) {
 
 export function* editConfiguration(action) {
   try {
+
+    console.warn(action.newConfiguration)
     yield* api.update(endpoint, action.newConfiguration, action.id, action.token);
     yield dispatch({
       type: actionTypes.CONFIGURATION_OPERATION_SUCCESS,

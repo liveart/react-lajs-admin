@@ -14,7 +14,6 @@ export default class ThumbResizeInput extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state = {url: ''};
   }
 

@@ -40,7 +40,9 @@
       "secondaryData": "graphicsCategories"
     },
     "colors": {
-      "type": "array",
+      "type": [
+        {}
+      ],
       "showInTable": false,
       "showInput": true,
       "inputElement": "DATA_MULTISELECT",

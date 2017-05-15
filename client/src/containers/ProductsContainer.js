@@ -1,6 +1,7 @@
 import {connect} from 'react-redux';
 import {fetchProducts, createProduct, editProduct, deleteProduct} from '../actions/products';
 import {fetchProductsCategories, createProductsCategory} from '../actions/productsCategories';
+import {uploadFile} from '../actions/files';
 import {
   selectRow, setObjectHolderProperty,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
@@ -82,6 +83,9 @@ const mapDispatchToProps = dispatch => {
     },
     createProductsCategory(cat, token) {
       dispatch(createProductsCategory(cat, token));
+    },
+    uploadFile(file, endpoint) {
+      dispatch(uploadFile(file, endpoint));
     }
   };
 };
