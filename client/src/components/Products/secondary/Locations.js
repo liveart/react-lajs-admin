@@ -225,7 +225,6 @@ export default class Locations extends Component {
                                if (vals && vals.length > 2) {
                                  return vals[2];
                                }
-
                                return '';
                              })()}/>
                     </div>
@@ -242,7 +241,6 @@ export default class Locations extends Component {
                                  if (vals && vals.length > 3) {
                                    return vals[3];
                                  }
-
                                  return '';
                                })()}/>
                     </div>
@@ -306,11 +304,8 @@ export default class Locations extends Component {
                                  const {x} = this.cropper.getData();
                                  const x1New = Number(e.target.value);
                                  const newData = {};
-
                                  newData.width = x1New - x;
-
                                  this.props.changeLocationsNestedArrValue('editableArea', 2, Number(x1New));
-
                                  this.cropper.setData(newData);
                                }
                              }}
