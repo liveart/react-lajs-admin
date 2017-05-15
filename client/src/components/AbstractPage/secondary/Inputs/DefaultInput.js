@@ -57,9 +57,11 @@ export default class DefaultInput extends Component {
           props.valueKey = 'value';
           props.labelKey = 'name';
         } else {
-          props.value = value ? value.map(v => ({id: v, label: v})) : [];
+          props.value = value ? value.map(v => ({value: v, label: v})) : [];
           onChangeHandler = (p, e) => setEditingObjectProperty(p, input.props.getValue(e).map(v => v.label));
         }
+      } else {
+        onChangeHandler = (p, e) => setEditingObjectProperty(p, input.props.getValue(e));
       }
     }
 
@@ -77,7 +79,7 @@ export default class DefaultInput extends Component {
       }
 
       if (typeof currSample.selectOptions === 'object') {
-        props.options = map(currSample.selectOptions, col => ({id: col, label: col}));
+        props.options = map(currSample.selectOptions, col => ({value: col, label: col}));
       }
     }
 
