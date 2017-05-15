@@ -43,6 +43,10 @@
       "showInput": true,
       "sortable": false,
       "inputElement": "THUMB_RESIZE_INPUT",
+      "uploadParams": {
+        "dir": "files/productThumbs/",
+        "endpoint": "containers/productThumbs"
+      },
       "header": "Thumb",
       "representation": "THUMBNAIL"
     },
