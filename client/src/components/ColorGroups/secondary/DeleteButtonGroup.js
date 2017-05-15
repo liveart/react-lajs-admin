@@ -24,7 +24,7 @@ export default class ColorgroupDeleteButton extends Component {
                   this.props.restoreTableState(Colorgroup);
                 }}>Cancel
         </button>
-        {this.props.newGroup === '' && this.props.selectedValue === MOVE_COLORS_TO_OTHER_GROUP ?
+        { (this.props.linkedProducts.length || this.props.linkedGraphics.length) || (this.props.newGroup === '' && this.props.selectedValue === MOVE_COLORS_TO_OTHER_GROUP) ?
           <button disabled type='button' className='btn btn-danger'
                   onClick={() => this.props.handleDeleteBtnClick(true)}>Delete
           </button> :
