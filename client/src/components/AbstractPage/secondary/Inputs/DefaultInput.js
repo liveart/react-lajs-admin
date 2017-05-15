@@ -60,6 +60,8 @@ export default class DefaultInput extends Component {
           props.value = value ? value.map(v => ({value: v, label: v})) : [];
           onChangeHandler = (p, e) => setEditingObjectProperty(p, input.props.getValue(e).map(v => v.label));
         }
+      } else {
+        onChangeHandler = (p, e) => setEditingObjectProperty(p, input.props.getValue(e));
       }
     }
 
