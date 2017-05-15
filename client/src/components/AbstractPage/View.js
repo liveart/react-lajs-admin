@@ -51,14 +51,14 @@ export default class AbstractPageView extends Component {
                                            shouldGroupRender={true}
                                            titleCol={3}
                                            elementCol={9}
-                             />)}/>}
+                             />)}
+                           />}
       />
     }));
   };
 
   renderInputs = () =>
-    (sortBy([...this.getDefaultInputs(), ...this.getGroupedInputs()], 'viewIndex'))
-      .map(obj => obj.element);
+    (sortBy([...this.getDefaultInputs(), ...this.getGroupedInputs()], 'viewIndex')).map(obj => obj.element);
 
   renderPage = () => {
     if (this.props.status === STATUS_DEFAULT) {

@@ -44,6 +44,12 @@ export default class DefaultInput extends Component {
 
     let props = {};
 
+    if (typeof input.props.valueProp === 'string') {
+      props[input.props.valueProp] = value;
+    } else {
+      props.value = value;
+    }
+
     if (typeof input.props.getValue === 'function') {
       if (Array.isArray(currSample.type) && currSample.type.length) {
         if (typeof currSample.type[0] === 'object') {
@@ -51,6 +57,7 @@ export default class DefaultInput extends Component {
           props.valueKey = 'value';
           props.labelKey = 'name';
         } else {
+          props.value = value ? value.map(v => ({id: v, label: v})) : [];
           onChangeHandler = (p, e) => setEditingObjectProperty(p, input.props.getValue(e).map(v => v.label));
         }
       }
@@ -65,12 +72,6 @@ export default class DefaultInput extends Component {
       props.onChange = e => onChangeHandler(property, e);
     }
 
-    if (typeof input.props.valueProp === 'string') {
-      props[input.props.valueProp] = value;
-    } else {
-      props.value = value;
-    }
-
     if (input.props.acceptsOptions && input.props.acceptsOptions === true) {
       if (typeof currSample.secondaryDataId === 'string') {
         props.valueKey = currSample.secondaryDataId;
@@ -81,7 +82,7 @@ export default class DefaultInput extends Component {
       }
 
       if (typeof currSample.selectOptions === 'object') {
-        props.options = map(currSample.selectOptions, col => ({id: col, name: col}));
+        props.options = map(currSample.selectOptions, col => ({id: col, label: col}));
       }
     }
 
