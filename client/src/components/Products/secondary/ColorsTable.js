@@ -26,7 +26,7 @@ export default class ColorsTable extends Component {
         </tr>
         </thead>
         <tbody>
-        {this.props.objectHolder.colors ?
+        {this.props.objectHolder.colors && this.props.objectHolder.colors.length ?
           this.props.objectHolder.colors.map((c, key) =>
             <tr key={key}>
               <td className='col-md-4'>
