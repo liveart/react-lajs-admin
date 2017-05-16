@@ -3,7 +3,7 @@ import {fetchProducts, createProduct, editProduct, deleteProduct} from '../actio
 import {fetchProductsCategories, createProductsCategory} from '../actions/productsCategories';
 import {uploadFile} from '../actions/files';
 import {
-  selectRow, setObjectHolderProperty,
+  selectRow, setObjectHolderProperty, enableAdditionalSavingComplete, enableBeforeSaving,
   enableEditing, enableCreating, enableDefaultStatus, setInitialState
 } from '../actions/table';
 import Products from '../components/Products';
@@ -83,6 +83,12 @@ const mapDispatchToProps = dispatch => {
     },
     enableImportJson() {
       dispatch(enableImportJson());
+    },
+    enableAdditionalSavingComplete() {
+      dispatch(enableAdditionalSavingComplete());
+    },
+    enableBeforeSaving() {
+      dispatch(enableBeforeSaving());
     },
     createProductsCategory(cat, token) {
       dispatch(createProductsCategory(cat, token));

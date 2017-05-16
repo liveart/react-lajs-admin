@@ -48,5 +48,6 @@ export const PTypes = {
   sortComparators: PropTypes.object,
   customDefaultRender: PropTypes.object,
   secondaryData: PropTypes.array,
-  uploadFile: PropTypes.func
+  uploadFile: PropTypes.func,
+  beforeSaveHook: PropTypes.func
 };

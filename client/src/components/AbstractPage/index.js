@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
-import {ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, LEAVE_URL_OPTION} from '../../definitions';
+import {
+  ID_PROP, STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, STATUS_ADDITIONAL_SAVING_COMPLETE,
+  LEAVE_URL_OPTION
+} from '../../definitions';
 import {NotificationMessages, NotificationTypes} from '../../strings';
 import View from './View';
 import {checkNotEmpty} from '../../FormValidation';
@@ -87,6 +90,9 @@ export default class AbstractPage extends Component {
       this.setState({...this.state, empty: [...empty]});
       return;
     }
+    if (this.props.beforeSaveHook) {
+      this.props.beforeSaveHook();
+    }
     let entity = {};
     properties.forEach(prop => {
       if (prop !== ID_PROP) {
@@ -141,22 +147,20 @@ export default class AbstractPage extends Component {
 
   handleImportJson = (json, baseUrl, urlOption, forceNoBase) => {
     if (!this.props.parser) {
-      this.props.addNotification('error', 'The parser is not found for this model.');
+      this.props.addNotification(NotificationTypes.ERR, NotificationMessages.PARSER_NOT_FOUND);
       return;
     }
 
     if (!baseUrl.length && !forceNoBase && urlOption !== LEAVE_URL_OPTION) {
-      this.props.addNotification('warning', 'Base url is not set',
-        'Not setting correct base url will result in broken links.',
-        15, f => this.handleImportJson(json, baseUrl, urlOption, true));
+      this.props.addNotification(NotificationTypes.WARN, NotificationMessages.BASE_URL_NOT_SET_TITLE,
+        NotificationMessages.BASE_URL_NOT_SET, 15, f => this.handleImportJson(json, baseUrl, urlOption, true));
       return;
     }
     if (!forceNoBase && urlOption !== LEAVE_URL_OPTION) {
       const r = new RegExp('^(?:[a-z]+:)?//', 'i');
       if (!r.test(baseUrl)) {
-        this.props.addNotification('warning', 'The specified base url seems not to have a protocol',
-          'Not setting correct base url will result in broken links.',
-          15, f => this.handleImportJson(json, baseUrl, urlOption, true));
+        this.props.addNotification(NotificationTypes.WARN, NotificationMessages.NO_PROTOCOL_TITLE,
+          NotificationMessages.NO_PROTOCOL, 15, f => this.handleImportJson(json, baseUrl, urlOption, true));
         return;
       }
     }
@@ -174,8 +178,7 @@ export default class AbstractPage extends Component {
       this.props.restoreTableState({...this.props.objectSample});
       this.setState({...this.state, json: ''});
     } catch (e) {
-      console.warn(e)
-      this.props.addNotification('error', 'Json structure is invalid.');
+      this.props.addNotification(NotificationTypes.ERR, NotificationMessages.INVALID_JSON);
     }
   };
 

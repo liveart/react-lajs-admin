@@ -33,6 +33,18 @@ export const enableImportJson = () => {
   };
 };
 
+export const enableBeforeSaving = () => {
+  return {
+    type: actionTypes.ENABLE_BEFORE_SAVING_STATUS
+  };
+};
+
+export const enableAdditionalSavingComplete = () => {
+  return {
+    type: actionTypes.ENABLE_ADDITIONAL_SAVING_COMPLETE_STATUS
+  };
+};
+
 export const enableDefaultStatus = () => {
   return {
     type: actionTypes.ENABLE_DEFAULT_STATUS
