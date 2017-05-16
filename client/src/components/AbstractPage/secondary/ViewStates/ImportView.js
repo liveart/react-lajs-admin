@@ -1,22 +1,22 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ImportButtonGroup from '../ButtonGroups/ImportButtonGroup';
+import {IMPORT_URL_INFO} from '../../../../strings';
 const LEAVE_URL_OPTION = 'Import';
 const KEEP_URL_OPTION = 'Keep';
 
 export default class ImportView extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    json: PropTypes.string.isRequired,
-    urlSelect: PropTypes.string.isRequired,
-    baseUrl: PropTypes.string.isRequired,
     handleFileSelection: PropTypes.func.isRequired,
-    onBaseUrlChange: PropTypes.func.isRequired,
-    onJsonChange: PropTypes.func.isRequired,
     updateObject: PropTypes.func.isRequired,
-    onCancelBtnClick: PropTypes.func.isRequired,
-    onSaveBtnClick: PropTypes.func.isRequired
+    onCancelBtnClick: PropTypes.func.isRequired
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {baseUrl: '', urlOption: LEAVE_URL_OPTION};
+  }
 
   render() {
     return <section>
@@ -41,28 +41,28 @@ export default class ImportView extends Component {
                   <div className='form-group'>
                     <div className='col-md-3'>
                       <select className='form-control'
-                              onChange={this.props.updateObject}
-                              value={this.props.urlSelect}>
+                              onChange={e => this.setState({...this.state, urlOption: e.target.value})}
+                              value={this.state.urlOption}>
                         <option value={LEAVE_URL_OPTION}>Leave URL's as is</option>
                         <option value={KEEP_URL_OPTION}>Keep original URL's</option>
                       </select>
                     </div>
                     <div className='col-md-9'>
-                      {this.props.urlSelect === LEAVE_URL_OPTION ?
+                      {this.state.urlOption === LEAVE_URL_OPTION ?
                         <input disabled type='text' className='form-control'
                                value=''/> :
                         <input type='text' className='form-control'
-                               placeholder='Base url for links. Requires protocol (example http://site.com/)'
-                               value={this.props.baseUrl}
-                               onChange={this.props.onBaseUrlChange}/>}
+                               placeholder={IMPORT_URL_INFO}
+                               value={this.state.baseUrl}
+                               onChange={e => this.setState({...this.state, baseUrl: e.target.value})}/>}
                     </div>
                   </div>
                   <textarea className='form-control' style={{marginBottom: 6}} rows={15}
                             value={this.props.json}
-                            onChange={this.props.onJsonChange}/>
+                            onChange={e => this.props.changeJsonValue(e.target.value)}/>
                 </div>
                 <div className='box-footer'>
-                  <ImportButtonGroup {...this.props}/>
+                  <ImportButtonGroup {...this.props} {...this.state}/>
                 </div>
               </form>
             </div>

@@ -8,14 +8,14 @@ import Locations from './secondary/Locations';
 import * as ProductModel from '../../../../common/models/product.json';
 import ColorizableTable from '../Colorizable/ColorizableTable';
 const Product = ProductModel.properties;
+import {parseJson} from '../../ProductJsonParser';
 
 export default class ProductView extends Component {
 
   render() {
-    return <AbstractPage {...this.props} objectSample={{...Product}}
+    return <AbstractPage {...this.props} objectSample={{...Product}} parser={parseJson}
                          sortingSupport={true}
                          secondaryData={this.props.productsCategories}
-                         handleImportJson={this.handleImportJson}
                          enableImportJson={this.props.enableImportJson}
                          nested={{
                            colorizables: <ColorizableTable

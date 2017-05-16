@@ -58,6 +58,9 @@ const mapDispatchToProps = dispatch => {
     createEntity(graphic, token) {
       dispatch(createGraphic(graphic, token));
     },
+    createRelatedCategory(category, token) {
+      dispatch(createGraphicsCategory(category, token));
+    },
     editEntity(id, newGraphic, token) {
       dispatch(editGraphic(id, newGraphic, token));
     },

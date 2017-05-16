@@ -57,10 +57,7 @@
     "colors": {
       "type": {
         "url": "string",
-        "pantones_url": {
-          "type": "string",
-          "default": ""
-        }
+        "pantones_url": "string"
       },
       "required": true,
       "viewIndex": 4,

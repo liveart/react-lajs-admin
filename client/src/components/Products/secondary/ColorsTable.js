@@ -70,7 +70,7 @@ export default class ColorsTable extends Component {
                         </td>
                         <td><a className='btn btn-danger btn-xs' href='#'
                                onClick={() => this.props.deleteLocationRow(key, k)}>
-                          <i className='fa fa-ban'/></a></td>
+                          <i className='fa fa-times'/></a></td>
                       </tr>
                     )) : null}
                     </tbody>
@@ -82,7 +82,7 @@ export default class ColorsTable extends Component {
                 </div>
               </td>
               <td><a className='btn btn-danger btn-xs' href='#' onClick={() => this.props.deleteColorsRow(key)}>
-                <i className='fa fa-ban'/></a></td>
+                <i className='fa fa-times'/></a></td>
             </tr>) : null}
         </tbody>
       </table>

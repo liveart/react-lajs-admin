@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import AbstractPage from '../AbstractPage';
 import ColorizableTable from '../Colorizable/ColorizableTable';
 import * as GraphicModel from '../../../../common/models/graphic.json';
+import {parseJson} from '../../GraphicJsonParser';
 const Graphic = GraphicModel.properties;
 
 export default class GraphicsView extends Component {
   render() {
-    return <AbstractPage {...this.props}
+    return <AbstractPage {...this.props} parser={parseJson}
                          objectSample={Graphic}
                          sortingSupport={true}
                          secondaryData={this.props.graphicsCategories}

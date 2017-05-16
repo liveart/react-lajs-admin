@@ -60,6 +60,9 @@ const mapDispatchToProps = dispatch => {
     createEntity(product, token) {
       dispatch(createProduct(product, token));
     },
+    createRelatedCategory(category, token) {
+      dispatch(createProductsCategory(category, token));
+    },
     editEntity(id, newProduct, token) {
       dispatch(editProduct(id, newProduct, token));
     },

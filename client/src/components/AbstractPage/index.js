@@ -15,7 +15,7 @@ export default class AbstractPage extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {empty: [], json: '', baseUrl: '', urlSelect: LEAVE_URL_OPTION};
+    this.state = {empty: [], json: ''};
   }
 
   componentWillUpdate() {
@@ -118,9 +118,6 @@ export default class AbstractPage extends Component {
     }
   };
 
-  handleSaveImportBtnClick = () =>
-    this.props.handleImportJson(this.state.json, this.state.baseUrl, this.state.urlSelect);
-
   handleCancelBtnClick = () => {
     if (this.props.status !== STATUS_DEFAULT) {
       this.props.enableDefaultStatus();
@@ -128,8 +125,6 @@ export default class AbstractPage extends Component {
       this.setState({...this.state, json: '', baseUrl: ''});
     }
   };
-
-  handleJsonChange = e => this.setState({...this.state, json: e.target.value});
 
   handleBaseUrlChange = e => this.setState({...this.state, baseUrl: e.target.value});
 
@@ -144,6 +139,48 @@ export default class AbstractPage extends Component {
     reader.readAsText(e.target.files[0]);
   };
 
+  handleImportJson = (json, baseUrl, urlOption, forceNoBase) => {
+    if (!this.props.parser) {
+      this.props.addNotification('error', 'The parser is not found for this model.');
+      return;
+    }
+
+    if (!baseUrl.length && !forceNoBase && urlOption !== LEAVE_URL_OPTION) {
+      this.props.addNotification('warning', 'Base url is not set',
+        'Not setting correct base url will result in broken links.',
+        15, f => this.handleImportJson(json, baseUrl, urlOption, true));
+      return;
+    }
+    if (!forceNoBase && urlOption !== LEAVE_URL_OPTION) {
+      const r = new RegExp('^(?:[a-z]+:)?//', 'i');
+      if (!r.test(baseUrl)) {
+        this.props.addNotification('warning', 'The specified base url seems not to have a protocol',
+          'Not setting correct base url will result in broken links.',
+          15, f => this.handleImportJson(json, baseUrl, urlOption, true));
+        return;
+      }
+    }
+    try {
+      let parsed = this.props.parser(json, baseUrl);
+      const categories = [...parsed.categories];
+      if (categories && categories.length) {
+        this.props.createRelatedCategory(categories, this.props.token);
+      }
+      const graphics = [...parsed.graphics];
+      if (graphics && graphics.length) {
+        this.props.createEntity(graphics, this.props.token);
+      }
+      this.props.enableDefaultStatus();
+      this.props.restoreTableState({...this.props.objectSample});
+      this.setState({...this.state, json: ''});
+    } catch (e) {
+      console.warn(e)
+      this.props.addNotification('error', 'Json structure is invalid.');
+    }
+  };
+
+  changeJsonValue = val => this.setState({...this.state, json: val});
+
   render() {
     return <View {...this.props}
                  {...this.state}
@@ -153,10 +190,9 @@ export default class AbstractPage extends Component {
                  handleSaveBtnClick={this.handleSaveBtnClick}
                  handleDeleteBtnClick={this.handleDeleteBtnClick}
                  handleFileSelection={this.handleFileSelection}
+                 handleImportJson={this.handleImportJson}
                  updateObject={this.updateObject}
-                 onBaseUrlChange={this.handleBaseUrlChange}
-                 onJsonChange={this.handleJsonChange}
                  onCancelBtnClick={this.handleCancelBtnClick}
-                 onSaveBtnClick={this.handleSaveImportBtnClick}/>;
+                 onSaveImportBtnClick={this.handleSaveImportBtnClick}/>;
   }
 }

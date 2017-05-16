@@ -58,7 +58,7 @@ export default class ColorizableRow extends Component {
       </td>
       <td><a className='btn btn-danger btn-xs' href='#'
              onClick={this.props.deleteColorizableRow}>
-        <i className='fa fa-ban'/></a></td>
+        <i className='fa fa-times'/></a></td>
     </tr>;
   }
 }

@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 
 export default class ImportButtonGroup extends Component {
   static propTypes = {
-    onCancelBtnClick: PropTypes.func.isRequired,
-    onSaveBtnClick: PropTypes.func.isRequired
+    onCancelBtnClick: PropTypes.func.isRequired
   };
+
+  handleSaveImportBtnClick = () =>
+    this.props.handleImportJson(this.props.json, this.props.baseUrl, this.props.urlOption);
 
   render() {
     return <div>
@@ -16,7 +18,7 @@ export default class ImportButtonGroup extends Component {
       </div>
       <div className='pull-right'>
         <button type='button' className='btn btn-primary'
-                onClick={this.props.onSaveBtnClick}>Import
+                onClick={this.handleSaveImportBtnClick}>Import
         </button>
       </div>
     </div>;

@@ -13,3 +13,5 @@ export const NotificationMessages = {
   ARE_YOU_SURE: 'Are you sure?',
   FILL_REQUIRED: 'Please, fill all the required fields.'
 };
+
+export const IMPORT_URL_INFO = 'Base url for links. Requires protocol (example http://site.com/)';

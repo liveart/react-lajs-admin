@@ -82,16 +82,7 @@ export default class AbstractPageView extends Component {
     } else if (this.props.status === STATUS_CONFIRM_DELETE) {
       return <DeleteConfirmationView {...this.props}/>;
     } else if (this.props.status === STATUS_IMPORT_JSON) {
-      return <ImportView json={this.props.json}
-                         title={this.props.title}
-                         handleFileSelection={this.props.handleFileSelection}
-                         urlSelect={this.props.urlSelect}
-                         baseUrl={this.props.baseUrl}
-                         updateObject={this.props.updateObject}
-                         onBaseUrlChange={this.props.onBaseUrlChange}
-                         onJsonChange={this.props.onJsonChange}
-                         onCancelBtnClick={this.props.onCancelBtnClick}
-                         onSaveBtnClick={this.props.onSaveBtnClick}/>;
+      return <ImportView {...this.props} onSaveBtnClick={this.props.onSaveImportBtnClick}/>;
     }
   };
 

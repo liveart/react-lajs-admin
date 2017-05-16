@@ -41,7 +41,7 @@ export default class UnitRangeTable extends Component {
               </td>
               <td><a className='btn btn-danger btn-xs' href='#'
                      onClick={() => this.props.deleteUnitsRangeRow(k)}>
-                <i className='fa fa-ban'/></a></td>
+                <i className='fa fa-times'/></a></td>
             </tr>
           ) : null}
         </tbody>
