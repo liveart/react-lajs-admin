@@ -9,6 +9,12 @@ function parseGraphics(cat) {
       if (gr.colors) {
         if (typeof gr.colors !== 'object') {
           delete gr.colors;
+        } else {
+          let colors = [];
+          gr.colors.forEach(col => {
+            colors.push({name: col, value: col});
+          });
+          gr.colors = colors;
         }
       }
       if (gr.colorizableElements) {
