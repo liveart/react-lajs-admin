@@ -48,8 +48,7 @@ export default class ProductView extends Component {
                              getOptions={this.props.getOptions}
                              onColorsSelectChange={this.props.onColorsSelectChange}
                              onColorLocationChange={this.props.onColorLocationChange}
-                             onImageChange={(key, k, e) =>
-                               this.props.onImageUpload(this.props.objectHolder, 'colors', 'location', key, k, 'image', e)}
+                             onColorImageUpload={this.props.onColorImageUpload}
                              deleteLocationRow={(key, k) => this.props.updateArray(this.props.deleteFromDblNestedArray(
                                this.props.objectHolder, 'colors', 'location', key, k))}
                              addLocationRow={key => this.props.updateArray(this.props.addToDblNestedArray(

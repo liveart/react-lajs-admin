@@ -35,3 +35,5 @@
 !/client/public/files/fontsBoldItalic/.gitkeep
 /client/public/files/graphicCategoryThumbs/*
 !/client/public/files/graphicCategoryThumbs/.gitkeep
+/client/public/files/productColors/*
+!/client/public/files/productColors/.gitkeep

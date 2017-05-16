@@ -66,7 +66,7 @@ export default class ColorsTable extends Component {
                         <td>
                           <input type='file' className='form-control' accept='image/*'
                                  onChange={e =>
-                                   this.props.onImageChange(key, k, e)}/>
+                                   this.props.onColorImageUpload(key, k, e)}/>
                         </td>
                         <td><a className='btn btn-danger btn-xs' href='#'
                                onClick={() => this.props.deleteLocationRow(key, k)}>

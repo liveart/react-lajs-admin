@@ -2,13 +2,24 @@ import React, {Component} from 'react';
 import {PTypes} from './PropTypes';
 import View from './View';
 import * as helpers from '../AbstractPage/secondary/Inputs/helpers';
-import {STATUS_EDITING, STATUS_CREATING, STATUS_DEFAULT, SIZES} from '../../definitions';
+import {
+  STATUS_EDITING,
+  STATUS_CREATING,
+  STATUS_DEFAULT,
+  PRODUCT_LOCATION_IMAGE_CONTAINER,
+  PRODUCT_LOCATION_MASK_CONTAINER,
+  PRODUCT_LOCATION_OVERLAY_CONTAINER,
+  PRODUCT_LOCATION_COLORS_CONTAINER,
+  PRODUCT_LOCATION_COLORS_DIR,
+  PRODUCT_LOCATION_IMAGE_DIR,
+  PRODUCT_LOCATION_MASK_DIR,
+  PRODUCT_LOCATION_OVERLAY_DIR
+} from '../../definitions';
 import {NotificationTypes, NotificationMessages} from '../../strings';
-import map from 'lodash/map';
 import forEach from 'lodash/forEach';
 import forOwn from 'lodash/forOwn';
 import findIndex from 'lodash/findIndex';
-import {getFileUrl} from '../../utils';
+import {getFileUrl, getName} from '../../utils';
 import '../../../public/assets/css/cropper.css';
 import * as ProductModel from '../../../../common/models/product.json';
 const Location = ProductModel.properties.locations.type[0];
@@ -36,6 +47,41 @@ export default class ProductsComponent extends Component {
       }
     }
   }
+
+  beforeSaveHook = () => {
+    const locations = [...this.props.objectHolder.locations];
+    const colors = [...this.props.objectHolder.colors];
+    locations.forEach((loc, key) => {
+      if (typeof loc.mask === 'object') {
+        this.props.uploadFile(loc.mask, PRODUCT_LOCATION_MASK_CONTAINER);
+        locations[key].mask = getName(loc.mask, PRODUCT_LOCATION_MASK_DIR);
+      }
+      if (typeof loc.image === 'object') {
+        this.props.uploadFile(loc.image, PRODUCT_LOCATION_IMAGE_CONTAINER);
+        locations[key].image = getName(loc.image, PRODUCT_LOCATION_IMAGE_DIR);
+      }
+      if (typeof loc.overlayInfo === 'object') {
+        this.props.uploadFile(loc.overlayInfo, PRODUCT_LOCATION_OVERLAY_CONTAINER);
+        locations[key].overlayInfo = getName(loc.overlayInfo, PRODUCT_LOCATION_OVERLAY_DIR);
+      }
+    });
+    colors.forEach((col, key) => {
+      col.location.forEach((loc, k) => {
+        if (loc.image && typeof loc.image === 'object') {
+          this.props.uploadFile(loc.image, PRODUCT_LOCATION_COLORS_CONTAINER);
+          colors[key].location[k].image = getName(loc.image, PRODUCT_LOCATION_COLORS_DIR);
+        }
+      });
+    });
+    this.props.setEditingObjectProperty('colors', [...colors]);
+    this.props.setEditingObjectProperty('locations', [...locations]);
+  };
+
+  onColorImageUpload = (fInd, sInd, event) => {
+    const arr = this.props.objectHolder.colors;
+    arr[fInd].location[sInd].image = event.target.files[0];
+    this.props.setEditingObjectProperty('colors', [...arr]);
+  };
 
   handleSelectedObjectDataChange = (prop, propertyName, event) => {
     const object = this.props.objectHolder[prop];

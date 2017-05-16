@@ -2,6 +2,15 @@ export const ID_PROP = 'id';
 
 export const RELATIVE_URL = '@@RELATIVE';
 
+export const PRODUCT_LOCATION_IMAGE_CONTAINER = 'containers/productLocationImage';
+export const PRODUCT_LOCATION_MASK_CONTAINER = 'containers/productLocationMask';
+export const PRODUCT_LOCATION_OVERLAY_CONTAINER = 'containers/productLocationOverlay';
+export const PRODUCT_LOCATION_COLORS_CONTAINER = 'containers/productColors';
+export const PRODUCT_LOCATION_COLORS_DIR = 'files/productColors/';
+export const PRODUCT_LOCATION_IMAGE_DIR = 'files/productLocationImage/';
+export const PRODUCT_LOCATION_MASK_DIR = 'files/productLocationMask/';
+export const PRODUCT_LOCATION_OVERLAY_DIR = 'files/productLocationOverlay/';
+
 export const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
 export const ASSIGN_GROUP = 'Assign Color Group';

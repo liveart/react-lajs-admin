@@ -1,7 +1,6 @@
 import {ASSIGN_GROUP, ADD_COLOR} from '../../../../definitions';
 import map from 'lodash/map';
 import forEach from 'lodash/forEach';
-import {getName} from '../../../../utils';
 
 export function updateArray(resObj) {
   this.props.setEditingObjectProperty(resObj.name, [...resObj.array]);
@@ -71,12 +70,6 @@ export function onColorizableColorgroupSelectChange(objectHolder, val, key) {
     colorizables[key].colorgroup = {name: val.name, id: val.id};
     this.props.setEditingObjectProperty('colorizables', colorizables);
   }
-}
-
-export function onImageUpload(objectHolder, fArrName, sArrName, fInd, sInd, propName, event) {
-  const arr = objectHolder[fArrName];
-  arr[fInd][sArrName][sInd][propName] = getName(event.target.files[0]);
-  this.props.setEditingObjectProperty(fArrName, [...arr]);
 }
 
 export function getColorizableColorsOptions() {
