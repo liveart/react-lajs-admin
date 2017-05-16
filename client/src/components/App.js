@@ -17,8 +17,8 @@ export default class App extends Component {
   componentWillMount() {
     if (!this.props.token && typeof localStorage.token === 'string') {
       this.props.restoreUserToken(localStorage.token);
-      this.props.validateUserToken(localStorage.token);
-    } else if (this.props.token) {
+    }
+    if (this.props.token) {
       this.props.validateUserToken(this.props.token);
     }
   }

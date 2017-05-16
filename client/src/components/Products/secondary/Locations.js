@@ -33,6 +33,7 @@ export default class Locations extends Component {
         <div className='col-md-11'>
           <Creatable
             name='location'
+            className='onTop'
             placeholder={objectHolder.locations && objectHolder.locations.length ?
               map(objectHolder.locations, 'name').join(', ') :
               'No locations linked. Type a name to add location...'}
