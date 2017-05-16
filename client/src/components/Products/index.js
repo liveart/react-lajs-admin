@@ -148,6 +148,21 @@ export default class ProductsComponent extends Component {
   changeLocationsNestedHolderValue = (changingPropName, value) =>
     this.changeNestedHolderValue('locations', this.state.location, changingPropName, value);
 
+  addUnitRange = key => {
+    let arr = Array.isArray(this.props.objectHolder.locations) ? [...this.props.objectHolder.locations] : [];
+    if (typeof arr[key].editableAreaUnitsRange !== 'object') {
+      arr[key].editableAreaUnitsRange = [];
+    }
+    arr[key].editableAreaUnitsRange[arr[key].editableAreaUnitsRange.length] = [0, 0, 1];
+    return {name: 'Locations', array: arr};
+  };
+
+  changeUnitRange = (fInd, sInd, propName, event) => {
+    const arr = [...this.props.objectHolder.locations];
+    arr[fInd].editableAreaUnitsRange[sInd][propName] = Number(event.target.value);
+    return {name: 'locations', array: arr};
+  };
+
   crop = cropper => {
     if (!cropper) {
       return;
