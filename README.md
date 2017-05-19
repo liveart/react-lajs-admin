@@ -12,13 +12,23 @@
 
 ### Installing packages
 
-```
+```sh
 npm install
+```
+or
+
+```sh
+yarn
 ```
 
 ### Starting the server
-```
+```sh
 npm start
+```
+
+### Rebuild the bundle
+```sh
+npm run build
 ```
 
 ### Default credentials:
