@@ -5,7 +5,7 @@ import filter from 'lodash/filter';
 import View from './View';
 import {IN_FT, CM_M} from './secondary/helpers.js';
 
-export default class extends Component {
+export default class Configurations extends Component {
   static propTypes = PTypes;
 
   redirectWindowOptions = [{value: '(default)', label: 'Default'},

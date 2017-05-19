@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
 
+/**
+ * The component renders delete confirmation view if needed,
+ * say if color is linked to product but user wants to delete it.
+ */
 export default class DeleteConfirmationView extends Component {
   render() {
     return <section>

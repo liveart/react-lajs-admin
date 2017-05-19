@@ -17,6 +17,7 @@ import EditingView from './secondary/ViewStates/EditingView';
 import InputRow from './secondary/InputRow';
 import Panel from './secondary/Panel';
 
+
 export default class AbstractPageView extends Component {
 
   getDefaultInputs = () =>
@@ -50,8 +51,7 @@ export default class AbstractPageView extends Component {
                                            item={i}
                                            shouldGroupRender={true}
                                            titleCol={3}
-                                           elementCol={9}
-                             />)}
+                                           elementCol={9}/>)}
                            />}
       />
     }));

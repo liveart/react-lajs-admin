@@ -1,3 +1,44 @@
+/**
+ * Parses graphics and graphic categories from the LiveArt json structure.
+ * @param json json as string
+ * @param baseUrl url to use for links if needed
+ * @returns {{categories: Array, graphics: Array}}
+ */
+export function parseJson(json, baseUrl) {
+  if (baseUrl.length && baseUrl.charAt(baseUrl.length - 1) !== '/') {
+    baseUrl += '/';
+  }
+  const obj = JSON.parse(json);
+  const graphics = [];
+  const categories = [];
+  const graphicsCategoriesList = obj.graphicsCategoriesList;
+  graphicsCategoriesList.forEach(cat => {
+    const res = parseNested(cat);
+    delete cat.graphicsList;
+    delete cat.categories;
+    graphics.push(...res.graphics);
+    categories.push(cat, ...res.categories);
+  });
+
+  categories.forEach(cat => {
+    if (cat.thumb) {
+      cat.thumb = baseUrl + cat.thumb;
+    }
+  });
+
+  graphics.forEach(gr => {
+    if (gr.thumb) {
+      gr.thumb = baseUrl + gr.thumb;
+    }
+
+    if (gr.image) {
+      gr.image = baseUrl + gr.image;
+    }
+  });
+
+  return {categories, graphics};
+}
+
 function parseGraphics(cat) {
   const graphics = [];
   const graphicsList = [];
@@ -60,39 +101,4 @@ function parseNested(category) {
     });
   }
   return res;
-}
-
-export function parseJson(json, baseUrl) {
-  if (baseUrl.length && baseUrl.charAt(baseUrl.length - 1) !== '/') {
-    baseUrl += '/';
-  }
-  const obj = JSON.parse(json);
-  const graphics = [];
-  const categories = [];
-  const graphicsCategoriesList = obj.graphicsCategoriesList;
-  graphicsCategoriesList.forEach(cat => {
-    const res = parseNested(cat);
-    delete cat.graphicsList;
-    delete cat.categories;
-    graphics.push(...res.graphics);
-    categories.push(cat, ...res.categories);
-  });
-
-  categories.forEach(cat => {
-    if (cat.thumb) {
-      cat.thumb = baseUrl + cat.thumb;
-    }
-  });
-
-  graphics.forEach(gr => {
-    if (gr.thumb) {
-      gr.thumb = baseUrl + gr.thumb;
-    }
-
-    if (gr.image) {
-      gr.image = baseUrl + gr.image;
-    }
-  });
-
-  return {categories, graphics};
 }

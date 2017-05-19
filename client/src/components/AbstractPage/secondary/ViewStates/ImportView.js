@@ -5,6 +5,9 @@ import {IMPORT_URL_INFO} from '../../../../strings';
 const LEAVE_URL_OPTION = 'Import';
 const KEEP_URL_OPTION = 'Keep';
 
+/**
+ * The component renders view for the json import.
+ */
 export default class ImportView extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,

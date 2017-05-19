@@ -4,6 +4,9 @@ import {STATUS_EDITING, STATUS_CREATING} from '../../../../definitions';
 import CreatingButtonGroup from '../ButtonGroups/CreatingButtonGroup';
 import EditingButtonGroup from '../ButtonGroups/EditingButtonsGroup';
 
+/**
+ * The component renders inputs and creating or editing button groups depending on the status.
+ */
 export default class EditingView extends Component {
   static propTypes = {
     onCancelBtnClick: PropTypes.func.isRequired,

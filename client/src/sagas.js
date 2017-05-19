@@ -11,6 +11,9 @@ import * as productsWatchers from './sagas/watchers/products';
 import * as configWatchers from './sagas/watchers/configurations';
 import * as fileWatchers from './sagas/watchers/files';
 
+/**
+ * Root watcher where all the other saga watcher are forked.
+ */
 export default function* root() {
   yield [
     fork(usersWatchers.watchGetUserToken),

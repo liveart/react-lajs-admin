@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import Table from '../Table/index';
 import DefaultButtonGroup from '../ButtonGroups/DefaultButtonGroup';
 
+/**
+ * The component renders table and default button groups.
+ */
 export default class DefaultView extends Component {
   static propTypes = {
     onAddNewBtnClick: PropTypes.func.isRequired,

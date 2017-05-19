@@ -1,3 +1,53 @@
+/**
+ * Parses products and product categories from the LiveArt json structure.
+ * @param json json as string
+ * @param baseUrl url to use for links if needed
+ * @returns {{categories: Array, products: Array}}
+ */
+export function parseJson(json, baseUrl) {
+  if (baseUrl.length && baseUrl.charAt(baseUrl.length - 1) !== '/') {
+    baseUrl += '/';
+  }
+  const obj = JSON.parse(json);
+  const products = [];
+  const categories = [];
+  const productCategoriesList = obj.productCategoriesList;
+  productCategoriesList.forEach(cat => {
+    const res = parseNested(cat, baseUrl);
+    delete cat.products;
+    delete cat.categories;
+    products.push(...res.products);
+    categories.push(cat, ...res.categories);
+  });
+
+  categories.forEach(cat => {
+    if (cat.thumbUrl) {
+      cat.thumbUrl = baseUrl + cat.thumbUrl;
+    }
+  });
+
+  products.forEach(p => {
+
+    if (p.locations) {
+      p.locations = p.locations.map(loc => ({
+        ...loc,
+        image: loc.image ? baseUrl + loc.image : undefined,
+        mask: loc.mask ? baseUrl + loc.mask : undefined,
+        overlayInfo: loc.overlayInfo ? baseUrl + loc.overlayInfo : undefined
+      }));
+    }
+
+    if (p.thumbUrl) {
+      p.thumbUrl = baseUrl + p.thumbUrl;
+    }
+
+    if (p.template) {
+      p.template = baseUrl + p.template;
+    }
+  });
+  return {categories, products};
+}
+
 function parseProducts(cat, baseUrl) {
   const products = [];
   if (cat.products) {
@@ -60,48 +110,4 @@ function parseNested(category, baseUrl) {
     });
   }
   return res;
-}
-
-export function parseJson(json, baseUrl) {
-  if (baseUrl.length && baseUrl.charAt(baseUrl.length - 1) !== '/') {
-    baseUrl += '/';
-  }
-  const obj = JSON.parse(json);
-  const products = [];
-  const categories = [];
-  const productCategoriesList = obj.productCategoriesList;
-  productCategoriesList.forEach(cat => {
-    const res = parseNested(cat, baseUrl);
-    delete cat.products;
-    delete cat.categories;
-    products.push(...res.products);
-    categories.push(cat, ...res.categories);
-  });
-
-  categories.forEach(cat => {
-    if (cat.thumbUrl) {
-      cat.thumbUrl = baseUrl + cat.thumbUrl;
-    }
-  });
-
-  products.forEach(p => {
-
-    if (p.locations) {
-      p.locations = p.locations.map(loc => ({
-        ...loc,
-        image: loc.image ? baseUrl + loc.image : undefined,
-        mask: loc.mask ? baseUrl + loc.mask : undefined,
-        overlayInfo: loc.overlayInfo ? baseUrl + loc.overlayInfo : undefined
-      }));
-    }
-
-    if (p.thumbUrl) {
-      p.thumbUrl = baseUrl + p.thumbUrl;
-    }
-
-    if (p.template) {
-      p.template = baseUrl + p.template;
-    }
-  });
-  return {categories, products};
 }

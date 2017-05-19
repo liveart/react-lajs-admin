@@ -1,3 +1,10 @@
+/**
+ * Config for string constants.
+ */
+
+/**
+ * Constants for notification types.
+ */
 export const NotificationTypes = {
   WARN: 'warning',
   ERR: 'error',
@@ -5,6 +12,9 @@ export const NotificationTypes = {
   SUCCESS: 'success'
 };
 
+/**
+ * Constants for notification messages.
+ */
 export const NotificationMessages = {
   SVG_COLORS_MISSED: 'Some of the colors from the selected image are not present in the color list.',
   SVG_CAN_BE_PARSED: 'Some options might be parsed from the selected svg image',
@@ -20,4 +30,7 @@ export const NotificationMessages = {
   INVALID_JSON: 'Json structure is invalid.'
 };
 
+/**
+ * Used as placeholder for a url input in the import view if set url option is selected.
+ */
 export const IMPORT_URL_INFO = 'Base url for links. Requires protocol (example http://site.com/)';

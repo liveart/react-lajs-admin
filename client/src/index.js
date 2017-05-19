@@ -17,11 +17,17 @@ import ProductsContainer from './containers/ProductsContainer';
 import GraphicsCategoriesTableContainer from './containers/GraphicsCategoriesContainer';
 import ConfigurationsContainer from './containers/ConfigurationsContainer';
 
+/**
+ * Setting env for client depending on the server environment variable which is set through the console.
+ */
 let env = 'prod';
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
   env = 'dev';
 }
 
+/**
+ * Store configuration is loaded depending on the environment, development or production.
+ */
 let configureStore;
 if (env === 'dev') {
   configureStore = require('./store/configureStore.dev.js');
@@ -29,12 +35,22 @@ if (env === 'dev') {
   configureStore = require('./store/configureStore.prod.js');
 }
 
+/**
+ * Saga middleware.
+ */
 const sagaMiddleware = createSagaMiddleware();
 const store = configureStore(sagaMiddleware);
+
+/**
+ * Browser history.
+ */
 const history = syncHistoryWithStore(browserHistory, store);
 
 sagaMiddleware.run(sagaWatchers);
 
+/**
+ * Main react render method which defines store provider, router, and configure routes.
+ */
 ReactDOM.render((
   <Provider store={store}>
     <Router history={history}>

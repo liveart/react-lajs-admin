@@ -4,7 +4,7 @@ import {STATUS_EDITING} from '../../definitions';
 import {Elements} from '../../configurableElements/config';
 import AbstractPage from '../AbstractPage';
 
-export default class extends Component {
+export default class Admins extends Component {
   static propTypes = PTypes;
 
   constructor(props) {

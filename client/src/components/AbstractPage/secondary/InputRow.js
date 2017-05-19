@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
 
+/**
+ * The component renders title and input for the editing view.
+ * Represents one row in the editing view panel.
+ */
 export default class InputRow extends Component {
   static propTypes = {
     required: PropTypes.bool,

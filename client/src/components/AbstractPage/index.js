@@ -13,6 +13,11 @@ import difference from 'lodash/difference';
 import eq from 'lodash/eq';
 import {getHeader, getName} from '../../utils';
 
+/**
+ * AbstractPage is an abstract component which renders view states and handles functions needed to
+ * operate on objects editing, creating, and deleting. Each view state has it's own component,
+ * namely DefaultView, EditingView, ImportView, and DeleteConfirmationView.
+ */
 export default class AbstractPage extends Component {
   static propTypes = PTypes;
 
@@ -52,20 +57,34 @@ export default class AbstractPage extends Component {
     }
   }
 
+  /**
+   * Updates the object holder's property in the store by the event passed.
+   * @param propertyName the property to update.
+   * @param event event object that is returned when onChange is called.
+   */
   updateObject = (propertyName, event) => this.props.setEditingObjectProperty(propertyName, event.target.value);
 
+  /**
+   * Handles Add new button click. Sends action to enable creating status.
+   */
   handleAddNew = () => {
     if (this.props.status === STATUS_DEFAULT) {
       this.props.enableCreating(this.props.objectSample);
     }
   };
 
+  /**
+   * Handles *Import* button click. Sends action to enable import status.
+   */
   handleImportFromJson = () => {
     if (this.props.status === STATUS_DEFAULT) {
       this.props.enableImportJson();
     }
   };
 
+  /**
+   * Handles *Delete* button click. Deletes the entity that is being edited.
+   */
   handleDeleteBtnClick = () => {
     if (this.props.status === STATUS_EDITING) {
       if (typeof this.props.deleteConfirmation === 'boolean' && this.props.deleteConfirmation === true) {
@@ -82,6 +101,13 @@ export default class AbstractPage extends Component {
     }
   };
 
+  /**
+   * Handles *Save* and *Save and continue editing* buttons click.
+   * Depending on the status, which is either creating or editing,
+   * creates a new entity or edits the existing one.
+   * @param redirect whether or not to redirect after the click. Passed true if *Save* button is clicked,
+   * and passed false if *Save and continue edit* buttons is clicked.
+   */
   handleSaveBtnClick = redirect => {
     const properties = keys(this.props.objectSample);
     const empty = properties.filter(p => p !== ID_PROP &&
@@ -124,6 +150,9 @@ export default class AbstractPage extends Component {
     }
   };
 
+  /**
+   * Handles *cancel* button click. Sends action to enable default status.
+   */
   handleCancelBtnClick = () => {
     if (this.props.status !== STATUS_DEFAULT) {
       this.props.enableDefaultStatus();
@@ -132,8 +161,11 @@ export default class AbstractPage extends Component {
     }
   };
 
-  handleBaseUrlChange = e => this.setState({...this.state, baseUrl: e.target.value});
-
+  /**
+   * Handles file selection in the Import view.
+   * The method gets the contents and sets those into json text input.
+   * @param e event returned by onChange input prop.
+   */
   handleFileSelection = e => {
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -145,6 +177,16 @@ export default class AbstractPage extends Component {
     reader.readAsText(e.target.files[0]);
   };
 
+  /**
+   * Handles *Save* button click on Import View. The methods needs a parser that is specific for each entity.
+   * By default parsers for Graphics, Products, and related categories are available. Method also checks if
+   * the protocol, in case of choosing option to use origin url, is set up correctly. It parses entered json
+   * and creates parsed entities.
+   * @param json json, represented as text, to parse.
+   * @param baseUrl original url to use for the properties that store url's to files.
+   * @param urlOption one of the 2 defined constants that tell if to use original url for the file links.
+   * @param forceNoBase forces method not to show warning about incorrect base url.
+   */
   handleImportJson = (json, baseUrl, urlOption, forceNoBase) => {
     if (!this.props.parser) {
       this.props.addNotification(NotificationTypes.ERR, NotificationMessages.PARSER_NOT_FOUND);
@@ -182,6 +224,10 @@ export default class AbstractPage extends Component {
     }
   };
 
+  /**
+   * Changes value of json to be parsed in the state.
+   * @param val text that represents the json.
+   */
   changeJsonValue = val => this.setState({...this.state, json: val});
 
   render() {
