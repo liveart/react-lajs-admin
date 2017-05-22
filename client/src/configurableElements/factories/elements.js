@@ -14,6 +14,9 @@ import ParsableImageInput from '../elements/ParsableImageInput';
 import ThumbResizeInput from '../elements/ThumbResizeInput';
 import ImageInput from '../elements/ImageInput';
 
+/**
+ * The factory where an element is defined to be used for a specific inputElement string constant.
+ */
 export function getElement(type = Elements.DEFAULT_INPUT) {
   switch (type) {
     case Elements.DEFAULT_INPUT:

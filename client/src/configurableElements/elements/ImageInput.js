@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * Image input which also renders a preview for a just chosen image.
+ * Requires static options with set acceptsProps property to be properly initialized.
+ */
 export default class ImageInput extends React.Component {
   static propTypes = {
     setEditingObjectProperty: PropTypes.func

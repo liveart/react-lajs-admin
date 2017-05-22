@@ -1,5 +1,4 @@
 import {connect} from 'react-redux';
-
 import {
   selectRow, setObjectHolderProperty, enableEditing, enableCreating,
   enableDefaultStatus, setInitialState, enableConfirmDelete

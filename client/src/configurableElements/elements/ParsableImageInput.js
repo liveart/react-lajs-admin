@@ -4,6 +4,10 @@ import {NotificationMessages, NotificationTypes} from '../../strings';
 import {processSVGContent}  from '../../SvgConverter';
 import intersection from 'lodash/intersection';
 
+/**
+ * Image input which also parses an image with SVGConverter
+ * so as to get colorizable elements and transform the image.
+ */
 export default class ParsableImageInput extends React.Component {
   static propTypes = {
     property: PropTypes.string,

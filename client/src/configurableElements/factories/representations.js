@@ -2,6 +2,9 @@ import React from 'react';
 import {Representations} from '../config';
 import {getNameFromUrl, getFileUrl} from '../../utils';
 
+/**
+ * The factory where an element is defined to be used for a specific representation string constant.
+ */
 export function getElement(type = Representations.TEXT, value = '') {
   switch (type) {
     case Representations.TEXT:

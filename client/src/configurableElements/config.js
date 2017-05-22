@@ -1,3 +1,7 @@
+/**
+ * Config for a string constants of representation and input elements.
+ */
+
 export const Representations = {
   TEXT: 'TEXT',
   LINK: 'LINK',

@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import {ImageSize} from '../../values';
 import {dataUriToBlob} from '../../utils';
 
+/**
+ * A text input which resizes the current image
+ * to dimensions defined in ImageSize.GRAPHIC_THUMB property.
+ */
 export default class ThumbResizeInput extends React.Component {
   static propTypes = {
     property: PropTypes.string,
