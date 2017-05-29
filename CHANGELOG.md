@@ -1,11 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [0.2.0] - 2017-05-16
+## [0.2.0] - 2017-05-29
 ### Added
 - Major changes regarding component configuration
 - Ability to configure inputs through model files
-- Moving to Semantic Versioning
+- Adopting semantic versioning
 
 ## [0.0.4] - 2017-04-19
 ### Added
