@@ -1,0 +1,32 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "remote-dev-mongo": {
+    "host": "",
+    "port": 12345,
+    "url": "",
+    "database": "",
+    "password": "",
+    "name": "",
+    "user": "",
+    "connector": "mongodb"
+  },
+  "storage": {
+    "name": "storage",
+    "connector": "loopback-component-storage",
+    "provider": "filesystem",
+    "root": "./client/public/files",
+    "maxFileSize": "52428800"
+  },
+  "container": {
+    "name": "container",
+    "dataSource": "storage",
+    "public": true
+  },
+  "transient": {
+    "name": "transient",
+    "connector": "transient"
+  }
+}
